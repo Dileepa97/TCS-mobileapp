@@ -242,7 +242,6 @@ class _LeaveRequestState extends State<LeaveRequest> {
                           _endDate = null;
                           _noOfDays = null;
                           _leaveType = null;
-                          ;
                         });
                       },
                     )
