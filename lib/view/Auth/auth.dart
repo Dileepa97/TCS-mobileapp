@@ -4,14 +4,21 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        SizedBox.expand(
-          child: Container(
-            color: Colors.red,
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              'Auth',
+            ),
           ),
-        )
-      ],
-    ));
+        ),
+        body: Stack(
+          children: [
+            SizedBox.expand(
+              child: Container(
+                color: Colors.red,
+              ),
+            )
+          ],
+        ));
   }
 }
