@@ -55,14 +55,32 @@ class _HomePageState extends State<HomePage> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Authenticate',
+                'Login',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/auth');
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+          ),
+          Container(
+            height: 50,
+            margin: EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: RaisedButton(
+              color: Colors.blueAccent,
+              child: Text(
+                'Register',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
               },
             ),
           ),
