@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/services/AuthService.dart';
 
 import '../constants.dart';
 
@@ -13,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
               color: Colors.lightBlueAccent,
               onPressed: () {
-                //implement registration
+                //implement login
+                _authService.login(
+                    _usernameController.text, _passwordController.text);
               },
               title: 'Login',
             ),
