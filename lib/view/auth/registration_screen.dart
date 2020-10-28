@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/view/components/rounded_button.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
 
 import '../constants.dart';
 

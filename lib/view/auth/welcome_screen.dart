@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:timecapturesystem/view/Auth/registration_screen.dart';
-import 'package:timecapturesystem/view/components/rounded_button.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
 
 import 'login_screen.dart';
 

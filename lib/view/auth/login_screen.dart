@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/view/components/rounded_button.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
 
 import '../constants.dart';
 
@@ -11,6 +11,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
+              controller: _usernameController,
               onChanged: (value) {
                 //Do something with the user input.
               },
@@ -42,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 16.0,
             ),
             TextField(
+              controller: _passwordController,
               onChanged: (value) {
                 //Do something with the user input.
               },
