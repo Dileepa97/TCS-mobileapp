@@ -13,9 +13,9 @@ void main() => runApp(
           '/': (context) => HomePage(),
           // build the HomePage widget.
           '/login': (context) => LoginScreen(),
-          // build the HomePage widget.
+          // build the Login widget.
           '/register': (context) => RegistrationScreen(),
-          // build the HomePage widget.
+          // build the Register widget.
           '/userLeave': (context) => UserLeave(),
           //  build the UserLeave widget.
           '/leaveRequest': (context) => LeaveRequest(),
