@@ -11,16 +11,19 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  static const double spaceBetweenFields = 16.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
+            SizedBox(
+              height: 48.0,
+            ),
             Hero(
               tag: 'logo',
               child: Container(
@@ -35,18 +38,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               onChanged: (value) {
                 //Do something with the user input.
               },
-              decoration:
-                  kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Username'),
             ),
             SizedBox(
-              height: 8.0,
+              height: spaceBetweenFields,
+            ),
+            TextField(
+              onChanged: (value) {
+                //Do something with the user input.
+              },
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Full Name'),
+            ),
+            SizedBox(
+              height: spaceBetweenFields,
+            ),
+            TextField(
+              onChanged: (value) {
+                //Do something with the user input.
+              },
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+            ),
+            SizedBox(
+              height: spaceBetweenFields,
             ),
             TextField(
               onChanged: (value) {
                 //Do something with the user input.
               },
               decoration: kTextFieldDecoration.copyWith(
-                  hintText: 'Enter your password'),
+                  hintText: 'Telephone Number (optional)'),
+            ),
+            SizedBox(
+              height: spaceBetweenFields,
+            ),
+            TextField(
+              onChanged: (value) {
+                //Do something with the user input.
+              },
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Password'),
+            ),
+            SizedBox(
+              height: spaceBetweenFields,
+            ),
+            TextField(
+              onChanged: (value) {
+                //Do something with the user input.
+              },
+              decoration:
+                  kTextFieldDecoration.copyWith(hintText: 'Confirm password'),
             ),
             SizedBox(
               height: 24.0,

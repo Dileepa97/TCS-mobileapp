@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: 'Enter your username'),
             ),
             SizedBox(
-              height: 8.0,
+              height: 16.0,
             ),
             TextField(
               onChanged: (value) {
@@ -49,14 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: 'Enter your password.'),
             ),
             SizedBox(
-              height: 24.0,
+              height: 20.0,
             ),
             RoundedButton(
               color: Colors.lightBlueAccent,
               onPressed: () {
                 //implement registration
               },
-              title: 'Register',
+              title: 'Login',
             ),
           ],
         ),
