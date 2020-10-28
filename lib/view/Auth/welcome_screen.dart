@@ -56,11 +56,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 TypewriterAnimatedTextKit(
-                  speed: Duration(milliseconds: 300),
-                  text: ['Flash Chat'],
+                  speed: Duration(milliseconds: 100),
+                  text: ['Time Capture System'],
                   textStyle: TextStyle(
                     color: Colors.black87,
-                    fontSize: 45.0,
+                    fontSize: 25.0,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
