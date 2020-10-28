@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/LMS/user/userLeave.dart';
@@ -12,6 +13,8 @@ void main() => runApp(
         routes: {
           '/': (context) => HomePage(),
           // build the HomePage widget.
+          WelcomeScreen.id: (context) => WelcomeScreen(),
+          //build welcome screen
           LoginScreen.id: (context) => LoginScreen(),
           // build the Login widget.
           RegistrationScreen.id: (context) => RegistrationScreen(),
