@@ -12,9 +12,9 @@ void main() => runApp(
         routes: {
           '/': (context) => HomePage(),
           // build the HomePage widget.
-          '/login': (context) => LoginScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
           // build the Login widget.
-          '/register': (context) => RegistrationScreen(),
+          RegistrationScreen.id: (context) => RegistrationScreen(),
           // build the Register widget.
           '/userLeave': (context) => UserLeave(),
           //  build the UserLeave widget.
