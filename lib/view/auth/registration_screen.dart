@@ -14,9 +14,20 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   static const double spaceBetweenFields = 16.0;
+
+  //form controllers
+
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _telephoneNumberController =
+      TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   final AuthService _authService = AuthService();
+
   bool spin = false;
 
   @override
@@ -44,6 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 48.0,
               ),
               TextField(
+                controller: _usernameController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -53,6 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                controller: _fullNameController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -63,6 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                controller: _emailController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -72,6 +86,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                controller: _telephoneNumberController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -82,6 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                controller: _passwordController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -91,6 +107,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                controller: _confirmPasswordController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
