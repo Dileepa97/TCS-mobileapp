@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/models/AuthResponse_model.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
+import 'package:timecapturesystem/services/StorageService.dart';
 
 import '../constants.dart';
 
@@ -70,15 +73,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                   //implement login
                   try {
-                    bool logged = await _authService.login(
+                    int code = await _authService.login(
                         _usernameController.text, _passwordController.text);
-                    print(logged);
+                    if (code == 1) {
+                      //login success
+
+                    } else if (code == 404) {
+                      displayDialog(context, "Invalid User",
+                          "user with given username has not registered in the system");
+                    } else if (code == 401) {
+                      displayDialog(context, "Bad Credentials",
+                          "Invalid username or password");
+                    } else {
+                      displayDialog(context, "Unknown Error",
+                          "An Unknown Error Occurred");
+                    }
                   } catch (e) {
-                    print(e);
+                    displayDialog(context, "Error", e.toString());
+                    print(e.toString());
                   }
 
                   setState(() {
                     spin = false;
+                    _usernameController.text = "";
+                    _passwordController.text = "";
                   });
                 },
                 title: 'Login',
