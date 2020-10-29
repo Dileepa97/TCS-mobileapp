@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
 
@@ -97,6 +98,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
                 controller: _passwordController,
                 onChanged: (value) {
                   //Do something with the user input.
@@ -107,6 +111,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: spaceBetweenFields,
               ),
               TextField(
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
                 controller: _confirmPasswordController,
                 onChanged: (value) {
                   //Do something with the user input.
@@ -119,12 +126,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               RoundedButton(
                 color: Colors.blue,
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     spin = true;
                   });
                   //implement registration
+                  if (_passwordController.text ==
+                      _confirmPasswordController.text) {
+                    try {
+                      bool registered = await _authService.register(
+                          context,
+                          _usernameController.text,
+                          _fullNameController.text,
+                          _telephoneNumberController.text,
+                          _emailController.text,
+                          _passwordController.text);
 
+                      if (registered) {
+                        setState(() {
+                          _usernameController.clear();
+                          _fullNameController.clear();
+                          _telephoneNumberController.clear();
+                          _emailController.clear();
+                          _passwordController.clear();
+                          _confirmPasswordController.clear();
+                        });
+
+                        displayRegSuccessDialog(context);
+                      }
+                    } catch (e) {
+                      displayDialog(
+                          context, "Error", "An Unknown Error Occurred");
+                    }
+                  } else {
+                    displayDialog(context, "Password Mismatch",
+                        "Confirmation password did not match with your password");
+                  }
                   setState(() {
                     spin = false;
                   });
