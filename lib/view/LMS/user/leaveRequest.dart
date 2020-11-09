@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
+import 'package:timecapturesystem/services/leaveService.dart';
+import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
 
 class LeaveRequest extends StatefulWidget {
   @override
@@ -10,17 +15,22 @@ class _LeaveRequestState extends State<LeaveRequest> {
 
   String _userID;
   String _leaveType;
+  String _leaveDescription = 'new leave';
 
   DateTime _startDate;
   int _startDay;
   int _startMonth;
   int _startYear;
 
+  Duration _aDay = Duration(days: 1);
   DateTime _endDate;
   int _endDay;
   int _endMonth;
   int _endYear;
   int _noOfDays;
+
+  bool spin = false;
+  final LeaveService _leaveService = LeaveService();
 
   List<String> leaveTypes = ['No Pay', 'Maternity', 'Sick', 'Other'];
 
@@ -163,8 +173,8 @@ class _LeaveRequestState extends State<LeaveRequest> {
               onPressed: () {
                 showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2020),
+                        initialDate: DateTime.now().add(_aDay),
+                        firstDate: _startDate,
                         lastDate: DateTime(2021),
                         initialEntryMode: DatePickerEntryMode.input)
                     .then((date) {
@@ -187,71 +197,166 @@ class _LeaveRequestState extends State<LeaveRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/userLeave');
+          },
+        ),
         title: Text(
           'Leave Request',
         ),
       ),
-      body: Card(
-        color: Colors.grey[300],
-        borderOnForeground: true,
-        margin: EdgeInsets.all(5.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildUserID(),
-                _buildLeaveType(),
-                _buildStartDate(),
-                _buildEndDate(),
-                SizedBox(
-                  height: 25,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: ModalProgressHUD(
+        inAsyncCall: spin,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RaisedButton(
-                      color: Colors.blueAccent[200],
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          _noOfDays = _dayDif();
-
-                          ///for testing-------------
-
-                          print(_userID);
-                          print(_startDate);
-                          print(_endDate);
-                          print(_noOfDays);
-                          print(_leaveType);
-
-                          ///------------------------
-                        }
-                      },
-                      child: Text('Submit'),
+                    _buildUserID(),
+                    _buildLeaveType(),
+                    _buildStartDate(),
+                    _buildEndDate(),
+                    SizedBox(
+                      height: 25,
                     ),
-                    RaisedButton(
-                      color: Colors.red[400],
-                      child: Text('Clear'),
-                      onPressed: () {
-                        setState(() {
-                          _userID = null;
-                          _startDate = null;
-                          _endDate = null;
-                          _noOfDays = null;
-                          _leaveType = null;
-                        });
-                      },
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        RaisedButton(
+                          color: Colors.blueAccent[200],
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              if (_leaveType == null) {
+                                _showMyDialog1(
+                                    'Something Missing !', 'Select Leave Type');
+                              } else if (_startDate == null) {
+                                _showMyDialog1('Something Missing !',
+                                    'Leave Start Date field is empty');
+                              } else if (_endDate == null) {
+                                _showMyDialog1('Something Missing !',
+                                    'Leave End Date field is empty');
+                              } else {
+                                setState(() {
+                                  spin = true;
+                                });
+                                _formKey.currentState.save();
+                                _noOfDays = _dayDif();
+
+                                int code = await _leaveService.newLeave(
+                                    _leaveType,
+                                    _leaveDescription,
+                                    _startDate,
+                                    _endDate,
+                                    _noOfDays,
+                                    LeaveStatus.REQUESTED,
+                                    _userID);
+
+                                if (code == 1) {
+                                  setState(() {
+                                    spin = false;
+                                  });
+                                  _showMyDialog();
+                                } else if (code == 404) {
+                                  displayDialog(context, "Error 404",
+                                      "Content not found");
+                                } else {
+                                  displayDialog(context, "Unknown Error",
+                                      "An Unknown Error Occurred");
+                                }
+
+                                ///for testing-------------
+
+                                print(_userID);
+                                print(_startDate);
+                                print(_endDate);
+                                print(_noOfDays);
+                                print(_leaveType);
+
+                                ///------------------------
+                              }
+                            }
+                          },
+                          child: Text('Submit'),
+                        ),
+                        RaisedButton(
+                          color: Colors.red[400],
+                          child: Text('Clear'),
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pushNamed(context, '/leaveRequest');
+                            });
+                          },
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Leave Submitted'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Leave submitted successfully'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Done'),
+              onPressed: () {
+                Navigator.pushNamed(context, '/leaveRequest');
+                //Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showMyDialog1(String title, String str) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title', style: TextStyle(color: Colors.red)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$str ', style: TextStyle(color: Colors.red)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                //Navigator.pushNamed(context, '/leaveRequest');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

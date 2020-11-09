@@ -1,0 +1,1 @@
+enum LeaveStatus { REQUESTED, ACCEPTED, REJECTED, CANCELED }
