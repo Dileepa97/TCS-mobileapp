@@ -11,6 +11,7 @@ Map<String, String> headers = {'Content-Type': 'application/json'};
 
 class AuthService {
   static const API = 'http://localhost:8080/api/auth/';
+  //static const API = 'http://192.168.8.169:8080/api/auth/';
 
   Future<int> login(String username, String password) async {
     var body = jsonEncode({
