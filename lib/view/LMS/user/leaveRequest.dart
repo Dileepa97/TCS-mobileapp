@@ -32,7 +32,7 @@ class _LeaveRequestState extends State<LeaveRequest> {
   bool spin = false;
   final LeaveService _leaveService = LeaveService();
 
-  List<String> leaveTypes = ['No Pay', 'Maternity', 'Sick', 'Annual', 'Casual'];
+  List<String> leaveTypes = ['No Pay', 'Maternity', 'Sick', 'Other'];
 
   int _dayDif() {
     return (_endDate.difference(_startDate)).inDays;
@@ -197,6 +197,11 @@ class _LeaveRequestState extends State<LeaveRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/userLeave');
+          },
+        ),
         title: Text(
           'Leave Request',
         ),

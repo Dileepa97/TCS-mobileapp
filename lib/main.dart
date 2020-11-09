@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/leaveService.dart';
 import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
-import 'package:timecapturesystem/view/LMS/user/allLeaves.dart';
+
+import 'package:timecapturesystem/view/LMS/user/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
@@ -28,7 +29,7 @@ void main() => runApp(
           //  build the LeaveRequest widget.
           '/ownLeave': (context) => OwnLeave(),
           //  build the LeaveRequest widget.
-          //'/allLeaves': (context) => AllLeave(),
+          '/allLeaves': (context) => AllLeave(),
           //  build the LeaveRequest widget.
         },
       ),

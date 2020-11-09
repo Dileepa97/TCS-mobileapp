@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/leave/LeaveResponse.dart';
 import 'package:timecapturesystem/services/leaveService.dart';
 
-import 'allLeaves.dart';
-
 class UserLeave extends StatefulWidget {
   @override
   _UserLeaveState createState() => _UserLeaveState();
@@ -18,6 +16,11 @@ class _UserLeaveState extends State<UserLeave> {
       appBar: AppBar(
         title: Text(
           'User Leave',
+        ),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
         ),
       ),
       body: Column(
@@ -55,17 +58,17 @@ class _UserLeaveState extends State<UserLeave> {
                   color: Colors.white,
                 ),
               ),
-              onPressed: () async {
-                //Navigator.pushNamed(context, '/allLeaves');
-                //List<LeaveResponse> leaves= await _leaveService.fetchLeaves();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        //AllLeave(leaves:_leaveService.fetchLeaves() ),
-                        MyApp(),
-                  ),
-                );
+              onPressed: () {
+                Navigator.pushNamed(context, '/allLeaves');
+                // List<LeaveResponse> leaves = await _leaveService.fetchLeaves();
+                // print(leaves);
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     //builder: (context) => LeaveBoxList(items: leaves),
+                //      MyApp(),
+                //   ),
+                // );
               },
             ),
           ),

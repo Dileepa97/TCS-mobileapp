@@ -33,6 +33,7 @@ dependencies:
   flutter_secure_storage: ^3.3.5
   http: ^0.12.2
   enum_to_string: ^1.0.13
+  
 
 
 dev_dependencies:

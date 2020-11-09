@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
 
 class LeaveResponse {
@@ -33,7 +34,7 @@ class LeaveResponse {
         // json['leaveStartDate'] as DateTime,
         //json['leaveEndDate'] as DateTime,
         json['leaveCount'] as int,
-        json['leaveStatus'] as LeaveStatus,
+        EnumToString.fromString(LeaveStatus.values, json['leaveStatus']),
         json['userId'] as String);
 
     // authRes.roles.forEach((element) {

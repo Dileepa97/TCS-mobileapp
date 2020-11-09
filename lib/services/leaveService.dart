@@ -49,8 +49,9 @@ class LeaveService {
 
   Future<List<LeaveResponse>> fetchLeaves() async {
     var response = await http.get(API + "all");
+    List<LeaveResponse> parseLeaves1 = parseLeaves(response.body);
     if (response.statusCode == 200) {
-      return parseLeaves(response.body);
+      return parseLeaves1;
     } else {
       throw Exception('Unable to fetch leaves from the REST API');
     }
@@ -61,5 +62,17 @@ class LeaveService {
     return parsed
         .map<LeaveResponse>((json) => LeaveResponse.fromJson(json))
         .toList();
+  }
+
+  Future getData() async {
+    http.Response response =
+        await http.get('http://192.168.8.169:8080/leaves/all');
+    if (response.statusCode == 200) {
+      String data = response.body;
+      // print(data);
+      return jsonDecode(data);
+    } else {
+      return (response.statusCode);
+    }
   }
 }
