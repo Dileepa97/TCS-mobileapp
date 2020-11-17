@@ -13,6 +13,9 @@ import 'view/homePage.dart';
 void main() => runApp(
       MaterialApp(
         title: 'routes',
+        theme: ThemeData(
+          scaffoldBackgroundColor: Color(0xFFF1F1F1),
+        ),
         initialRoute: '/', // Start the app with the "/" named route.
         routes: {
           '/': (context) => HomePage(),
