@@ -17,4 +17,9 @@ class TokenStorageService {
     if (authData == null) return null;
     return AuthResponse.fromJson(jsonDecode(authData));
   }
+
+  Future<String> get idOrEmpty async {
+    var auth = await authDataOrEmpty;
+    return auth.id;
+  }
 }

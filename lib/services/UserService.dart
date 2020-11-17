@@ -6,8 +6,7 @@ const API = 'http://localhost:8080/api/users/';
 
 Future<http.Response> fetchLoggedInUser() async {
   final TokenStorageService tokenStorageService = TokenStorageService();
-  var authData = await tokenStorageService.authDataOrEmpty;
-  var id = authData.id;
+  var id = await tokenStorageService.idOrEmpty;
   var token = await tokenStorageService.jwtOrEmpty;
   if (token != null) {
     return http.get(
