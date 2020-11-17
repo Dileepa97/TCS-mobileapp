@@ -1,29 +1,113 @@
 import 'dart:collection';
 
 class User {
-  String id;
+  String _id;
 
-  String username;
+  String _username;
 
-  String fullName;
+  String _fullName;
 
-  String profileImageURL;
+  String _profileImageURL;
 
-  String telephoneNumber;
+  String _telephoneNumber;
 
-  String email;
+  String _email;
 
-  String password;
+  String _password;
 
-  bool isVerified;
+  bool _isVerified;
 
-  bool isEmailVerified;
+  bool _isEmailVerified;
 
-  int resetCode;
+  int _resetCode;
 
-  int emailVerificationCode;
+  int _emailVerificationCode;
 
-  bool updated = false;
-  Set<dynamic> roles = new HashSet<dynamic>();
-  int highestRoleIndex = 0;
+  bool _updated = false;
+  Set<dynamic> _roles = new HashSet<dynamic>();
+  int _highestRoleIndex = 0;
+
+  String get id => _id;
+
+  set id(String value) {
+    _id = value;
+  }
+
+  String get username => _username;
+
+  set username(String value) {
+    _username = value;
+  }
+
+  int get highestRoleIndex => _highestRoleIndex;
+
+  set highestRoleIndex(int value) {
+    _highestRoleIndex = value;
+  }
+
+  Set<dynamic> get roles => _roles;
+
+  set roles(Set<dynamic> value) {
+    _roles = value;
+  }
+
+  bool get updated => _updated;
+
+  set updated(bool value) {
+    _updated = value;
+  }
+
+  int get emailVerificationCode => _emailVerificationCode;
+
+  set emailVerificationCode(int value) {
+    _emailVerificationCode = value;
+  }
+
+  int get resetCode => _resetCode;
+
+  set resetCode(int value) {
+    _resetCode = value;
+  }
+
+  bool get isEmailVerified => _isEmailVerified;
+
+  set isEmailVerified(bool value) {
+    _isEmailVerified = value;
+  }
+
+  bool get isVerified => _isVerified;
+
+  set isVerified(bool value) {
+    _isVerified = value;
+  }
+
+  String get password => _password;
+
+  set password(String value) {
+    _password = value;
+  }
+
+  String get email => _email;
+
+  set email(String value) {
+    _email = value;
+  }
+
+  String get telephoneNumber => _telephoneNumber;
+
+  set telephoneNumber(String value) {
+    _telephoneNumber = value;
+  }
+
+  String get profileImageURL => _profileImageURL;
+
+  set profileImageURL(String value) {
+    _profileImageURL = value;
+  }
+
+  String get fullName => _fullName;
+
+  set fullName(String value) {
+    _fullName = value;
+  }
 }
