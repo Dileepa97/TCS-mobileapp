@@ -4,7 +4,7 @@ import 'StorageService.dart';
 
 const API = 'http://localhost:8080/api/users/';
 
-Future<http.Response> fetchUser() async {
+Future<http.Response> fetchLoggedInUser() async {
   final TokenStorageService tokenStorageService = TokenStorageService();
   var authData = await tokenStorageService.authDataOrEmpty;
   var id = authData.id;
