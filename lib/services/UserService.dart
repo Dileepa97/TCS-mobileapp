@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/models/user/user.dart';
 import 'StorageService.dart';
 
-const API = 'http://localhost:8080/api/users/';
+const API = 'http://192.168.8.100:8080/api/users/';
 
 class UserService {
   Future<http.Response> fetchLoggedInUser() async {

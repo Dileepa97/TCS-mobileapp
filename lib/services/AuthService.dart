@@ -9,7 +9,7 @@ import 'UserService.dart';
 
 final storage = FlutterSecureStorage();
 Map<String, String> headers = {'Content-Type': 'application/json'};
-const API = 'http://localhost:8080/api/auth/';
+const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {
   //static const API = 'http://192.168.8.169:8080/api/auth/';

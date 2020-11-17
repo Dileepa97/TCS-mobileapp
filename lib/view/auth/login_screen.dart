@@ -3,6 +3,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
+import 'package:timecapturesystem/view/auth/profile.dart';
 
 import '../constants.dart';
 
@@ -53,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 16.0,
               ),
               TextField(
+                obscureText: true,
                 controller: _passwordController,
                 onChanged: (value) {
                   //Do something with the user input.
@@ -75,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         _usernameController.text, _passwordController.text);
                     if (code == 1) {
                       //login success
-
+                      Navigator.pushNamed(context, Profile.id);
                     } else if (code == 404) {
                       displayDialog(context, "Invalid User",
                           "user with given username has not registered in the system");
@@ -106,3 +108,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+//welkfjwkle

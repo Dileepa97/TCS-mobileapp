@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:timecapturesystem/view/Auth/registration_screen.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/view/auth/profile.dart';
 
 import 'login_screen.dart';
 
@@ -60,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   text: ['Time Capture System'],
                   textStyle: TextStyle(
                     color: Colors.black87,
-                    fontSize: 25.0,
+                    fontSize: 22.0,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -82,6 +83,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
               title: 'Register',
+            ),
+            RoundedButton(
+              color: Colors.blue,
+              onPressed: () {
+                Navigator.pushNamed(context, Profile.id);
+              },
+              title: 'Profile',
             ),
           ],
         ),
