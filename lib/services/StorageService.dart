@@ -6,13 +6,13 @@ import 'package:timecapturesystem/models/Auth/AuthResponse.dart';
 final storage = FlutterSecureStorage();
 
 class TokenStorageService {
-  static Future<String> get jwtOrEmpty async {
+  Future<String> get jwtOrEmpty async {
     var jwt = await storage.read(key: "jwt");
     if (jwt == null) return null;
     return jwt;
   }
 
-  static Future<AuthResponse> get authDataOrEmpty async {
+  Future<AuthResponse> get authDataOrEmpty async {
     var authData = await storage.read(key: "auth");
     if (authData == null) return null;
     return AuthResponse.fromJson(jsonDecode(authData));

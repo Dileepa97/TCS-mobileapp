@@ -2,16 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/Auth/AuthResponse.dart';
 
 final storage = FlutterSecureStorage();
 Map<String, String> headers = {'Content-Type': 'application/json'};
+const API = 'http://localhost:8080/api/auth/';
 
 class AuthService {
-  static const API = 'http://localhost:8080/api/auth/';
-
   //static const API = 'http://192.168.8.169:8080/api/auth/';
 
   Future<int> login(String username, String password) async {
@@ -42,7 +40,7 @@ class AuthService {
       "email": email,
       "password": password,
     });
-    Response res;
+    http.Response res;
     try {
       res = await http.post(API + 'register', body: jsonBody, headers: headers);
 
