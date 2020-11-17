@@ -14,7 +14,7 @@ void displayRegSuccessDialog(context) => showDialog(
       builder: (context) => AlertDialog(
         title: Text("Registration Success"),
         content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation"),
+            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
         actions: [
           FlatButton(
             child: Text("OK"),
