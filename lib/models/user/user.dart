@@ -1,5 +1,9 @@
-import 'dart:collection';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:timecapturesystem/models/user/role.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class User {
   String id;
 
@@ -25,7 +29,7 @@ class User {
 
   bool updated = false;
 
-  Set<dynamic> roles = new HashSet<dynamic>();
+  Set<Role> roles;
 
   int highestRoleIndex;
 
@@ -44,4 +48,8 @@ class User {
       this.updated,
       this.roles,
       this.highestRoleIndex);
+
+  factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
