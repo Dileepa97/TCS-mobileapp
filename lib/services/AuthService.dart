@@ -5,12 +5,16 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/Auth/AuthResponse.dart';
 
+import 'UserService.dart';
+
 final storage = FlutterSecureStorage();
 Map<String, String> headers = {'Content-Type': 'application/json'};
 const API = 'http://localhost:8080/api/auth/';
 
 class AuthService {
   //static const API = 'http://192.168.8.169:8080/api/auth/';
+
+  final UserService userService = UserService();
 
   Future<int> login(String username, String password) async {
     var body = jsonEncode({
@@ -24,7 +28,6 @@ class AuthService {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
       storage.write(key: "auth", value: res.body);
       storage.write(key: "jwt", value: authResponse.token);
-
       return 1;
     } else {
       return res.statusCode;

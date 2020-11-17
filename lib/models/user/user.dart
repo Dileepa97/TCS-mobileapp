@@ -52,4 +52,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  @override
+  String toString() {
+    return 'User{id: $id, username: $username, fullName: $fullName, profileImageURL: $profileImageURL, telephoneNumber: $telephoneNumber, email: $email, password: $password, isVerified: $isVerified, isEmailVerified: $isEmailVerified, resetCode: $resetCode, emailVerificationCode: $emailVerificationCode, updated: $updated, roles: $roles, highestRoleIndex: $highestRoleIndex}';
+  }
 }

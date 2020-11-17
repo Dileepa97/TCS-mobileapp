@@ -6,24 +6,26 @@ import 'StorageService.dart';
 
 const API = 'http://localhost:8080/api/users/';
 
-Future<http.Response> fetchLoggedInUser() async {
-  final TokenStorageService tokenStorageService = TokenStorageService();
-  var id = await tokenStorageService.idOrEmpty;
-  var token = await tokenStorageService.jwtOrEmpty;
-  if (token != null) {
-    return http.get(
-      API + id,
-      headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
-    );
-  }
-  return null;
-}
-
-Future<User> getUser() async {
-  var res = await fetchLoggedInUser();
-  if (res.statusCode == 200) {
-    return User.fromJson(jsonDecode(res.body));
-  } else {
+class UserService {
+  Future<http.Response> fetchLoggedInUser() async {
+    final TokenStorageService tokenStorageService = TokenStorageService();
+    var id = await tokenStorageService.idOrEmpty;
+    var token = await tokenStorageService.jwtOrEmpty;
+    if (token != null) {
+      return http.get(
+        API + id,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token},
+      );
+    }
     return null;
+  }
+
+  Future<User> getUser() async {
+    var res = await fetchLoggedInUser();
+    if (res.statusCode == 200) {
+      return User.fromJson(jsonDecode(res.body));
+    } else {
+      return null;
+    }
   }
 }
