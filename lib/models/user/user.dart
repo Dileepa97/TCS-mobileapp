@@ -19,9 +19,9 @@ class User {
 
   String password;
 
-  bool isVerified;
+  bool verified;
 
-  bool isEmailVerified;
+  bool emailVerified;
 
   int resetCode;
 
@@ -41,8 +41,8 @@ class User {
       this.telephoneNumber,
       this.email,
       this.password,
-      this.isVerified,
-      this.isEmailVerified,
+      this.verified,
+      this.emailVerified,
       this.resetCode,
       this.emailVerificationCode,
       this.updated,
@@ -55,6 +55,6 @@ class User {
 
   @override
   String toString() {
-    return 'User{id: $id, username: $username, fullName: $fullName, profileImageURL: $profileImageURL, telephoneNumber: $telephoneNumber, email: $email, password: $password, isVerified: $isVerified, isEmailVerified: $isEmailVerified, resetCode: $resetCode, emailVerificationCode: $emailVerificationCode, updated: $updated, roles: $roles, highestRoleIndex: $highestRoleIndex}';
+    return 'User{id: $id, username: $username, fullName: $fullName, profileImageURL: $profileImageURL, telephoneNumber: $telephoneNumber, email: $email, password: $password, verified: $verified, emailVerified: $emailVerified, resetCode: $resetCode, emailVerificationCode: $emailVerificationCode, updated: $updated, roles: $roles, highestRoleIndex: $highestRoleIndex}';
   }
 }

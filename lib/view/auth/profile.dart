@@ -24,6 +24,10 @@ class _ProfileState extends State<Profile> {
             List<Widget> children;
             if (snapshot.hasData) {
               var _user = snapshot.data;
+              var vIcon = _user.verified ? Icons.verified : Icons.cancel;
+              var vIconColor =
+                  _user.verified ? Colors.lightGreenAccent : Colors.redAccent;
+
               children = <Widget>[
                 CircleAvatar(
                   radius: 90.0,
@@ -39,15 +43,27 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  _user.username,
-                  style: TextStyle(
-                    fontFamily: 'Source Sans Pro',
-                    color: Color.fromARGB(100, 214, 238, 255),
-                    fontSize: 20.0,
-                    letterSpacing: 2.5,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _user.username,
+                      style: TextStyle(
+                        fontFamily: 'Source Sans Pro',
+                        color: Color.fromARGB(100, 214, 238, 255),
+                        fontSize: 20.0,
+                        letterSpacing: 2.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Icon(
+                      vIcon,
+                      color: vIconColor,
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20.0,
