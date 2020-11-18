@@ -5,6 +5,8 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
 import 'package:timecapturesystem/view/user/profile.dart';
 
+import 'package:timecapturesystem/main.dart' as app;
+
 import '../constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -77,7 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         _usernameController.text, _passwordController.text);
                     if (code == 1) {
                       //login success
-                      Navigator.pushNamed(context, Profile.id);
+                      Navigator.popAndPushNamed(context, '/');
+                      app.main();
                     } else if (code == 404) {
                       displayDialog(context, "Invalid User",
                           "user with given username has not registered in the system");

@@ -84,13 +84,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               },
               title: 'Register',
             ),
-            RoundedButton(
-              color: Colors.blue,
-              onPressed: () {
-                Navigator.pushNamed(context, Profile.id);
-              },
-              title: 'Profile',
-            ),
           ],
         ),
       ),

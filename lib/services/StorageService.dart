@@ -22,4 +22,8 @@ class TokenStorageService {
     var auth = await authDataOrEmpty;
     return auth.id;
   }
+
+  static Future<void> clearStorage() async {
+    storage.deleteAll();
+  }
 }
