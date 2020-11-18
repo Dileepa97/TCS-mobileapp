@@ -12,7 +12,9 @@ AuthResponse _$AuthResponseFromJson(Map<String, dynamic> json) {
     json['type'] as String,
     json['id'] as String,
     json['message'] as String,
-    json['date'] == null ? null : DateTime.parse(json['date'] as String),
+    json['tokenExpirationDate'] == null
+        ? null
+        : DateTime.parse(json['date'] as String),
   );
 }
 
@@ -22,5 +24,5 @@ Map<String, dynamic> _$AuthResponseToJson(AuthResponse instance) =>
       'type': instance.type,
       'id': instance.id,
       'message': instance.message,
-      'date': instance.date?.toIso8601String(),
+      'tokenExpirationDate': instance.tokenExpirationDate?.toIso8601String(),
     };

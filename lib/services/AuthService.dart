@@ -26,6 +26,7 @@ class AuthService {
 
     if (res.statusCode == 200) {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
+      
       storage.write(key: "auth", value: res.body);
       storage.write(key: "jwt", value: authResponse.token);
       return 1;

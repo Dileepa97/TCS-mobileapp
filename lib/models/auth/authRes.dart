@@ -8,9 +8,10 @@ class AuthResponse {
   String type;
   String id;
   String message;
-  DateTime date;
+  DateTime tokenExpirationDate;
 
-  AuthResponse(this.token, this.type, this.id, this.message, this.date);
+  AuthResponse(
+      this.token, this.type, this.id, this.message, this.tokenExpirationDate);
 
   factory AuthResponse.fromJson(Map<String, dynamic> data) =>
       _$AuthResponseFromJson(data);
@@ -19,6 +20,6 @@ class AuthResponse {
 
   @override
   String toString() {
-    return 'AuthResponse{token: $token, type: $type, id: $id, message: $message, date: $date}';
+    return 'AuthResponse{token: $token, type: $type, id: $id, message: $message, tokenExpirationDate: $tokenExpirationDate}';
   }
 }
