@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:timecapturesystem/models/Auth/AuthResponse.dart';
+import 'package:timecapturesystem/models/Auth/authRes.dart';
 
 final storage = FlutterSecureStorage();
 
