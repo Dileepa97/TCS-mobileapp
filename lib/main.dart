@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/StorageService.dart';
-import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
 
 import 'package:timecapturesystem/view/LMS/user/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+import 'package:timecapturesystem/view/auth/auth_screen.dart';
 import 'view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
             routes = {
               '/': (context) => HomePage(),
               // build the HomePage widget.
-              WelcomeScreen.id: (context) => WelcomeScreen(),
+              AuthScreen.id: (context) => AuthScreen(),
               // build the Welcome widget.
               Profile.id: (context) => Profile(),
 
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
             routes = {
               '/': (context) => HomePage(),
               // build the HomePage widget.
-              WelcomeScreen.id: (context) => WelcomeScreen(),
+              AuthScreen.id: (context) => AuthScreen(),
               //
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.

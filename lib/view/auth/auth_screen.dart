@@ -6,14 +6,14 @@ import 'package:timecapturesystem/view/user/profile.dart';
 
 import 'login_screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class AuthScreen extends StatefulWidget {
   static const String id = "welcome_screen";
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
+class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   //animations
   AnimationController controller;

@@ -89,21 +89,34 @@ class _ProfileState extends State<Profile> {
                       ),
                     )),
                 Card(
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.email,
-                        color: Colors.blue.shade900,
-                      ),
-                      title: Text(
-                        _user.email,
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.blueGrey.shade900,
-                            fontFamily: 'Source Sans Pro'),
-                      ),
-                    ))
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.email,
+                      color: Colors.blue.shade900,
+                    ),
+                    title: Text(
+                      _user.email,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.blueGrey.shade900,
+                          fontFamily: 'Source Sans Pro'),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(15),
+                  child: FlatButton(
+                    child: Text(
+                      'EDIT',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    color: Colors.white,
+                    textColor: Colors.black87,
+                    onPressed: () {},
+                  ),
+                )
               ];
             } else if (snapshot.hasError) {
               children = <Widget>[

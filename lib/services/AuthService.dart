@@ -26,6 +26,7 @@ class AuthService {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
       authResponse.tokenExpirationDate =
           new DateTime.now().add(new Duration(days: 1));
+      print(authResponse);
       storage.write(key: "auth", value: authResponse.toJsonString());
       storage.write(key: "jwt", value: authResponse.token);
 
