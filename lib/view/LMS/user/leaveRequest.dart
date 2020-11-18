@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
 import 'package:timecapturesystem/services/leaveService.dart';
-import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
+import 'package:timecapturesystem/view/LMS/component/convert.dart';
+import 'package:timecapturesystem/view/LMS/component/customDropDown.dart';
+import 'package:timecapturesystem/view/LMS/component/inputContainer.dart';
+import 'package:timecapturesystem/view/LMS/component/inputDate.dart';
+import 'package:timecapturesystem/view/LMS/component/inputTextField.dart';
+import 'package:timecapturesystem/view/LMS/component/pageCard.dart';
 
 class LeaveRequest extends StatefulWidget {
   @override
@@ -11,186 +16,154 @@ class LeaveRequest extends StatefulWidget {
 }
 
 class _LeaveRequestState extends State<LeaveRequest> {
-  final _formKey = GlobalKey<FormState>();
-
   String _userID;
+  String _leaveTitle;
   String _leaveType;
-  String _leaveDescription = 'new leave';
+  String _leaveMethod;
+  String _leaveDescription = "";
 
   DateTime _startDate;
-  int _startDay;
-  int _startMonth;
-  int _startYear;
 
-  Duration _aDay = Duration(days: 1);
   DateTime _endDate;
-  int _endDay;
-  int _endMonth;
-  int _endYear;
-  int _noOfDays;
 
-  bool spin = false;
+  double _noOfDays;
+
+  bool _spin = false;
   final LeaveService _leaveService = LeaveService();
 
-  List<String> leaveTypes = ['No Pay', 'Maternity', 'Sick', 'Other'];
+  List<String> _leaveTypes = [
+    'No_Pay',
+    'Sick',
+    'Maternity',
+    'Casual',
+    'Annual'
+  ];
+
+  List<String> _leaveMethods = ['Half_Day', 'Full_Day', 'Multiple_Day'];
 
   int _dayDif() {
     return (_endDate.difference(_startDate)).inDays;
   }
 
   Widget _buildUserID() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'User Id*',
-        icon: Icon(
-          Icons.person,
-          color: Colors.blueAccent,
-        ),
-        border: OutlineInputBorder(),
+    return InputContainer(
+      child: InputTextField(
+        labelText: 'User ID (for testing)',
+        onChanged: (text) {
+          setState(() {
+            _userID = text;
+          });
+        },
       ),
-      maxLength: 6,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'User Id is required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _userID = value;
-      },
+    );
+  }
+
+  Widget _buildTitle() {
+    return InputContainer(
+      child: InputTextField(
+        labelText: 'Leave Title',
+        onChanged: (text) {
+          setState(() {
+            _leaveTitle = text;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildDescription() {
+    return InputContainer(
+      child: InputTextField(
+        maxLines: null,
+        labelText: 'Leave Description (Optional)',
+        onChanged: (text) {
+          setState(() {
+            _leaveDescription = text;
+          });
+        },
+      ),
     );
   }
 
   Widget _buildLeaveType() {
-    return Row(
-      children: [
-        SizedBox(
-          width: 40,
-        ),
-        Expanded(
-          child: Card(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Leave Type :',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                DropdownButton<String>(
-                  value: _leaveType,
-                  hint: Text('Leave Type'),
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  iconSize: 24,
+    return InputContainer(
+      child: CustomDropDown(
+        keyString: 'Leave Type',
+        item: _leaveType,
+        items: _leaveTypes,
+        onChanged: (String newValue) {
+          setState(() {
+            _leaveType = newValue;
+          });
+        },
+      ),
+    );
+  }
 
-                  //elevation: 16,
-                  underline: Container(
-                    height: 2,
-                    color: Colors.black54,
-                  ),
-                  onChanged: (String newValue) {
-                    setState(() {
-                      _leaveType = newValue;
-                    });
-                  },
-                  items:
-                      leaveTypes.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+  Widget _buildLeaveMethod() {
+    return InputContainer(
+      child: CustomDropDown(
+        keyString: 'Leave Method',
+        item: _leaveMethod,
+        items: _leaveMethods,
+        onChanged: (String newValue) {
+          setState(() {
+            _leaveMethod = newValue;
+          });
+        },
+      ),
     );
   }
 
   Widget _buildStartDate() {
-    return Row(
-      children: [
-        Icon(
-          Icons.calendar_today,
-          color: Colors.blueAccent,
-        ),
-        SizedBox(
-          width: 15.0,
-        ),
-        Expanded(
-          child: Card(
-            child: FlatButton(
-              child: Text(
-                _startDate == null
-                    ? 'Leave Start Date'
-                    : 'Start Date : $_startDay-$_startMonth-$_startYear',
-              ),
-              onPressed: () {
-                showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime(2021),
-                        initialEntryMode: DatePickerEntryMode.input)
-                    .then((date) {
-                  setState(() {
-                    _startDate = date;
-                    _startDay = date.day;
-                    _startMonth = date.month;
-                    _startYear = date.year;
-                  });
-                });
-              },
-            ),
-          ),
-        ),
-      ],
+    return InputContainer(
+      height: 45.0,
+      child: InputDate(
+        keyString: 'Leave Start Date : ',
+        date: _startDate,
+        onTap: () {
+          showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now().add(Duration(days: 365)),
+                  initialEntryMode: DatePickerEntryMode.input)
+              .then((datePicked) {
+            setState(() {
+              _startDate = datePicked;
+            });
+          });
+        },
+      ),
     );
   }
 
   Widget _buildEndDate() {
-    return Row(
-      children: [
-        Icon(
-          Icons.calendar_today,
-          color: Colors.blueAccent,
+    if (_leaveMethod == 'Multiple_Day') {
+      return InputContainer(
+        height: 45.0,
+        child: InputDate(
+          keyString: 'Leave End Date : ',
+          date: _endDate,
+          onTap: () {
+            showDatePicker(
+                    context: context,
+                    initialDate: _startDate.add(Duration(days: 1)),
+                    firstDate: _startDate.add(Duration(days: 1)),
+                    lastDate: DateTime.now().add(Duration(days: 365)),
+                    initialEntryMode: DatePickerEntryMode.input)
+                .then((date) {
+              setState(() {
+                _endDate = date;
+              });
+            });
+          },
         ),
-        SizedBox(
-          width: 15.0,
-        ),
-        Expanded(
-          child: Card(
-            child: FlatButton(
-              child: Text(
-                _endDate == null
-                    ? 'Leave End Date'
-                    : 'End Date : $_endDay-$_endMonth-$_endYear',
-              ),
-              onPressed: () {
-                showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now().add(_aDay),
-                        firstDate: _startDate,
-                        lastDate: DateTime(2021),
-                        initialEntryMode: DatePickerEntryMode.input)
-                    .then((date) {
-                  setState(() {
-                    _endDate = date;
-                    _endDay = date.day;
-                    _endMonth = date.month;
-                    _endYear = date.year;
-                  });
-                });
-              },
-            ),
-          ),
-        ),
-      ],
-    );
+      );
+    } else
+      return SizedBox(
+        height: 0.0,
+      );
   }
 
   @override
@@ -207,150 +180,216 @@ class _LeaveRequestState extends State<LeaveRequest> {
         ),
       ),
       body: ModalProgressHUD(
-        inAsyncCall: spin,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildUserID(),
-                    _buildLeaveType(),
-                    _buildStartDate(),
-                    _buildEndDate(),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RaisedButton(
-                          color: Colors.blueAccent[200],
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              if (_leaveType == null) {
-                                _showMyDialog1(
-                                    'Something Missing !', 'Select Leave Type');
-                              } else if (_startDate == null) {
-                                _showMyDialog1('Something Missing !',
-                                    'Leave Start Date field is empty');
-                              } else if (_endDate == null) {
-                                _showMyDialog1('Something Missing !',
-                                    'Leave End Date field is empty');
-                              } else {
-                                setState(() {
-                                  spin = true;
-                                });
-                                _formKey.currentState.save();
-                                _noOfDays = _dayDif();
-
-                                int code = await _leaveService.newLeave(
-                                    _leaveType,
-                                    _leaveDescription,
-                                    _startDate,
-                                    _endDate,
-                                    _noOfDays,
-                                    LeaveStatus.REQUESTED,
-                                    _userID);
-
-                                if (code == 1) {
-                                  setState(() {
-                                    spin = false;
-                                  });
-                                  _showMyDialog();
-                                } else if (code == 404) {
-                                  displayDialog(context, "Error 404",
-                                      "Content not found");
-                                } else {
-                                  displayDialog(context, "Unknown Error",
-                                      "An Unknown Error Occurred");
-                                }
-
-                                ///for testing-------------
-
-                                print(_userID);
-                                print(_startDate);
-                                print(_endDate);
-                                print(_noOfDays);
-                                print(_leaveType);
-
-                                ///------------------------
-                              }
-                            }
-                          },
-                          child: Text('Submit'),
-                        ),
-                        RaisedButton(
-                          color: Colors.red[400],
-                          child: Text('Clear'),
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pushNamed(context, '/leaveRequest');
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                  ],
+        inAsyncCall: _spin,
+        child: PageCard(
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Create New Leave',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+                child: Divider(
+                  thickness: 1,
                 ),
               ),
-            ),
+              _buildUserID(),
+              _buildTitle(),
+              _buildLeaveType(),
+              _buildLeaveMethod(),
+              _buildStartDate(),
+              _buildEndDate(),
+              _buildDescription(),
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  RoundedButton(
+                    color: Colors.blueAccent[200],
+                    title: 'Submit',
+                    minWidth: 100.0,
+                    onPressed: () async {
+                      if (_userID == null) {
+                        _showAlertDialog(
+                            title: 'Something Missing !',
+                            body: 'Enter User ID',
+                            color: Colors.redAccent);
+                      } else if (_leaveTitle == null) {
+                        _showAlertDialog(
+                            title: 'Something Missing !',
+                            body: 'Enter Leave Title',
+                            color: Colors.redAccent);
+                      } else if (_leaveType == null) {
+                        _showAlertDialog(
+                            title: 'Something Missing !',
+                            body: 'Select Leave Type',
+                            color: Colors.redAccent);
+                      } else if (_leaveMethod == null) {
+                        _showAlertDialog(
+                            title: 'Something Missing !',
+                            body: 'Select Leave Method',
+                            color: Colors.redAccent);
+                      } else if (_startDate == null) {
+                        _showAlertDialog(
+                            title: 'Something Missing !',
+                            body: 'Leave Start Date field is empty',
+                            color: Colors.redAccent);
+                      } else {
+                        if (_leaveMethod == 'Multiple_Day') {
+                          if (_endDate == null) {
+                            _showAlertDialog(
+                                title: 'Something Missing !',
+                                body: 'Leave End Date field is empty',
+                                color: Colors.redAccent);
+                          } else
+                            _noOfDays = _dayDif().toDouble() + 1.0;
+                        } else if (_leaveMethod == 'Half_Day') {
+                          _endDate = _startDate;
+                          _noOfDays = 0.5;
+                        } else {
+                          _endDate = _startDate;
+                          _noOfDays = 1.0;
+                        }
+
+                        _showMConfirmationDialog(
+                            title: 'Confirm Submission',
+                            children: [
+                              Text('User ID : $_userID'),
+                              Text('Leave Title : $_leaveTitle'),
+                              Text('Leave Type : $_leaveType'),
+                              Text('Leave Method : $_leaveMethod'),
+                              Text('No of Days : $_noOfDays'),
+                              Text(
+                                  'Leave Start Date : ${Convert(date: _startDate).stringDate()}'),
+                              Text(_leaveMethod == 'Multiple_Day'
+                                  ? 'Leave End Date : ${Convert(date: _endDate).stringDate()}'
+                                  : ''),
+                              Text('Leave Description : $_leaveDescription'),
+                            ],
+                            onPressedYes: () async {
+                              // setState(() {
+                              //   spin = true;
+                              // });
+
+                              ///for testing-------------
+
+                              print(_userID);
+                              print(_leaveTitle);
+                              print(_leaveType);
+                              print(_leaveMethod);
+                              print(_startDate);
+                              print(_endDate);
+                              print(_noOfDays);
+                              print(_leaveDescription);
+
+                              ///------------------------
+                              ///
+
+                              int code = await _leaveService.newLeave(
+                                  _leaveTitle,
+                                  _leaveType,
+                                  _leaveDescription,
+                                  _startDate,
+                                  _endDate,
+                                  _noOfDays,
+                                  LeaveStatus.REQUESTED,
+                                  _userID);
+
+                              Navigator.pushNamed(context, '/leaveRequest');
+                            },
+                            onPressedNo: () {
+                              Navigator.of(context).pop();
+                            });
+
+                        // if (code == 1) {
+                        //   setState(() {
+                        //     spin = false;
+                        //   });
+                        //   //_showMyDialog();
+                        // } else if (code == 404) {
+                        //   displayDialog(
+                        //       context, "Error 404", "Content not found");
+                        // } else {
+                        //   displayDialog(context, "Unknown Error",
+                        //       "An Unknown Error Occurred");
+                        // }
+                      }
+                    },
+                  ),
+                  RoundedButton(
+                    color: Colors.redAccent[200],
+                    title: 'Clear',
+                    minWidth: 100.0,
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pushNamed(context, '/leaveRequest');
+                      });
+                    },
+                  )
+                ],
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMConfirmationDialog(
+      {String title, List<Widget> children, onPressedYes, onPressedNo}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Leave Submitted'),
+          title: Text('$title'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
-                Text('Leave submitted successfully'),
-              ],
+              children: children,
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Done'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/leaveRequest');
-                //Navigator.of(context).pop();
-              },
-            ),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+                onPressed: onPressedYes),
+            FlatButton(
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.redAccent),
+                ),
+                onPressed: onPressedYes),
           ],
         );
       },
     );
   }
 
-  Future<void> _showMyDialog1(String title, String str) async {
+  Future<void> _showAlertDialog(
+      {String title, String body, Color color}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('$title', style: TextStyle(color: Colors.red)),
+          title: Text('$title', style: TextStyle(color: color)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('$str ', style: TextStyle(color: Colors.red)),
+                Text('$body ', style: TextStyle(color: color)),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok', style: TextStyle(color: Colors.red)),
+              child: Text('Ok', style: TextStyle(color: color)),
               onPressed: () {
-                //Navigator.pushNamed(context, '/leaveRequest');
                 Navigator.of(context).pop();
               },
             ),
