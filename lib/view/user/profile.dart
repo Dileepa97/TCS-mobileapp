@@ -19,7 +19,6 @@ class _ProfileState extends State<Profile> {
       body: SafeArea(
         child: FutureBuilder<User>(
           future: UserService().getUser(),
-          // a previously-obtained Future<String> or null
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {

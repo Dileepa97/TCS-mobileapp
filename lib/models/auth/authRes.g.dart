@@ -14,7 +14,7 @@ AuthResponse _$AuthResponseFromJson(Map<String, dynamic> json) {
     json['message'] as String,
     json['tokenExpirationDate'] == null
         ? null
-        : DateTime.parse(json['date'] as String),
+        : DateTime.parse(json['tokenExpirationDate'] as String),
   );
 }
 

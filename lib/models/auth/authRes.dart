@@ -22,4 +22,8 @@ class AuthResponse {
   String toString() {
     return 'AuthResponse{token: $token, type: $type, id: $id, message: $message, tokenExpirationDate: $tokenExpirationDate}';
   }
+
+  String toJsonString() {
+    return '{"token": "$token", "type": "$type", "id": "$id", "tokenExpirationDate": "$tokenExpirationDate"}';
+  }
 }

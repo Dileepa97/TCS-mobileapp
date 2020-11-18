@@ -3,7 +3,7 @@ import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
 
 import 'package:timecapturesystem/view/LMS/user/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
-import 'view/auth/profile.dart';
+import 'package:timecapturesystem/view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/LMS/user/userLeave.dart';

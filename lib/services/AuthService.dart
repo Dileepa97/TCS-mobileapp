@@ -12,8 +12,6 @@ Map<String, String> headers = {'Content-Type': 'application/json'};
 const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {
-  //static const API = 'http://192.168.8.169:8080/api/auth/';
-
   final UserService userService = UserService();
 
   Future<int> login(String username, String password) async {
@@ -28,8 +26,9 @@ class AuthService {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
       authResponse.tokenExpirationDate =
           new DateTime.now().add(new Duration(days: 1));
-      storage.write(key: "auth", value: authResponse.toString());
+      storage.write(key: "auth", value: authResponse.toJsonString());
       storage.write(key: "jwt", value: authResponse.token);
+
       return 1;
     } else {
       return res.statusCode;

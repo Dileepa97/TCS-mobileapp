@@ -3,7 +3,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
-import 'package:timecapturesystem/view/auth/profile.dart';
+import 'package:timecapturesystem/view/user/profile.dart';
 
 import '../constants.dart';
 
