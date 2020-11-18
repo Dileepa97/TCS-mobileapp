@@ -32,9 +32,6 @@ class AuthService {
       authResponse.tokenExpirationDate =
           new DateTime.now().add(new Duration(days: 1));
 
-      print(authResponse);
-      //TODO:print
-
       await storage.write(key: "auth", value: authResponse.toJsonString());
       await storage.write(key: "jwt", value: authResponse.token);
 

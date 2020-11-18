@@ -28,8 +28,9 @@ class _MyAppState extends State<MyApp> {
           var initialRoute;
           if (snapshot.hasData) {
             // TokenStorageService.clearStorage();
+            //TODO: check if expired and resolve bug
             print("user exist");
-            //TODO: check if expired
+
             initialRoute = '/';
             routes = {
               '/': (context) => HomePage(),
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
           } else {
             print("user not exist");
             initialRoute = LoginScreen.id;
+
             routes = {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
