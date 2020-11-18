@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:timecapturesystem/models/leave/LeaveResponse.dart';
 import 'package:timecapturesystem/services/leaveService.dart';
-import 'package:timecapturesystem/view/LMS/user/leaveDetailsPage.dart';
+import 'package:timecapturesystem/view/LMS/admin/leaveDetailsPage.dart';
 
 import 'leaveCard.dart';
 

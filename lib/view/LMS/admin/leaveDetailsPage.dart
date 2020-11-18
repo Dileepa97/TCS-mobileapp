@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/leave/LeaveResponse.dart';
+import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
 
 class LeaveDetailsPage extends StatelessWidget {
   LeaveDetailsPage({this.item});
@@ -100,21 +101,7 @@ class LeaveDetailsPage extends StatelessWidget {
                                 thickness: 1,
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                RoundedButton(
-                                  color: Colors.lightGreen,
-                                  title: 'Accept',
-                                  minWidth: 100.0,
-                                ),
-                                RoundedButton(
-                                  color: Colors.red[300],
-                                  title: 'Reject',
-                                  minWidth: 100,
-                                ),
-                              ],
-                            )
+                            buttonRow(),
                           ],
                         ))
                   ],
@@ -123,6 +110,29 @@ class LeaveDetailsPage extends StatelessWidget {
             )),
       ),
     );
+  }
+
+  Widget buttonRow() {
+    if (this.item.leaveStatus == LeaveStatus.REQUESTED) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          RoundedButton(
+            color: Colors.lightGreen,
+            title: 'Accept',
+            minWidth: 100.0,
+          ),
+          RoundedButton(
+            color: Colors.red[300],
+            title: 'Reject',
+            minWidth: 100,
+          ),
+        ],
+      );
+    } else
+      return SizedBox(
+        height: 0.0,
+      );
   }
 
   String stringDate(DateTime date) {
