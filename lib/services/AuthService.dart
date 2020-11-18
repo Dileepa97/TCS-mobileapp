@@ -26,8 +26,9 @@ class AuthService {
 
     if (res.statusCode == 200) {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
-      
-      storage.write(key: "auth", value: res.body);
+      authResponse.tokenExpirationDate =
+          new DateTime.now().add(new Duration(days: 1));
+      storage.write(key: "auth", value: authResponse.toString());
       storage.write(key: "jwt", value: authResponse.token);
       return 1;
     } else {
