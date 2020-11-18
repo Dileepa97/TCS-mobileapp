@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/view/Auth/auth_screen.dart';
+import 'package:timecapturesystem/services/AuthService.dart';
 import 'package:timecapturesystem/view/user/profile.dart';
 
+import 'package:timecapturesystem/main.dart' as app;
 import 'Auth/auth_screen.dart';
 
 ///time capture system user home page
@@ -32,6 +33,15 @@ class _HomePageState extends State<HomePage> {
               Navigator.pushNamed(context, Profile.id);
             },
             title: 'Profile',
+          ),
+          RoundedButton(
+            color: Colors.blue,
+            onPressed: () async {
+              app.main();
+              await AuthService.logout();
+              Navigator.pushReplacementNamed(context, AuthScreen.id);
+            },
+            title: 'Logout',
           ),
         ],
       ),

@@ -27,8 +27,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  final AuthService _authService = AuthService();
-
   bool spin = false;
 
   @override
@@ -134,7 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   if (_passwordController.text ==
                       _confirmPasswordController.text) {
                     try {
-                      bool registered = await _authService.register(
+                      bool registered = await AuthService.register(
                           context,
                           _usernameController.text,
                           _fullNameController.text,

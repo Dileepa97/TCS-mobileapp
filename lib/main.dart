@@ -3,7 +3,7 @@ import 'package:timecapturesystem/services/StorageService.dart';
 
 import 'package:timecapturesystem/view/LMS/user/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
-import 'package:timecapturesystem/view/auth/auth_screen.dart';
+
 import 'view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
@@ -25,14 +25,20 @@ class _MyAppState extends State<MyApp> {
         future: TokenStorageService.authDataOrEmpty,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           var routes;
+          var initialRoute;
           if (snapshot.hasData) {
             // TokenStorageService.clearStorage();
+            print("user exist");
             //TODO: check if expired
+            initialRoute = '/';
             routes = {
               '/': (context) => HomePage(),
               // build the HomePage widget.
-              AuthScreen.id: (context) => AuthScreen(),
-              // build the Welcome widget.
+
+              LoginScreen.id: (context) => LoginScreen(),
+              // build the Login widget.
+              RegistrationScreen.id: (context) => RegistrationScreen(),
+
               Profile.id: (context) => Profile(),
 
               '/userLeave': (context) => UserLeave(),
@@ -46,11 +52,10 @@ class _MyAppState extends State<MyApp> {
               // build the Register widget.
             };
           } else {
+            print("user not exist");
+            initialRoute = LoginScreen.id;
             routes = {
               '/': (context) => HomePage(),
-              // build the HomePage widget.
-              AuthScreen.id: (context) => AuthScreen(),
-              //
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.
               RegistrationScreen.id: (context) => RegistrationScreen(),
@@ -64,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                 scaffoldBackgroundColor: Color(0xFFF1F1F1),
               ),
               initialRoute:
-                  LoginScreen.id, // Start the app with the "/" named route.
+                  initialRoute, // Start the app with the "/" named route.
               routes: routes);
         });
   }

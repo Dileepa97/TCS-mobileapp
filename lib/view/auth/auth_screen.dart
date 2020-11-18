@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:timecapturesystem/view/Auth/registration_screen.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/view/user/profile.dart';
+import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import 'login_screen.dart';
 
 class AuthScreen extends StatefulWidget {
-  static const String id = "welcome_screen";
+  static const String id = "auth_screen";
 
   @override
   _AuthScreenState createState() => _AuthScreenState();
@@ -73,16 +72,9 @@ class _AuthScreenState extends State<AuthScreen>
             RoundedButton(
               color: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.pushReplacementNamed(context, LoginScreen.id);
               },
               title: 'Login',
-            ),
-            RoundedButton(
-              color: Colors.blue,
-              onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              },
-              title: 'Register',
             ),
           ],
         ),

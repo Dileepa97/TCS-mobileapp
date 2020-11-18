@@ -3,9 +3,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/AuthService.dart';
-import 'package:timecapturesystem/view/user/profile.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import '../constants.dart';
 
@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
+
   bool spin = false;
 
   @override
@@ -75,12 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                   //implement login
                   try {
-                    int code = await _authService.login(
+                    int code = await AuthService.login(
                         _usernameController.text, _passwordController.text);
                     if (code == 1) {
                       //login success
-                      Navigator.popAndPushNamed(context, '/');
                       app.main();
+                      Navigator.popAndPushNamed(context, '/');
                     } else if (code == 404) {
                       displayDialog(context, "Invalid User",
                           "user with given username has not registered in the system");
@@ -103,6 +103,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 },
                 title: 'Login',
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Text('or')],
+              ),
+              RoundedButton(
+                color: Colors.green,
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                      context, RegistrationScreen.id);
+                },
+                title: 'Create New Account',
               ),
             ],
           ),
