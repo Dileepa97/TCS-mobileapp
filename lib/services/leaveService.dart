@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:timecapturesystem/models/leave/LeaveResponse.dart';
 import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
 

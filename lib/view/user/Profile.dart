@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/UserService.dart';
+import 'package:timecapturesystem/view/user/EditProfile.dart';
 
 const fileAPI = 'http://192.168.8.100:8080/api/files/';
 
@@ -131,9 +132,11 @@ class _ProfileState extends State<Profile> {
                     ),
                     color: Colors.white,
                     textColor: Colors.black87,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, EditProfile.id);
+                    },
                   ),
-                )
+                ),
               ];
             } else if (snapshot.hasError) {
               children = <Widget>[

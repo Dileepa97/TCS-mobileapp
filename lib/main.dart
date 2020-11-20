@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:timecapturesystem/services/StorageService.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+import 'package:timecapturesystem/view/user/EditProfile.dart';
 
-import 'view/user/profile.dart';
+import 'view/user/Profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/LMS/user/userLeave.dart';
@@ -40,6 +40,7 @@ class _MyAppState extends State<MyApp> {
               RegistrationScreen.id: (context) => RegistrationScreen(),
 
               Profile.id: (context) => Profile(),
+              EditProfile.id: (context) => EditProfile(),
 
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.
