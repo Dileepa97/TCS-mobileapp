@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:timecapturesystem/view/LMS/component/inputContainer.dart';
-import 'package:timecapturesystem/view/LMS/component/inputTextField.dart';
-import 'package:timecapturesystem/view/constants.dart';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";
-
   @override
   MapScreenState createState() => MapScreenState();
 }
 
 class MapScreenState extends State<EditProfile>
     with SingleTickerProviderStateMixin {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _telephoneNumberController = TextEditingController();
-
-  Color fullNameInitColor = Colors.lightBlueAccent;
-
-  bool _status = false;
+  bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
   @override
@@ -48,9 +37,14 @@ class MapScreenState extends State<EditProfile>
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            new Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                              size: 22.0,
+                            ),
                             Padding(
-                              padding: EdgeInsets.only(left: 2.0),
-                              child: new Text('Edit Profile',
+                              padding: EdgeInsets.only(left: 25.0),
+                              child: new Text('PROFILE',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20.0,
@@ -78,6 +72,21 @@ class MapScreenState extends State<EditProfile>
                                 )),
                           ],
                         ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                new CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  radius: 25.0,
+                                  child: new Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            )),
                       ]),
                     )
                   ],
@@ -103,7 +112,7 @@ class MapScreenState extends State<EditProfile>
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   new Text(
-                                    'Personal Information',
+                                    'Parsonal Information',
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold),
@@ -120,62 +129,172 @@ class MapScreenState extends State<EditProfile>
                             ],
                           )),
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
-                        child: InputContainer(
-                          child: InputTextField(
-                            labelText: 'Username',
-                            onChanged: (text) {
-                              setState(() {
-                                _fullNameController.text = text;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Text(
+                                    'Name',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
-                        child: InputContainer(
-                          child: InputTextField(
-                            labelText: 'Full Name',
-                            onChanged: (text) {
-                              setState(() {
-                                _fullNameController.text = text;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 2.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Flexible(
+                                child: new TextField(
+                                  decoration: const InputDecoration(
+                                    hintText: "Enter Your Name",
+                                  ),
+                                  enabled: !_status,
+                                  autofocus: !_status,
+                                ),
+                              ),
+                            ],
+                          )),
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
-                        child: InputContainer(
-                          child: InputTextField(
-                            labelText: 'Email',
-                            onChanged: (text) {
-                              setState(() {
-                                _fullNameController.text = text;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Text(
+                                    'Email ID',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
                       Padding(
-                        padding:
-                            EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
-                        child: InputContainer(
-                          child: InputTextField(
-                            labelText: 'Telephone Number',
-                            onChanged: (text) {
-                              setState(() {
-                                _fullNameController.text = text;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      _getActionButtons(),
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 2.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Flexible(
+                                child: new TextField(
+                                  decoration: const InputDecoration(
+                                      hintText: "Enter Email ID"),
+                                  enabled: !_status,
+                                ),
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Text(
+                                    'Mobile',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 2.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              new Flexible(
+                                child: new TextField(
+                                  decoration: const InputDecoration(
+                                      hintText: "Enter Mobile Number"),
+                                  enabled: !_status,
+                                ),
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child: Container(
+                                  child: new Text(
+                                    'Pin Code',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                flex: 2,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: new Text(
+                                    'State',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                flex: 2,
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 2.0),
+                          child: new Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 10.0),
+                                  child: new TextField(
+                                    decoration: const InputDecoration(
+                                        hintText: "Enter Pin Code"),
+                                    enabled: !_status,
+                                  ),
+                                ),
+                                flex: 2,
+                              ),
+                              Flexible(
+                                child: new TextField(
+                                  decoration: const InputDecoration(
+                                      hintText: "Enter State"),
+                                  enabled: !_status,
+                                ),
+                                flex: 2,
+                              ),
+                            ],
+                          )),
+                      !_status ? _getActionButtons() : new Container(),
                     ],
                   ),
                 ),
@@ -196,7 +315,7 @@ class MapScreenState extends State<EditProfile>
 
   Widget _getActionButtons() {
     return Padding(
-      padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+      padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
       child: new Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
