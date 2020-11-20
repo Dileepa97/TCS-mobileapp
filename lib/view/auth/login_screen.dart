@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [Text('or')],
               ),
               RoundedButton(
-                color: Colors.greenAccent[400],
+                color: Colors.greenAccent[700],
                 onPressed: () {
                   Navigator.pushNamed(context, RegistrationScreen.id);
                 },

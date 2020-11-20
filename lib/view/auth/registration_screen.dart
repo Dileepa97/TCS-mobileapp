@@ -14,20 +14,19 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  static const double spaceBetweenFields = 16.0;
+  static const double spaceBetweenFields = 15.0;
 
   //form controllers
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _telephoneNumberController =
-      TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _telephoneNumberController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
   bool spin = false;
+  var gender;
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +123,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 decoration: inputDeco(Colors.lightBlueAccent)
                     .copyWith(hintText: 'Confirm password'),
               ),
-              SizedBox(
-                height: 24.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Gender : ",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Text(
+                    "Male",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Radio(
+                    value: 'Male',
+                    groupValue: gender,
+                    onChanged: (value) {
+                      setState(() {
+                        gender = value;
+                        print(gender);
+                      });
+                    },
+                  ),
+                  Text(
+                    "Female",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Radio(
+                    value: 'Female',
+                    groupValue: gender,
+                    onChanged: (value) {
+                      setState(() {
+                        gender = value;
+                        print(gender);
+                      });
+                    },
+                  ),
+                ],
               ),
               RoundedButton(
                 color: Colors.blue,
