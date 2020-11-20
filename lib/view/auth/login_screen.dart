@@ -110,8 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
               RoundedButton(
                 color: Colors.green,
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
-                      context, RegistrationScreen.id);
+                  Navigator.pushNamed(context, RegistrationScreen.id);
                 },
                 title: 'Create New Account',
               ),

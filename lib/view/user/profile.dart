@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
                   _user.username,
                   style: TextStyle(
                     fontFamily: 'Roboto',
-                    color: Colors.black45,
+                    color: Colors.black54,
                     fontSize: 20.0,
                     letterSpacing: 2.0,
                     fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
                           _user.title,
                           style: TextStyle(
                             fontFamily: 'Source Sans Pro',
-                            color: Color.fromARGB(100, 214, 238, 255),
+                            color: Colors.white70,
                             fontSize: 20.0,
                             letterSpacing: 2.5,
                             fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class _ProfileState extends State<Profile> {
                     child: ListTile(
                       leading: Icon(
                         Icons.phone,
-                        color: Colors.blue.shade900,
+                        color: Colors.green.shade900,
                       ),
                       title: Text(
                         _user.telephoneNumber,
