@@ -36,6 +36,7 @@ dependencies:
   json_annotation: ^3.1.0
   circular_profile_avatar: ^1.0.8
   google_fonts: ^1.1.1
+  direct_select: ^1.1.0
   
 
 
