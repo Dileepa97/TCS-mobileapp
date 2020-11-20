@@ -77,6 +77,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextField(
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -88,6 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextField(
                 controller: _telephoneNumberController,
+                keyboardType: TextInputType.number,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
