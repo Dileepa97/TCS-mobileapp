@@ -30,9 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
         inAsyncCall: spin,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               Hero(
                 tag: 'logo',
