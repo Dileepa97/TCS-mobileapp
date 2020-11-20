@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
             // TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");
-
             initialRoute = '/';
             routes = {
               '/': (context) => HomePage(),
