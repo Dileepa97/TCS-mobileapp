@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/UserService.dart';
@@ -28,11 +30,6 @@ class _ProfileState extends State<Profile> {
                   _user.verified ? Colors.lightGreenAccent : Colors.redAccent;
 
               children = <Widget>[
-                CircleAvatar(
-                  radius: 90.0,
-                  backgroundImage:
-                      NetworkImage(fileAPI + _user.profileImageURL),
-                ),
                 Text(
                   _user.fullName,
                   style: TextStyle(
@@ -42,25 +39,47 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                CircleAvatar(
+                  radius: 90.0,
+                  backgroundImage:
+                      NetworkImage(fileAPI + _user.profileImageURL),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  _user.username,
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    color: Colors.black45,
+                    fontSize: 20.0,
+                    letterSpacing: 2.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      _user.username,
-                      style: TextStyle(
-                        fontFamily: 'Source Sans Pro',
-                        color: Color.fromARGB(100, 214, 238, 255),
-                        fontSize: 20.0,
-                        letterSpacing: 2.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      vIcon,
-                      color: vIconColor,
+                    Row(
+                      children: [
+                        Text(
+                          _user.title,
+                          style: TextStyle(
+                            fontFamily: 'Source Sans Pro',
+                            color: Color.fromARGB(100, 214, 238, 255),
+                            fontSize: 20.0,
+                            letterSpacing: 2.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Icon(
+                          vIcon,
+                          color: vIconColor,
+                        ),
+                      ],
                     ),
                   ],
                 ),

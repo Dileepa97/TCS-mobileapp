@@ -92,6 +92,10 @@ flutter:
     - images/
 
   fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/RobotoSlab-Light.ttf
+
     - family: Pacifico
       fonts:
         - asset: fonts/Pacifico-Regular.ttf
