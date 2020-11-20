@@ -41,7 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             shrinkWrap: true,
             children: <Widget>[
               SizedBox(
-                height: 48.0,
+                height: 35.0,
               ),
               Hero(
                 tag: 'logo',
@@ -51,14 +51,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               SizedBox(
-                height: 48.0,
+                height: 20.0,
               ),
               TextField(
                 controller: _usernameController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Username'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Username'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -68,8 +69,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Full Name'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Full Name'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -79,7 +80,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Email'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -89,8 +91,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Telephone Number (optional)'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Telephone Number'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -103,7 +105,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Password'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Password'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -116,8 +119,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Confirm password'),
+                decoration: inputDeco(Colors.lightBlueAccent)
+                    .copyWith(hintText: 'Confirm password'),
               ),
               SizedBox(
                 height: 24.0,

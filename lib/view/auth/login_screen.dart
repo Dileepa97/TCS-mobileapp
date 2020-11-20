@@ -22,6 +22,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool spin = false;
 
+  Color usernameInitColor = Colors.lightBlueAccent;
+  Color passwordInitColor = Colors.lightBlueAccent;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
+              SizedBox(
+                height: 80.0,
+              ),
               Hero(
                 tag: 'logo',
                 child: Container(
@@ -41,15 +47,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(
-                height: 48.0,
+                height: 40.0,
               ),
               TextField(
                 controller: _usernameController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your username'),
+                onTap: () {
+                  setState(() {
+                    usernameInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration:
+                    inputDeco(usernameInitColor).copyWith(hintText: 'Username'),
               ),
               SizedBox(
                 height: 16.0,
@@ -60,8 +71,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your password.'),
+                onTap: () {
+                  setState(() {
+                    passwordInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration:
+                    inputDeco(passwordInitColor).copyWith(hintText: 'Password'),
               ),
               SizedBox(
                 height: 20.0,
@@ -69,6 +85,22 @@ class _LoginScreenState extends State<LoginScreen> {
               RoundedButton(
                 color: Colors.lightBlueAccent,
                 onPressed: () async {
+                  if (_usernameController.text.isEmpty ||
+                      _passwordController.text.isEmpty) {
+                    if (_usernameController.text.isEmpty) {
+                      setState(() {
+                        usernameInitColor = Colors.redAccent;
+                      });
+                    }
+                    if (_passwordController.text.isEmpty) {
+                      setState(() {
+                        passwordInitColor = Colors.redAccent;
+                      });
+                    }
+
+                    return;
+                  }
+
                   setState(() {
                     spin = true;
                   });
@@ -80,26 +112,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       //login success
                       app.main();
                       Navigator.popAndPushNamed(context, '/');
-                    } else if (code == 404) {
-                      displayDialog(context, "Invalid User",
-                          "user with given username has not registered in the system");
-                    } else if (code == 401) {
-                      displayDialog(context, "Bad Credentials",
-                          "Invalid username or password");
                     } else {
-                      displayDialog(context, "Unknown Error",
-                          "An Unknown Error Occurred");
+                      if (code == 404) {
+                        displayDialog(context, "Invalid User",
+                            "user with given username has not registered in the system");
+                      } else if (code == 401) {
+                        displayDialog(context, "Bad Credentials",
+                            "Invalid username or password");
+                      } else {
+                        displayDialog(context, "Unknown Error",
+                            "An Unknown Error Occurred");
+                      }
+                      setState(() {
+                        usernameInitColor = Colors.redAccent;
+                        passwordInitColor = Colors.redAccent;
+                        spin = false;
+                      });
                     }
                   } catch (e) {
                     displayDialog(context, "Error", e.toString());
                     print(e.toString());
                   }
-
-                  setState(() {
-                    spin = false;
-                    _usernameController.text = "";
-                    _passwordController.text = "";
-                  });
                 },
                 title: 'Login',
               ),
