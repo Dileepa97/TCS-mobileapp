@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/leaveService.dart';
 import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
+import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 
-import 'package:timecapturesystem/view/LMS/user/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
