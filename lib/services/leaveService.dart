@@ -16,19 +16,21 @@ class LeaveService {
   //static const API = 'http://localhost:8080/leaves/';
 
   Future<int> newLeave(
+      String leaveTitle,
       String leaveType,
       String leaveDescription,
       DateTime leaveStartDate,
       DateTime leaveEndDate,
-      int leaveCount,
+      double leaveDays,
       LeaveStatus leaveStatus,
       String userId) async {
     var body = jsonEncode({
+      "leaveTitle": leaveTitle,
       "leaveType": leaveType,
       "leaveDescription": leaveDescription,
       "leaveStartDate": leaveStartDate.toIso8601String(),
       "leaveEndDate": leaveEndDate.toIso8601String(),
-      "leaveCount": leaveCount,
+      "leaveDays": leaveDays,
       "leaveStatus": EnumToString.convertToString(leaveStatus),
       "userId": userId
     });
