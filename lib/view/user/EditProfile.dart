@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/UserService.dart';
 
@@ -15,6 +16,7 @@ class EditProfile extends StatefulWidget {
 class MapScreenState extends State<EditProfile>
     with SingleTickerProviderStateMixin {
   bool _status = true;
+  final userService = UserService();
   final FocusNode myFocusNode = FocusNode();
 
   TextEditingController _usernameController = TextEditingController();
@@ -332,16 +334,16 @@ class MapScreenState extends State<EditProfile>
                 child: Text("Update"),
                 textColor: Colors.white,
                 color: Colors.green,
-                onPressed: () {
+                onPressed: () async {
                   if (_usernameController.text.isNotEmpty ||
                       _fullNameController.text.isNotEmpty ||
                       _emailController.text.isNotEmpty ||
                       _telephoneNumberController.text.isNotEmpty) {
                     //send request
-                    setState(() {
-                      _status = true;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    });
+                    displayUpdateDialog(context);
+                  } else {
+                    displayDialog(context, "Form Empty",
+                        "You must fill at least one value to update");
                   }
                 },
                 shape: RoundedRectangleBorder(
@@ -388,15 +390,69 @@ class MapScreenState extends State<EditProfile>
         ),
       ),
       onTap: () async {
-        user = await UserService().getUser();
+        user = await userService.getUser();
         setState(() {
-          _usernameHintText = user.username;
-          _fullNameHintText = user.fullName;
-          _emailHintText = user.email;
-          _telephoneNumberHintText = user.telephoneNumber;
+          updateFormState();
           _status = false;
         });
       },
     );
   }
+
+  updateFormState() {
+    _usernameHintText = user.username;
+    _fullNameHintText = user.fullName;
+    _emailHintText = user.email;
+    _telephoneNumberHintText = user.telephoneNumber;
+  }
+
+  void displayUpdateDialog(context) => showDialog(
+        barrierColor: Colors.white70,
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Confirm Update"),
+          content: Text(
+              "Since your're updating profile you'll get UNVERIFIED\n\nHence an admin must verify your account for you to log back into the system again"),
+          actions: [
+            FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              child: Text(
+                "Confirm",
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.green,
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+
+                bool success = await userService.updateUser(
+                    context,
+                    _usernameController.text,
+                    _fullNameController.text,
+                    _emailController.text,
+                    _telephoneNumberController.text);
+
+                if (success) {
+                  //if success login page
+                  updateSuccessDialog(context);
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                color: Colors.redAccent,
+                child: Text("Cancel"))
+          ],
+        ),
+      );
 }

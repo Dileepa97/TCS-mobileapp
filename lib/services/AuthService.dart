@@ -13,7 +13,7 @@ import 'UserService.dart';
 import 'package:timecapturesystem/main.dart' as app;
 
 final storage = FlutterSecureStorage();
-Map<String, String> headers = {'Content-Type': 'application/json'};
+String contentTypeHeader = 'application/json';
 const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {
@@ -25,7 +25,9 @@ class AuthService {
       "password": password,
     });
 
-    var res = await http.post(API + "login", body: body, headers: headers);
+    var res = await http.post(API + "login",
+        body: body,
+        headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
     if (res.statusCode == 200) {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
@@ -57,7 +59,9 @@ class AuthService {
     });
     http.Response res;
     try {
-      res = await http.post(API + 'register', body: jsonBody, headers: headers);
+      res = await http.post(API + 'register',
+          body: jsonBody,
+          headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
       if (res.statusCode == 200) {
         return true;

@@ -25,3 +25,22 @@ void displayRegSuccessDialog(context) => showDialog(
         ],
       ),
     );
+
+void updateSuccessDialog(context) => showDialog(
+      barrierColor: Colors.white70,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Update Profile Success"),
+        content: Text(
+            "You have successfully updated your profile\nYou'll be logged out of the system and wont be able to login until an admin re-verify your account"),
+        actions: [
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
+            },
+          )
+        ],
+      ),
+    );
