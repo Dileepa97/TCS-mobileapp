@@ -49,13 +49,17 @@ class AuthService {
       String fullName,
       String telephoneNumber,
       String email,
-      String password) async {
+      String password,
+      String gender,
+      bool probationary) async {
     var jsonBody = jsonEncode({
       "username": username,
       "fullName": fullName,
       "telephoneNumber": telephoneNumber,
       "email": email,
       "password": password,
+      "gender": gender,
+      "probationary": probationary
     });
     http.Response res;
     try {

@@ -25,6 +25,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
+  Color _usernameInitColor = Colors.lightBlueAccent;
+  Color _fullNameInitColor = Colors.lightBlueAccent;
+  Color _emailInitColor = Colors.lightBlueAccent;
+  Color _telephoneNumberInitColor = Colors.lightBlueAccent;
+  Color _passwordInitColor = Colors.lightBlueAccent;
+  Color _confirmPasswordInitColor = Colors.lightBlueAccent;
+
   bool spin = false;
   var gender;
 
@@ -57,7 +64,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
+                onTap: () {
+                  setState(() {
+                    _usernameInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_usernameInitColor)
                     .copyWith(hintText: 'Username'),
               ),
               SizedBox(
@@ -68,7 +80,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
+                onTap: () {
+                  setState(() {
+                    _fullNameInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_fullNameInitColor)
                     .copyWith(hintText: 'Full Name'),
               ),
               SizedBox(
@@ -80,8 +97,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
-                    .copyWith(hintText: 'Email'),
+                onTap: () {
+                  setState(() {
+                    _emailInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration:
+                    inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -92,7 +114,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
+                onTap: () {
+                  setState(() {
+                    _telephoneNumberInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_telephoneNumberInitColor)
                     .copyWith(hintText: 'Telephone Number'),
               ),
               SizedBox(
@@ -106,7 +133,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
+                onTap: () {
+                  setState(() {
+                    _passwordInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_passwordInitColor)
                     .copyWith(hintText: 'Password'),
               ),
               SizedBox(
@@ -120,7 +152,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: inputDeco(Colors.lightBlueAccent)
+                onTap: () {
+                  setState(() {
+                    _confirmPasswordInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_confirmPasswordInitColor)
                     .copyWith(hintText: 'Confirm password'),
               ),
               Row(
@@ -170,40 +207,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     spin = true;
                   });
                   //implement registration
-                  if (_passwordController.text ==
-                      _confirmPasswordController.text) {
-                    try {
-                      bool registered = await AuthService.register(
-                          context,
-                          _usernameController.text,
-                          _fullNameController.text,
-                          _telephoneNumberController.text,
-                          _emailController.text,
-                          _passwordController.text);
-
-                      if (registered) {
-                        setState(() {
-                          _usernameController.clear();
-                          _fullNameController.clear();
-                          _telephoneNumberController.clear();
-                          _emailController.clear();
-                          _passwordController.clear();
-                          _confirmPasswordController.clear();
-                        });
-
-                        displayRegSuccessDialog(context);
-                      }
-                    } catch (e) {
-                      displayDialog(
-                          context, "Error", "An Unknown Error Occurred");
-                    }
+                  if (checkValidity()) {
+                    await registerUser();
                   } else {
-                    displayDialog(context, "Password Mismatch",
-                        "Confirmation password did not match with your password");
+                    setState(() {
+                      spin = false;
+                    });
                   }
-                  setState(() {
-                    spin = false;
-                  });
                 },
                 title: 'Register',
               ),
@@ -212,5 +222,94 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  checkValidity() {
+    int flag = 0;
+    //TODO : add more validation
+    if (_usernameController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _usernameInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_fullNameController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _fullNameInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_emailController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _emailInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_telephoneNumberController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_passwordController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _passwordInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_confirmPasswordController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent;
+      });
+    }
+
+    checkPasswordMatch();
+
+    if (gender == null) {
+      flag++;
+      displayDialog(context, "Select Gender", "Please select a gender");
+    }
+
+    return flag == 0;
+  }
+
+  checkPasswordMatch() {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent.shade700;
+        _passwordInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Password Mismatch",
+          "Confirmation password did not match with your password");
+    } else {
+      _confirmPasswordInitColor = Colors.blueAccent;
+      _passwordInitColor = Colors.blueAccent;
+    }
+  }
+
+  registerUser() async {
+    try {
+      bool registered = await AuthService.register(
+          context,
+          _usernameController.text,
+          _fullNameController.text,
+          _telephoneNumberController.text,
+          _emailController.text,
+          _passwordController.text,
+          gender,
+          false);
+//TODO : probationary, title
+      if (registered) {
+        displayRegSuccessDialog(context);
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
   }
 }
