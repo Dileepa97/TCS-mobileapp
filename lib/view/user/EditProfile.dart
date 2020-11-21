@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/UserService.dart';
+
+const fileAPI = 'http://192.168.8.100:8080/api/files/';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";
+
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -12,6 +17,17 @@ class MapScreenState extends State<EditProfile>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _telephoneNumberController = TextEditingController();
+
+  String _usernameHintText = 'Edit Username';
+  String _fullNameHintText = "Edit FullName";
+  String _emailHintText = "Edit Email";
+  String _telephoneNumberHintText = "Edit Telephone Number";
+  User user;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -20,263 +36,278 @@ class MapScreenState extends State<EditProfile>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: new Container(
-      color: Colors.white,
-      child: new ListView(
-        children: <Widget>[
-          Column(
+    setState(() {});
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: new ListView(
             children: <Widget>[
-              new Container(
-                height: 250.0,
-                color: Colors.white,
-                child: new Column(
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 0.0),
-                              child: new Text('Edit Profile',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                      fontFamily: 'sans-serif-light',
-                                      color: Colors.black)),
-                            )
-                          ],
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: new Stack(fit: StackFit.loose, children: <Widget>[
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new Container(
-                                width: 140.0,
-                                height: 140.0,
-                                decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    image: new ExactAssetImage('images/as.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                )),
-                          ],
-                        ),
+              Column(
+                children: <Widget>[
+                  new Container(
+                    height: 250.0,
+                    color: Colors.white,
+                    child: new Column(
+                      children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                            padding: EdgeInsets.only(left: 20.0, top: 20.0),
                             child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                new CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  radius: 25.0,
-                                  child: new Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                  ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 0.0),
+                                  child: new Text('Edit Profile',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0,
+                                          fontFamily: 'sans-serif-light',
+                                          color: Colors.black)),
                                 )
                               ],
                             )),
-                      ]),
-                    )
-                  ],
-                ),
-              ),
-              new Container(
-                color: Color(0xffFFFFFF),
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 25.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 18.0, right: 25.0, top: 25.0),
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    'Personal Information',
-                                    style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  _status ? _getEditIcon() : new Container(),
-                                ],
-                              )
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    'Username',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Flexible(
-                                child: new TextField(
-                                  decoration: const InputDecoration(
-                                    hintText: "Enter Your Username",
-                                  ),
-                                  enabled: !_status,
-                                  autofocus: !_status,
-                                ),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    'Full Name',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Flexible(
-                                child: new TextField(
-                                  decoration: const InputDecoration(
-                                    hintText: "Enter Your Name",
-                                  ),
-                                  enabled: !_status,
-                                  autofocus: !_status,
-                                ),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    'Email',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Flexible(
-                                child: new TextField(
-                                  decoration: const InputDecoration(
-                                      hintText: "Enter Email ID"),
-                                  enabled: !_status,
-                                ),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    'Telephone Number',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
-                          child: new Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              new Flexible(
-                                child: new TextField(
-                                  decoration: const InputDecoration(
-                                      hintText: "Enter Mobile Number"),
-                                  enabled: !_status,
-                                ),
-                              ),
-                            ],
-                          )),
-                      !_status ? _getActionButtons() : new Container(),
-                    ],
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.0),
+                          child:
+                              new Stack(fit: StackFit.loose, children: <Widget>[
+                            new Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                new Container(
+                                    width: 140.0,
+                                    height: 140.0,
+                                    decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: user == null
+                                            ? ExactAssetImage('images/as.png')
+                                            : NetworkImage(
+                                                fileAPI + user.profileImageURL),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                            Padding(
+                                padding:
+                                    EdgeInsets.only(top: 90.0, right: 100.0),
+                                child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    new CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      radius: 25.0,
+                                      child: new Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ]),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
+                  new Container(
+                    color: Color(0xffFFFFFF),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 2.0),
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 18.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Personal Information',
+                                        style: TextStyle(
+                                            fontSize: 19.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      _status
+                                          ? _getEditIcon()
+                                          : new Container(),
+                                    ],
+                                  )
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Username',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration()
+                                          .copyWith(
+                                              hintText: _usernameHintText),
+                                      enabled: !_status,
+                                      autofocus: !_status,
+                                      controller: _usernameController,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Full Name',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration()
+                                          .copyWith(
+                                              hintText: _fullNameHintText),
+                                      enabled: !_status,
+                                      autofocus: !_status,
+                                      controller: _fullNameController,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Email',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration()
+                                          .copyWith(hintText: _emailHintText),
+                                      enabled: !_status,
+                                      controller: _emailController,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Telephone Number',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration()
+                                          .copyWith(
+                                              hintText:
+                                                  _telephoneNumberHintText),
+                                      enabled: !_status,
+                                      controller: _telephoneNumberController,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          !_status ? _getActionButtons() : new Container(),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 
   @override
@@ -297,18 +328,24 @@ class MapScreenState extends State<EditProfile>
             child: Padding(
               padding: EdgeInsets.only(right: 10.0),
               child: Container(
-                  child: new RaisedButton(
-                child: new Text("Save"),
+                  child: RaisedButton(
+                child: Text("Update"),
                 textColor: Colors.white,
                 color: Colors.green,
                 onPressed: () {
-                  setState(() {
-                    _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  });
+                  if (_usernameController.text.isNotEmpty ||
+                      _fullNameController.text.isNotEmpty ||
+                      _emailController.text.isNotEmpty ||
+                      _telephoneNumberController.text.isNotEmpty) {
+                    //send request
+                    setState(() {
+                      _status = true;
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    });
+                  }
                 },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
               )),
             ),
             flex: 2,
@@ -317,18 +354,19 @@ class MapScreenState extends State<EditProfile>
             child: Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Container(
-                  child: new RaisedButton(
-                child: new Text("Cancel"),
+                  child: RaisedButton(
+                child: Text("Cancel"),
                 textColor: Colors.white,
                 color: Colors.red,
                 onPressed: () {
                   setState(() {
                     _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
+
+                    FocusScope.of(context).requestFocus(FocusNode());
                   });
                 },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
               )),
             ),
             flex: 2,
@@ -339,9 +377,9 @@ class MapScreenState extends State<EditProfile>
   }
 
   Widget _getEditIcon() {
-    return new GestureDetector(
-      child: new CircleAvatar(
-        backgroundColor: Colors.red,
+    return GestureDetector(
+      child: CircleAvatar(
+        backgroundColor: Colors.blueAccent,
         radius: 14.0,
         child: new Icon(
           Icons.edit,
@@ -349,8 +387,13 @@ class MapScreenState extends State<EditProfile>
           size: 16.0,
         ),
       ),
-      onTap: () {
+      onTap: () async {
+        user = await UserService().getUser();
         setState(() {
+          _usernameHintText = user.username;
+          _fullNameHintText = user.fullName;
+          _emailHintText = user.email;
+          _telephoneNumberHintText = user.telephoneNumber;
           _status = false;
         });
       },

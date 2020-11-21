@@ -31,123 +31,125 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: spin,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              SizedBox(
-                height: 80.0,
-              ),
-              Hero(
-                tag: 'logo',
-                child: Container(
-                  height: 200.0,
-                  child: Image.asset('images/logo.png'),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SizedBox(
+                  height: 80.0,
                 ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              TextField(
-                controller: _usernameController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    usernameInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration:
-                    inputDeco(usernameInitColor).copyWith(hintText: 'Username'),
-              ),
-              SizedBox(
-                height: 16.0,
-              ),
-              TextField(
-                obscureText: true,
-                controller: _passwordController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    passwordInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration:
-                    inputDeco(passwordInitColor).copyWith(hintText: 'Password'),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RoundedButton(
-                color: Colors.lightBlueAccent,
-                onPressed: () async {
-                  if (_usernameController.text.isEmpty ||
-                      _passwordController.text.isEmpty) {
-                    if (_usernameController.text.isEmpty) {
-                      setState(() {
-                        usernameInitColor = Colors.redAccent;
-                      });
-                    }
-                    if (_passwordController.text.isEmpty) {
-                      setState(() {
-                        passwordInitColor = Colors.redAccent;
-                      });
-                    }
-
-                    return;
-                  }
-
-                  setState(() {
-                    spin = true;
-                  });
-                  //implement login
-                  try {
-                    int code = await AuthService.login(
-                        _usernameController.text, _passwordController.text);
-                    if (code == 1) {
-                      //login success
-                      app.main();
-                      Navigator.popAndPushNamed(context, '/');
-                    } else {
-                      if (code == 404) {
-                        displayDialog(context, "Invalid User",
-                            "user with given username has not registered in the system");
-                      } else if (code == 401) {
-                        displayDialog(context, "Bad Credentials",
-                            "Invalid username or password");
-                      } else {
-                        displayDialog(context, "Unknown Error",
-                            "An Unknown Error Occurred");
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    height: 200.0,
+                    child: Image.asset('images/logo.png'),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                TextField(
+                  controller: _usernameController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      usernameInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(usernameInitColor)
+                      .copyWith(hintText: 'Username'),
+                ),
+                SizedBox(
+                  height: 16.0,
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: _passwordController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      passwordInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(passwordInitColor)
+                      .copyWith(hintText: 'Password'),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RoundedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () async {
+                    if (_usernameController.text.isEmpty ||
+                        _passwordController.text.isEmpty) {
+                      if (_usernameController.text.isEmpty) {
+                        setState(() {
+                          usernameInitColor = Colors.redAccent;
+                        });
                       }
-                      setState(() {
-                        usernameInitColor = Colors.redAccent;
-                        passwordInitColor = Colors.redAccent;
-                        spin = false;
-                      });
+                      if (_passwordController.text.isEmpty) {
+                        setState(() {
+                          passwordInitColor = Colors.redAccent;
+                        });
+                      }
+
+                      return;
                     }
-                  } catch (e) {
-                    displayDialog(context, "Error", e.toString());
-                    print(e.toString());
-                  }
-                },
-                title: 'Login',
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text('or')],
-              ),
-              RoundedButton(
-                color: Colors.greenAccent[700],
-                onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.id);
-                },
-                title: 'Create New Account',
-              ),
-            ],
+
+                    setState(() {
+                      spin = true;
+                    });
+                    //implement login
+                    try {
+                      int code = await AuthService.login(
+                          _usernameController.text, _passwordController.text);
+                      if (code == 1) {
+                        //login success
+                        app.main();
+                        Navigator.popAndPushNamed(context, '/');
+                      } else {
+                        if (code == 404) {
+                          displayDialog(context, "Invalid User",
+                              "user with given username has not registered in the system");
+                        } else if (code == 401) {
+                          displayDialog(context, "Bad Credentials",
+                              "Invalid username or password");
+                        } else {
+                          displayDialog(context, "Unknown Error",
+                              "An Unknown Error Occurred");
+                        }
+                        setState(() {
+                          usernameInitColor = Colors.redAccent;
+                          passwordInitColor = Colors.redAccent;
+                          spin = false;
+                        });
+                      }
+                    } catch (e) {
+                      displayDialog(context, "Error", e.toString());
+                      print(e.toString());
+                    }
+                  },
+                  title: 'Login',
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text('or')],
+                ),
+                RoundedButton(
+                  color: Colors.greenAccent[700],
+                  onPressed: () {
+                    Navigator.pushNamed(context, RegistrationScreen.id);
+                  },
+                  title: 'Create New Account',
+                ),
+              ],
+            ),
           ),
         ),
       ),
