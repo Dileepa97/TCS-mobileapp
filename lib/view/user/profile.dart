@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/UserService.dart';
-import 'package:timecapturesystem/view/user/EditProfile.dart';
+import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/user/edit_profile.dart';
 
 const fileAPI = 'http://192.168.8.100:8080/api/files/';
 

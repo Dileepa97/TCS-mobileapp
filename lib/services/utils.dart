@@ -1,4 +1,4 @@
-import 'StorageService.dart';
+import 'storage_service.dart';
 
 Future<String> generateAuthHeader() async {
   var token = await TokenStorageService.jwtOrEmpty;

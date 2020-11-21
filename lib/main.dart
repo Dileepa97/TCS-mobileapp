@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/services/StorageService.dart';
+import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
-import 'package:timecapturesystem/view/user/EditProfile.dart';
+import 'package:timecapturesystem/view/user/edit_profile.dart';
 
-import 'view/user/Profile.dart';
+import 'view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/LMS/user/userLeave.dart';

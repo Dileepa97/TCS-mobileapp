@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/utils.dart';
-import 'StorageService.dart';
+import 'storage_service.dart';
 
 String contentTypeHeader = 'application/json';
 

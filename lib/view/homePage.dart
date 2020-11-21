@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/services/AuthService.dart';
+import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
-import 'package:timecapturesystem/view/user/Profile.dart';
+import 'package:timecapturesystem/view/user/profile.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
-import 'Auth/auth_screen.dart';
 
 ///time capture system user home page
 class HomePage extends StatefulWidget {
