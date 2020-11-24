@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/user/upload_image.dart';
 
 //TODO:image upload
-const fileAPI = 'http://192.168.8.100:8080/api/files/';
+const fileAPI = 'http://localhost:8080/api/files/';
+// const fileAPI = 'http://192.168.8.100:8080/api/files/';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";
@@ -94,15 +96,21 @@ class MapScreenState extends State<EditProfile>
                             Padding(
                                 padding:
                                     EdgeInsets.only(top: 90.0, right: 100.0),
-                                child: new Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    new CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      radius: 25.0,
-                                      child: new Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushReplacementNamed(
+                                            context, UploadImage.id);
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                        radius: 25.0,
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     )
                                   ],

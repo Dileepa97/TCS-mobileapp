@@ -3,6 +3,7 @@ import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
+import 'package:timecapturesystem/view/user/upload_image.dart';
 
 import 'view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
@@ -21,8 +22,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-        future: TokenStorageService.authDataOrEmpty,
+    return StreamBuilder<dynamic>(
+        stream: Stream.fromFuture(TokenStorageService.authDataOrEmpty),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           var routes;
           var initialRoute;
@@ -40,7 +41,10 @@ class _MyAppState extends State<MyApp> {
               RegistrationScreen.id: (context) => RegistrationScreen(),
 
               Profile.id: (context) => Profile(),
+
               EditProfile.id: (context) => EditProfile(),
+
+              UploadImage.id: (context) => UploadImage(),
 
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.

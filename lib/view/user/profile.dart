@@ -3,7 +3,8 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
 
-const fileAPI = 'http://192.168.8.100:8080/api/files/';
+const fileAPI = 'http://localhost:8080/api/files/';
+// const fileAPI = 'http://192.168.8.100:8080/api/files/';
 
 class Profile extends StatefulWidget {
   static const String id = "profile_screen";
