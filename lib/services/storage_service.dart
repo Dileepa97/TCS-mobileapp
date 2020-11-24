@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:timecapturesystem/models/AuthResponse.dart';
+import 'package:timecapturesystem/models/Auth/auth_response.dart';
 
 final storage = FlutterSecureStorage();
 
@@ -16,5 +16,14 @@ class TokenStorageService {
     var authData = await storage.read(key: "auth");
     if (authData == null) return null;
     return AuthResponse.fromJson(jsonDecode(authData));
+  }
+
+  static Future<String> get idOrEmpty async {
+    var auth = await authDataOrEmpty;
+    return auth.id;
+  }
+
+  static Future<void> clearStorage() async {
+    storage.deleteAll();
   }
 }

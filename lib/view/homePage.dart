@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/view/Auth/welcome_screen.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/services/auth_service.dart';
+import 'package:timecapturesystem/view/auth/login_screen.dart';
+import 'package:timecapturesystem/view/user/profile.dart';
 
-import 'Auth/welcome_screen.dart';
+import 'package:timecapturesystem/main.dart' as app;
 
 ///time capture system user home page
 class HomePage extends StatefulWidget {
@@ -17,57 +20,28 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: RaisedButton(
-              color: Colors.blueAccent,
-              child: Text(
-                'Leave',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/userLeave');
-              },
-            ),
+          RoundedButton(
+            color: Colors.blueAccent,
+            onPressed: () {
+              Navigator.pushNamed(context, '/userLeave');
+            },
+            title: 'Leave Management System',
           ),
-          // Container(
-          //   height: 50,
-          //   margin: EdgeInsets.symmetric(vertical: 5),
-          //   padding: EdgeInsets.symmetric(horizontal: 10),
-          //   child: RaisedButton(
-          //     color: Colors.blueAccent,
-          //     child: Text(
-          //       'Progress',
-          //       style: TextStyle(
-          //         fontSize: 20.0,
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //     onPressed: () {},
-          //   ),
-          // ),
-          Container(
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: RaisedButton(
-              color: Colors.blueAccent,
-              child: Text(
-                'Auth',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, WelcomeScreen.id);
-              },
-            ),
+          RoundedButton(
+            color: Colors.blue,
+            onPressed: () {
+              Navigator.pushNamed(context, Profile.id);
+            },
+            title: 'Profile',
+          ),
+          RoundedButton(
+            color: Colors.redAccent,
+            onPressed: () async {
+              app.main();
+              await AuthService.logout();
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
+            },
+            title: 'Logout',
           ),
         ],
       ),

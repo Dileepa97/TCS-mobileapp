@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/services/AuthService.dart';
+import 'package:timecapturesystem/services/auth_service.dart';
 
 import '../constants.dart';
 
@@ -14,22 +14,26 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  static const double spaceBetweenFields = 16.0;
+  static const double spaceBetweenFields = 15.0;
 
   //form controllers
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _telephoneNumberController =
-      TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _telephoneNumberController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  Color _usernameInitColor = Colors.lightBlueAccent;
+  Color _fullNameInitColor = Colors.lightBlueAccent;
+  Color _emailInitColor = Colors.lightBlueAccent;
+  Color _telephoneNumberInitColor = Colors.lightBlueAccent;
+  Color _passwordInitColor = Colors.lightBlueAccent;
+  Color _confirmPasswordInitColor = Colors.lightBlueAccent;
 
   bool spin = false;
+  var gender;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             shrinkWrap: true,
             children: <Widget>[
               SizedBox(
-                height: 48.0,
+                height: 35.0,
               ),
               Hero(
                 tag: 'logo',
@@ -53,14 +57,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               SizedBox(
-                height: 48.0,
+                height: 20.0,
               ),
               TextField(
                 controller: _usernameController,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Username'),
+                onTap: () {
+                  setState(() {
+                    _usernameInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_usernameInitColor)
+                    .copyWith(hintText: 'Username'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -70,29 +80,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Full Name'),
+                onTap: () {
+                  setState(() {
+                    _fullNameInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_fullNameInitColor)
+                    .copyWith(hintText: 'Full Name'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
               ),
               TextField(
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                onTap: () {
+                  setState(() {
+                    _emailInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration:
+                    inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
               ),
               TextField(
                 controller: _telephoneNumberController,
+                keyboardType: TextInputType.number,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Telephone Number (optional)'),
+                onTap: () {
+                  setState(() {
+                    _telephoneNumberInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_telephoneNumberInitColor)
+                    .copyWith(hintText: 'Telephone Number'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -105,7 +133,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Password'),
+                onTap: () {
+                  setState(() {
+                    _passwordInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_passwordInitColor)
+                    .copyWith(hintText: 'Password'),
               ),
               SizedBox(
                 height: spaceBetweenFields,
@@ -118,11 +152,53 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Confirm password'),
+                onTap: () {
+                  setState(() {
+                    _confirmPasswordInitColor = Colors.lightBlueAccent;
+                  });
+                },
+                decoration: inputDeco(_confirmPasswordInitColor)
+                    .copyWith(hintText: 'Confirm password'),
               ),
-              SizedBox(
-                height: 24.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Gender : ",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Text(
+                    "Male",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Radio(
+                    value: 'Male',
+                    groupValue: gender,
+                    onChanged: (value) {
+                      setState(() {
+                        gender = value;
+                        print(gender);
+                      });
+                    },
+                  ),
+                  Text(
+                    "Female",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Radio(
+                    value: 'Female',
+                    groupValue: gender,
+                    onChanged: (value) {
+                      setState(() {
+                        gender = value;
+                        print(gender);
+                      });
+                    },
+                  ),
+                ],
               ),
               RoundedButton(
                 color: Colors.blue,
@@ -131,40 +207,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     spin = true;
                   });
                   //implement registration
-                  if (_passwordController.text ==
-                      _confirmPasswordController.text) {
-                    try {
-                      bool registered = await _authService.register(
-                          context,
-                          _usernameController.text,
-                          _fullNameController.text,
-                          _telephoneNumberController.text,
-                          _emailController.text,
-                          _passwordController.text);
-
-                      if (registered) {
-                        setState(() {
-                          _usernameController.clear();
-                          _fullNameController.clear();
-                          _telephoneNumberController.clear();
-                          _emailController.clear();
-                          _passwordController.clear();
-                          _confirmPasswordController.clear();
-                        });
-
-                        displayRegSuccessDialog(context);
-                      }
-                    } catch (e) {
-                      displayDialog(
-                          context, "Error", "An Unknown Error Occurred");
-                    }
+                  if (checkValidity()) {
+                    await registerUser();
                   } else {
-                    displayDialog(context, "Password Mismatch",
-                        "Confirmation password did not match with your password");
+                    setState(() {
+                      spin = false;
+                    });
                   }
-                  setState(() {
-                    spin = false;
-                  });
                 },
                 title: 'Register',
               ),
@@ -173,5 +222,94 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  checkValidity() {
+    int flag = 0;
+    //TODO : add more validation
+    if (_usernameController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _usernameInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_fullNameController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _fullNameInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_emailController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _emailInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_telephoneNumberController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_passwordController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _passwordInitColor = Colors.redAccent;
+      });
+    }
+
+    if (_confirmPasswordController.text.isEmpty) {
+      flag++;
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent;
+      });
+    }
+
+    checkPasswordMatch();
+
+    if (gender == null) {
+      flag++;
+      displayDialog(context, "Select Gender", "Please select a gender");
+    }
+
+    return flag == 0;
+  }
+
+  checkPasswordMatch() {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent.shade700;
+        _passwordInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Password Mismatch",
+          "Confirmation password did not match with your password");
+    } else {
+      _confirmPasswordInitColor = Colors.blueAccent;
+      _passwordInitColor = Colors.blueAccent;
+    }
+  }
+
+  registerUser() async {
+    try {
+      bool registered = await AuthService.register(
+          context,
+          _usernameController.text,
+          _fullNameController.text,
+          _telephoneNumberController.text,
+          _emailController.text,
+          _passwordController.text,
+          gender,
+          false);
+//TODO : probationary, title
+      if (registered) {
+        displayRegSuccessDialog(context);
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
   }
 }
