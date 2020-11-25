@@ -67,22 +67,22 @@ class UserService {
     return false;
   }
 
-  Future<dynamic> getAllUsers(dynamic context) async {
+  Future<List<User>> getAllUsers(dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
-      var res = await http.patch(API, headers: {
+      var res = await http.get(API, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
       if (res.statusCode == 200) {
-        List<dynamic> _userList = jsonDecode(res.body);
-        List<dynamic> userList = [];
-        _userList.forEach((element) {
-          userList.add(User.fromJson(jsonDecode(element)));
-        });
-        return userList;
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
       } else if (res.statusCode == 400) {
-        displayDialog(context, "Error", "Bad request");
+        displayDialog(context, "Error", "Bad Request");
       } else {
         displayDialog(
             context, "Error", "An error occurred while fetching users");

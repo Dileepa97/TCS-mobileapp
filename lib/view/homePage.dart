@@ -5,6 +5,7 @@ import 'package:timecapturesystem/view/auth/login_screen.dart';
 import 'package:timecapturesystem/view/user/profile.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
 
 ///time capture system user home page
 class HomePage extends StatefulWidget {
@@ -33,6 +34,13 @@ class _HomePageState extends State<HomePage> {
               Navigator.pushNamed(context, Profile.id);
             },
             title: 'Profile',
+          ),
+          RoundedButton(
+            color: Colors.blue,
+            onPressed: () {
+              Navigator.pushNamed(context, UserManagementDashboard.id);
+            },
+            title: 'User Management',
           ),
           RoundedButton(
             color: Colors.redAccent,
