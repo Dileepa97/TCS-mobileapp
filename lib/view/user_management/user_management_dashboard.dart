@@ -93,14 +93,7 @@ class UserCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TextButton(
-                  child: const Text('BUY TICKETS'),
-                  onPressed: () {
-                    /* ... */
-                  },
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  child: const Text('LISTEN'),
+                  child: const Text('View'),
                   onPressed: () {
                     /* ... */
                   },
