@@ -66,7 +66,7 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
   }
 }
 
-class UserCard extends StatelessWidget {
+class UserCard extends StatefulWidget {
   final User user;
 
   const UserCard({
@@ -75,36 +75,62 @@ class UserCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    var vIcon = user.verified ? Icons.verified : Icons.cancel;
-    var vIconColor = user.verified ? Colors.lightGreenAccent : Colors.redAccent;
+  _UserCardState createState() => _UserCardState();
+}
 
-    return Center(
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.ac_unit),
-              title: Text(user.fullName),
-              subtitle: Text(user.username),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TextButton(
-                  child: const Text('View'),
-                  onPressed: () {
-                    /* ... */
-                  },
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
-          ],
+class _UserCardState extends State<UserCard> {
+  @override
+  Widget build(BuildContext context) {
+    var vIcon = widget.user.verified ? Icons.verified : Icons.cancel;
+    var vIconColor = widget.user.verified ? Colors.green : Colors.redAccent;
+
+    var imageURL = widget.user.profileImageURL == null
+        ? 'default.png'
+        : widget.user.profileImageURL;
+    return GestureDetector(
+      onDoubleTap: () {},
+      child: Container(
+        height: 80,
+        child: Card(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: NetworkImage(fileAPI + imageURL),
+              ),
+              Container(
+                width: 150,
+                child: Text(widget.user.fullName),
+              ),
+              Icon(
+                vIcon,
+                color: vIconColor,
+                size: 30,
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+highestRoleName(int highestRoleIndex) {
+  String role;
+
+  switch (highestRoleIndex) {
+    case 0:
+      role = 'Team Member';
+      break;
+    case 1:
+      role = 'Team Leader';
+      break;
+    case 2:
+      role = 'Team Member';
+      break;
+    case 3:
+      role = 'Team Member';
+      break;
   }
 }
 
