@@ -66,4 +66,30 @@ class UserService {
     }
     return false;
   }
+
+  Future<dynamic> getAllUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.patch(API, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        List<dynamic> _userList = jsonDecode(res.body);
+        List<dynamic> userList = [];
+        _userList.forEach((element) {
+          userList.add(User.fromJson(jsonDecode(element)));
+        });
+        return userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
 }
