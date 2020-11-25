@@ -24,7 +24,7 @@ class _UserDetailsState extends State<UserDetails> {
   Widget build(BuildContext context) {
     var user = widget.user;
     var vIcon = user.verified ? Icons.verified : Icons.cancel;
-    var vIconColor = user.verified ? Colors.green : Colors.redAccent;
+    var vIconColor = user.verified ? Colors.greenAccent : Colors.redAccent;
     var imageURL = ((user.profileImageURL == null)
         ? ('default.png')
         : (user.profileImageURL));
@@ -44,6 +44,9 @@ class _UserDetailsState extends State<UserDetails> {
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+            SizedBox(
+              height: 40.0,
             ),
             CircleAvatar(
               radius: 90.0,
@@ -67,6 +70,9 @@ class _UserDetailsState extends State<UserDetails> {
               children: [
                 Row(
                   children: [
+                    SizedBox(
+                      width: 5.0,
+                    ),
                     Text(
                       user.title == null ? '' : user.title,
                       style: TextStyle(
@@ -79,10 +85,6 @@ class _UserDetailsState extends State<UserDetails> {
                     ),
                     SizedBox(
                       width: 5.0,
-                    ),
-                    Icon(
-                      vIcon,
-                      color: vIconColor,
                     ),
                   ],
                 ),
@@ -129,17 +131,51 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             //TODO:icons for delete verify un-verify assign roles
             Container(
-              margin: EdgeInsets.all(15),
-              child: FlatButton(
-                child: Text(
-                  'EDIT',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                color: Colors.white,
-                textColor: Colors.black87,
-                onPressed: () {},
-              ),
-            ),
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.admin_panel_settings,
+                            color: Colors.greenAccent,
+                            size: 35.0,
+                          ),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.accessibility_new,
+                            color: Colors.greenAccent,
+                            size: 35.0,
+                          ),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            vIcon,
+                            color: vIconColor,
+                            size: 35.0,
+                          ),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete_forever,
+                            color: Colors.black87,
+                            size: 35.0,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
+                    )
+                  ],
+                )),
           ],
         ),
       )),
