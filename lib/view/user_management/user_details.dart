@@ -12,7 +12,7 @@ class UserDetails extends StatefulWidget {
 
   const UserDetails({
     Key key,
-    this.user,
+    @required this.user,
   });
 
   @override
@@ -25,8 +25,9 @@ class _UserDetailsState extends State<UserDetails> {
     var user = widget.user;
     var vIcon = user.verified ? Icons.verified : Icons.cancel;
     var vIconColor = user.verified ? Colors.green : Colors.redAccent;
-    var imageURL =
-        user.profileImageURL == null ? 'default.png' : user.profileImageURL;
+    var imageURL = ((user.profileImageURL == null)
+        ? ('default.png')
+        : (user.profileImageURL));
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
@@ -46,7 +47,7 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             CircleAvatar(
               radius: 90.0,
-              backgroundImage: NetworkImage(imageURL),
+              backgroundImage: NetworkImage('$fileAPI$imageURL'),
             ),
             SizedBox(
               height: 10.0,
@@ -55,7 +56,7 @@ class _UserDetailsState extends State<UserDetails> {
               user.username,
               style: TextStyle(
                 fontFamily: 'Roboto',
-                color: Colors.black54,
+                color: Colors.black87,
                 fontSize: 20.0,
                 letterSpacing: 2.0,
                 fontWeight: FontWeight.bold,
@@ -67,7 +68,7 @@ class _UserDetailsState extends State<UserDetails> {
                 Row(
                   children: [
                     Text(
-                      user.title,
+                      user.title == null ? '' : user.title,
                       style: TextStyle(
                         fontFamily: 'Source Sans Pro',
                         color: Colors.white70,
@@ -126,6 +127,7 @@ class _UserDetailsState extends State<UserDetails> {
                 ),
               ),
             ),
+            //TODO:icons for delete verify un-verify assign roles
             Container(
               margin: EdgeInsets.all(15),
               child: FlatButton(
@@ -135,9 +137,7 @@ class _UserDetailsState extends State<UserDetails> {
                 ),
                 color: Colors.white,
                 textColor: Colors.black87,
-                onPressed: () {
-                  Navigator.pushNamed(context, EditProfile.id);
-                },
+                onPressed: () {},
               ),
             ),
           ],

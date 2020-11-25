@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                   _user.username,
                   style: TextStyle(
                     fontFamily: 'Roboto',
-                    color: Colors.black54,
+                    color: Colors.black87,
                     fontSize: 20.0,
                     letterSpacing: 2.0,
                     fontWeight: FontWeight.bold,

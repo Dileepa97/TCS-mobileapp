@@ -53,6 +53,7 @@ class AuthService {
       String password,
       String gender,
       bool probationary) async {
+    print(gender);
     var jsonBody = jsonEncode({
       "username": username,
       "fullName": fullName,
@@ -62,6 +63,7 @@ class AuthService {
       "gender": gender,
       "probationary": probationary
     });
+    print(jsonBody);
     http.Response res;
     try {
       res = await http.post(API + 'register',

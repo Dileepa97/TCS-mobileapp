@@ -209,6 +209,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   //implement registration
                   if (checkValidity()) {
                     await registerUser();
+                    setState(() {
+                      spin = false;
+                    });
                   } else {
                     setState(() {
                       spin = false;

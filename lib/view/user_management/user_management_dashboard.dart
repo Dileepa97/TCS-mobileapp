@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/user_management/user_details.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 
@@ -88,7 +89,13 @@ class _UserCardState extends State<UserCard> {
         ? 'default.png'
         : widget.user.profileImageURL;
     return GestureDetector(
-      onDoubleTap: () {},
+      onDoubleTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UserDetails(user: widget.user)),
+        );
+      },
       child: Container(
         height: 80,
         child: Card(
