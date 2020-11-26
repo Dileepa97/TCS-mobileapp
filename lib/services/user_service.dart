@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/utils.dart';
 import 'storage_service.dart';
 
@@ -10,6 +11,7 @@ String contentTypeHeader = 'application/json';
 
 // const API = 'http://192.168.8.100:8080/api/users/';
 const API = 'http://localhost:8080/api/users/';
+const historyAPI = 'http://localhost:8080/api/userHistory/';
 
 class UserService {
   static Future<http.Response> fetchUserById(id) async {
@@ -102,6 +104,23 @@ class UserService {
       }
     } catch (e) {
       displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<UserHistory> fetchUserHistoryById(id) async {
+    var authHeader = await generateAuthHeader();
+    if (authHeader != null) {
+      http.Response res = await http.get(
+        historyAPI + id,
+        headers: {
+          HttpHeaders.authorizationHeader: authHeader,
+          HttpHeaders.contentTypeHeader: contentTypeHeader
+        },
+      );
+      if (res.statusCode == 200) {
+        return UserHistory.fromJson(jsonDecode(res.body));
+      }
     }
     return null;
   }
