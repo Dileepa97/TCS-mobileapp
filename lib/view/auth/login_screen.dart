@@ -133,7 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
                       print(e.toString());
-                      spin = false;
+                      setState(() {
+                        spin = false;
+                      });
                     }
                   },
                   title: 'Login',
