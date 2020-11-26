@@ -8,82 +8,57 @@ const userAPI = 'http://localhost:8080/api/users/';
 String contentTypeHeader = 'application/json';
 
 class AdminService {
-  //Verify User
-  Future<dynamic> verifyUser(userId) async {
+  //handle verification
+  //if verified -> un-verify
+  //if unverified -> verify
+  Future<dynamic> handleUserVerification(userId, isVerified) async {
+    String endpoint = isVerified ? 'un-verify/' : 'verify/';
     var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'verify/' + userId,
+    http.Response res = await http.get(
+      API + endpoint + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       },
     );
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  //unVerify User
-  Future<dynamic> unVerifyUser(userId) async {
+  Future<bool> handleRoleAssignmentRequest(username, endpoint) async {
     var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'un-verify/' + userId,
+    http.Response res = await http.get(
+      API + endpoint + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       },
     );
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  //toAdmin
-  Future<dynamic> upliftToAdmin(username) async {
-    var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'to-admin/' + username,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
+  //handleRole assignment
+  Future<dynamic> handleAdminRoleAssignment(username, isAdmin) async {
+    String endpoint = isAdmin ? 'downgrade-admin/' : 'to-admin/';
+    return handleRoleAssignmentRequest(username, endpoint);
   }
 
-  //toTeamLead
-  Future<dynamic> upliftToTeamLead(username) async {
-    var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'to-teamlead/' + username,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
-  }
-
-  //downgradeFromAdmin
-  Future<dynamic> downgradeFromAdmin(username) async {
-    var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'downgrade-admin/' + username,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
-  }
-
-  //downgradeFromTeamLead
-  Future<dynamic> downgradeFromTeamLead(username) async {
-    var authHeader = await generateAuthHeader();
-    var res = http.get(
-      API + 'downgrade-teamlead/' + username,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
+  Future<dynamic> handleTeamLeadRoleAssignment(username, isAdmin) async {
+    String endpoint = isAdmin ? 'downgrade-teamlead/' : 'to-teamlead/';
+    return handleRoleAssignmentRequest(username, endpoint);
   }
 
   //delete the user
   Future<dynamic> deleteUser(userId) async {
     var authHeader = await generateAuthHeader();
-    var res = http.delete(
+    http.Response res = await http.delete(
       userAPI + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,

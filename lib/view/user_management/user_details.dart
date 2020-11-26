@@ -148,6 +148,7 @@ class _UserDetailsState extends State<UserDetails> {
                 ),
               ),
             ),
+
             //TODO:icons for delete verify un-verify assign roles
             Container(
                 margin: EdgeInsets.all(15),
@@ -165,11 +166,16 @@ class _UserDetailsState extends State<UserDetails> {
                             color: isAdmin ? Colors.white : Colors.black87,
                             size: 35.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (isAdmin) {
-                              displayDowngradeAdminSureDialog(context);
+                              var confirmed =
+                                  await displayDowngradeAdminSureDialog(
+                                      context);
+                              if (confirmed) {}
                             } else {
-                              displayUpliftToAdminSureDialog(context);
+                              var confirmed =
+                                  await displayUpliftToAdminSureDialog(context);
+                              if (confirmed) {}
                             }
                           },
                         ),
@@ -179,11 +185,17 @@ class _UserDetailsState extends State<UserDetails> {
                             color: isTeamLead ? Colors.white : Colors.black87,
                             size: 35.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (isTeamLead) {
-                              displayDowngradeTeamLeadSureDialog(context);
+                              var confirmed =
+                                  await displayDowngradeTeamLeadSureDialog(
+                                      context);
+                              if (confirmed) {}
                             } else {
-                              displayUpliftToTeamLeadSureDialog(context);
+                              var confirmed =
+                                  await displayUpliftToTeamLeadSureDialog(
+                                      context);
+                              if (confirmed) {}
                             }
                           },
                         ),
@@ -194,12 +206,14 @@ class _UserDetailsState extends State<UserDetails> {
                                 user.verified ? Colors.black87 : Colors.white,
                             size: 35.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (user.verified) {
                               displayDialog(context, "Invalid Operation",
                                   "Only un-verified users can be deleted");
                             } else {
-                              displayDeleteSureDialog(context);
+                              var confirmed =
+                                  await displayDeleteUserSureDialog(context);
+                              if (confirmed) {}
                             }
                           },
                         ),
@@ -209,11 +223,16 @@ class _UserDetailsState extends State<UserDetails> {
                             color: vIconColor,
                             size: 35.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (user.verified) {
-                              displayUnVerifySureDialog(context);
+                              var confirmed =
+                                  await displayUnVerifySureDialog(context);
+
+                              if (confirmed) {}
                             } else {
-                              displayVerifySureDialog(context);
+                              var confirmed =
+                                  await displayVerifySureDialog(context);
+                              if (confirmed) {}
                             }
                           },
                         ),

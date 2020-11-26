@@ -399,7 +399,7 @@ class MapScreenState extends State<EditProfile>
         ),
       ),
       onTap: () async {
-        user = await userService.getUser();
+        user = await userService.getLoggedInUser();
         setState(() {
           updateFormState();
           _status = false;

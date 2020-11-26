@@ -46,154 +46,62 @@ void updateSuccessDialog(context) => showDialog(
     );
 
 //TODO:connect with buttons
+//TODO:Refactor
+
 //Admin_service dialogs
 
-void displayVerifySureDialog(context) => showDialog(
+Future<bool> displayConfirmationBox(context, content) => showDialog(
       barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure ?"),
-        content: Text(
-            "After user is verified he/she will be able to log into Time Capture System"),
+        content: Text(content),
         actions: [
           FlatButton(
             child: Text("Confirm"),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+              return true;
+            },
           ),
           FlatButton(
             child: Text("Cancel"),
             onPressed: () {
               Navigator.pop(context);
+              return true;
             },
           )
         ],
       ),
     );
 
-void displayUnVerifySureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text(
-            "After user is un-verified he/she won't be able to log into Time Capture System"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayVerifySureDialog(context) => displayConfirmationBox(context,
+    "After user is verified he/she will be able to log into Time Capture System");
 
-void displayUpliftToAdminSureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text("User will gain administrative access"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayUnVerifySureDialog(context) => displayConfirmationBox(
+    context,
+    "After user is un-verified he/she won't be able to log into Time Capture System");
 
-void displayUpliftToTeamLeadSureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text("User will gain Team-Lead access"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayUpliftToAdminSureDialog(context) =>
+    displayConfirmationBox(context, "User will gain administrative access");
 
-void displayDowngradeAdminSureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text("User will lose administrative access"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayUpliftToTeamLeadSureDialog(context) =>
+    displayConfirmationBox(context, "User will gain Team-Lead access");
 
-void displayDowngradeTeamLeadSureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text("User will lose Team-Lead access"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayDowngradeAdminSureDialog(context) =>
+    displayConfirmationBox(context, "User will lose administrative access");
 
-void displayDeleteSureDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text(
-            "All the data that belongs to this user will be deleted forever"),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+Future<bool> displayDowngradeTeamLeadSureDialog(context) =>
+    displayConfirmationBox(context, "User will lose Team-Lead access");
+
+Future<bool> displayDeleteUserSureDialog(context) => displayConfirmationBox(
+    context, "All the data that belongs to this user will be deleted forever");
+
+controlButton(text, context) {
+  return FlatButton(
+    child: Text(text),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+}

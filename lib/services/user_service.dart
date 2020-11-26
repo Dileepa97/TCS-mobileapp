@@ -12,8 +12,7 @@ String contentTypeHeader = 'application/json';
 const API = 'http://localhost:8080/api/users/';
 
 class UserService {
-  Future<http.Response> fetchLoggedInUser() async {
-    var id = await TokenStorageService.idOrEmpty;
+  Future<http.Response> fetchUserById(id) async {
     var authHeader = await generateAuthHeader();
     if (authHeader != null) {
       return http.get(
@@ -27,8 +26,22 @@ class UserService {
     return null;
   }
 
-  Future<User> getUser() async {
+  Future<http.Response> fetchLoggedInUser() async {
+    var id = await TokenStorageService.idOrEmpty;
+    return fetchUserById(id);
+  }
+
+  Future<User> getLoggedInUser() async {
     var res = await fetchLoggedInUser();
+    if (res.statusCode == 200) {
+      return User.fromJson(jsonDecode(res.body));
+    } else {
+      return null;
+    }
+  }
+
+  Future<User> getUserById(userId) async {
+    var res = await fetchUserById(userId);
     if (res.statusCode == 200) {
       return User.fromJson(jsonDecode(res.body));
     } else {
