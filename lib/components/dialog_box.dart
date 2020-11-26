@@ -45,6 +45,8 @@ void updateSuccessDialog(context) => showDialog(
       ),
     );
 
+//Admin_service dialogs
+
 void displayVerifySureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
