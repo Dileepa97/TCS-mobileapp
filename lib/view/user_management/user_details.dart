@@ -161,7 +161,7 @@ class _UserDetailsState extends State<UserDetails> {
                         IconButton(
                           icon: Icon(
                             Icons.admin_panel_settings,
-                            color: Colors.greenAccent,
+                            color: isAdmin ? Colors.white : Colors.black87,
                             size: 35.0,
                           ),
                           onPressed: () {},
@@ -169,7 +169,16 @@ class _UserDetailsState extends State<UserDetails> {
                         IconButton(
                           icon: Icon(
                             Icons.accessibility_new,
-                            color: Colors.greenAccent,
+                            color: isTeamLead ? Colors.white : Colors.black87,
+                            size: 35.0,
+                          ),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete_forever,
+                            color:
+                                user.verified ? Colors.black87 : Colors.white,
                             size: 35.0,
                           ),
                           onPressed: () {},
@@ -178,14 +187,6 @@ class _UserDetailsState extends State<UserDetails> {
                           icon: Icon(
                             vIcon,
                             color: vIconColor,
-                            size: 35.0,
-                          ),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete_forever,
-                            color: Colors.black87,
                             size: 35.0,
                           ),
                           onPressed: () {},
