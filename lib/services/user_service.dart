@@ -12,7 +12,7 @@ String contentTypeHeader = 'application/json';
 const API = 'http://localhost:8080/api/users/';
 
 class UserService {
-  Future<http.Response> fetchUserById(id) async {
+  static Future<http.Response> fetchUserById(id) async {
     var authHeader = await generateAuthHeader();
     if (authHeader != null) {
       return http.get(
@@ -26,12 +26,12 @@ class UserService {
     return null;
   }
 
-  Future<http.Response> fetchLoggedInUser() async {
+  static Future<http.Response> fetchLoggedInUser() async {
     var id = await TokenStorageService.idOrEmpty;
     return fetchUserById(id);
   }
 
-  Future<User> getLoggedInUser() async {
+  static Future<User> getLoggedInUser() async {
     var res = await fetchLoggedInUser();
     if (res.statusCode == 200) {
       return User.fromJson(jsonDecode(res.body));
@@ -40,7 +40,7 @@ class UserService {
     }
   }
 
-  Future<User> getUserById(userId) async {
+  static Future<User> getUserById(userId) async {
     var res = await fetchUserById(userId);
     if (res.statusCode == 200) {
       return User.fromJson(jsonDecode(res.body));
@@ -49,8 +49,8 @@ class UserService {
     }
   }
 
-  Future<bool> updateUser(dynamic context, String username, String fullName,
-      String email, String telephoneNumber) async {
+  static Future<bool> updateUser(dynamic context, String username,
+      String fullName, String email, String telephoneNumber) async {
     var jsonBody = jsonEncode({
       "username": username,
       "fullName": fullName,
@@ -80,7 +80,7 @@ class UserService {
     return false;
   }
 
-  Future<List<User>> getAllUsers(dynamic context) async {
+  static Future<List<User>> getAllUsers(dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
       var res = await http.get(API, headers: {

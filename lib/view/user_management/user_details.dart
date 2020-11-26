@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/view/user/edit_profile.dart';
+import 'package:timecapturesystem/services/admin_service.dart';
+import 'package:timecapturesystem/services/user_service.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';
@@ -171,11 +172,11 @@ class _UserDetailsState extends State<UserDetails> {
                               var confirmed =
                                   await displayDowngradeAdminSureDialog(
                                       context);
-                              if (confirmed) {}
+                              if (confirmed == null ? false : confirmed) {}
                             } else {
                               var confirmed =
                                   await displayUpliftToAdminSureDialog(context);
-                              if (confirmed) {}
+                              if (confirmed == null ? false : confirmed) {}
                             }
                           },
                         ),
@@ -190,12 +191,12 @@ class _UserDetailsState extends State<UserDetails> {
                               var confirmed =
                                   await displayDowngradeTeamLeadSureDialog(
                                       context);
-                              if (confirmed) {}
+                              if (confirmed == null ? false : confirmed) {}
                             } else {
                               var confirmed =
                                   await displayUpliftToTeamLeadSureDialog(
                                       context);
-                              if (confirmed) {}
+                              if (confirmed == null ? false : confirmed) {}
                             }
                           },
                         ),
@@ -213,7 +214,8 @@ class _UserDetailsState extends State<UserDetails> {
                             } else {
                               var confirmed =
                                   await displayDeleteUserSureDialog(context);
-                              if (confirmed) {}
+
+                              if (confirmed == null ? false : confirmed) {}
                             }
                           },
                         ),
@@ -224,15 +226,25 @@ class _UserDetailsState extends State<UserDetails> {
                             size: 35.0,
                           ),
                           onPressed: () async {
-                            if (user.verified) {
-                              var confirmed =
-                                  await displayUnVerifySureDialog(context);
+                            var confirmed = await handleVerifySureDialog(
+                                context, user.verified);
 
-                              if (confirmed) {}
-                            } else {
-                              var confirmed =
-                                  await displayVerifySureDialog(context);
-                              if (confirmed) {}
+                            if (confirmed == null ? false : confirmed) {
+                              bool success =
+                                  await AdminService.handleUserVerification(
+                                      user.id, user.verified);
+
+                              if (success) {
+                                var user = await UserService.getUserById(
+                                    widget.user.id);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UserDetails(user: user)));
+                              } else {
+                                operationFailed(context);
+                              }
                             }
                           },
                         ),

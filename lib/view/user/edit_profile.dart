@@ -19,7 +19,7 @@ class EditProfile extends StatefulWidget {
 class MapScreenState extends State<EditProfile>
     with SingleTickerProviderStateMixin {
   bool _status = true;
-  final userService = UserService();
+
   final FocusNode myFocusNode = FocusNode();
 
   TextEditingController _usernameController = TextEditingController();
@@ -399,7 +399,7 @@ class MapScreenState extends State<EditProfile>
         ),
       ),
       onTap: () async {
-        user = await userService.getLoggedInUser();
+        user = await UserService.getLoggedInUser();
         setState(() {
           updateFormState();
           _status = false;
@@ -437,7 +437,7 @@ class MapScreenState extends State<EditProfile>
                 Navigator.pop(context);
                 Navigator.pop(context);
 
-                bool success = await userService.updateUser(
+                bool success = await UserService.updateUser(
                     context,
                     _usernameController.text,
                     _fullNameController.text,

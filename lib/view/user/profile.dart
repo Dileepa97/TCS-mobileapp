@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: FutureBuilder<User>(
-          future: UserService().getLoggedInUser(),
+          future: UserService.getLoggedInUser(),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {

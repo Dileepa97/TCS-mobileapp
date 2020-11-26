@@ -8,7 +8,6 @@ import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/services/utils.dart';
 
 import 'storage_service.dart';
-import 'user_service.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
 
@@ -18,8 +17,6 @@ const API = 'http://localhost:8080/api/auth/';
 // const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {
-  final UserService userService = UserService();
-
   static Future<int> login(String username, String password) async {
     var body = jsonEncode({
       "username": username,

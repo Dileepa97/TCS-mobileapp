@@ -21,7 +21,7 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: FutureBuilder<List<User>>(
-          future: UserService().getAllUsers(context),
+          future: UserService.getAllUsers(context),
           builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {

@@ -11,7 +11,7 @@ class AdminService {
   //handle verification
   //if verified -> un-verify
   //if unverified -> verify
-  Future<dynamic> handleUserVerification(userId, isVerified) async {
+  static Future<dynamic> handleUserVerification(userId, isVerified) async {
     String endpoint = isVerified ? 'un-verify/' : 'verify/';
     var authHeader = await generateAuthHeader();
     http.Response res = await http.get(
@@ -28,7 +28,7 @@ class AdminService {
     }
   }
 
-  Future<bool> handleRoleAssignmentRequest(username, endpoint) async {
+  static Future<bool> handleRoleAssignmentRequest(username, endpoint) async {
     var authHeader = await generateAuthHeader();
     http.Response res = await http.get(
       API + endpoint + username,
@@ -45,18 +45,18 @@ class AdminService {
   }
 
   //handleRole assignment
-  Future<dynamic> handleAdminRoleAssignment(username, isAdmin) async {
+  static Future<dynamic> handleAdminRoleAssignment(username, isAdmin) async {
     String endpoint = isAdmin ? 'downgrade-admin/' : 'to-admin/';
     return handleRoleAssignmentRequest(username, endpoint);
   }
 
-  Future<dynamic> handleTeamLeadRoleAssignment(username, isAdmin) async {
+  static Future<dynamic> handleTeamLeadRoleAssignment(username, isAdmin) async {
     String endpoint = isAdmin ? 'downgrade-teamlead/' : 'to-teamlead/';
     return handleRoleAssignmentRequest(username, endpoint);
   }
 
   //delete the user
-  Future<dynamic> deleteUser(userId) async {
+  static Future<dynamic> deleteUser(userId) async {
     var authHeader = await generateAuthHeader();
     http.Response res = await http.delete(
       userAPI + userId,

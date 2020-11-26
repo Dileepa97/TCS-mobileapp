@@ -26,6 +26,9 @@ void displayRegSuccessDialog(context) => showDialog(
       ),
     );
 
+void operationFailed(context) => displayDialog(
+    context, "Failed", "An error occurred while delivering your request");
+
 void updateSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
       context: context,
@@ -49,38 +52,51 @@ void updateSuccessDialog(context) => showDialog(
 //TODO:Refactor
 
 //Admin_service dialogs
-
-Future<bool> displayConfirmationBox(context, content) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure ?"),
-        content: Text(content),
-        actions: [
-          FlatButton(
-            child: Text("Confirm"),
-            onPressed: () {
-              Navigator.pop(context);
-              return true;
-            },
+//TODO : test pass
+Future<bool> displayConfirmationBox(context, content) async {
+  bool confirm = false;
+  await showDialog(
+    barrierColor: Colors.black54,
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Are you sure ?"),
+      content: Text(content),
+      actions: [
+        FlatButton(
+          color: Colors.blueAccent,
+          child: Text("Confirm"),
+          onPressed: () {
+            confirm = true;
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          color: Colors.redAccent,
+          child: Text(
+            "Cancel",
+// style: TextStyle(color: Colors.redAccent),
           ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-              return true;
-            },
-          )
-        ],
-      ),
-    );
+          onPressed: () {
+            confirm = false;
+            Navigator.pop(context);
+          },
+        )
+      ],
+    ),
+  );
 
-Future<bool> displayVerifySureDialog(context) => displayConfirmationBox(context,
-    "After user is verified he/she will be able to log into Time Capture System");
+  return confirm;
+}
 
-Future<bool> displayUnVerifySureDialog(context) => displayConfirmationBox(
-    context,
-    "After user is un-verified he/she won't be able to log into Time Capture System");
+Future<bool> handleVerifySureDialog(context, isVerified) {
+  if (isVerified) {
+    return displayConfirmationBox(context,
+        "After user is un-verified he/she won't be able to log into Time Capture System");
+  } else {
+    return displayConfirmationBox(context,
+        "After user is verified he/she will be able to log into Time Capture System");
+  }
+}
 
 Future<bool> displayUpliftToAdminSureDialog(context) =>
     displayConfirmationBox(context, "User will gain administrative access");
