@@ -173,11 +173,22 @@ class _UserDetailsState extends State<UserDetails> {
                               var confirmed =
                                   await displayDowngradeAdminSureDialog(
                                       context);
-                              if (confirmed == null ? false : confirmed) {}
+                              if (confirmed) {
+                                bool success = await AdminService
+                                    .handleAdminRoleAssignment(
+                                        user.username, isAdmin);
+                                handleSuccess(success, context, user.id);
+                              }
                             } else {
                               var confirmed =
                                   await displayUpliftToAdminSureDialog(context);
-                              if (confirmed == null ? false : confirmed) {}
+                              if (confirmed) {
+                                bool success = await AdminService
+                                    .handleAdminRoleAssignment(
+                                        user.username, isAdmin);
+
+                                await handleSuccess(success, context, user.id);
+                              }
                             }
                           },
                         ),
@@ -192,12 +203,22 @@ class _UserDetailsState extends State<UserDetails> {
                               var confirmed =
                                   await displayDowngradeTeamLeadSureDialog(
                                       context);
-                              if (confirmed == null ? false : confirmed) {}
+                              if (confirmed) {
+                                bool success = await AdminService
+                                    .handleTeamLeadRoleAssignment(
+                                        user.username, isTeamLead);
+                                await handleSuccess(success, context, user.id);
+                              }
                             } else {
                               var confirmed =
                                   await displayUpliftToTeamLeadSureDialog(
                                       context);
-                              if (confirmed == null ? false : confirmed) {}
+                              if (confirmed) {
+                                bool success = await AdminService
+                                    .handleTeamLeadRoleAssignment(
+                                        user.username, isTeamLead);
+                                await handleSuccess(success, context, user.id);
+                              }
                             }
                           },
                         ),
@@ -216,7 +237,18 @@ class _UserDetailsState extends State<UserDetails> {
                               var confirmed =
                                   await displayDeleteUserSureDialog(context);
 
-                              if (confirmed == null ? false : confirmed) {}
+                              if (confirmed) {
+                                bool success =
+                                    await AdminService.deleteUser(user.id);
+                                if (success) {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(
+                                      context, UserManagementDashboard.id);
+                                } else {
+                                  operationFailed(context);
+                                }
+                              }
                             }
                           },
                         ),
@@ -230,26 +262,11 @@ class _UserDetailsState extends State<UserDetails> {
                             var confirmed = await handleVerifySureDialog(
                                 context, user.verified);
 
-                            if (confirmed == null ? false : confirmed) {
+                            if (confirmed) {
                               bool success =
                                   await AdminService.handleUserVerification(
                                       user.id, user.verified);
-
-                              if (success) {
-                                var user = await UserService.getUserById(
-                                    widget.user.id);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pushNamed(
-                                    context, UserManagementDashboard.id);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserDetails(user: user)));
-                              } else {
-                                operationFailed(context);
-                              }
+                              await handleSuccess(success, context, user.id);
                             }
                           },
                         ),
@@ -261,5 +278,19 @@ class _UserDetailsState extends State<UserDetails> {
         ),
       )),
     );
+  }
+}
+
+handleSuccess(success, context, userId) async {
+  if (success) {
+    var user = await UserService.getUserById(userId);
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pushNamed(context, UserManagementDashboard.id);
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => UserDetails(user: user)));
+  } else {
+    operationFailed(context);
   }
 }

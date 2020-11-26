@@ -26,8 +26,8 @@ void displayRegSuccessDialog(context) => showDialog(
       ),
     );
 
-void operationFailed(context) => displayDialog(
-    context, "Failed", "An error occurred while delivering your request");
+void operationFailed(context) =>
+    displayDialog(context, "Failed", "Failed to execute request, try again");
 
 void updateSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
@@ -98,26 +98,25 @@ Future<bool> handleVerifySureDialog(context, isVerified) {
   }
 }
 
-Future<bool> displayUpliftToAdminSureDialog(context) =>
-    displayConfirmationBox(context, "User will gain administrative access");
+Future<bool> displayUpliftToAdminSureDialog(context) {
+  return displayConfirmationBox(
+      context, "User will gain administrative access");
+}
 
-Future<bool> displayUpliftToTeamLeadSureDialog(context) =>
-    displayConfirmationBox(context, "User will gain Team-Lead access");
+Future<bool> displayUpliftToTeamLeadSureDialog(context) {
+  return displayConfirmationBox(context, "User will gain Team-Lead access");
+}
 
-Future<bool> displayDowngradeAdminSureDialog(context) =>
-    displayConfirmationBox(context, "User will lose administrative access");
+Future<bool> displayDowngradeAdminSureDialog(context) {
+  return displayConfirmationBox(
+      context, "User will lose administrative access");
+}
 
-Future<bool> displayDowngradeTeamLeadSureDialog(context) =>
-    displayConfirmationBox(context, "User will lose Team-Lead access");
+Future<bool> displayDowngradeTeamLeadSureDialog(context) {
+  return displayConfirmationBox(context, "User will lose Team-Lead access");
+}
 
-Future<bool> displayDeleteUserSureDialog(context) => displayConfirmationBox(
-    context, "All the data that belongs to this user will be deleted forever");
-
-controlButton(text, context) {
-  return FlatButton(
-    child: Text(text),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
+Future<bool> displayDeleteUserSureDialog(context) {
+  return displayConfirmationBox(context,
+      "All the data that belongs to this user will be deleted forever");
 }

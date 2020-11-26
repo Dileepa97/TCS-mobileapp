@@ -56,7 +56,7 @@ class AdminService {
   }
 
   //delete the user
-  static Future<dynamic> deleteUser(userId) async {
+  static Future<bool> deleteUser(userId) async {
     var authHeader = await generateAuthHeader();
     http.Response res = await http.delete(
       userAPI + userId,
@@ -65,5 +65,11 @@ class AdminService {
         HttpHeaders.contentTypeHeader: contentTypeHeader
       },
     );
+
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
