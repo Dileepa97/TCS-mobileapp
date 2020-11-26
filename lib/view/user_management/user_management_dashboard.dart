@@ -122,24 +122,24 @@ class _UserCardState extends State<UserCard> {
   }
 }
 
-highestRoleName(int highestRoleIndex) {
-  String role;
-
-  switch (highestRoleIndex) {
-    case 0:
-      role = 'Team Member';
-      break;
-    case 1:
-      role = 'Team Leader';
-      break;
-    case 2:
-      role = 'Team Member';
-      break;
-    case 3:
-      role = 'Team Member';
-      break;
-  }
-}
+// highestRoleName(int highestRoleIndex) {
+//   String role;
+//
+//   switch (highestRoleIndex) {
+//     case 0:
+//       role = 'Team Member';
+//       break;
+//     case 1:
+//       role = 'Team Leader';
+//       break;
+//     case 2:
+//       role = 'Team Member';
+//       break;
+//     case 3:
+//       role = 'Team Member';
+//       break;
+//   }
+// }
 
 //
 // CircleAvatar(
