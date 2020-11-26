@@ -3,6 +3,7 @@ import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';
@@ -237,7 +238,11 @@ class _UserDetailsState extends State<UserDetails> {
                               if (success) {
                                 var user = await UserService.getUserById(
                                     widget.user.id);
-                                Navigator.pushReplacement(
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pushNamed(
+                                    context, UserManagementDashboard.id);
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
