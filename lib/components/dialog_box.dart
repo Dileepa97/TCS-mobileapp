@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
 
 void displayDialog(context, title, text) => showDialog(
-      barrierColor: Colors.transparent,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) =>
           AlertDialog(title: Text(title), content: Text(text)),
     );
 
 void displayRegSuccessDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Registration Success"),
@@ -27,7 +27,7 @@ void displayRegSuccessDialog(context) => showDialog(
     );
 
 void updateSuccessDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Update Profile Success"),
@@ -45,13 +45,14 @@ void updateSuccessDialog(context) => showDialog(
       ),
     );
 
+//TODO:connect with buttons
 //Admin_service dialogs
 
 void displayVerifySureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Are you sure to verify this user ?"),
+        title: Text("Are you sure ?"),
         content: Text(
             "After user is verified he/she will be able to log into Time Capture System"),
         actions: [
@@ -70,10 +71,10 @@ void displayVerifySureDialog(context) => showDialog(
     );
 
 void displayUnVerifySureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Are you sure to UN-VERIFY this user ?"),
+        title: Text("Are you sure ?"),
         content: Text(
             "After user is un-verified he/she won't be able to log into Time Capture System"),
         actions: [
@@ -92,7 +93,7 @@ void displayUnVerifySureDialog(context) => showDialog(
     );
 
 void displayUpliftToAdminSureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure ?"),
@@ -113,7 +114,7 @@ void displayUpliftToAdminSureDialog(context) => showDialog(
     );
 
 void displayUpliftToTeamLeadSureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure ?"),
@@ -134,7 +135,7 @@ void displayUpliftToTeamLeadSureDialog(context) => showDialog(
     );
 
 void displayDowngradeAdminSureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure ?"),
@@ -155,11 +156,33 @@ void displayDowngradeAdminSureDialog(context) => showDialog(
     );
 
 void displayDowngradeTeamLeadSureDialog(context) => showDialog(
-      barrierColor: Colors.white70,
+      barrierColor: Colors.black54,
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure ?"),
         content: Text("User will lose Team-Lead access"),
+        actions: [
+          FlatButton(
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+
+void displayDeleteSureDialog(context) => showDialog(
+      barrierColor: Colors.black54,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Are you sure ?"),
+        content: Text(
+            "All the data that belongs to this user will be deleted forever"),
         actions: [
           FlatButton(
             child: Text("Confirm"),

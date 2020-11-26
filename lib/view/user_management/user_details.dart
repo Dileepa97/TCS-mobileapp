@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
 
@@ -164,7 +165,13 @@ class _UserDetailsState extends State<UserDetails> {
                             color: isAdmin ? Colors.white : Colors.black87,
                             size: 35.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (isAdmin) {
+                              displayDowngradeAdminSureDialog(context);
+                            } else {
+                              displayUpliftToAdminSureDialog(context);
+                            }
+                          },
                         ),
                         IconButton(
                           icon: Icon(
@@ -172,7 +179,13 @@ class _UserDetailsState extends State<UserDetails> {
                             color: isTeamLead ? Colors.white : Colors.black87,
                             size: 35.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (isTeamLead) {
+                              displayDowngradeTeamLeadSureDialog(context);
+                            } else {
+                              displayUpliftToTeamLeadSureDialog(context);
+                            }
+                          },
                         ),
                         IconButton(
                           icon: Icon(
@@ -181,7 +194,14 @@ class _UserDetailsState extends State<UserDetails> {
                                 user.verified ? Colors.black87 : Colors.white,
                             size: 35.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (user.verified) {
+                              displayDialog(context, "Invalid Operation",
+                                  "Only un-verified users can be deleted");
+                            } else {
+                              displayDeleteSureDialog(context);
+                            }
+                          },
                         ),
                         IconButton(
                           icon: Icon(
@@ -189,7 +209,13 @@ class _UserDetailsState extends State<UserDetails> {
                             color: vIconColor,
                             size: 35.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (user.verified) {
+                              displayUnVerifySureDialog(context);
+                            } else {
+                              displayVerifySureDialog(context);
+                            }
+                          },
                         ),
                       ],
                     )

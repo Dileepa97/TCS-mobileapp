@@ -11,7 +11,7 @@ class AdminService {
   //Verify User
   Future<dynamic> verifyUser(userId) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'verify/' + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -23,7 +23,7 @@ class AdminService {
   //unVerify User
   Future<dynamic> unVerifyUser(userId) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'un-verify/' + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -35,7 +35,7 @@ class AdminService {
   //toAdmin
   Future<dynamic> upliftToAdmin(username) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'to-admin/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -47,7 +47,7 @@ class AdminService {
   //toTeamLead
   Future<dynamic> upliftToTeamLead(username) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'to-teamlead/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -59,7 +59,7 @@ class AdminService {
   //downgradeFromAdmin
   Future<dynamic> downgradeFromAdmin(username) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'downgrade-admin/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -71,7 +71,7 @@ class AdminService {
   //downgradeFromTeamLead
   Future<dynamic> downgradeFromTeamLead(username) async {
     var authHeader = await generateAuthHeader();
-    http.get(
+    var res = http.get(
       API + 'downgrade-teamlead/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -83,7 +83,7 @@ class AdminService {
   //delete the user
   Future<dynamic> deleteUser(userId) async {
     var authHeader = await generateAuthHeader();
-    http.delete(
+    var res = http.delete(
       userAPI + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
