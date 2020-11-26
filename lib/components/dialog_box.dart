@@ -49,14 +49,18 @@ void displayVerifySureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
+        title: Text("Are you sure to verify this user ?"),
         content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+            "After user is verified he/she will be able to log into Time Capture System"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
@@ -67,14 +71,18 @@ void displayUnVerifySureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
+        title: Text("Are you sure to UN-VERIFY this user ?"),
         content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+            "After user is un-verified he/she won't be able to log into Time Capture System"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
@@ -85,14 +93,17 @@ void displayUpliftToAdminSureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+        title: Text("Are you sure ?"),
+        content: Text("User will gain administrative access"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
@@ -103,14 +114,17 @@ void displayUpliftToTeamLeadSureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+        title: Text("Are you sure ?"),
+        content: Text("User will gain Team-Lead access"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
@@ -121,14 +135,17 @@ void displayDowngradeAdminSureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+        title: Text("Are you sure ?"),
+        content: Text("User will lose administrative access"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
@@ -139,14 +156,17 @@ void displayDowngradeTeamLeadSureDialog(context) => showDialog(
       barrierColor: Colors.white70,
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
+        title: Text("Are you sure ?"),
+        content: Text("User will lose Team-Lead access"),
         actions: [
           FlatButton(
-            child: Text("OK"),
+            child: Text("Confirm"),
+            onPressed: () {},
+          ),
+          FlatButton(
+            child: Text("Cancel"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
             },
           )
         ],
