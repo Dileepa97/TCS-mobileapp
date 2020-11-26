@@ -23,11 +23,29 @@ class _UserDetailsState extends State<UserDetails> {
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
+
     var vIcon = user.verified ? Icons.verified : Icons.cancel;
     var vIconColor = user.verified ? Colors.greenAccent : Colors.redAccent;
     var imageURL = ((user.profileImageURL == null)
         ? ('default.png')
         : (user.profileImageURL));
+
+    var isAdmin = false;
+    var isTeamLead = false;
+
+    for (dynamic role in user.roles) {
+      if (role.name == "ROLE_TEAM_MEMBER") {}
+
+      if (role.name == "ROLE_TEAM_LEADER") {
+        isTeamLead = true;
+      }
+
+      if (role.name == "ROLE_ADMIN") {
+        isAdmin = true;
+      }
+      if (role.name == "ROLE_SUPER_ADMIN") {}
+    }
+
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
