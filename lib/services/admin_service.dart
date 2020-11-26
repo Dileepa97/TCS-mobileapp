@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/services/utils.dart';
 
 const API = 'http://localhost:8080/api/auth/';
+const userAPI = 'http://localhost:8080/api/users/';
 String contentTypeHeader = 'application/json';
 
 class AdminService {
@@ -11,7 +12,7 @@ class AdminService {
   Future<dynamic> verifyUser(userId) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'verify/' + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -23,7 +24,7 @@ class AdminService {
   Future<dynamic> unVerifyUser(userId) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'un-verify/' + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -32,10 +33,10 @@ class AdminService {
   }
 
   //toAdmin
-  Future<dynamic> upliftToAdmin(userId) async {
+  Future<dynamic> upliftToAdmin(username) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'to-admin/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -44,10 +45,10 @@ class AdminService {
   }
 
   //toTeamLead
-  Future<dynamic> upliftToTeamLead(userId) async {
+  Future<dynamic> upliftToTeamLead(username) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'to-teamlead/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -56,10 +57,10 @@ class AdminService {
   }
 
   //downgradeFromAdmin
-  Future<dynamic> downgradeFromAdmin(userId) async {
+  Future<dynamic> downgradeFromAdmin(username) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'downgrade-admin/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -68,10 +69,10 @@ class AdminService {
   }
 
   //downgradeFromTeamLead
-  Future<dynamic> downgradeFromTeamLead(userId) async {
+  Future<dynamic> downgradeFromTeamLead(username) async {
     var authHeader = await generateAuthHeader();
     http.get(
-      API,
+      API + 'downgrade-teamlead/' + username,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -82,8 +83,8 @@ class AdminService {
   //delete the user
   Future<dynamic> deleteUser(userId) async {
     var authHeader = await generateAuthHeader();
-    http.get(
-      API,
+    http.delete(
+      userAPI + userId,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
