@@ -252,6 +252,17 @@ class _UserDetailsState extends State<UserDetails> {
                             }
                           },
                         ),
+                        if (user.updated)
+                          IconButton(
+                            icon: Icon(
+                              Icons.update,
+                              color: Colors.black,
+                              size: 35.0,
+                            ),
+                            onPressed: () async {
+                              //TODO : get update history and pass or give ID and pass
+                            },
+                          ),
                         IconButton(
                           icon: Icon(
                             vIcon,
