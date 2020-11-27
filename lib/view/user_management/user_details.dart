@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
@@ -222,6 +223,22 @@ class _UserDetailsState extends State<UserDetails> {
                             }
                           },
                         ),
+                        if (user.updated)
+                          IconButton(
+                            icon: Icon(
+                              Icons.update,
+                              color: Colors.black,
+                              size: 35.0,
+                            ),
+                            onPressed: () async {
+                              //TODO : get update history and pass or give ID and pass
+                              UserHistory uh =
+                                  await UserService.fetchUserHistoryById(
+                                      user.id);
+                              displayHistory(context, user, uh);
+                              print(uh.toString());
+                            },
+                          ),
                         IconButton(
                           icon: Icon(
                             Icons.delete_forever,
@@ -252,17 +269,6 @@ class _UserDetailsState extends State<UserDetails> {
                             }
                           },
                         ),
-                        if (user.updated)
-                          IconButton(
-                            icon: Icon(
-                              Icons.update,
-                              color: Colors.black,
-                              size: 35.0,
-                            ),
-                            onPressed: () async {
-                              //TODO : get update history and pass or give ID and pass
-                            },
-                          ),
                         IconButton(
                           icon: Icon(
                             vIcon,
@@ -289,6 +295,20 @@ class _UserDetailsState extends State<UserDetails> {
         ),
       )),
     );
+  }
+
+  void displayHistory(
+      BuildContext context, User user, UserHistory userHistory) {
+    displayDialog(
+        context,
+        "Update History",
+        "Current value(s) and previous value(s) are displayed respectively\n\n"
+            "${userHistory.username == null ? '' : ('Username : ' + user.username + ' | ' + userHistory.username + '\n\n')}"
+            "${userHistory.fullName == null ? '' : ('Full name : ' + user.fullName + ' | ' + userHistory.fullName + '\n\n')}"
+            "${userHistory.telephoneNumber == null ? '' : ('Telephone Number ' + user.telephoneNumber + ' | ' + userHistory.telephoneNumber + '\n\n')}"
+            "${userHistory.email == null ? '' : ('Email : ' + user.email + ' | ' + userHistory.email + '\n\n')}"
+            "${userHistory.title == null ? '' : ('Title : ' + user.title + ' | ' + userHistory.title + '\n\n')}"
+            "${userHistory.probationary == null ? '' : ('On Probationary : ' + (user.probationary ? 'Yes' : 'No') + ' | ' + (userHistory.probationary ? 'Yes' : 'No') + '\n\n')}");
   }
 }
 
