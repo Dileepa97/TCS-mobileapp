@@ -89,4 +89,8 @@ class AuthService {
     await TokenStorageService.clearStorage();
     app.main();
   }
+
+  static forgotPassword(String email) async {
+    var authHeader = await generateAuthHeader();
+  }
 }
