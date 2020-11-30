@@ -5,18 +5,17 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/auth_service.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
-import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import '../constants.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const String id = "login_screen";
+class ForgotPasswordScreen extends StatefulWidget {
+  static const String id = "forgot_password_screen";
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   bool spin = false;
@@ -46,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 100.0,
                 ),
                 TextField(
                   controller: _emailController,
@@ -60,6 +59,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   decoration:
                       inputDeco(emailInitColor).copyWith(hintText: 'Email'),
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 RoundedButton(
                   color: Colors.lightBlueAccent,
@@ -89,10 +91,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else {
                         if (code == 404) {
                           displayDialog(context, "Invalid User",
-                              "user with given email has not registered in the system");
+                              "user with given username has not registered in the system");
                         } else if (code == 401) {
                           displayDialog(
-                              context, "Bad Credentials", "Invalid email");
+                              context, "Bad Credentials", "Invalid username");
                         } else {
                           displayDialog(context, "Unknown Error",
                               "An Unknown Error Occurred");

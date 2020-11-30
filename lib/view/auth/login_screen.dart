@@ -8,6 +8,7 @@ import 'package:timecapturesystem/main.dart' as app;
 import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import '../constants.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = "login_screen";
@@ -138,11 +139,45 @@ class _LoginScreenState extends State<LoginScreen> {
                       });
                     }
                   },
-                  title: 'Login',
+                  title: 'Log In',
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('or')],
+                  children: [
+                    GestureDetector(
+                      child: Text(
+                        'Forgotten Password?',
+                        style: TextStyle(
+                            color: Colors.blue[900],
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, ForgotPasswordScreen.id);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: Divider(
+                      height: 1.0,
+                      color: Colors.black,
+                    )),
+                    Text(" OR "),
+                    Expanded(
+                        child: Divider(
+                      height: 1.0,
+                      color: Colors.black,
+                    )),
+                  ],
                 ),
                 RoundedButton(
                   color: Colors.greenAccent[700],

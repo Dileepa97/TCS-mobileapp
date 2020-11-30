@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+import 'package:timecapturesystem/view/auth/forgot_password.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
 import 'package:timecapturesystem/view/user/upload_image.dart';
 import 'package:timecapturesystem/view/user_management/user_details.dart';
@@ -50,6 +51,8 @@ class _MyAppState extends State<MyApp> {
 
               UploadImage.id: (context) => UploadImage(),
 
+              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.
               '/leaveRequest': (context) => LeaveRequest(),
@@ -68,6 +71,9 @@ class _MyAppState extends State<MyApp> {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.
+
+              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+
               RegistrationScreen.id: (context) => RegistrationScreen(),
               //  build the LeaveRequest widget.
             };
