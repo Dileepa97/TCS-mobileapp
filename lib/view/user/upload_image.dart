@@ -105,38 +105,19 @@ class UploadImageState extends State<UploadImage> {
         child: Container(
           padding: EdgeInsets.all(30.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              OutlineButton(
-                onPressed: chooseImage,
-                child: Text('Choose Image'),
-              ),
+              (imageUrl != null)
+                  ? Image.network(imageUrl)
+                  : Placeholder(
+                      fallbackHeight: 200.0, fallbackWidth: double.infinity),
               SizedBox(
                 height: 20.0,
               ),
-              showImage(),
-              SizedBox(
-                height: 20.0,
-              ),
-              OutlineButton(
-                onPressed: startUpload,
+              RaisedButton(
                 child: Text('Upload Image'),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                status,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20.0,
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
+                color: Colors.lightBlue,
+                onPressed: () => upload(imageFileName),
+              )
             ],
           ),
         ),
@@ -144,3 +125,40 @@ class UploadImageState extends State<UploadImage> {
     );
   }
 }
+
+//
+// Column(
+// crossAxisAlignment: CrossAxisAlignment.stretch,
+// children: <Widget>[
+// OutlineButton(
+// onPressed: chooseImage,
+// child: Text('Choose Image'),
+// ),
+// SizedBox(
+// height: 20.0,
+// ),
+// showImage(),
+// SizedBox(
+// height: 20.0,
+// ),
+// OutlineButton(
+// onPressed: startUpload,
+// child: Text('Upload Image'),
+// ),
+// SizedBox(
+// height: 20.0,
+// ),
+// Text(
+// status,
+// textAlign: TextAlign.center,
+// style: TextStyle(
+// color: Colors.green,
+// fontWeight: FontWeight.w500,
+// fontSize: 20.0,
+// ),
+// ),
+// SizedBox(
+// height: 20.0,
+// ),
+// ],
+// ),
