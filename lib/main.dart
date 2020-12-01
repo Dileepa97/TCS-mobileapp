@@ -5,7 +5,6 @@ import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
 import 'package:timecapturesystem/view/auth/forgot_password.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
-import 'package:timecapturesystem/view/user/upload_image.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
 
 import 'view/user/profile.dart';
@@ -48,7 +47,7 @@ class _MyAppState extends State<MyApp> {
 
               EditProfile.id: (context) => EditProfile(),
 
-              UploadImage.id: (context) => UploadImage(),
+              // UploadImage.id: (context) => UploadImage(),
 
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.

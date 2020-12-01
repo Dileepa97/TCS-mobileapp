@@ -19,7 +19,26 @@ void displayRegSuccessDialog(context) => showDialog(
           FlatButton(
             child: Text("OK"),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoginScreen.id);
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+
+void displayPWDResetSuccessDialog(context) => showDialog(
+      barrierColor: Colors.black54,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Success"),
+        content: Text(
+            "You have successfully reset your password, now you can login with your new password"),
+        actions: [
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
           )
         ],

@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/auth_service.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/view/auth/login_screen.dart';
 
 import '../constants.dart';
 
@@ -140,9 +141,10 @@ class _ForgotPasswordChangeScreenState
                       int code = await AuthService.forgotPasswordChange(
                           _passwordController.text, _codeController.text);
                       if (code == 1) {
-                        //login success
-                        app.main();
-                        Navigator.popAndPushNamed(context, '/');
+                        displayPWDResetSuccessDialog(context);
+                        setState(() {
+                          spin = true;
+                        });
                       } else {
                         if (code == 404) {
                           displayDialog(context, "Invalid Code",

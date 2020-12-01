@@ -91,20 +91,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       int code = await AuthService.forgotPassword(
                         _emailController.text,
                       );
-                      if (code == 1) {
-                        //login success
-                        app.main();
-                        Navigator.popAndPushNamed(context, '/');
+                      if (code == 200) {
+                        Navigator.popAndPushNamed(
+                            context, ForgotPasswordChangeScreen.id);
                       } else {
                         if (code == 404) {
-                          displayDialog(context, "Invalid User",
-                              "user with given username has not registered in the system");
+                          displayDialog(
+                              context, "Invalid Email", "Email not found");
                         } else if (code == 401) {
                           displayDialog(
-                              context, "Bad Credentials", "Invalid username");
+                              context, "Bad Credentials", "Invalid email");
                         } else {
-                          displayDialog(context, "Unknown Error",
-                              "An Unknown Error Occurred");
+                          displayDialog(
+                              context, "Error", "An Unknown Error Occurred");
                         }
                         setState(() {
                           emailInitColor = Colors.redAccent;
@@ -120,20 +119,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     }
                   },
                   title: 'Submit',
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                GestureDetector(
-                  child: Text(
-                    'Enter Reset Code',
-                    style: TextStyle(
-                        color: Colors.blue[900], fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, ForgotPasswordChangeScreen.id);
-                  },
                 ),
               ],
             ),

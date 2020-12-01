@@ -101,8 +101,8 @@ class MapScreenState extends State<EditProfile>
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.pushReplacementNamed(
-                                            context, UploadImage.id);
+                                        // Navigator.pushReplacementNamed(
+                                        //     context, UploadImage.id);
                                       },
                                       child: CircleAvatar(
                                         backgroundColor: Colors.red,

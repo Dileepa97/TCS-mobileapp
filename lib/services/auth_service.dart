@@ -91,10 +91,32 @@ class AuthService {
   }
 
   static forgotPassword(String email) async {
-    var authHeader = await generateAuthHeader();
+    var jsonBody = jsonEncode({
+      "email": email,
+    });
+    var res = await http.post(API + "password-reset-req-mobile",
+        body: jsonBody,
+        headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
+
+    return res.statusCode;
   }
 
   static forgotPasswordChange(String password, String code) async {
-    var authHeader = await generateAuthHeader();
+    var jsonBody = jsonEncode({
+      "newPassword": password,
+      "code": code,
+    });
+    try {
+      var res = await http.post(API + "reset-password",
+          body: jsonBody,
+          headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
+      if (res.statusCode == 200) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      return 0;
+    }
   }
 }
