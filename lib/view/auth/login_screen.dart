@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 1.0,
                       color: Colors.black,
                     )),
-                    Text(" OR "),
+                    Text("  OR  "),
                     Expanded(
                         child: Divider(
                       height: 1.0,

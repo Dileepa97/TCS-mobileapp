@@ -3,9 +3,9 @@ import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
 import 'package:timecapturesystem/view/auth/forgot_password.dart';
+import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/user/edit_profile.dart';
 import 'package:timecapturesystem/view/user/upload_image.dart';
-import 'package:timecapturesystem/view/user_management/user_details.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
 
 import 'view/user/profile.dart';
@@ -41,7 +41,6 @@ class _MyAppState extends State<MyApp> {
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
-
               // build the Login widget.
               RegistrationScreen.id: (context) => RegistrationScreen(),
 
@@ -50,8 +49,6 @@ class _MyAppState extends State<MyApp> {
               EditProfile.id: (context) => EditProfile(),
 
               UploadImage.id: (context) => UploadImage(),
-
-              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
 
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.
@@ -75,6 +72,9 @@ class _MyAppState extends State<MyApp> {
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
 
               RegistrationScreen.id: (context) => RegistrationScreen(),
+
+              ForgotPasswordChangeScreen.id: (context) =>
+                  ForgotPasswordChangeScreen(),
               //  build the LeaveRequest widget.
             };
           }

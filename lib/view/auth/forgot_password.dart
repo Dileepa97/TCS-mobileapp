@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/auth_service.dart';
 
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 
 import '../constants.dart';
 
@@ -67,13 +68,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
                     if (_emailController.text.isEmpty) {
-                      if (_emailController.text.isEmpty) {
+                      setState(() {
+                        emailInitColor = Colors.redAccent;
+                      });
+
+                      return;
+                    } else {
+                      if (!isEmail(_emailController.text)) {
                         setState(() {
                           emailInitColor = Colors.redAccent;
                         });
-                      }
 
-                      return;
+                        return;
+                      }
                     }
 
                     setState(() {
@@ -114,6 +121,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   },
                   title: 'Submit',
                 ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                GestureDetector(
+                  child: Text(
+                    'Enter Reset Code',
+                    style: TextStyle(
+                        color: Colors.blue[900], fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, ForgotPasswordChangeScreen.id);
+                  },
+                ),
               ],
             ),
           ),
@@ -121,4 +142,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
+}
+
+bool isEmail(String em) {
+  String p =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+  RegExp regExp = new RegExp(p);
+
+  return regExp.hasMatch(em);
 }

@@ -93,4 +93,8 @@ class AuthService {
   static forgotPassword(String email) async {
     var authHeader = await generateAuthHeader();
   }
+
+  static forgotPasswordChange(String password, String code) async {
+    var authHeader = await generateAuthHeader();
+  }
 }
