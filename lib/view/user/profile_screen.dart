@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
-import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
@@ -139,7 +137,11 @@ class _ProfileState extends State<Profile> {
                         color: Colors.white,
                         textColor: Colors.black87,
                         onPressed: () {
-                          Navigator.pushNamed(context, EditProfile.id);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile(user: _user)),
+                          );
                         },
                       ),
                     ),

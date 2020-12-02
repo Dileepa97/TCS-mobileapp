@@ -13,6 +13,7 @@ import 'view/Auth/registration_screen.dart';
 import 'view/LMS/user/leaveRequest.dart';
 import 'view/LMS/user/userLeave.dart';
 import 'view/homePage.dart';
+import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
 void main() async => {runApp(MyApp())};
@@ -49,6 +50,8 @@ class _MyAppState extends State<MyApp> {
               EditProfile.id: (context) => EditProfile(),
 
               ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
+
+              PickImageScreen.id: (context) => PickImageScreen(),
 
               // UploadImage.id: (context) => UploadImage(),
 

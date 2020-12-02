@@ -4,13 +4,17 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 
+import 'pick_image_screen.dart';
+
 //TODO:image upload
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";
+  final User user;
 
+  const EditProfile({Key key, this.user}) : super(key: key);
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -26,12 +30,6 @@ class MapScreenState extends State<EditProfile>
   TextEditingController _emailController = TextEditingController();
   TextEditingController _telephoneNumberController = TextEditingController();
 
-  String _usernameHintText = 'Edit Username';
-  String _fullNameHintText = "Edit FullName";
-  String _emailHintText = "Edit Email";
-  String _telephoneNumberHintText = "Edit Telephone Number";
-  User user;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +38,11 @@ class MapScreenState extends State<EditProfile>
 
   @override
   Widget build(BuildContext context) {
+    var user = widget.user;
+    String _usernameHintText = user.username;
+    String _fullNameHintText = user.fullName;
+    String _emailHintText = user.email;
+    String _telephoneNumberHintText = user.telephoneNumber;
     setState(() {});
     return Scaffold(
         backgroundColor: Colors.white,
@@ -100,8 +103,8 @@ class MapScreenState extends State<EditProfile>
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
-                                        // Navigator.pushReplacementNamed(
-                                        //     context, UploadImage.id);
+                                        Navigator.pushNamed(
+                                            context, PickImageScreen.id);
                                       },
                                       child: CircleAvatar(
                                         backgroundColor: Colors.redAccent,
@@ -151,9 +154,7 @@ class MapScreenState extends State<EditProfile>
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      _status
-                                          ? _getEditIcon()
-                                          : new Container(),
+                                      _status ? (_getEditIcon()) : Container(),
                                     ],
                                   )
                                 ],
@@ -309,35 +310,7 @@ class MapScreenState extends State<EditProfile>
                           SizedBox(
                             height: 20,
                           ),
-                          !_status
-                              ? _getActionButtons()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.all(20),
-                                      child: FlatButton(
-                                        child: Text(
-                                          'Change Password',
-                                          style: TextStyle(
-                                              fontSize: 17.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                        ),
-                                        color: Colors.lightBlue.shade600,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                        ),
-                                        textColor: Colors.black87,
-                                        onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, ChangePasswordScreen.id);
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          !_status ? _getActionButtons() : Container()
                         ],
                       ),
                     ),
@@ -370,7 +343,7 @@ class MapScreenState extends State<EditProfile>
                   child: RaisedButton(
                 child: Text("Update"),
                 textColor: Colors.white,
-                color: Colors.green,
+                color: Colors.lightBlue.shade700,
                 onPressed: () async {
                   if (_usernameController.text.isNotEmpty ||
                       _fullNameController.text.isNotEmpty ||
@@ -416,31 +389,43 @@ class MapScreenState extends State<EditProfile>
   }
 
   Widget _getEditIcon() {
-    return GestureDetector(
-      child: CircleAvatar(
-        backgroundColor: Colors.lightBlue.shade600,
-        radius: 14.0,
-        child: new Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 16.0,
+    return Row(
+      children: [
+        GestureDetector(
+          child: CircleAvatar(
+            backgroundColor: Colors.redAccent,
+            radius: 14.0,
+            child: Icon(
+              Icons.lock,
+              color: Colors.white,
+              size: 16.0,
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, ChangePasswordScreen.id);
+          },
         ),
-      ),
-      onTap: () async {
-        user = await UserService.getLoggedInUser();
-        setState(() {
-          updateFormState();
-          _status = false;
-        });
-      },
+        SizedBox(
+          width: 20,
+        ),
+        GestureDetector(
+          child: CircleAvatar(
+            backgroundColor: Colors.lightBlue.shade600,
+            radius: 14.0,
+            child: Icon(
+              Icons.edit,
+              color: Colors.white,
+              size: 16.0,
+            ),
+          ),
+          onTap: () async {
+            setState(() {
+              _status = false;
+            });
+          },
+        ),
+      ],
     );
-  }
-
-  updateFormState() {
-    _usernameHintText = user.username;
-    _fullNameHintText = user.fullName;
-    _emailHintText = user.email;
-    _telephoneNumberHintText = user.telephoneNumber;
   }
 
   void displayUpdateDialog(context) => showDialog(
