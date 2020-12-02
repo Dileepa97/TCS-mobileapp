@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/main.dart' as app;
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/services/utils.dart';

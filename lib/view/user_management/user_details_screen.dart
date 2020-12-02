@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/user_management/update_table_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
@@ -235,8 +236,13 @@ class _UserDetailsState extends State<UserDetails> {
                               UserHistory uh =
                                   await UserService.fetchUserHistoryById(
                                       user.id);
-                              displayHistory(context, user, uh);
-                              print(uh.toString());
+
+                              // displayHistory(context, user, uh);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UserUpdateTable(user, uh)));
                             },
                           ),
                         IconButton(
@@ -295,20 +301,6 @@ class _UserDetailsState extends State<UserDetails> {
         ),
       )),
     );
-  }
-
-  void displayHistory(
-      BuildContext context, User user, UserHistory userHistory) {
-    displayDialog(
-        context,
-        "Update History",
-        "Current value(s) and previous value(s) are displayed respectively\n\n"
-            "${userHistory.username == null ? '' : ('Username : ' + user.username + ' | ' + userHistory.username + '\n\n')}"
-            "${userHistory.fullName == null ? '' : ('Full name : ' + user.fullName + ' | ' + userHistory.fullName + '\n\n')}"
-            "${userHistory.telephoneNumber == null ? '' : ('Telephone Number ' + user.telephoneNumber + ' | ' + userHistory.telephoneNumber + '\n\n')}"
-            "${userHistory.email == null ? '' : ('Email : ' + user.email + ' | ' + userHistory.email + '\n\n')}"
-            "${userHistory.title == null ? '' : ('Title : ' + user.title + ' | ' + userHistory.title + '\n\n')}"
-            "${userHistory.probationary == null ? '' : ('On Probationary : ' + (user.probationary ? 'Yes' : 'No') + ' | ' + (userHistory.probationary ? 'Yes' : 'No') + '\n\n')}");
   }
 }
 
