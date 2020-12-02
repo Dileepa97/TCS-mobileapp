@@ -121,5 +121,23 @@ class AuthService {
 
   static changePassword(oldPassword, newPassword) async {
     var id = await TokenStorageService.idOrEmpty;
+    var jsonBody = jsonEncode({
+      "id": id,
+      "newPassword": newPassword,
+      "oldPassword": oldPassword,
+    });
+
+    try {
+      var res = await http.post(API + "change-password",
+          body: jsonBody,
+          headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
+      if (res.statusCode == 200) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      return 0;
+    }
   }
 }
