@@ -6,6 +6,7 @@ import 'package:timecapturesystem/services/admin_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user_management/update_table_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';
@@ -120,35 +121,49 @@ class _UserDetailsState extends State<UserDetails> {
                 color: Colors.lightBlueAccent.shade100,
               ),
             ),
-            Card(
+            GestureDetector(
+              onTap: () {
+                _launchUrl("tel:${user.telephoneNumber}");
+              },
+              child: Card(
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.phone,
+                      color: Colors.green.shade900,
+                    ),
+                    title: Text(
+                      user.telephoneNumber,
+                      style: TextStyle(
+                        color: Colors.blueGrey.shade900,
+                        fontFamily: 'Source Sans Pro',
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  )),
+            ),
+            GestureDetector(
+              onTap: () {
+                // var url = 'mailto:$toMailId?subject=$subject&body=$body';
+                var subject = "";
+                var body = "Dear " + user.fullName;
+                _launchUrl("mailto:${user.email}?subject=$subject&body=$body");
+              },
+              child: Card(
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
                 child: ListTile(
                   leading: Icon(
-                    Icons.phone,
-                    color: Colors.green.shade900,
+                    Icons.email,
+                    color: Colors.blue.shade900,
                   ),
                   title: Text(
-                    user.telephoneNumber,
+                    user.email,
                     style: TextStyle(
-                      color: Colors.blueGrey.shade900,
-                      fontFamily: 'Source Sans Pro',
-                      fontSize: 20.0,
-                    ),
+                        fontSize: 17.0,
+                        color: Colors.blueGrey.shade900,
+                        fontFamily: 'Source Sans Pro'),
                   ),
-                )),
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-              child: ListTile(
-                leading: Icon(
-                  Icons.email,
-                  color: Colors.blue.shade900,
-                ),
-                title: Text(
-                  user.email,
-                  style: TextStyle(
-                      fontSize: 17.0,
-                      color: Colors.blueGrey.shade900,
-                      fontFamily: 'Source Sans Pro'),
                 ),
               ),
             ),
@@ -315,5 +330,15 @@ handleSuccess(success, context, userId) async {
         MaterialPageRoute(builder: (context) => UserDetails(user: user)));
   } else {
     operationFailed(context);
+  }
+}
+
+_launchUrl(url) async {
+  // const url = "tel:1234567";
+  // var url = 'mailto:$toMailId?subject=$subject&body=$body';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

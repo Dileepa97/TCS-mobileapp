@@ -18,7 +18,9 @@ class UserUpdateTable extends StatelessWidget {
                 child: Container(
                   child: Text('Please rotate your phone',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w500)),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 27)),
                 ),
               )
             : Container(
