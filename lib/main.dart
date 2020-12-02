@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
-import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
+import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
+import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
-import 'view/user/profile_screen.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
-import 'view/LMS/user/userLeave.dart';
 import 'view/LMS/user/leaveRequest.dart';
+import 'view/LMS/user/userLeave.dart';
 import 'view/homePage.dart';
+import 'view/user/profile_screen.dart';
 
 void main() async => {runApp(MyApp())};
 
@@ -46,6 +47,8 @@ class _MyAppState extends State<MyApp> {
               Profile.id: (context) => Profile(),
 
               EditProfile.id: (context) => EditProfile(),
+
+              ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
 
               // UploadImage.id: (context) => UploadImage(),
 

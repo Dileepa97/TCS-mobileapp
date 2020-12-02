@@ -7,7 +7,7 @@ import 'package:timecapturesystem/services/auth_service.dart';
 import '../constants.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  static const String id = "forgot_password_change_screen";
+  static const String id = "change_password_screen";
 
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
@@ -17,10 +17,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   static const double spaceBetweenFields = 15.0;
   bool spin = false;
 
+  TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
-  Color codeInitColor = Colors.lightBlueAccent;
+  Color _oldPasswordInitColor = Colors.lightBlueAccent;
   Color _passwordInitColor = Colors.lightBlueAccent;
   Color _confirmPasswordInitColor = Colors.lightBlueAccent;
 
@@ -48,6 +49,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 SizedBox(
                   height: 80.0,
+                ),
+                TextField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: _oldPasswordController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _oldPasswordInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_oldPasswordInitColor)
+                      .copyWith(hintText: 'Current Password'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
                 ),
                 TextField(
                   obscureText: true,
@@ -85,16 +105,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(
-                  height: 20.0,
-                ),
-                Text(
-                  'Please check your email for the reset code',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
                   height: 10.0,
                 ),
                 RoundedButton(
@@ -103,13 +113,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     if (!PasswordsMatch()) {
                       return;
                     }
-
                     setState(() {
                       spin = true;
                     });
                     //implement login
                     try {
                       int code = await AuthService.changePassword(
+                          _oldPasswordController.text,
                           _passwordController.text);
                       if (code == 1) {
                         displayPWDResetSuccessDialog(context);
@@ -118,17 +128,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         });
                       } else {
                         if (code == 404) {
-                          displayDialog(context, "Invalid Code",
-                              "The code you entered is invalid");
-                        } else if (code == 401) {
                           displayDialog(
-                              context, "Bad Credentials", "Invalid user");
+                              context, "Invalid User", "User not found");
+                        } else if (code == 401) {
+                          displayDialog(context, "Bad Credentials",
+                              "Invalid old password");
+                          setState(() {
+                            _oldPasswordInitColor = Colors.lightBlueAccent;
+                            spin = false;
+                          });
                         } else {
                           displayDialog(
                               context, "Error", "An Unknown Error Occurred");
                         }
                         setState(() {
-                          codeInitColor = Colors.redAccent;
                           spin = false;
                         });
                       }

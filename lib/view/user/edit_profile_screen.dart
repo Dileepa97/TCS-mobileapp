@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 
 //TODO:image upload
 const fileAPI = 'http://localhost:8080/api/files/';
@@ -308,7 +310,24 @@ class MapScreenState extends State<EditProfile>
                                   ),
                                 ],
                               )),
-                          !_status ? _getActionButtons() : new Container(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          !_status
+                              ? _getActionButtons()
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    RoundedButton(
+                                      title: 'Change Password',
+                                      color: Colors.lightBlueAccent,
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, ChangePasswordScreen.id);
+                                      },
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),

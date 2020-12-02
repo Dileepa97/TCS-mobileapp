@@ -119,5 +119,7 @@ class AuthService {
     }
   }
 
-  static changePassword(password) {}
+  static changePassword(oldPassword, newPassword) async {
+    var id = await TokenStorageService.idOrEmpty;
+  }
 }
