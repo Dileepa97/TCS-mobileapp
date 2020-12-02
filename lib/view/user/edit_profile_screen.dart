@@ -106,7 +106,7 @@ class MapScreenState extends State<EditProfile>
                                         //     context, UploadImage.id);
                                       },
                                       child: CircleAvatar(
-                                        backgroundColor: Colors.red,
+                                        backgroundColor: Colors.redAccent,
                                         radius: 25.0,
                                         child: Icon(
                                           Icons.camera_alt,
@@ -295,15 +295,13 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration()
-                                          .copyWith(
-                                              hintText:
-                                                  _telephoneNumberHintText),
+                                  Flexible(
+                                    child: TextField(
+                                      decoration: InputDecoration().copyWith(
+                                          hintText: _telephoneNumberHintText),
                                       enabled: !_status,
                                       controller: _telephoneNumberController,
                                     ),
@@ -318,13 +316,27 @@ class MapScreenState extends State<EditProfile>
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    RoundedButton(
-                                      title: 'Change Password',
-                                      color: Colors.lightBlueAccent,
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, ChangePasswordScreen.id);
-                                      },
+                                    Container(
+                                      margin: EdgeInsets.all(20),
+                                      child: FlatButton(
+                                        child: Text(
+                                          'Change Password',
+                                          style: TextStyle(
+                                              fontSize: 17.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white),
+                                        ),
+                                        color: Colors.lightBlue.shade600,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        textColor: Colors.black87,
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, ChangePasswordScreen.id);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -408,7 +420,7 @@ class MapScreenState extends State<EditProfile>
   Widget _getEditIcon() {
     return GestureDetector(
       child: CircleAvatar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.lightBlue.shade600,
         radius: 14.0,
         child: new Icon(
           Icons.edit,

@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
 
 void displayDialog(context, title, text) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) =>
-          AlertDialog(title: Text(title), content: Text(text)),
-    );
+    barrierColor: Colors.black54,
+    context: context,
+    builder: (context) => (Platform.isAndroid
+        ? AlertDialog(title: Text(title), content: Text(text))
+        : CupertinoAlertDialog(title: Text(title), content: Text(text))));
 
 void displayRegSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
