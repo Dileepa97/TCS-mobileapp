@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/view/user_management/user_details.dart';
+import 'package:timecapturesystem/view/user_management/user_details_screen.dart';
 
 class UserCard extends StatefulWidget {
   final User user;

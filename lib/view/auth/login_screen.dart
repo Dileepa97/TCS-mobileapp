@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/services/auth_service.dart';
-
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import '../constants.dart';
-import 'forgot_password.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = "login_screen";

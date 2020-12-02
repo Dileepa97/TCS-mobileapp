@@ -4,7 +4,7 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
-import 'package:timecapturesystem/view/user_management/user_management_dashboard.dart';
+import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';

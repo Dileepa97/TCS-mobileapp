@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/services/utils.dart';
 
 const API = 'http://localhost:8080/api/auth/';

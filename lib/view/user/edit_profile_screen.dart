@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/dialog_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
-import 'package:timecapturesystem/view/user/upload_image.dart';
 
 //TODO:image upload
 const fileAPI = 'http://localhost:8080/api/files/';
