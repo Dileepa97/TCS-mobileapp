@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
@@ -39,7 +40,29 @@ class _PickImageScreenState extends State<PickImageScreen> {
 
   Widget _buildImage() {
     if (_imageFile != null) {
-      return Image.file(_imageFile);
+      return Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          Image.file(_imageFile),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              child: CircleAvatar(
+                backgroundColor: Colors.lightBlueAccent.shade700,
+                radius: 33.0,
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                  size: 28.0,
+                ),
+              ),
+              onTap: () async {
+                await _cropImage();
+              },
+            ),
+          ),
+        ],
+      );
     } else {
       return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
     }
@@ -101,6 +124,16 @@ class _PickImageScreenState extends State<PickImageScreen> {
           onPressed: onPressed),
     );
   }
+
+  Future<void> _cropImage() async {
+    File cropped = await ImageCropper.cropImage(
+      sourcePath: _imageFile.path,
+    );
+
+    setState(() {
+      _imageFile = cropped ?? _imageFile;
+    });
+  }
 }
 
 uploadImage(File imageFile, context) async {
@@ -127,29 +160,3 @@ uploadImage(File imageFile, context) async {
     }
   } catch (e) {}
 }
-//
-// this.
-// id + '
-// @
-// '
-// +
-// new
-// Date
-// (
-// ).toISOString
-// (
-// )
-//
-// upload(imageFileName) async {
-//   var authHeader = await generateAuthHeader();
-//   http.post(uploadEndPoint,
-//       body: MultipartFile.fromBytes(base64Image, [1, 2, 3]),
-//       headers: {
-//         HttpHeaders.authorizationHeader: authHeader,
-//         HttpHeaders.contentTypeHeader: contentTypeHeader
-//       }).then((result) {
-//     setStatus(result.statusCode == 200 ? result.body : errMessage);
-//   }).catchError((error) {
-//     setStatus(error.toString());
-//   });
-// }

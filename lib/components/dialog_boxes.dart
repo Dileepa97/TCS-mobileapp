@@ -1,15 +1,35 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
+import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
+import 'package:timecapturesystem/view/user/profile_screen.dart';
 
 void displayDialog(context, title, text) => showDialog(
     barrierColor: Colors.black54,
     context: context,
     builder: (context) => (Platform.isAndroid
         ? AlertDialog(title: Text(title), content: Text(text))
-        : CupertinoAlertDialog(title: Text(title), content: Text(text))));
+        : CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                  child: Text("Profile"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }),
+              CupertinoDialogAction(
+                  child: Text("Edit"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }),
+            ],
+          )));
 
 void displayRegSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
