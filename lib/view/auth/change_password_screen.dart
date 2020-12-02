@@ -110,7 +110,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (!PasswordsMatch()) {
+                    var flag = 0;
+                    if (_passwordController.text.isEmpty) {
+                      setState(() {
+                        _passwordInitColor = Colors.redAccent;
+                      });
+                      flag++;
+                    }
+                    if (_confirmPasswordController.text.isEmpty) {
+                      setState(() {
+                        _confirmPasswordInitColor = Colors.redAccent;
+                      });
+                      flag++;
+                    }
+                    if (_oldPasswordController.text.isEmpty) {
+                      setState(() {
+                        _oldPasswordInitColor = Colors.redAccent;
+                      });
+                      flag++;
+                    }
+
+                    if (flag > 0) {
+                      return;
+                    }
+
+                    if (!passwordsMatch()) {
                       return;
                     }
                     setState(() {
@@ -122,7 +146,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _oldPasswordController.text,
                           _passwordController.text);
                       if (code == 1) {
-                        displayPWDResetSuccessDialog(context);
+                        displayPWDChangedSuccessDialog(context);
                         setState(() {
                           spin = true;
                         });
@@ -163,8 +187,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  PasswordsMatch() {
+  passwordsMatch() {
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
@@ -179,11 +202,4 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       return true;
     }
   }
-}
-
-bool isEmail(String em) {
-  String p =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(p);
-  return regExp.hasMatch(em);
 }

@@ -45,6 +45,25 @@ void displayPWDResetSuccessDialog(context) => showDialog(
       ),
     );
 
+void displayPWDChangedSuccessDialog(context) => showDialog(
+      barrierColor: Colors.black54,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Success"),
+        content: Text("You have successfully changed your password"),
+        actions: [
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+
 void operationFailed(context) =>
     displayDialog(context, "Failed", "Failed to execute request, try again");
 

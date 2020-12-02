@@ -115,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.popAndPushNamed(context, '/');
                       } else {
                         if (code == 404) {
-                          displayDialog(context, "Invalid User",
-                              "user with given username has not registered in the system");
+                          displayDialog(
+                              context, "Invalid", "Check your credentials");
                         } else if (code == 401) {
                           displayDialog(context, "Bad Credentials",
                               "Invalid username or password");
