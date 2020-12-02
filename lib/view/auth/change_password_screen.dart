@@ -17,7 +17,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   static const double spaceBetweenFields = 15.0;
   bool spin = false;
 
-  TextEditingController _codeController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
@@ -49,22 +48,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 SizedBox(
                   height: 80.0,
-                ),
-                TextField(
-                  controller: _codeController,
-                  onChanged: (value) {
-                    //Do something with the user input.
-                  },
-                  onTap: () {
-                    setState(() {
-                      codeInitColor = Colors.lightBlueAccent;
-                    });
-                  },
-                  decoration:
-                      inputDeco(codeInitColor).copyWith(hintText: 'Code'),
-                ),
-                SizedBox(
-                  height: spaceBetweenFields,
                 ),
                 TextField(
                   obscureText: true,
@@ -117,13 +100,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_codeController.text.isEmpty) {
-                      setState(() {
-                        codeInitColor = Colors.redAccent;
-                      });
-                      return;
-                    }
-
                     if (!PasswordsMatch()) {
                       return;
                     }
@@ -133,8 +109,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     });
                     //implement login
                     try {
-                      int code = await AuthService.forgotPasswordChange(
-                          _passwordController.text, _codeController.text);
+                      int code = await AuthService.changePassword(
+                          _passwordController.text);
                       if (code == 1) {
                         displayPWDResetSuccessDialog(context);
                         setState(() {
@@ -146,7 +122,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               "The code you entered is invalid");
                         } else if (code == 401) {
                           displayDialog(
-                              context, "Bad Credentials", "Invalid code");
+                              context, "Bad Credentials", "Invalid user");
                         } else {
                           displayDialog(
                               context, "Error", "An Unknown Error Occurred");

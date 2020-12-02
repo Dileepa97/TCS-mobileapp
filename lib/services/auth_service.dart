@@ -83,7 +83,7 @@ class AuthService {
 
   static Future<void> logout() async {
     var authHeader = await generateAuthHeader();
-    var res = await http.get(API + "logout",
+    await http.get(API + "logout",
         headers: {HttpHeaders.authorizationHeader: authHeader});
     await TokenStorageService.clearStorage();
     app.main();
@@ -118,4 +118,6 @@ class AuthService {
       return 0;
     }
   }
+
+  static changePassword(password) {}
 }
