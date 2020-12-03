@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
-import 'package:timecapturesystem/view/user/edit_profile.dart';
+import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
 const fileAPI = 'http://localhost:8080/api/files/';
 // const fileAPI = 'http://192.168.8.100:8080/api/files/';
@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: FutureBuilder<User>(
-          future: UserService().getUser(),
+          future: UserService.getLoggedInUser(),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                   _user.username,
                   style: TextStyle(
                     fontFamily: 'Roboto',
-                    color: Colors.black54,
+                    color: Colors.black87,
                     fontSize: 20.0,
                     letterSpacing: 2.0,
                     fontWeight: FontWeight.bold,
@@ -124,19 +124,28 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(15),
-                  child: FlatButton(
-                    child: Text(
-                      'EDIT',
-                      style: TextStyle(fontSize: 20.0),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      child: FlatButton(
+                        child: Text(
+                          'Edit Details',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        color: Colors.white,
+                        textColor: Colors.black87,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile(user: _user)),
+                          );
+                        },
+                      ),
                     ),
-                    color: Colors.white,
-                    textColor: Colors.black87,
-                    onPressed: () {
-                      Navigator.pushNamed(context, EditProfile.id);
-                    },
-                  ),
+                  ],
                 ),
               ];
             } else if (snapshot.hasError) {

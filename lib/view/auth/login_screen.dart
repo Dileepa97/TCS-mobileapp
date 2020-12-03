@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/services/auth_service.dart';
-
 import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/view/auth/registration_screen.dart';
 
 import '../constants.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = "login_screen";
@@ -115,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.popAndPushNamed(context, '/');
                       } else {
                         if (code == 404) {
-                          displayDialog(context, "Invalid User",
-                              "user with given username has not registered in the system");
+                          displayDialog(
+                              context, "Invalid", "Check your credentials");
                         } else if (code == 401) {
                           displayDialog(context, "Bad Credentials",
                               "Invalid username or password");
@@ -133,14 +133,50 @@ class _LoginScreenState extends State<LoginScreen> {
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
                       print(e.toString());
-                      spin = false;
+                      setState(() {
+                        spin = false;
+                      });
                     }
                   },
-                  title: 'Login',
+                  title: 'Log In',
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('or')],
+                  children: [
+                    GestureDetector(
+                      child: Text(
+                        'Forgotten Password?',
+                        style: TextStyle(
+                            color: Colors.blue[900],
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, ForgotPasswordScreen.id);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: Divider(
+                      height: 1.0,
+                      color: Colors.black,
+                    )),
+                    Text("  OR  "),
+                    Expanded(
+                        child: Divider(
+                      height: 1.0,
+                      color: Colors.black,
+                    )),
+                  ],
                 ),
                 RoundedButton(
                   color: Colors.greenAccent[700],
