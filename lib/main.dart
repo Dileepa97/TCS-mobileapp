@@ -22,13 +22,13 @@ void main() async {
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
   var userData = await TokenStorageService.authDataOrEmpty;
-  // if (userData != null) {
-  //   DateTime dateTime = userData.tokenExpirationDate;
-  //   if (dateTime.isBefore(DateTime.now())) {
-  //     TokenStorageService.clearStorage();
-  //     userData = null;
-  //   }
-  // }
+  if (userData != null) {
+    DateTime dateTime = userData.tokenExpirationDate;
+    if (dateTime.isBefore(DateTime.now())) {
+      await TokenStorageService.clearStorage();
+      userData = null;
+    }
+  }
   runApp(MyApp(userData));
 }
 
@@ -45,12 +45,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<dynamic>(
-        stream: Stream.fromFuture(TokenStorageService.authDataOrEmpty),
+    return FutureBuilder<dynamic>(
+        future: (TokenStorageService.authDataOrEmpty),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           var routes;
           var initialRoute;
-          if (snapshot.hasData || userData != null) {
+          if (userData != null) {
             // TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");

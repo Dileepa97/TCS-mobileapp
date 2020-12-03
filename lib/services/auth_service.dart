@@ -95,6 +95,14 @@ class AuthService {
     app.main();
   }
 
+  // static Future<void> logoutWithContext(context) async {
+  //   var authHeader = await generateAuthHeader();
+  //   await http.get(API + "logout",
+  //       headers: {HttpHeaders.authorizationHeader: authHeader});
+  //   await TokenStorageService.clearStorage();
+  //   app.main();
+  // }
+
   static forgotPassword(String email) async {
     var jsonBody = jsonEncode({
       "email": email,
