@@ -50,32 +50,18 @@ class _MyAppState extends State<MyApp> {
             initialRoute = '/';
             routes = {
               '/': (context) => HomePage(),
-              // build the HomePage widget.
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
-              // build the Login widget.
               RegistrationScreen.id: (context) => RegistrationScreen(),
-
               Profile.id: (context) => Profile(),
-
               EditProfile.id: (context) => EditProfile(),
-
               ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
-
               PickImageScreen.id: (context) => PickImageScreen(),
-
-              // UploadImage.id: (context) => UploadImage(),
-
               '/userLeave': (context) => UserLeave(),
-              //  build the UserLeave widget.
               '/leaveRequest': (context) => LeaveRequest(),
-              //  build the LeaveRequest widget.
               '/ownLeave': (context) => OwnLeave(),
-              //  build the LeaveRequest widget.
               '/allLeaves': (context) => AllLeave(),
-              //  build the LeaveRequest widget.
-              // build the Register widget.
             };
           } else {
             print("user not exist");
@@ -84,14 +70,10 @@ class _MyAppState extends State<MyApp> {
             routes = {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
-              // build the Login widget.
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
-
               RegistrationScreen.id: (context) => RegistrationScreen(),
-
               ForgotPasswordChangeScreen.id: (context) =>
                   ForgotPasswordChangeScreen(),
-              //  build the LeaveRequest widget.
             };
           }
 
