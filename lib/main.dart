@@ -22,6 +22,13 @@ void main() async {
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
   var userData = await TokenStorageService.authDataOrEmpty;
+  // if (userData != null) {
+  //   DateTime dateTime = userData.tokenExpirationDate;
+  //   if (dateTime.isBefore(DateTime.now())) {
+  //     TokenStorageService.clearStorage();
+  //     userData = null;
+  //   }
+  // }
   runApp(MyApp(userData));
 }
 
