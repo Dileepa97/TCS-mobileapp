@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
-import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
-import 'package:timecapturesystem/view/user/profile_screen.dart';
 
 void displayDialog(context, title, text) => showDialog(
     barrierColor: Colors.black54,
