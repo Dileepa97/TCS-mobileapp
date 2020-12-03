@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
                 Text(
                   _user.fullName,
                   style: TextStyle(
-                    fontFamily: 'Pacifico',
+                    fontFamily: 'Maven Pro',
                     fontSize: 40.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Text(
-                          _user.title,
+                          _user.title != null ? _user.title : '',
                           style: TextStyle(
                             fontFamily: 'Source Sans Pro',
                             color: Colors.white70,

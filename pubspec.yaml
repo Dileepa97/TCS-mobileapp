@@ -111,3 +111,7 @@ flutter:
     - family: Source Sans Pro
       fonts:
         - asset: fonts/SourceSansPro-Regular.ttf
+
+    - family: Maven Pro
+      fonts:
+        - asset: fonts/MavenPro-Regular.ttf
