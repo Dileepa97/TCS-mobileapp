@@ -41,13 +41,16 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(
+                  height: 60,
+                ),
                 CircleAvatar(
-                  radius: 90.0,
+                  radius: 120.0,
                   backgroundImage:
                       NetworkImage(fileAPI + _user.profileImageURL),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: 50.0,
                 ),
                 Text(
                   _user.username,
@@ -58,6 +61,9 @@ class _ProfileState extends State<Profile> {
                     letterSpacing: 2.0,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +81,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(
-                          width: 5.0,
+                          width: 10.0,
                         ),
                         Icon(
                           vIcon,
@@ -87,7 +93,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 20.0,
-                  width: 150.0,
+                  width: 350.0,
                   child: Divider(
                     color: Colors.lightBlueAccent.shade100,
                   ),

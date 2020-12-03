@@ -47,23 +47,24 @@ class MapScreenState extends State<EditProfile>
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: new ListView(
+          child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  new Container(
+                  Container(
                     height: 250.0,
                     color: Colors.white,
-                    child: new Column(
+                    child: Column(
                       children: <Widget>[
                         Padding(
                             padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                            child: new Row(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(left: 0.0),
-                                  child: new Text('Edit Profile',
+                                  padding: EdgeInsets.only(
+                                      left: 130.0, right: 130, bottom: 20),
+                                  child: Text('Edit Profile',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20.0,
@@ -74,16 +75,15 @@ class MapScreenState extends State<EditProfile>
                             )),
                         Padding(
                           padding: EdgeInsets.only(top: 2.0),
-                          child:
-                              new Stack(fit: StackFit.loose, children: <Widget>[
-                            new Row(
+                          child: Stack(fit: StackFit.loose, children: <Widget>[
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                new Container(
+                                Container(
                                     width: 140.0,
                                     height: 140.0,
-                                    decoration: new BoxDecoration(
+                                    decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                         image: user == null
@@ -122,27 +122,27 @@ class MapScreenState extends State<EditProfile>
                       ],
                     ),
                   ),
-                  new Container(
+                  Container(
                     color: Color(0xffFFFFFF),
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 2.0),
-                      child: new Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 18.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
+                                      Text(
                                         'Personal Information',
                                         style: TextStyle(
                                             fontSize: 19.0,
@@ -150,7 +150,7 @@ class MapScreenState extends State<EditProfile>
                                       ),
                                     ],
                                   ),
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
@@ -162,10 +162,10 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
