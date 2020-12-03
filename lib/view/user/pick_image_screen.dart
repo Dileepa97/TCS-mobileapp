@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/mixins/orientation.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/services/utils.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
@@ -78,6 +79,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    OrientationManager.portraitMode();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

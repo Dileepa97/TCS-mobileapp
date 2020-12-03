@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/services/utils.dart';
 
-var apiEndpoint = DotEnv().env['K_IP'].toString();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
 // var apiEndpoint =  DotEnv().env['API_URL'];
 
 var API = apiEndpoint + 'auth/';

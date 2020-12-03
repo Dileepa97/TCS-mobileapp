@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/mixins/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 
-class UserUpdateTable extends StatelessWidget {
+class UserUpdateTable extends StatefulWidget {
   final User user;
   final UserHistory userHistory;
 
   UserUpdateTable(this.user, this.userHistory);
 
   @override
+  _UserUpdateTableState createState() => _UserUpdateTableState();
+}
+
+class _UserUpdateTableState extends State<UserUpdateTable> {
+  @override
   Widget build(BuildContext context) {
+    OrientationManager.enableRotation();
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
@@ -58,71 +65,73 @@ class UserUpdateTable extends StatelessWidget {
                                   color: Colors.white))),
                     ],
                     rows: [
-                      if (userHistory.username != null)
+                      if (widget.userHistory.username != null)
                         DataRow(cells: [
                           DataCell(Text('Username',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.username,
+                          DataCell(Text(widget.user.username,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.username,
+                          DataCell(Text(widget.userHistory.username,
                               style: TextStyle(color: Colors.white))),
                         ]),
-                      if (userHistory.fullName != null)
+                      if (widget.userHistory.fullName != null)
                         DataRow(cells: [
                           DataCell(Text('Full Name',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.fullName,
+                          DataCell(Text(widget.user.fullName,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.fullName,
+                          DataCell(Text(widget.userHistory.fullName,
                               style: TextStyle(color: Colors.white))),
                         ]),
-                      if (userHistory.telephoneNumber != null)
+                      if (widget.userHistory.telephoneNumber != null)
                         DataRow(cells: [
                           DataCell(Text('Telephone Number',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.telephoneNumber,
+                          DataCell(Text(widget.user.telephoneNumber,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.telephoneNumber,
+                          DataCell(Text(widget.userHistory.telephoneNumber,
                               style: TextStyle(color: Colors.white))),
                         ]),
-                      if (userHistory.email != null)
+                      if (widget.userHistory.email != null)
                         DataRow(cells: [
                           DataCell(Text('Email',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.email,
+                          DataCell(Text(widget.user.email,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.email,
+                          DataCell(Text(widget.userHistory.email,
                               style: TextStyle(color: Colors.white))),
                         ]),
-                      if (userHistory.title != null)
+                      if (widget.userHistory.title != null)
                         DataRow(cells: [
                           DataCell(Text('Title',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.title,
+                          DataCell(Text(widget.user.title,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.title,
+                          DataCell(Text(widget.userHistory.title,
                               style: TextStyle(color: Colors.white))),
                         ]),
-                      if (userHistory.probationary != null &&
-                          userHistory.probationary != user.probationary)
+                      if (widget.userHistory.probationary != null &&
+                          widget.userHistory.probationary !=
+                              widget.user.probationary)
                         DataRow(cells: [
                           DataCell(Text('Probationary?',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(user.probationary ? 'Yes' : 'No',
+                          DataCell(Text(widget.user.probationary ? 'Yes' : 'No',
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(userHistory.probationary ? 'Yes' : 'No',
+                          DataCell(Text(
+                              widget.userHistory.probationary ? 'Yes' : 'No',
                               style: TextStyle(color: Colors.white))),
                         ]),
                     ],
@@ -131,6 +140,12 @@ class UserUpdateTable extends StatelessWidget {
               ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    OrientationManager.portraitMode();
+    super.dispose();
   }
 }
 //

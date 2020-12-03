@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:timecapturesystem/mixins/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user_management/user_card.dart';
@@ -18,22 +19,25 @@ class UserManagementDashboard extends StatefulWidget {
 class _UserManagementDashboardState extends State<UserManagementDashboard> {
   @override
   Widget build(BuildContext context) {
+    OrientationManager.enableRotation();
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: FutureBuilder<List<User>>(
           future: UserService.getAllUsers(context),
           builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-            List<Widget> children;
+            var child;
             if (snapshot.hasData) {
               var users = <Widget>[];
               snapshot.data.forEach((user) {
                 users.add(UserCard(user: user));
               });
 
-              children = users;
+              child = ListView(
+                children: users,
+              );
             } else if (snapshot.hasError) {
-              children = <Widget>[
+              child = Column(children: <Widget>[
                 Icon(
                   Icons.error_outline,
                   color: Colors.red,
@@ -43,28 +47,22 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
                   padding: const EdgeInsets.only(top: 16),
                   child: Text('Error: ${snapshot.error}'),
                 )
-              ];
+              ]);
             } else {
-              children = <Widget>[
-                SizedBox(
-                  child: CircularProgressIndicator(),
-                  width: 60,
-                  height: 60,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('loading'),
-                )
-              ];
+              child = Container(
+                child: CircularProgressIndicator(),
+              );
             }
-            return Center(
-              child: ListView(
-                children: children,
-              ),
-            );
+            return Center(child: child);
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    OrientationManager.portraitMode();
+    super.dispose();
   }
 }

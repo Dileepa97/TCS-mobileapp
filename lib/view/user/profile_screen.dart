@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:timecapturesystem/mixins/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
@@ -17,6 +18,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    OrientationManager.portraitMode();
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
