@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/main.dart' as app;
+import 'package:timecapturesystem/managers/auth.dart';
 import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
-
-import 'package:timecapturesystem/main.dart' as app;
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 ///time capture system user home page
@@ -16,6 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    // AuthManager.checkAuthExpired();
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
