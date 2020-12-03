@@ -21,15 +21,21 @@ import 'view/user/profile_screen.dart';
 void main() async {
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
-  runApp(MyApp());
+  var userData = await TokenStorageService.authDataOrEmpty;
+  runApp(MyApp(userData));
 }
 
 class MyApp extends StatefulWidget {
+  final userData;
+  MyApp(this.userData);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  get userData => widget.userData;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<dynamic>(
@@ -37,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           var routes;
           var initialRoute;
-          if (snapshot.hasData) {
+          if (snapshot.hasData || userData != null) {
             // TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");
@@ -79,7 +85,6 @@ class _MyAppState extends State<MyApp> {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.
-
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
 
               RegistrationScreen.id: (context) => RegistrationScreen(),

@@ -18,7 +18,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    OrientationManager.portraitMode();
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
