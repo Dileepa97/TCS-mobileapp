@@ -42,15 +42,15 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 SizedBox(
-                  height: 60,
+                  height: 40,
                 ),
                 CircleAvatar(
-                  radius: 120.0,
+                  radius: 140.0,
                   backgroundImage:
                       NetworkImage(fileAPI + _user.profileImageURL),
                 ),
                 SizedBox(
-                  height: 50.0,
+                  height: 20.0,
                 ),
                 Text(
                   _user.username,
