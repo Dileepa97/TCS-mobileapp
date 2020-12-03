@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
@@ -10,9 +11,14 @@ import 'package:timecapturesystem/services/utils.dart';
 
 import 'storage_service.dart';
 
-final storage = FlutterSecureStorage();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+// var apiEndpoint =  DotEnv().env['API_URL'];
+
+var API = apiEndpoint + 'auth/';
 String contentTypeHeader = 'application/json';
-const API = 'http://localhost:8080/api/auth/';
+
+final storage = FlutterSecureStorage();
+
 // const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
@@ -11,9 +12,10 @@ import 'storage_service.dart';
 
 String contentTypeHeader = 'application/json';
 
-// const API = 'http://192.168.8.100:8080/api/users/';
-const API = 'http://localhost:8080/api/users/';
-const historyAPI = 'http://localhost:8080/api/userHistory/';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+
+var API = apiEndpoint + 'users/';
+var historyAPI = apiEndpoint + 'userHistory/';
 
 class UserService {
   static Future<http.Response> fetchUserById(id) async {

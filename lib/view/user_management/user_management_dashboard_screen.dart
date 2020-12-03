@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user_management/user_card.dart';
 
-const fileAPI = 'http://localhost:8080/api/files/';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+var fileAPI = apiEndpoint + 'files/';
 
 class UserManagementDashboard extends StatefulWidget {
   static const String id = "user_management_screen";

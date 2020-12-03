@@ -5,29 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
 
 void displayDialog(context, title, text) => showDialog(
-    barrierColor: Colors.black54,
-    context: context,
-    builder: (context) => (Platform.isAndroid
-        ? AlertDialog(title: Text(title), content: Text(text))
-        : CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                  child: Text("Profile"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }),
-              CupertinoDialogAction(
-                  child: Text("Edit"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }),
-            ],
-          )));
+      barrierColor: Colors.black54,
+      context: context,
+      builder: (context) => (Platform.isAndroid
+          ? AlertDialog(title: Text(title), content: Text(text))
+          : CupertinoAlertDialog(
+              title: Text(title),
+              content: Text(text),
+            )),
+    );
 
 void displayRegSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,

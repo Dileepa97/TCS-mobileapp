@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
@@ -6,9 +7,9 @@ import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 
 import 'pick_image_screen.dart';
 
-//TODO:image upload
-const fileAPI = 'http://localhost:8080/api/files/';
-// const fileAPI = 'http://192.168.8.100:8080/api/files/';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+
+var fileAPI = apiEndpoint + 'files/';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";

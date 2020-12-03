@@ -2,13 +2,17 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/services/utils.dart';
 
-const uploadEndPoint = 'http://localhost:8080/api/files';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+
+var uploadEndPoint = apiEndpoint + 'files';
+
 const contentTypeHeader = 'application/json';
 
 class PickImageScreen extends StatefulWidget {

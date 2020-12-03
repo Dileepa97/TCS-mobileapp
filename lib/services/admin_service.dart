@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/services/utils.dart';
 
-const API = 'http://localhost:8080/api/auth/';
-const userAPI = 'http://localhost:8080/api/users/';
+var apiEndpoint = DotEnv().env['K_IP'].toString();
+// var apiEndpoint =  DotEnv().env['API_URL'];
+
+var API = apiEndpoint + 'auth/';
+var userAPI = apiEndpoint + 'users/';
 String contentTypeHeader = 'application/json';
 
 class AdminService {
