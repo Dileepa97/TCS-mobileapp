@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/mixins/orientation.dart';
+import 'package:timecapturesystem/managers/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 

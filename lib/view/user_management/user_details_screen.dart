@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
-import 'package:timecapturesystem/mixins/orientation.dart';
+import 'package:timecapturesystem/managers/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
