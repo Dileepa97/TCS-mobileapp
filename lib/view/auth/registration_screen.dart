@@ -58,17 +58,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             shrinkWrap: true,
             children: <Widget>[
               SizedBox(
-                height: 35.0,
+                height: 30.0,
               ),
               Hero(
                 tag: 'logo',
                 child: Container(
-                  height: 200.0,
+                  height: 100.0,
                   child: Image.asset('images/logo.png'),
                 ),
               ),
               SizedBox(
-                height: 20.0,
+                height: 17.0,
               ),
               TextField(
                 controller: _usernameController,
@@ -171,6 +171,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 decoration: inputDeco(_confirmPasswordInitColor)
                     .copyWith(hintText: 'Confirm password'),
               ),
+              SizedBox(
+                height: 8,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -236,7 +239,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: DropdownButton<String>(
                   value: _title,
-                  hint: Text('Title'),
+                  hint: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Title'),
+                    ],
+                  ),
                   items: titles.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
