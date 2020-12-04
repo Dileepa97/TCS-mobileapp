@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/auth_service.dart';
 
@@ -209,6 +209,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   //implement registration
                   if (checkValidity()) {
                     await registerUser();
+                    setState(() {
+                      spin = false;
+                    });
                   } else {
                     setState(() {
                       spin = false;

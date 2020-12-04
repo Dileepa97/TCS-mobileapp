@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
-import 'package:timecapturesystem/view/user/edit_profile.dart';
-import 'package:timecapturesystem/view/user/upload_image.dart';
+import 'package:timecapturesystem/view/auth/change_password_screen.dart';
+import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
+import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
+import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
+import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
-import 'view/user/profile.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
-import 'view/LMS/user/userLeave.dart';
 import 'view/LMS/user/leaveRequest.dart';
+import 'view/LMS/user/userLeave.dart';
 import 'view/homePage.dart';
+import 'view/user/pick_image_screen.dart';
+import 'view/user/profile_screen.dart';
 
 void main() async => {runApp(MyApp())};
 
@@ -35,7 +39,8 @@ class _MyAppState extends State<MyApp> {
             routes = {
               '/': (context) => HomePage(),
               // build the HomePage widget.
-
+              UserManagementDashboard.id: (context) =>
+                  UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.
               RegistrationScreen.id: (context) => RegistrationScreen(),
@@ -44,7 +49,11 @@ class _MyAppState extends State<MyApp> {
 
               EditProfile.id: (context) => EditProfile(),
 
-              UploadImage.id: (context) => UploadImage(),
+              ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
+
+              PickImageScreen.id: (context) => PickImageScreen(),
+
+              // UploadImage.id: (context) => UploadImage(),
 
               '/userLeave': (context) => UserLeave(),
               //  build the UserLeave widget.
@@ -64,7 +73,13 @@ class _MyAppState extends State<MyApp> {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
               // build the Login widget.
+
+              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+
               RegistrationScreen.id: (context) => RegistrationScreen(),
+
+              ForgotPasswordChangeScreen.id: (context) =>
+                  ForgotPasswordChangeScreen(),
               //  build the LeaveRequest widget.
             };
           }

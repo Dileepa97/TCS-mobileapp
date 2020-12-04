@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:timecapturesystem/components/dialog_box.dart';
+import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
-import 'package:timecapturesystem/view/user/upload_image.dart';
+import 'package:timecapturesystem/view/auth/change_password_screen.dart';
+
+import 'pick_image_screen.dart';
 
 //TODO:image upload
 const fileAPI = 'http://localhost:8080/api/files/';
@@ -11,7 +12,9 @@ const fileAPI = 'http://localhost:8080/api/files/';
 
 class EditProfile extends StatefulWidget {
   static const String id = "edit_profile";
+  final User user;
 
+  const EditProfile({Key key, this.user}) : super(key: key);
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -19,19 +22,13 @@ class EditProfile extends StatefulWidget {
 class MapScreenState extends State<EditProfile>
     with SingleTickerProviderStateMixin {
   bool _status = true;
-  final userService = UserService();
+
   final FocusNode myFocusNode = FocusNode();
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _telephoneNumberController = TextEditingController();
-
-  String _usernameHintText = 'Edit Username';
-  String _fullNameHintText = "Edit FullName";
-  String _emailHintText = "Edit Email";
-  String _telephoneNumberHintText = "Edit Telephone Number";
-  User user;
 
   @override
   void initState() {
@@ -41,6 +38,11 @@ class MapScreenState extends State<EditProfile>
 
   @override
   Widget build(BuildContext context) {
+    var user = widget.user;
+    String _usernameHintText = user.username;
+    String _fullNameHintText = user.fullName;
+    String _emailHintText = user.email;
+    String _telephoneNumberHintText = user.telephoneNumber;
     setState(() {});
     return Scaffold(
         backgroundColor: Colors.white,
@@ -101,11 +103,11 @@ class MapScreenState extends State<EditProfile>
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.pushReplacementNamed(
-                                            context, UploadImage.id);
+                                        Navigator.pushNamed(
+                                            context, PickImageScreen.id);
                                       },
                                       child: CircleAvatar(
-                                        backgroundColor: Colors.red,
+                                        backgroundColor: Colors.redAccent,
                                         radius: 25.0,
                                         child: Icon(
                                           Icons.camera_alt,
@@ -152,9 +154,7 @@ class MapScreenState extends State<EditProfile>
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      _status
-                                          ? _getEditIcon()
-                                          : new Container(),
+                                      _status ? (_getEditIcon()) : Container(),
                                     ],
                                   )
                                 ],
@@ -294,22 +294,23 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration()
-                                          .copyWith(
-                                              hintText:
-                                                  _telephoneNumberHintText),
+                                  Flexible(
+                                    child: TextField(
+                                      decoration: InputDecoration().copyWith(
+                                          hintText: _telephoneNumberHintText),
                                       enabled: !_status,
                                       controller: _telephoneNumberController,
                                     ),
                                   ),
                                 ],
                               )),
-                          !_status ? _getActionButtons() : new Container(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          !_status ? _getActionButtons() : Container()
                         ],
                       ),
                     ),
@@ -342,7 +343,7 @@ class MapScreenState extends State<EditProfile>
                   child: RaisedButton(
                 child: Text("Update"),
                 textColor: Colors.white,
-                color: Colors.green,
+                color: Colors.lightBlue.shade700,
                 onPressed: () async {
                   if (_usernameController.text.isNotEmpty ||
                       _fullNameController.text.isNotEmpty ||
@@ -388,31 +389,43 @@ class MapScreenState extends State<EditProfile>
   }
 
   Widget _getEditIcon() {
-    return GestureDetector(
-      child: CircleAvatar(
-        backgroundColor: Colors.blueAccent,
-        radius: 14.0,
-        child: new Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 16.0,
+    return Row(
+      children: [
+        GestureDetector(
+          child: CircleAvatar(
+            backgroundColor: Colors.redAccent,
+            radius: 14.0,
+            child: Icon(
+              Icons.lock,
+              color: Colors.white,
+              size: 16.0,
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, ChangePasswordScreen.id);
+          },
         ),
-      ),
-      onTap: () async {
-        user = await userService.getUser();
-        setState(() {
-          updateFormState();
-          _status = false;
-        });
-      },
+        SizedBox(
+          width: 20,
+        ),
+        GestureDetector(
+          child: CircleAvatar(
+            backgroundColor: Colors.lightBlue.shade600,
+            radius: 14.0,
+            child: Icon(
+              Icons.edit,
+              color: Colors.white,
+              size: 16.0,
+            ),
+          ),
+          onTap: () async {
+            setState(() {
+              _status = false;
+            });
+          },
+        ),
+      ],
     );
-  }
-
-  updateFormState() {
-    _usernameHintText = user.username;
-    _fullNameHintText = user.fullName;
-    _emailHintText = user.email;
-    _telephoneNumberHintText = user.telephoneNumber;
   }
 
   void displayUpdateDialog(context) => showDialog(
@@ -437,7 +450,7 @@ class MapScreenState extends State<EditProfile>
                 Navigator.pop(context);
                 Navigator.pop(context);
 
-                bool success = await userService.updateUser(
+                bool success = await UserService.updateUser(
                     context,
                     _usernameController.text,
                     _fullNameController.text,
