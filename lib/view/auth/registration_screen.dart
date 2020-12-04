@@ -35,6 +35,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool spin = false;
   var gender;
 
+  var _title;
+  var titles = <String>['', 'Apple', 'Amazon', 'Tesla'];
+
+  var onProbationary = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,6 +211,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      'On Probationary ?',
+                      style: TextStyle(fontSize: 17.0),
+                    ),
+                    Checkbox(
+                      checkColor: Colors.greenAccent,
+                      activeColor: Colors.red,
+                      value: this.onProbationary,
+                      onChanged: (bool value) {
+                        setState(() {
+                          this.onProbationary = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: DropdownButton<String>(
+                  value: _title,
+                  hint: Text('Title'),
+                  items: titles.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String value) {
+                    setState(() {
+                      _title = value;
+                    });
+                  },
+                ),
+              ),
               RoundedButton(
                 color: Colors.blue,
                 onPressed: () async {
@@ -316,3 +366,5 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 }
+
+getTitles() {}
