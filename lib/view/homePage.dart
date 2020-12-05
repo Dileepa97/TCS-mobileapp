@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
             RoundedButton(
               color: Colors.redAccent,
               onPressed: () async {
-                app.main();
                 await AuthService.logout();
                 Navigator.pushReplacementNamed(context, LoginScreen.id);
               },

@@ -26,7 +26,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   bool spin = false;
   var title;
   var deletingTitle;
-  var titles = <String>[];
+  var titles = <String>['None'];
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +87,16 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                         _titleController.text,
                       );
                       if (code == 200) {
+                        displayDialog(
+                            context, "Success", "New title added successfully");
+                        _titleController.clear();
+                        var newTitles = await AuthService.getTitles();
+                        setState(() {
+                          titles = newTitles;
+                        });
+                        setState(() {
+                          spin = false;
+                        });
                       } else {
                         setState(() {
                           _titleInitColor = Colors.redAccent;
@@ -115,7 +125,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                       if (snapshot.hasData) {
                         titles = snapshot.data;
                       } else {
-                        titles = [];
+                        titles = ['None'];
                       }
                       return dropDownList(titles);
                     },
@@ -124,10 +134,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 RoundedButton(
                   color: Colors.red,
                   onPressed: () async {
-                    if (deletingTitle.isEmpty) {
-                      setState(() {
-                        _titleInitColor = Colors.redAccent;
-                      });
+                    if (deletingTitle.isEmpty || deletingTitle == 'None') {
                       return;
                     }
                     setState(() {
@@ -136,13 +143,18 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     //implement login
                     try {
                       print(deletingTitle);
-                      int code = await AuthService.deleteTitle(
-                        deletingTitle,
-                      );
+
+                      int code = await AuthService.deleteTitle(deletingTitle);
+
                       if (code == 200) {
+                        displayDialog(
+                            context, "Success", "Title deleted successfully");
+
+                        setState(() {
+                          spin = false;
+                        });
                       } else {
                         setState(() {
-                          _titleInitColor = Colors.redAccent;
                           spin = false;
                         });
                       }

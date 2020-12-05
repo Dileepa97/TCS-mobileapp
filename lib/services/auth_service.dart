@@ -92,11 +92,10 @@ class AuthService {
   }
 
   static Future<void> logout() async {
-    var authHeader = await generateAuthHeader();
-    await http.get(authAPI + "logout",
-        headers: {HttpHeaders.authorizationHeader: authHeader});
+    // var authHeader = await generateAuthHeader();
+    // await http.get(authAPI + "logout",
+    //     headers: {HttpHeaders.authorizationHeader: authHeader});
     await TokenStorageService.clearStorage();
-    app.main();
   }
 
   // static Future<void> logoutWithContext(context) async {
@@ -174,9 +173,12 @@ class AuthService {
 
   static Future<dynamic> addTitle(String title) async {
     var authHeader = await generateAuthHeader();
+    var body = jsonEncode({
+      "name": title,
+    });
     http.Response res = await http.post(
       titleAPI,
-      body: title,
+      body: body,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -187,8 +189,8 @@ class AuthService {
 
   static Future<dynamic> deleteTitle(deletingTitle) async {
     var authHeader = await generateAuthHeader();
-    http.Response res = await http.post(
-      titleAPI + '/deleteBy/' + deletingTitle,
+    http.Response res = await http.delete(
+      titleAPI + 'deleteByName/' + deletingTitle,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
