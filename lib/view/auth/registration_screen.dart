@@ -36,15 +36,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   var gender;
 
   var _title;
-  var titles = <String>['', 'Apple', 'Amazon', 'Tesla'];
+  var titles = <String>[];
 
   var onProbationary = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +202,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value) {
                       setState(() {
                         gender = value;
-                        print(gender);
                       });
                     },
                   ),
@@ -237,24 +230,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
-                child: DropdownButton<String>(
-                  value: _title,
-                  hint: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Title'),
-                    ],
-                  ),
-                  items: titles.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String value) {
-                    setState(() {
-                      _title = value;
-                    });
+                child: FutureBuilder<List<String>>(
+                  future: AuthService.getTitles(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<String>> snapshot) {
+                    if (snapshot.hasData) {
+                      titles = snapshot.data;
+                    } else {
+                      titles = [];
+                    }
+                    return dropDownList(titles);
                   },
                 ),
               ),
@@ -364,8 +349,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           _emailController.text,
           _passwordController.text,
           gender,
-          false);
-//TODO : probationary, title
+          _title,
+          onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
       }
@@ -373,6 +358,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Error", e.toString());
     }
   }
-}
 
-getTitles() {}
+  dropDownList(inputTitles) {
+    return DropdownButton<String>(
+      value: _title,
+      hint: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Title'),
+        ],
+      ),
+      items: inputTitles.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onTap: () async {},
+      onChanged: (String value) {
+        setState(() {
+          _title = value;
+        });
+      },
+    );
+  }
+}

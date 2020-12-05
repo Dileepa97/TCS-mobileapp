@@ -27,6 +27,7 @@ void displayRegSuccessDialog(context) => showDialog(
             child: Text("OK"),
             onPressed: () {
               Navigator.pop(context);
+              Navigator.pop(context);
             },
           )
         ],
