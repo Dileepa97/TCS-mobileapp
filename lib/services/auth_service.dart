@@ -172,7 +172,28 @@ class AuthService {
     return titles;
   }
 
-  static addTitle(String text) {}
+  static Future<dynamic> addTitle(String title) async {
+    var authHeader = await generateAuthHeader();
+    http.Response res = await http.post(
+      titleAPI,
+      body: title,
+      headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      },
+    );
+    return res.statusCode;
+  }
 
-  static deleteTitle(deletingTitle) {}
+  static Future<dynamic> deleteTitle(deletingTitle) async {
+    var authHeader = await generateAuthHeader();
+    http.Response res = await http.post(
+      titleAPI + '/deleteBy/' + deletingTitle,
+      headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      },
+    );
+    return res.statusCode;
+  }
 }
