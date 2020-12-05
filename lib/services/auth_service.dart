@@ -1,18 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/main.dart' as app;
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
+import 'package:timecapturesystem/models/auth/title.dart';
 import 'package:timecapturesystem/services/utils.dart';
 
 import 'storage_service.dart';
 
-final storage = FlutterSecureStorage();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+// var apiEndpoint =  DotEnv().env['API_URL'];
+
+var authAPI = apiEndpoint + 'auth/';
+var titleAPI = apiEndpoint + 'titles/';
+
 String contentTypeHeader = 'application/json';
-const API = 'http://localhost:8080/api/auth/';
+
+final storage = FlutterSecureStorage();
+
 // const API = 'http://192.168.8.100:8080/api/auth/';
 
 class AuthService {
@@ -22,14 +31,14 @@ class AuthService {
       "password": password,
     });
 
-    var res = await http.post(API + "login",
+    var res = await http.post(authAPI + "login",
         body: body,
         headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
     if (res.statusCode == 200) {
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
       authResponse.tokenExpirationDate =
-          new DateTime.now().add(new Duration(days: 1));
+          DateTime.now().add(new Duration(days: 1));
 
       await storage.write(key: "auth", value: authResponse.toJsonString());
       await storage.write(key: "jwt", value: authResponse.token);
@@ -48,6 +57,7 @@ class AuthService {
       String email,
       String password,
       String gender,
+      String title,
       bool probationary) async {
     print(gender);
     var jsonBody = jsonEncode({
@@ -57,12 +67,12 @@ class AuthService {
       "email": email,
       "password": password,
       "gender": gender,
-      "probationary": probationary
+      "probationary": probationary,
+      "title": (title == 'None' || title == '') ? null : title
     });
-    print(jsonBody);
     http.Response res;
     try {
-      res = await http.post(API + 'register',
+      res = await http.post(authAPI + 'register',
           body: jsonBody,
           headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
@@ -83,17 +93,25 @@ class AuthService {
 
   static Future<void> logout() async {
     var authHeader = await generateAuthHeader();
-    await http.get(API + "logout",
+    await http.get(authAPI + "logout",
         headers: {HttpHeaders.authorizationHeader: authHeader});
     await TokenStorageService.clearStorage();
     app.main();
   }
 
+  // static Future<void> logoutWithContext(context) async {
+  //   var authHeader = await generateAuthHeader();
+  //   await http.get(API + "logout",
+  //       headers: {HttpHeaders.authorizationHeader: authHeader});
+  //   await TokenStorageService.clearStorage();
+  //   app.main();
+  // }
+
   static forgotPassword(String email) async {
     var jsonBody = jsonEncode({
       "email": email,
     });
-    var res = await http.post(API + "password-reset-req-mobile",
+    var res = await http.post(authAPI + "password-reset-req-mobile",
         body: jsonBody,
         headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
@@ -106,7 +124,7 @@ class AuthService {
       "code": code,
     });
     try {
-      var res = await http.post(API + "reset-password",
+      var res = await http.post(authAPI + "reset-password",
           body: jsonBody,
           headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
       if (res.statusCode == 200) {
@@ -128,7 +146,7 @@ class AuthService {
     });
 
     try {
-      var res = await http.post(API + "change-password",
+      var res = await http.post(authAPI + "change-password",
           body: jsonBody,
           headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
       if (res.statusCode == 200) {
@@ -139,5 +157,18 @@ class AuthService {
     } catch (e) {
       return 0;
     }
+  }
+
+  static Future<List<String>> getTitles() async {
+    var res = await http.get(titleAPI,
+        headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
+    List<String> titles = ['None'];
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      for (Map i in data) {
+        titles.add(Title.fromJson(i).name);
+      }
+    }
+    return titles;
   }
 }

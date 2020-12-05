@@ -35,6 +35,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool spin = false;
   var gender;
 
+  var _title;
+  var titles = <String>[];
+
+  var onProbationary = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,17 +52,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             shrinkWrap: true,
             children: <Widget>[
               SizedBox(
-                height: 35.0,
+                height: 30.0,
               ),
               Hero(
                 tag: 'logo',
                 child: Container(
-                  height: 200.0,
+                  height: 100.0,
                   child: Image.asset('images/logo.png'),
                 ),
               ),
               SizedBox(
-                height: 20.0,
+                height: 17.0,
               ),
               TextField(
                 controller: _usernameController,
@@ -160,6 +165,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 decoration: inputDeco(_confirmPasswordInitColor)
                     .copyWith(hintText: 'Confirm password'),
               ),
+              SizedBox(
+                height: 8,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -194,11 +202,46 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value) {
                       setState(() {
                         gender = value;
-                        print(gender);
                       });
                     },
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      'On Probationary ?',
+                      style: TextStyle(fontSize: 17.0),
+                    ),
+                    Checkbox(
+                      checkColor: Colors.greenAccent,
+                      activeColor: Colors.red,
+                      value: this.onProbationary,
+                      onChanged: (bool value) {
+                        setState(() {
+                          this.onProbationary = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: FutureBuilder<List<String>>(
+                  future: AuthService.getTitles(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<String>> snapshot) {
+                    if (snapshot.hasData) {
+                      titles = snapshot.data;
+                    } else {
+                      titles = [];
+                    }
+                    return dropDownList(titles);
+                  },
+                ),
               ),
               RoundedButton(
                 color: Colors.blue,
@@ -306,13 +349,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           _emailController.text,
           _passwordController.text,
           gender,
-          false);
-//TODO : probationary, title
+          _title,
+          onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
       }
     } catch (e) {
       displayDialog(context, "Error", e.toString());
     }
+  }
+
+  dropDownList(inputTitles) {
+    return DropdownButton<String>(
+      value: _title,
+      hint: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Title'),
+        ],
+      ),
+      items: inputTitles.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onTap: () async {},
+      onChanged: (String value) {
+        setState(() {
+          _title = value;
+        });
+      },
+    );
   }
 }
