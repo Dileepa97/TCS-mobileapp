@@ -46,224 +46,226 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: spin,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Hero(
-                tag: 'logo',
-                child: Container(
-                  height: 100.0,
-                  child: Image.asset('images/logo.png'),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SizedBox(
+                  height: 30.0,
                 ),
-              ),
-              SizedBox(
-                height: 17.0,
-              ),
-              TextField(
-                controller: _usernameController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _usernameInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration: inputDeco(_usernameInitColor)
-                    .copyWith(hintText: 'Username'),
-              ),
-              SizedBox(
-                height: spaceBetweenFields,
-              ),
-              TextField(
-                controller: _fullNameController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _fullNameInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration: inputDeco(_fullNameInitColor)
-                    .copyWith(hintText: 'Full Name'),
-              ),
-              SizedBox(
-                height: spaceBetweenFields,
-              ),
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _emailInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration:
-                    inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
-              ),
-              SizedBox(
-                height: spaceBetweenFields,
-              ),
-              TextField(
-                controller: _telephoneNumberController,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _telephoneNumberInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration: inputDeco(_telephoneNumberInitColor)
-                    .copyWith(hintText: 'Telephone Number'),
-              ),
-              SizedBox(
-                height: spaceBetweenFields,
-              ),
-              TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: _passwordController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _passwordInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration: inputDeco(_passwordInitColor)
-                    .copyWith(hintText: 'Password'),
-              ),
-              SizedBox(
-                height: spaceBetweenFields,
-              ),
-              TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: _confirmPasswordController,
-                onChanged: (value) {
-                  //Do something with the user input.
-                },
-                onTap: () {
-                  setState(() {
-                    _confirmPasswordInitColor = Colors.lightBlueAccent;
-                  });
-                },
-                decoration: inputDeco(_confirmPasswordInitColor)
-                    .copyWith(hintText: 'Confirm password'),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 10,
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    height: 100.0,
+                    child: Image.asset('images/logo.png'),
                   ),
-                  Text(
-                    "Gender : ",
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  Text(
-                    "Male",
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  Radio(
-                    value: 'Male',
-                    groupValue: gender,
-                    onChanged: (value) {
-                      setState(() {
-                        gender = value;
-                        print(gender);
-                      });
-                    },
-                  ),
-                  Text(
-                    "Female",
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  Radio(
-                    value: 'Female',
-                    groupValue: gender,
-                    onChanged: (value) {
-                      setState(() {
-                        gender = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
+                ),
+                SizedBox(
+                  height: 17.0,
+                ),
+                TextField(
+                  controller: _usernameController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _usernameInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_usernameInitColor)
+                      .copyWith(hintText: 'Username'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
+                ),
+                TextField(
+                  controller: _fullNameController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _fullNameInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_fullNameInitColor)
+                      .copyWith(hintText: 'Full Name'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
+                ),
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _emailInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration:
+                      inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
+                ),
+                TextField(
+                  controller: _telephoneNumberController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _telephoneNumberInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_telephoneNumberInitColor)
+                      .copyWith(hintText: 'Telephone Number'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
+                ),
+                TextField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: _passwordController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _passwordInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_passwordInitColor)
+                      .copyWith(hintText: 'Password'),
+                ),
+                SizedBox(
+                  height: spaceBetweenFields,
+                ),
+                TextField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: _confirmPasswordController,
+                  onChanged: (value) {
+                    //Do something with the user input.
+                  },
+                  onTap: () {
+                    setState(() {
+                      _confirmPasswordInitColor = Colors.lightBlueAccent;
+                    });
+                  },
+                  decoration: inputDeco(_confirmPasswordInitColor)
+                      .copyWith(hintText: 'Confirm password'),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'On Probationary ?',
-                      style: TextStyle(fontSize: 17.0),
+                    SizedBox(
+                      width: 10,
                     ),
-                    Checkbox(
-                      checkColor: Colors.greenAccent,
-                      activeColor: Colors.red,
-                      value: this.onProbationary,
-                      onChanged: (bool value) {
+                    Text(
+                      "Gender : ",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    Text(
+                      "Male",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    Radio(
+                      value: 'Male',
+                      groupValue: gender,
+                      onChanged: (value) {
                         setState(() {
-                          this.onProbationary = value;
+                          gender = value;
+                          print(gender);
+                        });
+                      },
+                    ),
+                    Text(
+                      "Female",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    Radio(
+                      value: 'Female',
+                      groupValue: gender,
+                      onChanged: (value) {
+                        setState(() {
+                          gender = value;
                         });
                       },
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: FutureBuilder<List<String>>(
-                  future: AuthService.getTitles(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<String>> snapshot) {
-                    if (snapshot.hasData) {
-                      titles = snapshot.data;
-                    } else {
-                      titles = [];
-                    }
-                    return dropDownList(titles);
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'On Probationary ?',
+                        style: TextStyle(fontSize: 17.0),
+                      ),
+                      Checkbox(
+                        checkColor: Colors.greenAccent,
+                        activeColor: Colors.red,
+                        value: this.onProbationary,
+                        onChanged: (bool value) {
+                          setState(() {
+                            this.onProbationary = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              RoundedButton(
-                color: Colors.blue,
-                onPressed: () async {
-                  setState(() {
-                    spin = true;
-                  });
-                  //implement registration
-                  if (checkValidity()) {
-                    await registerUser();
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: FutureBuilder<List<String>>(
+                    future: AuthService.getTitles(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>> snapshot) {
+                      if (snapshot.hasData) {
+                        titles = snapshot.data;
+                      } else {
+                        titles = [];
+                      }
+                      return dropDownList(titles);
+                    },
+                  ),
+                ),
+                RoundedButton(
+                  color: Colors.blue,
+                  onPressed: () async {
                     setState(() {
-                      spin = false;
+                      spin = true;
                     });
-                  } else {
-                    setState(() {
-                      spin = false;
-                    });
-                  }
-                },
-                title: 'Register',
-              ),
-            ],
+                    //implement registration
+                    if (checkValidity()) {
+                      await registerUser();
+                      setState(() {
+                        spin = false;
+                      });
+                    } else {
+                      setState(() {
+                        spin = false;
+                      });
+                    }
+                  },
+                  title: 'Register',
+                ),
+              ],
+            ),
           ),
         ),
       ),

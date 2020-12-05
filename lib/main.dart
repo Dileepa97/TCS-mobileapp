@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
 import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
               EditProfile.id: (context) => EditProfile(),
               ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
               PickImageScreen.id: (context) => PickImageScreen(),
+              TitleManagementScreen.id: (context) => TitleManagementScreen(),
               '/userLeave': (context) => UserLeave(),
               '/leaveRequest': (context) => LeaveRequest(),
               '/ownLeave': (context) => OwnLeave(),

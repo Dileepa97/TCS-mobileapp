@@ -171,4 +171,8 @@ class AuthService {
     }
     return titles;
   }
+
+  static addTitle(String text) {}
+
+  static deleteTitle(deletingTitle) {}
 }
