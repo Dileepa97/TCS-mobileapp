@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
-const fileAPI = 'http://localhost:8080/api/files/';
-// const fileAPI = 'http://192.168.8.100:8080/api/files/';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+var fileAPI = apiEndpoint + 'files/';
 
 class Profile extends StatefulWidget {
   static const String id = "profile_screen";
@@ -33,19 +34,22 @@ class _ProfileState extends State<Profile> {
                 Text(
                   _user.fullName,
                   style: TextStyle(
-                    fontFamily: 'Pacifico',
+                    fontFamily: 'Maven Pro',
                     fontSize: 40.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(
+                  height: 40,
+                ),
                 CircleAvatar(
-                  radius: 90.0,
+                  radius: 140.0,
                   backgroundImage:
                       NetworkImage(fileAPI + _user.profileImageURL),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: 20.0,
                 ),
                 Text(
                   _user.username,
@@ -57,13 +61,16 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       children: [
                         Text(
-                          _user.title,
+                          _user.title != null ? _user.title : '',
                           style: TextStyle(
                             fontFamily: 'Source Sans Pro',
                             color: Colors.white70,
@@ -73,7 +80,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(
-                          width: 5.0,
+                          width: 10.0,
                         ),
                         Icon(
                           vIcon,
@@ -85,7 +92,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(
                   height: 20.0,
-                  width: 150.0,
+                  width: 350.0,
                   child: Divider(
                     color: Colors.lightBlueAccent.shade100,
                   ),

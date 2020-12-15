@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 
+import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
@@ -14,6 +16,7 @@ import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_de
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
+import 'managers/orientation.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 
@@ -21,47 +24,55 @@ import 'view/homePage.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
-void main() async => {runApp(MyApp())};
+void main() async {
+  await DotEnv().load('.env');
+  OrientationManager.portraitMode();
+  var userData = await TokenStorageService.authDataOrEmpty;
+  if (userData != null) {
+    DateTime dateTime = userData.tokenExpirationDate;
+    if (dateTime.isBefore(DateTime.now())) {
+      await TokenStorageService.clearStorage();
+      userData = null;
+    }
+  }
+  runApp(MyApp(userData));
+}
 
 class MyApp extends StatefulWidget {
+  final userData;
+  MyApp(this.userData);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  get userData => widget.userData;
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<dynamic>(
-        stream: Stream.fromFuture(TokenStorageService.authDataOrEmpty),
+    return FutureBuilder<dynamic>(
+        future: (TokenStorageService.authDataOrEmpty),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           var routes;
           var initialRoute;
-          if (snapshot.hasData) {
-            TokenStorageService.clearStorage();
+          if (userData != null) {
+            // TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");
             initialRoute = '/';
             routes = {
               '/': (context) => HomePage(),
-              // build the HomePage widget.
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
-              // build the Login widget.
               RegistrationScreen.id: (context) => RegistrationScreen(),
-
               Profile.id: (context) => Profile(),
-
               EditProfile.id: (context) => EditProfile(),
-
               ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
-
               PickImageScreen.id: (context) => PickImageScreen(),
-
-              // UploadImage.id: (context) => UploadImage(),
-
+              TitleManagementScreen.id: (context) => TitleManagementScreen(),
               '/userLeave': (context) => UserLeave(),
-              //  build the UserLeave widget.
               '/leaveRequest': (context) => LeaveRequest(),
               //  build the LeaveRequest widget.
               '/ownLeave': (context) => OwnLeaves(),
@@ -80,15 +91,10 @@ class _MyAppState extends State<MyApp> {
             routes = {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),
-              // build the Login widget.
-
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
-
               RegistrationScreen.id: (context) => RegistrationScreen(),
-
               ForgotPasswordChangeScreen.id: (context) =>
                   ForgotPasswordChangeScreen(),
-              //  build the LeaveRequest widget.
             };
           }
 

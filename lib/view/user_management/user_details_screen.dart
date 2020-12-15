@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/managers/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
@@ -8,8 +10,9 @@ import 'package:timecapturesystem/view/user_management/update_table_screen.dart'
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const fileAPI = 'http://localhost:8080/api/files/';
-// const fileAPI = 'http://192.168.8.100:8080/api/files/';
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+
+var fileAPI = apiEndpoint + 'files/';
 
 class UserDetails extends StatefulWidget {
   static const String id = "user_details_screen";
