@@ -11,8 +11,8 @@ import 'storage_service.dart';
 
 String contentTypeHeader = 'application/json';
 
-//const API = 'http://192.168.8.169:8080/api/users/';
-const API = 'http://localhost:8080/api/users/';
+const API = 'http://192.168.8.169:8080/api/users/';
+//const API = 'http://localhost:8080/api/users/';
 const historyAPI = 'http://localhost:8080/api/userHistory/';
 
 class UserService {

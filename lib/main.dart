@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
-import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
-import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/get_all_leaves_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/get_requested_leaves_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/leave_request_first_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/leave_request_main_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/userLeave.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
-import 'view/LMS/user/leaveRequest.dart';
-import 'view/LMS/user/userLeave.dart';
+
 import 'view/homePage.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
@@ -32,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           var routes;
           var initialRoute;
           if (snapshot.hasData) {
-            // TokenStorageService.clearStorage();
+            TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");
             initialRoute = '/';
@@ -59,11 +64,14 @@ class _MyAppState extends State<MyApp> {
               //  build the UserLeave widget.
               '/leaveRequest': (context) => LeaveRequest(),
               //  build the LeaveRequest widget.
-              '/ownLeave': (context) => OwnLeave(),
+              '/ownLeave': (context) => OwnLeaves(),
               //  build the LeaveRequest widget.
               '/allLeaves': (context) => AllLeave(),
               //  build the LeaveRequest widget.
               // build the Register widget.
+              '/requestFirstScreen': (context) => FirstRequestScreen(),
+              '/allRequestedLeaves': (context) => AllRequestedLeaves(),
+              '/availableUserLeaves': (context) => UserLeaveAvailable(),
             };
           } else {
             print("user not exist");

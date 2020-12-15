@@ -12,8 +12,8 @@ import 'storage_service.dart';
 
 final storage = FlutterSecureStorage();
 String contentTypeHeader = 'application/json';
-const API = 'http://localhost:8080/api/auth/';
-//const API = 'http://192.168.8.169:8080/api/auth/';
+//const API = 'http://localhost:8080/api/auth/';
+const API = 'http://192.168.8.169:8080/api/auth/';
 
 class AuthService {
   static Future<int> login(String username, String password) async {

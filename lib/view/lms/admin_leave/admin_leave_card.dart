@@ -1,55 +1,11 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/models/leave/LeaveResponse.dart';
-import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
-import 'package:timecapturesystem/models/leave/LeaveType.dart';
+import 'package:timecapturesystem/models/lms/leave_response.dart';
+import '../check_leaves.dart';
 
 class LeaveCard extends StatelessWidget {
   LeaveCard({this.item});
   final LeaveResponse item;
-
-  Color statusColor(LeaveStatus status) {
-    if (status == LeaveStatus.REQUESTED) {
-      return Colors.blue;
-    } else if (status == LeaveStatus.ACCEPTED) {
-      return Colors.green;
-    } else if (status == LeaveStatus.REJECTED) {
-      return Colors.red;
-    } else if (status == LeaveStatus.CANCELED) {
-      return Colors.grey;
-    } else
-      return Colors.black;
-  }
-
-  Icon typeIcon(LeaveType type) {
-    if (type == LeaveType.No_Pay) {
-      return Icon(
-        Icons.money_off,
-        size: 20,
-      );
-    } else if (type == LeaveType.Sick) {
-      return Icon(
-        Icons.local_hospital,
-        size: 20,
-      );
-    } else if (type == LeaveType.Maternity) {
-      return Icon(
-        Icons.pregnant_woman,
-        size: 20,
-      );
-    } else if (type == LeaveType.Annual) {
-      return Icon(
-        Icons.date_range,
-        size: 20,
-      );
-    } else if (type == LeaveType.Casual) {
-      return Icon(
-        Icons.directions_walk,
-        size: 20,
-      );
-    } else
-      return null;
-  }
 
   Widget build(BuildContext context) {
     return Container(
@@ -93,14 +49,15 @@ class LeaveCard extends StatelessWidget {
                           EnumToString.convertToString(this.item.leaveStatus),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: statusColor(this.item.leaveStatus),
+                            color: CheckStatus(status: this.item.leaveStatus)
+                                .statusColor(),
                           ),
                         )
                       ],
                     ),
                     Row(
                       children: [
-                        typeIcon(this.item.leaveType),
+                        CheckType(type: this.item.leaveType).typeIcon(),
                         SizedBox(
                           width: 10,
                         ),
