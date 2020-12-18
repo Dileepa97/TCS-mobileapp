@@ -16,13 +16,18 @@ class CustomDropDown extends StatelessWidget {
         Text(
           keyString + ' : ',
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
         DropdownButton<String>(
           value: item,
-          hint: Text(keyString),
+          hint: Text(
+            keyString,
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
           icon: Icon(Icons.keyboard_arrow_down),
           iconSize: 24,
           elevation: 16,
@@ -34,7 +39,13 @@ class CustomDropDown extends StatelessWidget {
           items: items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             );
           }).toList(),
         ),
