@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth_service.dart';
 
 import '../constants.dart';
@@ -35,8 +38,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool spin = false;
   var gender;
 
-  var _title;
-  var titles = <String>[];
+  var _titleName;
+
+  var titleNames = ['None'];
+  var titles;
+
+  titleModel.Title _title;
 
   var onProbationary = false;
 
@@ -231,16 +238,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: FutureBuilder<List<String>>(
+                  child: FutureBuilder<dynamic>(
                     future: AuthService.getTitles(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<String>> snapshot) {
+                        AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titles = snapshot.data;
-                      } else {
-                        titles = [];
+                        titles = Map.fromIterable(snapshot.data,
+                            key: (e) => e.name, value: (e) => e.id);
+                        titleNames = [];
+                        for (titleModel.Title title in snapshot.data) {
+                          titleNames.add(title.name);
+                        }
                       }
-                      return dropDownList(titles);
+                      return dropDownList(titleNames);
                     },
                   ),
                 ),
@@ -362,26 +372,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   dropDownList(inputTitles) {
-    return DropdownButton<String>(
-      value: _title,
-      hint: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Title'),
-        ],
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: _titleName,
+        hint: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Title'),
+          ],
+        ),
+        items: inputTitles.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onTap: () async {},
+        onChanged: (String value) {
+          setState(() {
+            _titleName = value;
+            _title = titleModel.Title(titles[value], value);
+          });
+        },
       ),
-      items: inputTitles.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onTap: () async {},
-      onChanged: (String value) {
-        setState(() {
-          _title = value;
-        });
-      },
     );
   }
 }

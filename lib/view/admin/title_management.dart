@@ -177,26 +177,28 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   }
 
   dropDownList(inputTitles) {
-    return DropdownButton<String>(
-      value: deletingTitle,
-      hint: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Title'),
-        ],
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: deletingTitle,
+        hint: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Title'),
+          ],
+        ),
+        items: inputTitles.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onTap: () async {},
+        onChanged: (String value) {
+          setState(() {
+            deletingTitle = value;
+          });
+        },
       ),
-      items: inputTitles.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onTap: () async {},
-      onChanged: (String value) {
-        setState(() {
-          deletingTitle = value;
-        });
-      },
     );
   }
 }

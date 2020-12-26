@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
-import 'package:timecapturesystem/main.dart' as app;
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
 import 'package:timecapturesystem/services/utils.dart';
@@ -57,9 +56,10 @@ class AuthService {
       String email,
       String password,
       String gender,
-      String title,
+      Title title,
       bool probationary) async {
     print(gender);
+
     var jsonBody = jsonEncode({
       "username": username,
       "fullName": fullName,
@@ -68,7 +68,7 @@ class AuthService {
       "password": password,
       "gender": gender,
       "probationary": probationary,
-      "title": (title == 'None' || title == '') ? null : title
+      "title": title
     });
     http.Response res;
     try {
@@ -158,14 +158,15 @@ class AuthService {
     }
   }
 
-  static Future<List<String>> getTitles() async {
+  static Future<dynamic> getTitles() async {
     var res = await http.get(titleAPI,
         headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
-    List<String> titles = ['None'];
+    var titles = [];
+
     if (res.statusCode == 200) {
       final data = jsonDecode(res.body);
       for (Map i in data) {
-        titles.add(Title.fromJson(i).name);
+        titles.add(Title.fromJson(i));
       }
     }
     return titles;
