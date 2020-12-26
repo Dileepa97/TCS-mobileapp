@@ -13,7 +13,7 @@ Title _$TitleFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$TitleToJson(Title instance) => <String, dynamic>{
+Map<String, dynamic> _$TitleToJson(Title instance) => <String, String>{
       'id': instance.id,
       'name': instance.name,
     };
