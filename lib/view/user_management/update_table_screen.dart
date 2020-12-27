@@ -115,9 +115,9 @@ class _UserUpdateTableState extends State<UserUpdateTable> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))),
-                          DataCell(Text(widget.user.title,
+                          DataCell(Text(widget.user.title.name,
                               style: TextStyle(color: Colors.white))),
-                          DataCell(Text(widget.userHistory.title,
+                          DataCell(Text(widget.userHistory.title.name,
                               style: TextStyle(color: Colors.white))),
                         ]),
                       if (widget.userHistory.probationary != null &&

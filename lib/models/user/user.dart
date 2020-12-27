@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:timecapturesystem/models/auth/title.dart';
 import 'package:timecapturesystem/models/user/role.dart';
 
 part 'user.g.dart';
@@ -33,7 +34,7 @@ class User {
 
   int highestRoleIndex;
 
-  String title;
+  Title title;
 
   bool probationary;
 

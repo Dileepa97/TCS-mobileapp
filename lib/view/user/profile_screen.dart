@@ -70,7 +70,7 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Text(
-                          _user.title != null ? _user.title : '',
+                          _user.title != null ? _user.title.name : '',
                           style: TextStyle(
                             fontFamily: 'Source Sans Pro',
                             color: Colors.white70,

@@ -13,7 +13,9 @@ UserHistory _$UserHistoryFromJson(Map<String, dynamic> json) {
     json['fullName'] as String,
     json['telephoneNumber'] as String,
     json['email'] as String,
-    json['title'] as String,
+    json['title'] == null
+        ? null
+        : Title.fromJson(json['title'] as Map<String, dynamic>),
     json['probationary'] as bool,
   );
 }
@@ -25,6 +27,6 @@ Map<String, dynamic> _$UserHistoryToJson(UserHistory instance) =>
       'fullName': instance.fullName,
       'telephoneNumber': instance.telephoneNumber,
       'email': instance.email,
-      'title': instance.title,
+      'title': instance.title?.toJson(),
       'probationary': instance.probationary,
     };

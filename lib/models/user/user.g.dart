@@ -25,7 +25,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
             (e) => e == null ? null : Role.fromJson(e as Map<String, dynamic>))
         ?.toSet(),
     json['highestRoleIndex'] as int,
-    json['title'] as String,
+    json['title'] == null
+        ? null
+        : Title.fromJson(json['title'] as Map<String, dynamic>),
     json['probationary'] as bool,
     json['gender'] as String,
   );
@@ -46,7 +48,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'updated': instance.updated,
       'roles': instance.roles?.map((e) => e?.toJson())?.toList(),
       'highestRoleIndex': instance.highestRoleIndex,
-      'title': instance.title,
+      'title': instance.title?.toJson(),
       'probationary': instance.probationary,
       'gender': instance.gender,
     };
