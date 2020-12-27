@@ -32,12 +32,9 @@ class _UserDetailsState extends State<UserDetails> {
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
-
+    print(user.profileImageURL);
     var vIcon = user.verified ? Icons.verified : Icons.cancel;
     var vIconColor = user.verified ? Colors.greenAccent : Colors.redAccent;
-    var imageURL = ((user.profileImageURL == null)
-        ? ('default.png')
-        : (user.profileImageURL));
 
     var isAdmin = false;
     var isTeamLead = false;
@@ -77,7 +74,9 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             CircleAvatar(
               radius: 90.0,
-              backgroundImage: NetworkImage('$fileAPI$imageURL'),
+              backgroundImage: user.profileImageURL == 'default.png'
+                  ? AssetImage('images/default.png')
+                  : NetworkImage(fileAPI + user.profileImageURL),
             ),
             SizedBox(
               height: 10.0,
@@ -101,7 +100,7 @@ class _UserDetailsState extends State<UserDetails> {
                       width: 5.0,
                     ),
                     Text(
-                      user.title == null ? '' : user.title,
+                      user.title == null ? '' : user.title.name,
                       style: TextStyle(
                         fontFamily: 'Source Sans Pro',
                         color: Colors.white70,
