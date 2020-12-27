@@ -39,10 +39,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   var gender;
 
   var _titleName;
-
   var titleNames = ['None'];
   var titles;
-
   titleModel.Title _title;
 
   var onProbationary = false;

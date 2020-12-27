@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:timecapturesystem/models/auth/title.dart';
 
 part 'user_history.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserHistory {
   String id;
 
@@ -14,7 +15,7 @@ class UserHistory {
 
   String email;
 
-  String title;
+  Title title;
 
   bool probationary;
 

@@ -63,7 +63,7 @@ class MapScreenState extends State<EditProfile>
                               children: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.only(
-                                      left: 130.0, right: 130, bottom: 20),
+                                      left: 110.0, right: 110, bottom: 20),
                                   child: Text('Edit Profile',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,

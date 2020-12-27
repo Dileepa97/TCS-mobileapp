@@ -25,7 +25,7 @@ class _ProfileState extends State<Profile> {
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
-              var _user = snapshot.data;
+              User _user = snapshot.data;
               var vIcon = _user.verified ? Icons.verified : Icons.cancel;
               var vIconColor =
                   _user.verified ? Colors.lightGreenAccent : Colors.redAccent;
@@ -45,8 +45,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 CircleAvatar(
                   radius: 140.0,
-                  backgroundImage:
-                      NetworkImage(fileAPI + _user.profileImageURL),
+                  backgroundImage: _user.profileImageURL == 'default.png'
+                      ? AssetImage('images/default.png')
+                      : NetworkImage(fileAPI + _user.profileImageURL),
                 ),
                 SizedBox(
                   height: 20.0,
@@ -70,7 +71,7 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Text(
-                          _user.title != null ? _user.title : '',
+                          _user.title != null ? _user.title.name : '',
                           style: TextStyle(
                             fontFamily: 'Source Sans Pro',
                             color: Colors.white70,
