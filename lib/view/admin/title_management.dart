@@ -26,13 +26,8 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
 
   bool spin = false;
 
-  var title;
-  var deletingTitle;
-  var _titleName;
-  var titleNames = ['None'];
-  var titles;
-
-  titleModel.Title _title;
+  var titleNames = ['Title'];
+  String _selectedTitleName = 'Title';
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +91,6 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                         displayDialog(
                             context, "Success", "New title added successfully");
                         _titleController.clear();
-                        var newTitles = await AuthService.getTitles();
-                        setState(() {
-                          titles = newTitles;
-                        });
                         setState(() {
                           spin = false;
                         });
@@ -129,21 +120,23 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titles = Map.fromIterable(snapshot.data,
-                            key: (e) => e.name, value: (e) => e.id);
-                        titleNames = [];
+                        titleNames = ['Title'];
                         for (titleModel.Title title in snapshot.data) {
                           titleNames.add(title.name);
                         }
+                        return dropDownList(titleNames);
+                      } else {
+                        titleNames = ['Title'];
+                        return dropDownList(titleNames);
                       }
-                      return dropDownList(titleNames);
                     },
                   ),
                 ),
                 RoundedButton(
                   color: Colors.red,
                   onPressed: () async {
-                    if (deletingTitle.isEmpty || deletingTitle == 'None') {
+                    if (_selectedTitleName.isEmpty ||
+                        _selectedTitleName == 'Title') {
                       return;
                     }
                     setState(() {
@@ -151,16 +144,15 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     });
                     //implement login
                     try {
-                      print(deletingTitle);
-
-                      int code = await AuthService.deleteTitle(deletingTitle);
+                      int code =
+                          await AuthService.deleteTitle(_selectedTitleName);
 
                       if (code == 200) {
                         displayDialog(
                             context, "Success", "Title deleted successfully");
-
                         setState(() {
                           spin = false;
+                          _selectedTitleName = null;
                         });
                       } else {
                         setState(() {
@@ -188,7 +180,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   dropDownList(inputTitles) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: _titleName,
+        value: _selectedTitleName,
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -201,11 +193,9 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
             child: Text(value),
           );
         }).toList(),
-        onTap: () async {},
         onChanged: (String value) {
           setState(() {
-            _titleName = value;
-            _title = titleModel.Title(titles[value], value);
+            _selectedTitleName = value;
           });
         },
       ),
