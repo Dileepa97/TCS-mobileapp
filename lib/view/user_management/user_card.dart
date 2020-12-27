@@ -38,7 +38,9 @@ class _UserCardState extends State<UserCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: NetworkImage(fileAPI + imageURL),
+                backgroundImage: imageURL == 'default.png'
+                    ? AssetImage('images/default.png')
+                    : NetworkImage(fileAPI + imageURL),
               ),
               Container(
                 width: 150,
