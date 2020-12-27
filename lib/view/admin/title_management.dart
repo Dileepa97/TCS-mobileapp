@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth_service.dart';
 
 import '../constants.dart';
@@ -24,9 +25,14 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   Color _titleInitColor = Colors.lightBlueAccent;
 
   bool spin = false;
+
   var title;
   var deletingTitle;
-  var titles = <String>['None'];
+  var _titleName;
+  var titleNames = ['None'];
+  var titles;
+
+  titleModel.Title _title;
 
   @override
   Widget build(BuildContext context) {
@@ -118,16 +124,19 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: FutureBuilder<List<String>>(
+                  child: FutureBuilder<dynamic>(
                     future: AuthService.getTitles(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<String>> snapshot) {
+                        AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titles = snapshot.data;
-                      } else {
-                        titles = ['None'];
+                        titles = Map.fromIterable(snapshot.data,
+                            key: (e) => e.name, value: (e) => e.id);
+                        titleNames = [];
+                        for (titleModel.Title title in snapshot.data) {
+                          titleNames.add(title.name);
+                        }
                       }
-                      return dropDownList(titles);
+                      return dropDownList(titleNames);
                     },
                   ),
                 ),
@@ -179,7 +188,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   dropDownList(inputTitles) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: deletingTitle,
+        value: _titleName,
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -195,7 +204,8 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
         onTap: () async {},
         onChanged: (String value) {
           setState(() {
-            deletingTitle = value;
+            _titleName = value;
+            _title = titleModel.Title(titles[value], value);
           });
         },
       ),
