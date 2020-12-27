@@ -25,7 +25,8 @@ class _ProfileState extends State<Profile> {
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
-              var _user = snapshot.data;
+              User _user = snapshot.data;
+              print(_user.title);
               var vIcon = _user.verified ? Icons.verified : Icons.cancel;
               var vIconColor =
                   _user.verified ? Colors.lightGreenAccent : Colors.redAccent;
