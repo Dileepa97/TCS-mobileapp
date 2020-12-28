@@ -199,4 +199,17 @@ class AuthService {
     );
     return res.statusCode;
   }
+
+  static Future<dynamic> changeTitle(currentTitle, newTitle) async {
+    //TODO : edit
+    var authHeader = await generateAuthHeader();
+    http.Response res = await http.delete(
+      titleAPI + 'deleteByName/' + currentTitle,
+      headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      },
+    );
+    return res.statusCode;
+  }
 }
