@@ -200,11 +200,16 @@ class AuthService {
     return res.statusCode;
   }
 
-  static Future<dynamic> changeTitle(currentTitle, newTitle) async {
+  static Future<dynamic> changeTitle(
+      Title currentTitle, String newTitle) async {
+    // print(currentTitle.toString());
+    // print(titleCase(newTitle));
     //TODO : edit
+    var body = jsonEncode({"name": newTitle, "id": currentTitle.id});
     var authHeader = await generateAuthHeader();
-    http.Response res = await http.delete(
-      titleAPI + 'deleteByName/' + currentTitle,
+    http.Response res = await http.put(
+      titleAPI,
+      body: body,
       headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader

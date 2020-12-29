@@ -28,8 +28,10 @@ class _TitleChangeManagementScreenState
 
   bool spin = false;
 
-  var titleNames = ['Title'];
-  String _selectedTitleName = 'Title';
+  var _titleName;
+  var titleNames = ['None'];
+  var titles;
+  titleModel.Title _title;
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +73,14 @@ class _TitleChangeManagementScreenState
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titleNames = ['Title'];
+                        titles = Map.fromIterable(snapshot.data,
+                            key: (e) => e.name, value: (e) => e.id);
+                        titleNames = [];
                         for (titleModel.Title title in snapshot.data) {
                           titleNames.add(title.name);
                         }
-                        return dropDownList(titleNames);
-                      } else {
-                        titleNames = ['Title'];
-                        return dropDownList(titleNames);
                       }
+                      return dropDownList(titleNames);
                     },
                   ),
                 ),
@@ -105,8 +106,7 @@ class _TitleChangeManagementScreenState
                 RoundedButton(
                   color: Colors.red,
                   onPressed: () async {
-                    if (_selectedTitleName.isEmpty ||
-                        _selectedTitleName == 'Title') {
+                    if (_titleName.isEmpty || _titleName == 'Title') {
                       return;
                     }
                     setState(() {
@@ -114,15 +114,16 @@ class _TitleChangeManagementScreenState
                     });
                     //implement login
                     try {
-                      int code =
-                          await AuthService.deleteTitle(_selectedTitleName);
+                      int code = await AuthService.changeTitle(
+                          _title, _titleController.text);
 
                       if (code == 200) {
                         displayDialog(
                             context, "Success", "Title changed successfully");
                         setState(() {
                           spin = false;
-                          _selectedTitleName = null;
+                          _titleName = null;
+                          _titleController.text = null;
                         });
                       } else {
                         setState(() {
@@ -150,7 +151,7 @@ class _TitleChangeManagementScreenState
   dropDownList(inputTitles) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: _selectedTitleName,
+        value: _titleName,
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -163,9 +164,11 @@ class _TitleChangeManagementScreenState
             child: Text(value),
           );
         }).toList(),
+        onTap: () async {},
         onChanged: (String value) {
           setState(() {
-            _selectedTitleName = value;
+            _titleName = value;
+            _title = titleModel.Title(titles[value], value);
           });
         },
       ),

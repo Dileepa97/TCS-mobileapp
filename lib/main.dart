@@ -70,6 +70,9 @@ class _MyAppState extends State<MyApp> {
               TitleManagementScreen.id: (context) => TitleManagementScreen(),
               TitleChangeManagementScreen.id: (context) =>
                   TitleChangeManagementScreen(),
+              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+              ForgotPasswordChangeScreen.id: (context) =>
+                  ForgotPasswordChangeScreen(),
               '/userLeave': (context) => UserLeave(),
               '/leaveRequest': (context) => LeaveRequest(),
               '/ownLeave': (context) => OwnLeave(),
