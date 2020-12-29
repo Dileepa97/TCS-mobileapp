@@ -39,7 +39,16 @@ class _TitleChangeManagementScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Change Title"),
+        elevation: 0,
+        title: Text(
+          "Change Title",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
@@ -97,10 +106,10 @@ class _TitleChangeManagementScreenState
                       .copyWith(hintText: 'New Title Name'),
                 ),
                 SizedBox(
-                  height: 30.0,
+                  height: 47.0,
                 ),
                 RoundedButton(
-                  color: Colors.red,
+                  color: Colors.redAccent,
                   onPressed: () async {
                     if (_titleName.isEmpty || _titleName == 'Title') {
                       return;

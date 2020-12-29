@@ -4,7 +4,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
-import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/services/title_service.dart';
 import 'package:timecapturesystem/view/admin/title_change_management.dart';
 
@@ -36,7 +35,16 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Title Management"),
+        elevation: 0,
+        title: Text(
+          "Title Management",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
