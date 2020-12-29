@@ -10,7 +10,7 @@ void displayDialog(context, title, text) => showDialog(
       builder: (context) => (Platform.isAndroid
           ? AlertDialog(title: Text(title), content: Text(text))
           : CupertinoAlertDialog(
-              title: Text(title),
+              title: Text(title + "\n"),
               content: Text(text),
             )),
     );
@@ -104,35 +104,60 @@ Future<bool> displayConfirmationBox(context, content) async {
   await showDialog(
     barrierColor: Colors.black54,
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Are you sure ?"),
-      content: Text(content),
-      actions: [
-        FlatButton(
-          color: Colors.blueAccent,
-          child: Text("Confirm"),
-          onPressed: () {
-            confirm = true;
-            Navigator.pop(context);
-          },
-        ),
-        FlatButton(
-          color: Colors.redAccent,
-          child: Text(
-            "Cancel",
+    builder: (context) => (Platform.isAndroid
+        ? AlertDialog(
+            title: Text("Are you sure ?"),
+            content: Text(content),
+            actions: [
+              FlatButton(
+                color: Colors.blueAccent,
+                child: Text("Confirm"),
+                onPressed: () {
+                  confirm = true;
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                color: Colors.redAccent,
+                child: Text(
+                  "Cancel",
 // style: TextStyle(color: Colors.redAccent),
-          ),
-          onPressed: () {
-            confirm = false;
-            Navigator.pop(context);
-          },
-        )
-      ],
-    ),
+                ),
+                onPressed: () {
+                  confirm = false;
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          )
+        //how it will display on iOS
+        : CupertinoAlertDialog(
+            title: Text("Are you sure ?\n"),
+            content: Text(content),
+            actions: [
+              FlatButton(
+                child: Text("Confirm"),
+                onPressed: () {
+                  confirm = true;
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  "Cancel",
+                ),
+                onPressed: () {
+                  confirm = false;
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          )),
   );
-
   return confirm;
 }
+
+//Admin functions
 
 Future<bool> handleVerifySureDialog(context, isVerified) {
   if (isVerified) {
@@ -165,4 +190,21 @@ Future<bool> displayDowngradeTeamLeadSureDialog(context) {
 Future<bool> displayDeleteUserSureDialog(context) {
   return displayConfirmationBox(context,
       "All the data that belongs to this user will be deleted forever");
+}
+
+//Title TitleChangeManagement
+
+Future<bool> displayAddTitleSureDialog(context) {
+  return displayConfirmationBox(context,
+      "To add this Title, It will be displayed on registration screen and user profile update screen");
+}
+
+Future<bool> displayDeleteTitleSureDialog(context) {
+  return displayConfirmationBox(context,
+      "This will remove the selected title from users who selected it as their title");
+}
+
+Future<bool> displayChangeTitleSureDialog(context) {
+  return displayConfirmationBox(context,
+      "This will change the title of users who have already been assigned to this title");
 }
