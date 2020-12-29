@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth_service.dart';
+import 'package:timecapturesystem/services/title_service.dart';
 import 'package:timecapturesystem/view/admin/title_change_management.dart';
 
 import '../constants.dart';
@@ -88,7 +89,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     });
                     //implement login
                     try {
-                      int code = await AuthService.addTitle(
+                      int code = await TitleService.addTitle(
                         _titleController.text,
                       );
                       if (code == 200) {
@@ -120,7 +121,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   child: FutureBuilder<dynamic>(
-                    future: AuthService.getTitles(),
+                    future: TitleService.getTitles(),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
@@ -149,7 +150,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     //implement login
                     try {
                       int code =
-                          await AuthService.deleteTitle(_selectedTitleName);
+                          await TitleService.deleteTitle(_selectedTitleName);
 
                       if (code == 200) {
                         displayDialog(
