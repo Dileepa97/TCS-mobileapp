@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:quartet/quartet.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
@@ -175,7 +176,7 @@ class AuthService {
   static Future<dynamic> addTitle(String title) async {
     var authHeader = await generateAuthHeader();
     var body = jsonEncode({
-      "name": title,
+      "name": titleCase(title),
     });
     http.Response res = await http.post(
       titleAPI,
@@ -202,10 +203,7 @@ class AuthService {
 
   static Future<dynamic> changeTitle(
       Title currentTitle, String newTitle) async {
-    // print(currentTitle.toString());
-    // print(titleCase(newTitle));
-    //TODO : edit
-    var body = jsonEncode({"name": newTitle, "id": currentTitle.id});
+    var body = jsonEncode({"name": titleCase(newTitle), "id": currentTitle.id});
     var authHeader = await generateAuthHeader();
     http.Response res = await http.put(
       titleAPI,

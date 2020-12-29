@@ -43,6 +43,7 @@ dependencies:
   url_launcher:
   dio: ^3.0.10
   flutter_dotenv: ^2.1.0
+  quartet: ^0.1.1
 
 
 

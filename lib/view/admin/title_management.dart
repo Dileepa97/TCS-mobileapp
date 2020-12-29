@@ -27,13 +27,16 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
 
   bool spin = false;
 
-  var titleNames = ['Title'];
-  String _selectedTitleName = 'Title';
+  var titleNames = ['Pick Title'];
+  String _selectedTitleName = 'Pick Title';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("Title Management"),
+      ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
         child: SafeArea(
@@ -52,14 +55,6 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Center(
-                    child: Text(
-                  'Manage Title',
-                  style: TextStyle(fontSize: 30),
-                )),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -129,13 +124,13 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titleNames = ['Title'];
+                        titleNames = ['Pick Title'];
                         for (titleModel.Title title in snapshot.data) {
                           titleNames.add(title.name);
                         }
                         return dropDownList(titleNames);
                       } else {
-                        titleNames = ['Title'];
+                        titleNames = ['Pick Title'];
                         return dropDownList(titleNames);
                       }
                     },
@@ -145,7 +140,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                   color: Colors.red,
                   onPressed: () async {
                     if (_selectedTitleName.isEmpty ||
-                        _selectedTitleName == 'Title') {
+                        _selectedTitleName == 'Pick Title') {
                       return;
                     }
                     setState(() {
@@ -204,7 +199,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Title'),
+            Text('Pick Title'),
           ],
         ),
         items: inputTitles.map<DropdownMenuItem<String>>((String value) {

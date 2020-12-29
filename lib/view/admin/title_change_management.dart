@@ -37,6 +37,9 @@ class _TitleChangeManagementScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("Change Title"),
+      ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
         child: SafeArea(
@@ -56,15 +59,7 @@ class _TitleChangeManagementScreenState
                   ),
                 ),
                 SizedBox(
-                  height: 5.0,
-                ),
-                Center(
-                    child: Text(
-                  'Change Title',
-                  style: TextStyle(fontSize: 30),
-                )),
-                SizedBox(
-                  height: 40.0,
+                  height: 30.0,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
