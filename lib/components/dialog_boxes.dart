@@ -192,16 +192,16 @@ Future<bool> displayDeleteUserSureDialog(context) {
       "All the data that belongs to this user will be deleted forever");
 }
 
-//Title TitleChangeManagement
+//Title Title Change Management
 
 Future<bool> displayAddTitleSureDialog(context) {
   return displayConfirmationBox(context,
-      "To add this Title, It will be displayed on registration screen and user profile update screen");
+      "It will be displayed on registration screen and user profile update screen");
 }
 
 Future<bool> displayDeleteTitleSureDialog(context) {
   return displayConfirmationBox(context,
-      "This will remove the selected title from users who selected it as their title");
+      "This will remove the selected title from users who have selected it as their title");
 }
 
 Future<bool> displayChangeTitleSureDialog(context) {

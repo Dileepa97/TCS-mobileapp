@@ -86,39 +86,43 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 RoundedButton(
                   color: Colors.green,
                   onPressed: () async {
-                    if (_titleController.text.isEmpty) {
-                      setState(() {
-                        _titleInitColor = Colors.redAccent;
-                      });
-                      return;
-                    }
-                    setState(() {
-                      spin = true;
-                    });
-                    //implement login
-                    try {
-                      int code = await TitleService.addTitle(
-                        _titleController.text,
-                      );
-                      if (code == 200) {
-                        displayDialog(
-                            context, "Success", "New title added successfully");
-                        _titleController.clear();
-                        setState(() {
-                          spin = false;
-                        });
-                      } else {
+                    var confirmed = await displayAddTitleSureDialog(context);
+
+                    if (confirmed) {
+                      if (_titleController.text.isEmpty) {
                         setState(() {
                           _titleInitColor = Colors.redAccent;
+                        });
+                        return;
+                      }
+                      setState(() {
+                        spin = true;
+                      });
+                      //implement login
+                      try {
+                        int code = await TitleService.addTitle(
+                          _titleController.text,
+                        );
+                        if (code == 200) {
+                          displayDialog(context, "Success",
+                              "New title added successfully");
+                          _titleController.clear();
+                          setState(() {
+                            spin = false;
+                          });
+                        } else {
+                          setState(() {
+                            _titleInitColor = Colors.redAccent;
+                            spin = false;
+                          });
+                        }
+                      } catch (e) {
+                        displayDialog(context, "Error", e.toString());
+                        print(e.toString());
+                        setState(() {
                           spin = false;
                         });
                       }
-                    } catch (e) {
-                      displayDialog(context, "Error", e.toString());
-                      print(e.toString());
-                      setState(() {
-                        spin = false;
-                      });
                     }
                   },
                   title: 'Submit',
@@ -148,36 +152,40 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 RoundedButton(
                   color: Colors.red,
                   onPressed: () async {
-                    if (_selectedTitleName.isEmpty ||
-                        _selectedTitleName == 'Pick Title') {
-                      return;
-                    }
-                    setState(() {
-                      spin = true;
-                    });
-                    //implement login
-                    try {
-                      int code =
-                          await TitleService.deleteTitle(_selectedTitleName);
+                    var confirmed = await displayDeleteTitleSureDialog(context);
 
-                      if (code == 200) {
-                        displayDialog(
-                            context, "Success", "Title deleted successfully");
-                        setState(() {
-                          spin = false;
-                          _selectedTitleName = null;
-                        });
-                      } else {
+                    if (confirmed) {
+                      if (_selectedTitleName.isEmpty ||
+                          _selectedTitleName == 'Pick Title') {
+                        return;
+                      }
+                      setState(() {
+                        spin = true;
+                      });
+                      //implement login
+                      try {
+                        int code =
+                            await TitleService.deleteTitle(_selectedTitleName);
+
+                        if (code == 200) {
+                          displayDialog(
+                              context, "Success", "Title deleted successfully");
+                          setState(() {
+                            spin = false;
+                            _selectedTitleName = null;
+                          });
+                        } else {
+                          setState(() {
+                            spin = false;
+                          });
+                        }
+                      } catch (e) {
+                        displayDialog(context, "Error", e.toString());
+                        print(e.toString());
                         setState(() {
                           spin = false;
                         });
                       }
-                    } catch (e) {
-                      displayDialog(context, "Error", e.toString());
-                      print(e.toString());
-                      setState(() {
-                        spin = false;
-                      });
                     }
                   },
                   title: 'Delete',

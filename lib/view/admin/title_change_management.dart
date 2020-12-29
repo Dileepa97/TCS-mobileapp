@@ -4,7 +4,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
-import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/services/title_service.dart';
 
 import '../constants.dart';
@@ -111,36 +110,40 @@ class _TitleChangeManagementScreenState
                 RoundedButton(
                   color: Colors.redAccent,
                   onPressed: () async {
-                    if (_titleName.isEmpty || _titleName == 'Title') {
-                      return;
-                    }
-                    setState(() {
-                      spin = true;
-                    });
-                    //implement login
-                    try {
-                      int code = await TitleService.changeTitle(
-                          _title, _titleController.text);
+                    var confirmed = await displayChangeTitleSureDialog(context);
 
-                      if (code == 200) {
-                        displayDialog(
-                            context, "Success", "Title changed successfully");
-                        setState(() {
-                          spin = false;
-                          _titleName = null;
-                          _titleController.text = null;
-                        });
-                      } else {
+                    if (confirmed) {
+                      if (_titleName.isEmpty || _titleName == 'Title') {
+                        return;
+                      }
+                      setState(() {
+                        spin = true;
+                      });
+                      //implement login
+                      try {
+                        int code = await TitleService.changeTitle(
+                            _title, _titleController.text);
+
+                        if (code == 200) {
+                          setState(() {
+                            spin = false;
+                            _titleName = null;
+                            _titleController.clear();
+                          });
+                          displayDialog(
+                              context, "Success", "Title changed successfully");
+                        } else {
+                          setState(() {
+                            spin = false;
+                          });
+                        }
+                      } catch (e) {
+                        displayDialog(context, "Error", e.toString());
+                        print(e.toString());
                         setState(() {
                           spin = false;
                         });
                       }
-                    } catch (e) {
-                      displayDialog(context, "Error", e.toString());
-                      print(e.toString());
-                      setState(() {
-                        spin = false;
-                      });
                     }
                   },
                   title: 'Change',
