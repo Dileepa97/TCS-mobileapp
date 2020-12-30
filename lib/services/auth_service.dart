@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:quartet/quartet.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
@@ -156,47 +157,5 @@ class AuthService {
     } catch (e) {
       return 0;
     }
-  }
-
-  static Future<dynamic> getTitles() async {
-    var res = await http.get(titleAPI,
-        headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
-    var titles = [];
-
-    if (res.statusCode == 200) {
-      final data = jsonDecode(res.body);
-      for (Map i in data) {
-        titles.add(Title.fromJson(i));
-      }
-    }
-    return titles;
-  }
-
-  static Future<dynamic> addTitle(String title) async {
-    var authHeader = await generateAuthHeader();
-    var body = jsonEncode({
-      "name": title,
-    });
-    http.Response res = await http.post(
-      titleAPI,
-      body: body,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
-    return res.statusCode;
-  }
-
-  static Future<dynamic> deleteTitle(deletingTitle) async {
-    var authHeader = await generateAuthHeader();
-    http.Response res = await http.delete(
-      titleAPI + 'deleteByName/' + deletingTitle,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
-    return res.statusCode;
   }
 }

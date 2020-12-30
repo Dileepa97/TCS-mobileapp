@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/services/storage_service.dart';
 
+import 'package:timecapturesystem/view/LMS/admin/getLeaves.dart';
+import 'package:timecapturesystem/view/LMS/user/ownLeave.dart';
+import 'package:timecapturesystem/view/admin/title_change_management.dart';
+
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
@@ -72,6 +76,11 @@ class _MyAppState extends State<MyApp> {
               ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
               PickImageScreen.id: (context) => PickImageScreen(),
               TitleManagementScreen.id: (context) => TitleManagementScreen(),
+              TitleChangeManagementScreen.id: (context) =>
+                  TitleChangeManagementScreen(),
+              ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+              ForgotPasswordChangeScreen.id: (context) =>
+                  ForgotPasswordChangeScreen(),
               '/userLeave': (context) => UserLeave(),
               '/leaveRequest': (context) => LeaveRequest(),
               //  build the LeaveRequest widget.

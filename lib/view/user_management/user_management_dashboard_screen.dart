@@ -21,6 +21,13 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
   Widget build(BuildContext context) {
     OrientationManager.enableRotation();
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text(
+          "User Management",
+        ),
+        backgroundColor: Colors.lightBlue.shade800,
+      ),
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: FutureBuilder<List<User>>(

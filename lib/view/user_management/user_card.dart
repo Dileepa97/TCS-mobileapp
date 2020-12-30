@@ -24,7 +24,7 @@ class _UserCardState extends State<UserCard> {
         ? 'default.png'
         : widget.user.profileImageURL;
     return GestureDetector(
-      onDoubleTap: () {
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(

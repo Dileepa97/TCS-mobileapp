@@ -4,7 +4,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
-import 'package:timecapturesystem/services/auth_service.dart';
+import 'package:timecapturesystem/services/title_service.dart';
+import 'package:timecapturesystem/view/admin/title_change_management.dart';
 
 import '../constants.dart';
 
@@ -26,18 +27,25 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
 
   bool spin = false;
 
-  var title;
-  var deletingTitle;
-  var _titleName;
-  var titleNames = ['None'];
-  var titles;
-
-  titleModel.Title _title;
+  var titleNames = ['Pick Title'];
+  String _selectedTitleName = 'Pick Title';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        title: Text(
+          "Title Management",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
+      ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
         child: SafeArea(
@@ -47,7 +55,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(
-                  height: 80.0,
+                  height: 40.0,
                 ),
                 Hero(
                   tag: 'logo',
@@ -57,7 +65,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 70.0,
+                  height: 30.0,
                 ),
                 TextField(
                   controller: _titleController,
@@ -76,45 +84,45 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                   height: 20.0,
                 ),
                 RoundedButton(
-                  color: Colors.lightBlueAccent,
+                  color: Colors.green,
                   onPressed: () async {
-                    if (_titleController.text.isEmpty) {
-                      setState(() {
-                        _titleInitColor = Colors.redAccent;
-                      });
-                      return;
-                    }
-                    setState(() {
-                      spin = true;
-                    });
-                    //implement login
-                    try {
-                      int code = await AuthService.addTitle(
-                        _titleController.text,
-                      );
-                      if (code == 200) {
-                        displayDialog(
-                            context, "Success", "New title added successfully");
-                        _titleController.clear();
-                        var newTitles = await AuthService.getTitles();
-                        setState(() {
-                          titles = newTitles;
-                        });
-                        setState(() {
-                          spin = false;
-                        });
-                      } else {
+                    var confirmed = await displayAddTitleSureDialog(context);
+
+                    if (confirmed) {
+                      if (_titleController.text.isEmpty) {
                         setState(() {
                           _titleInitColor = Colors.redAccent;
+                        });
+                        return;
+                      }
+                      setState(() {
+                        spin = true;
+                      });
+                      //implement login
+                      try {
+                        int code = await TitleService.addTitle(
+                          _titleController.text,
+                        );
+                        if (code == 200) {
+                          displayDialog(context, "Success",
+                              "New title added successfully");
+                          _titleController.clear();
+                          setState(() {
+                            spin = false;
+                          });
+                        } else {
+                          setState(() {
+                            _titleInitColor = Colors.redAccent;
+                            spin = false;
+                          });
+                        }
+                      } catch (e) {
+                        displayDialog(context, "Error", e.toString());
+                        print(e.toString());
+                        setState(() {
                           spin = false;
                         });
                       }
-                    } catch (e) {
-                      displayDialog(context, "Error", e.toString());
-                      print(e.toString());
-                      setState(() {
-                        spin = false;
-                      });
                     }
                   },
                   title: 'Submit',
@@ -125,57 +133,73 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   child: FutureBuilder<dynamic>(
-                    future: AuthService.getTitles(),
+                    future: TitleService.getTitles(),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
-                        titles = Map.fromIterable(snapshot.data,
-                            key: (e) => e.name, value: (e) => e.id);
-                        titleNames = [];
+                        titleNames = ['Pick Title'];
                         for (titleModel.Title title in snapshot.data) {
                           titleNames.add(title.name);
                         }
+                        return dropDownList(titleNames);
+                      } else {
+                        titleNames = ['Pick Title'];
+                        return dropDownList(titleNames);
                       }
-                      return dropDownList(titleNames);
                     },
                   ),
                 ),
                 RoundedButton(
                   color: Colors.red,
                   onPressed: () async {
-                    if (deletingTitle.isEmpty || deletingTitle == 'None') {
-                      return;
-                    }
-                    setState(() {
-                      spin = true;
-                    });
-                    //implement login
-                    try {
-                      print(deletingTitle);
+                    var confirmed = await displayDeleteTitleSureDialog(context);
 
-                      int code = await AuthService.deleteTitle(deletingTitle);
+                    if (confirmed) {
+                      if (_selectedTitleName.isEmpty ||
+                          _selectedTitleName == 'Pick Title') {
+                        return;
+                      }
+                      setState(() {
+                        spin = true;
+                      });
+                      //implement login
+                      try {
+                        int code =
+                            await TitleService.deleteTitle(_selectedTitleName);
 
-                      if (code == 200) {
-                        displayDialog(
-                            context, "Success", "Title deleted successfully");
-
-                        setState(() {
-                          spin = false;
-                        });
-                      } else {
+                        if (code == 200) {
+                          displayDialog(
+                              context, "Success", "Title deleted successfully");
+                          setState(() {
+                            spin = false;
+                            _selectedTitleName = null;
+                          });
+                        } else {
+                          setState(() {
+                            spin = false;
+                          });
+                        }
+                      } catch (e) {
+                        displayDialog(context, "Error", e.toString());
+                        print(e.toString());
                         setState(() {
                           spin = false;
                         });
                       }
-                    } catch (e) {
-                      displayDialog(context, "Error", e.toString());
-                      print(e.toString());
-                      setState(() {
-                        spin = false;
-                      });
                     }
                   },
                   title: 'Delete',
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                RoundedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, TitleChangeManagementScreen.id);
+                  },
+                  title: 'Edit Titles',
                 ),
               ],
             ),
@@ -188,11 +212,11 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
   dropDownList(inputTitles) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: _titleName,
+        value: _selectedTitleName,
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Title'),
+            Text('Pick Title'),
           ],
         ),
         items: inputTitles.map<DropdownMenuItem<String>>((String value) {
@@ -201,11 +225,9 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
             child: Text(value),
           );
         }).toList(),
-        onTap: () async {},
         onChanged: (String value) {
           setState(() {
-            _titleName = value;
-            _title = titleModel.Title(titles[value], value);
+            _selectedTitleName = value;
           });
         },
       ),
