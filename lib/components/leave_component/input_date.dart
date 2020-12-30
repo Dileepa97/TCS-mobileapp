@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/view/LMS/component/convert.dart';
+
+import 'convert.dart';
 
 class InputDate extends StatelessWidget {
   final String keyString;

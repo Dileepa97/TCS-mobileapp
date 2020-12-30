@@ -1,6 +1,8 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:timecapturesystem/models/leave/LeaveStatus.dart';
-import 'package:timecapturesystem/models/leave/LeaveType.dart';
+
+import 'leave_method.dart';
+import 'leave_status.dart';
+import 'leave_type.dart';
 
 class LeaveResponse {
   String leaveId;
@@ -10,6 +12,8 @@ class LeaveResponse {
   DateTime reqDate;
   DateTime leaveStartDate;
   DateTime leaveEndDate;
+  LeaveMethod startDayMethod;
+  LeaveMethod endDayMethod;
   double leaveCount;
   LeaveStatus leaveStatus;
   String userId;
@@ -22,23 +26,25 @@ class LeaveResponse {
       this.reqDate,
       this.leaveStartDate,
       this.leaveEndDate,
+      this.startDayMethod,
+      this.endDayMethod,
       this.leaveCount,
       this.leaveStatus,
       this.userId);
 
   factory LeaveResponse.fromJson(dynamic json) {
     var leaveRes = LeaveResponse(
-        json['leaveId'] as String,
-        json['leaveTitle'] as String,
-        EnumToString.fromString(LeaveType.values, json['leaveType']),
-        json['leaveDescription'] as String,
+        json['id'] as String,
+        json['title'] as String,
+        EnumToString.fromString(LeaveType.values, json['type']),
+        json['description'] as String,
         DateTime.tryParse(json['reqDate']),
-        DateTime.tryParse(json['leaveStartDate']),
-        DateTime.tryParse(json['leaveEndDate']),
-        // json['leaveStartDate'] as DateTime,
-        //json['leaveEndDate'] as DateTime,
-        json['leaveDays'] as double,
-        EnumToString.fromString(LeaveStatus.values, json['leaveStatus']),
+        DateTime.tryParse(json['startDate']),
+        json['endDate'] == null ? null : DateTime.tryParse(json['endDate']),
+        EnumToString.fromString(LeaveMethod.values, json['startDayMethod']),
+        EnumToString.fromString(LeaveMethod.values, json['endDayMethod']),
+        json['days'] as double,
+        EnumToString.fromString(LeaveStatus.values, json['status']),
         json['userId'] as String);
 
     // authRes.roles.forEach((element) {
