@@ -22,8 +22,6 @@ String contentTypeHeader = 'application/json';
 
 final storage = FlutterSecureStorage();
 
-// const API = 'http://192.168.8.100:8080/api/auth/';
-
 class AuthService {
   static Future<int> login(String username, String password) async {
     var body = jsonEncode({
