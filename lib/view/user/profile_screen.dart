@@ -4,7 +4,8 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
-var apiEndpoint = DotEnv().env['API_URL'].toString();
+// var apiEndpoint = DotEnv().env['API_URL'].toString();
+var apiEndpoint = DotEnv().env['K_IP2'].toString();
 var fileAPI = apiEndpoint + 'files/';
 
 class Profile extends StatefulWidget {
