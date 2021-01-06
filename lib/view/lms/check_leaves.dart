@@ -20,6 +20,8 @@ class CheckStatus {
       return Colors.orange;
     } else if (status == LeaveStatus.EXPIRED) {
       return Colors.black;
+    } else if (status == LeaveStatus.ONGOING_CANCELED) {
+      return Colors.black;
     } else
       return Colors.black;
   }
@@ -33,7 +35,7 @@ class CheckType {
   Icon typeIcon() {
     if (type == LeaveType.LIEU) {
       return Icon(
-        Icons.arrow_forward,
+        Icons.label_important_outline,
         size: 20,
       );
     } else if (type == LeaveType.MEDICAL) {
@@ -48,7 +50,7 @@ class CheckType {
       );
     } else if (type == LeaveType.PATERNITY) {
       return Icon(
-        Icons.pregnant_woman,
+        Icons.baby_changing_station_outlined,
         size: 20,
       );
     } else if (type == LeaveType.ANNUAL) {
@@ -59,6 +61,16 @@ class CheckType {
     } else if (type == LeaveType.CASUAL) {
       return Icon(
         Icons.directions_walk,
+        size: 20,
+      );
+    } else if (type == LeaveType.EXTENDED_ANNUAL) {
+      return Icon(
+        Icons.event_note,
+        size: 20,
+      );
+    } else if (type == LeaveType.EXTENDED_MEDICAL) {
+      return Icon(
+        Icons.queue,
         size: 20,
       );
     } else

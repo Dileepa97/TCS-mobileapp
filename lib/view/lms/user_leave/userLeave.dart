@@ -54,14 +54,14 @@ class _UserLeaveState extends State<UserLeave> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Check All Leaves',
+                'Check Requested Leaves',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/allLeaves');
+                Navigator.pushNamed(context, '/allRequestedLeaves');
               },
             ),
           ),
@@ -72,14 +72,14 @@ class _UserLeaveState extends State<UserLeave> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Check Requested Leaves',
+                'Admin leaves',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/allRequestedLeaves');
+                Navigator.pushNamed(context, '/adminLeaveDashboard');
               },
             ),
           ),
