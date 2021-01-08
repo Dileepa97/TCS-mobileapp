@@ -57,6 +57,9 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
+      ///App Bar
       appBar: AppBar(
         title: Text(
           'Leave',
@@ -72,7 +75,8 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
         shadowColor: Colors.white,
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
+
+      ///Body
       body: Center(
         child: SingleChildScrollView(
           child: Container(

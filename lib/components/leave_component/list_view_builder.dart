@@ -21,18 +21,17 @@ class LeaveListViewBuilder extends StatelessWidget {
       itemCount: list.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          // child: isUserLeave
-          //     ? UserLeaveCard(item: list[index])
-          //     : LeaveCard(item: list[index]),
-          child: AdminLeaveCard(item: list[index]),
+          child: isUserLeave
+              ? UserLeaveCard(item: list[index])
+              : AdminLeaveCard(item: list[index]),
           onTap: () {
             if (isUserLeave) {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => UserLeaveDetailsPage(item: list[index]),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserLeaveDetailsPage(item: list[index]),
+                ),
+              );
             } else {
               Navigator.push(
                 context,

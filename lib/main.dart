@@ -15,6 +15,7 @@ import 'package:timecapturesystem/view/lms/user_leave/leave_request_main_screen.
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/userLeave.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
@@ -82,7 +83,7 @@ class _MyAppState extends State<MyApp> {
               '/userLeave': (context) => UserLeave(),
               '/leaveRequest': (context) => LeaveRequest(),
               //  build the LeaveRequest widget.
-              // '/ownLeave': (context) => OwnLeaves(),
+              '/ownLeave': (context) => OwnLeaves(),
               //  build the LeaveRequest widget.
               '/allLeaves': (context) => AllLeave(),
               //  build the LeaveRequest widget.
@@ -93,6 +94,7 @@ class _MyAppState extends State<MyApp> {
               '/adminLeaveDashboard': (context) => AdminLeaveDashBoard(),
               '/adminGetLeaves': (context) => AdminGetLeaves(),
               '/adminLeaveByMonth': (context) => AdminLeaveByMonth(),
+              '/userLeaveDashboard': (context) => UserLeaveDashboard(),
             };
           } else {
             print("user not exist");

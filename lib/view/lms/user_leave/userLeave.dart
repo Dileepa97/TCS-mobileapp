@@ -90,38 +90,14 @@ class _UserLeaveState extends State<UserLeave> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Check My Leaves',
+                'User leave',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/ownLeave');
-              },
-            ),
-          ),
-          Container(
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: RaisedButton(
-              color: Colors.blueAccent,
-              child: Text(
-                'My Leaves Types',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () async {
-                setState(() {
-                  // data();
-                });
-                // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //   return UserLeaveAvailable(list: this.list);
-                // }));
-                Navigator.pushNamed(context, '/availableUserLeaves');
+                Navigator.pushNamed(context, '/userLeaveDashboard');
               },
             ),
           ),

@@ -122,6 +122,42 @@ class LeaveService {
     return null;
   }
 
+  ///Get logged user leaves by year -  logged user
+  Future<dynamic> getLoggedUserLeaves(dynamic context, int year) async {
+    try {
+      var params = {
+        'year': '$year',
+      };
+
+      var uri = Uri.http(apiAuth, 'api/leaves/logged-user', params);
+
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<Leave> _leaveList =
+            (resBody as List).map((i) => Leave.fromJson(i)).toList();
+
+        return _leaveList;
+      } else if (res.statusCode == 400) {
+        return res.statusCode;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
   Future getData() async {
     var authHeader = await generateAuthHeader();
     http.Response res = await http.get(
