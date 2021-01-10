@@ -54,24 +54,6 @@ class _UserLeaveState extends State<UserLeave> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Check Requested Leaves',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/allRequestedLeaves');
-              },
-            ),
-          ),
-          Container(
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: RaisedButton(
-              color: Colors.blueAccent,
-              child: Text(
                 'Admin leaves',
                 style: TextStyle(
                   fontSize: 20.0,

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/lms/leave_response.dart';
+import 'package:timecapturesystem/models/lms/not_available_users.dart';
 
 import '../utils.dart';
 
@@ -158,6 +159,104 @@ class LeaveService {
     return null;
   }
 
+  ///Get leave by status(current year) -  admin
+  Future<dynamic> getLeavesByStatus(dynamic context, String status) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(API + '/status/$status', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<Leave> _leaveList =
+            (resBody as List).map((i) => Leave.fromJson(i)).toList();
+
+        return _leaveList;
+      } else if (res.statusCode == 400) {
+        return res.statusCode;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  ///Get unavailable users in current date -  admin
+  Future<dynamic> getUnavailableUsersToday(
+      dynamic context, int year, int month, int day) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var params = {'year': '$year', 'month': '$month', 'day': '$day'};
+
+      var uri = Uri.http(apiAuth, 'api/leaves/user-not-available/date', params);
+
+      var res = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<NotAvailableUsers> _userList = (resBody as List)
+            .map((i) => NotAvailableUsers.fromJson(i))
+            .toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        return res.statusCode;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  ///Get unavailable users in current week -  admin
+  Future<dynamic> getUnavailableUsersWeek(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var res =
+          await http.get(API + '/user-not-available/week-ahead', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<NotAvailableUsers> _userList = (resBody as List)
+            .map((i) => NotAvailableUsers.fromJson(i))
+            .toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        return res.statusCode;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
   Future getData() async {
     var authHeader = await generateAuthHeader();
     http.Response res = await http.get(
@@ -189,18 +288,6 @@ class LeaveService {
       print('$status');
       return (response.statusCode);
       //return jsonDecode(data);
-    } else {
-      return (response.statusCode);
-    }
-  }
-
-  Future getLeavesByStatus(String status) async {
-    http.Response response =
-        await http.get('http://192.168.8.169:8080/api/leaves/status/$status');
-    if (response.statusCode == 200) {
-      String data = response.body;
-      // print(data);
-      return jsonDecode(data);
     } else {
       return (response.statusCode);
     }

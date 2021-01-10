@@ -10,6 +10,7 @@ import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard.dar
 import 'package:timecapturesystem/view/lms/admin_leave/get_all_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/get_requested_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/leave_by_month.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/today_unavailable_users.dart';
 import 'package:timecapturesystem/view/lms/user_leave/leave_request_first_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/leave_request_main_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
@@ -24,6 +25,7 @@ import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/homePage.dart';
 import 'view/lms/admin_leave/get_leaves_screen.dart';
+import 'view/lms/admin_leave/week_unavailable_users.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
@@ -89,12 +91,16 @@ class _MyAppState extends State<MyApp> {
               //  build the LeaveRequest widget.
               // build the Register widget.
               '/requestFirstScreen': (context) => FirstRequestScreen(),
-              // '/allRequestedLeaves': (context) => AllRequestedLeaves(),
+              '/allRequestedLeaves': (context) => AllRequestedLeaves(),
               '/availableUserLeaves': (context) => UserLeaveAvailable(),
               '/adminLeaveDashboard': (context) => AdminLeaveDashBoard(),
               '/adminGetLeaves': (context) => AdminGetLeaves(),
               '/adminLeaveByMonth': (context) => AdminLeaveByMonth(),
               '/userLeaveDashboard': (context) => UserLeaveDashboard(),
+              '/todayUnavailableUserScreen': (context) =>
+                  TodayUnavailableUserScreen(),
+              '/weekUnavailableUserScreen': (context) =>
+                  WeekUnavailableUserScreen(),
             };
           } else {
             print("user not exist");

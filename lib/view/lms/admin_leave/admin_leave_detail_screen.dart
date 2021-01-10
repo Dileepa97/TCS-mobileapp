@@ -91,7 +91,9 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: UserProfileImage(
-                              item: widget.item, height: 60, width: 60),
+                              userId: widget.item.userId,
+                              height: 60,
+                              width: 60),
                         ),
 
                         Column(

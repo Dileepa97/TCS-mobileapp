@@ -44,19 +44,19 @@ class UserNameText extends StatelessWidget {
 class UserProfileImage extends StatelessWidget {
   const UserProfileImage({
     Key key,
-    @required this.item,
+    @required this.userId,
     this.height,
     this.width,
   }) : super(key: key);
 
-  final Leave item;
+  final String userId;
   final double height;
   final double width;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
-      future: UserService.getUserById(item.userId),
+      future: UserService.getUserById(userId),
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         Widget _avatar;
         if (snapshot.hasData) {

@@ -32,7 +32,7 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
       ),
       child: Row(
         children: <Widget>[
-          UserProfileImage(item: widget.item, height: 60, width: 60),
+          UserProfileImage(userId: widget.item.userId, height: 60, width: 60),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
