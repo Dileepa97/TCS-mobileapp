@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/models/lms/leave_method.dart';
 import 'package:timecapturesystem/models/lms/leave_status.dart';
 import 'package:timecapturesystem/models/lms/leave_type.dart';
 
@@ -75,5 +76,19 @@ class CheckType {
       );
     } else
       return null;
+  }
+}
+
+class CheckMethod {
+  LeaveMethod method;
+  CheckMethod({this.method});
+
+  String methodString() {
+    if (method == LeaveMethod.FIRST_HALF) {
+      return 'Morning';
+    } else if (method == LeaveMethod.SECOND_HALF) {
+      return 'Afternoon';
+    } else
+      return 'Full Day';
   }
 }

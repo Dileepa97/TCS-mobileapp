@@ -86,6 +86,35 @@ class LeaveService {
     return null;
   }
 
+  ///Get leave by id
+  Future<dynamic> getLeaveById(String id) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(API + '/$id', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        Leave _leaveList = Leave.fromJson(resBody);
+
+        return _leaveList;
+      } else if (res.statusCode == 400) {
+        return res.statusCode;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      // displayDialog( "Error", e.toString());
+    }
+    return null;
+  }
+
   //Get all leave by month - admin
   Future<dynamic> getLeavesByMonth(dynamic context, int year, int month) async {
     try {
@@ -231,7 +260,7 @@ class LeaveService {
       var authHeader = await generateAuthHeader();
 
       var res =
-          await http.get(API + '/user-not-available/week-ahead', headers: {
+          await http.get(API + '/users-not-available-week-ahead', headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
@@ -274,22 +303,34 @@ class LeaveService {
     }
   }
 
-  Future acceptOrReject(String leaveId, String status) async {
-    var params = {
-      'leaveId': '$leaveId',
-      'status': '$status',
-    };
+  Future<dynamic> acceptOrReject(
+      String leaveId, String status, String reason) async {
+    try {
+      var authHeader = await generateAuthHeader();
 
-    var uri = Uri.http(
-        '192.168.8.169:8080', '/api/leaves/status/change/admin', params);
-    http.Response response = await http.patch(uri);
-    if (response.statusCode == 202) {
-      //String data = response.body;
-      print('$status');
-      return (response.statusCode);
-      //return jsonDecode(data);
-    } else {
-      return (response.statusCode);
+      var params = {
+        'leaveId': '$leaveId',
+        'status': '$status',
+        'reason': '$reason'
+      };
+
+      var uri = Uri.http(apiAuth, '/api/leaves/change-status', params);
+
+      http.Response response = await http.patch(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (response.statusCode == 200) {
+        //String data = response.body;
+        //print('$status');
+        return (response.statusCode);
+        //return jsonDecode(data);
+      } else {
+        return (response.statusCode);
+      }
+    } catch (e) {
+      //displayDialog(context, "Error", e.toString());
     }
   }
 
