@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/leave_component/list_view_builder.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/models/lms/leave_response.dart';
+import 'package:timecapturesystem/services/lms/leave_service.dart';
+import 'package:numberpicker/numberpicker.dart';
 
-import 'package:timecapturesystem/services/LMS/leave_service.dart';
-
-class OwnLeaves extends StatefulWidget {
+class AdminLeaveByMonth extends StatefulWidget {
   @override
-  _OwnLeavesState createState() => _OwnLeavesState();
+  _AdminLeaveByMonthState createState() => _AdminLeaveByMonthState();
 }
 
-class _OwnLeavesState extends State<OwnLeaves> {
+class _AdminLeaveByMonthState extends State<AdminLeaveByMonth> {
   LeaveService _leaveService = LeaveService();
-  List<LeaveResponse> list = List<LeaveResponse>();
   int _year = DateTime.now().year;
+  int _month = DateTime.now().month;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My leaves',
+          'Leaves by Month',
           style: TextStyle(color: Colors.black),
         ),
         leading: BackButton(
@@ -63,7 +62,21 @@ class _OwnLeavesState extends State<OwnLeaves> {
                     ),
                   ),
                   onTap: () {
-                    _showIntDialog(2020, DateTime.now().year, _year);
+                    _showIntDialog(2020, DateTime.now().year, _year, true);
+                  },
+                ),
+                GestureDetector(
+                  child: Text(
+                    'Month : $_month',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: Colors.blue[700],
+                      fontSize: 18,
+                      fontFamily: 'Source Sans Pro',
+                    ),
+                  ),
+                  onTap: () {
+                    _showIntDialog(1, 12, _month, false);
                   },
                 ),
               ],
@@ -73,7 +86,7 @@ class _OwnLeavesState extends State<OwnLeaves> {
             height: 8,
           ),
           FutureBuilder<dynamic>(
-            future: _leaveService.getLoggedUserLeaves(context, _year),
+            future: _leaveService.getLeavesByMonth(context, _year, _month),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               Widget child;
               if (snapshot.hasData) {
@@ -83,7 +96,7 @@ class _OwnLeavesState extends State<OwnLeaves> {
                   child = Center(child: Text("Bad request"));
                 } else if (snapshot.data == 204) {
                   child = Center(
-                      child: Text("No leave data available for this year"));
+                      child: Text("No leave data available for this month"));
                 } else if (snapshot.data == 1) {
                   child = Center(child: Text("An unknown error occured"));
                 } else {
@@ -92,7 +105,7 @@ class _OwnLeavesState extends State<OwnLeaves> {
 
                   child = LeaveListViewBuilder(
                     list: leaves,
-                    isUserLeave: true,
+                    isUserLeave: false,
                   );
                 }
               } else {
@@ -107,7 +120,7 @@ class _OwnLeavesState extends State<OwnLeaves> {
     );
   }
 
-  Future _showIntDialog(int min, int max, int init) async {
+  Future _showIntDialog(int min, int max, int init, bool isYear) async {
     await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
@@ -120,7 +133,12 @@ class _OwnLeavesState extends State<OwnLeaves> {
       },
     ).then((num value) {
       if (value != null) {
-        setState(() => _year = value);
+        if (isYear) {
+          setState(() => _year = value);
+        } else {
+          setState(() => _month = value);
+        }
+
         // integerNumberPicker.animateInt(value);
       }
     });

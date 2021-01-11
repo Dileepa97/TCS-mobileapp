@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/leave_component/button_row.dart';
 import 'package:timecapturesystem/components/leave_component/date_format.dart';
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/models/lms/day_amount.dart';
+import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
 
 import 'package:timecapturesystem/models/lms/leave_response.dart';
@@ -13,10 +14,13 @@ import 'package:timecapturesystem/services/LMS/leave_service.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:timecapturesystem/view/lms/admin_leave/user_data.dart';
+
+import '../check_leaves.dart';
 
 class LeaveDetailsPage extends StatefulWidget {
   LeaveDetailsPage({this.item});
-  final LeaveResponse item;
+  final Leave item;
 
   @override
   _LeaveDetailsPageState createState() => _LeaveDetailsPageState();
@@ -43,119 +47,291 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
 
   bool _dataAvailable = false;
 
-  @override
-  void initState() {
-    userLeaveTypeData(widget.item.userId,
-        EnumToString.convertToString(widget.item.leaveType));
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   userLeaveTypeData(
+  //       widget.item.userId, EnumToString.convertToString(widget.item.type));
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
+      ///App Bar
       appBar: AppBar(
-        title: Text(this.widget.item.userId),
+        title: Text(
+          'Leave',
+          style: TextStyle(color: Colors.black),
+        ),
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.all(5.0),
-            child: Card(
-              shadowColor: Colors.black54,
+
+      ///Body
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
               color: Colors.white,
-              elevation: 8,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Row(
                       children: [
+                        ///Profile image
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                            radius: 25.0,
-                            backgroundImage: AssetImage('images/user.png'),
-                          ),
+                          child: UserProfileImage(
+                              userId: widget.item.userId,
+                              height: 60,
+                              width: 60),
                         ),
-                        SizedBox(
-                          height: 100,
-                          child: VerticalDivider(
-                            thickness: 1,
-                            color: Colors.black12,
-                          ),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ///User name
+                            UserNameText(item: widget.item, fontSize: 18),
+
+                            //Requested date
+                            Text(
+                              'Requested date : ' +
+                                  widget.item.reqDate
+                                      .toIso8601String()
+                                      .substring(0, 10),
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontFamily: 'Source Sans Pro',
+                              ),
+                            ),
+
+                            ///Requested time
+                            Text(
+                              'Requested time : ' +
+                                  widget.item.reqDate
+                                      .toIso8601String()
+                                      .substring(11, 16),
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontFamily: 'Source Sans Pro',
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    // Container(
-                    //   height: 150.0,
-                    //   child: Padding(
-                    //       padding: const EdgeInsets.all(10.0),
-                    //       child: DonutPieChart(
-                    //         _createChartData(),
-                    //         animate: true,
-                    //       )),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          DetailRow(
-                              keyString: 'Leave Title',
-                              valueString: this.widget.item.leaveTitle),
-                          SizedBox(height: 5),
-                          DetailRow(
-                              keyString: 'Leave Type',
-                              valueString: EnumToString.convertToString(
-                                  this.widget.item.leaveType)),
-                          SizedBox(height: 5),
-                          DetailRow(
-                              keyString: 'Leave Status',
-                              valueString: EnumToString.convertToString(
-                                  this.widget.item.leaveStatus)),
+                          ///Title
+                          Text(
+                            this.widget.item.title,
+                            style: TextStyle(
+                              color: Colors.cyan[800],
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
                           SizedBox(
-                            height: 30,
+                            height: 20,
                             child: Divider(
                               color: Colors.black12,
                               thickness: 1,
                             ),
                           ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ///Leave type
+                              Text(
+                                EnumToString.convertToString(widget.item.type)
+                                        .substring(0, 1) +
+                                    EnumToString.convertToString(
+                                            widget.item.type)
+                                        .substring(1)
+                                        .toLowerCase()
+                                        .replaceAll('_', '\n'),
+                                style: TextStyle(
+                                  color: Colors.purple[900],
+                                  fontFamily: 'Source Sans Pro',
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              ///Icon
+                              CircleAvatar(
+                                child: CheckType(type: widget.item.type)
+                                    .typeIcon(),
+                                radius: 15,
+                                backgroundColor:
+                                    CheckStatus(status: widget.item.status)
+                                        .statusColor(),
+                                foregroundColor: Colors.white,
+                              ),
+
+                              ///Leave Status
+                              Text(
+                                EnumToString.convertToString(widget.item.status)
+                                        .substring(0, 1) +
+                                    EnumToString.convertToString(
+                                            widget.item.status)
+                                        .substring(1)
+                                        .toLowerCase()
+                                        .replaceAll('_', '\n'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: CheckStatus(status: widget.item.status)
+                                      .statusColor(),
+                                  fontFamily: 'Source Sans Pro',
+                                  fontSize: 19,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(
+                            height: 20,
+                            child: Divider(
+                              color: Colors.black12,
+                              thickness: 1,
+                            ),
+                          ),
+
+                          ///Start date
                           DetailRow(
-                              keyString: 'Request Date',
-                              valueString:
-                                  date.stringDate(this.widget.item.reqDate)),
+                            keyString: 'Start Date',
+                            valueString: widget.item.startDate
+                                .toIso8601String()
+                                .substring(0, 10),
+                          ),
                           SizedBox(height: 5),
+
+                          ///Start day method
                           DetailRow(
-                              keyString: 'Start Date',
-                              valueString: date
-                                  .stringDate(this.widget.item.leaveStartDate)),
-                          SizedBox(height: 5),
-                          DetailRow(
-                              keyString: 'Start Day Option',
+                              keyString: 'Start Day Method',
                               valueString: EnumToString.convertToString(
-                                  this.widget.item.startDayMethod)),
+                                          widget.item.startDayMethod)
+                                      .substring(0, 1) +
+                                  EnumToString.convertToString(
+                                          this.widget.item.startDayMethod)
+                                      .substring(1)
+                                      .toLowerCase()
+                                      .replaceAll('_', ' ')),
                           SizedBox(height: 5),
-                          this.widget.item.leaveEndDate != null
+
+                          ///End date
+                          this.widget.item.endDate != null
                               ? DetailRow(
                                   keyString: 'End Date',
-                                  valueString: date.stringDate(
-                                      this.widget.item.leaveEndDate))
+                                  valueString: widget.item.endDate
+                                      .toIso8601String()
+                                      .substring(0, 10))
                               : SizedBox(),
-                          SizedBox(height: 5),
-                          this.widget.item.leaveEndDate != null
+                          this.widget.item.endDate != null
+                              ? SizedBox(height: 5)
+                              : SizedBox(),
+
+                          ///End day method
+                          this.widget.item.endDate != null
                               ? DetailRow(
-                                  keyString: 'End Day Option',
+                                  keyString: 'End Day Method',
                                   valueString: EnumToString.convertToString(
-                                      this.widget.item.endDayMethod))
+                                              widget.item.endDayMethod)
+                                          .substring(0, 1) +
+                                      EnumToString.convertToString(
+                                              this.widget.item.endDayMethod)
+                                          .substring(1)
+                                          .toLowerCase()
+                                          .replaceAll('_', ' '))
                               : SizedBox(),
-                          SizedBox(height: 5),
+                          this.widget.item.endDate != null
+                              ? SizedBox(height: 5)
+                              : SizedBox(),
+
+                          ///Leave days
                           DetailRow(
                               keyString: 'Leave Days',
-                              valueString:
-                                  this.widget.item.leaveCount.toString()),
+                              valueString: this.widget.item.days.toString()),
+                          SizedBox(height: 5),
+
+                          ///Leave taken days
+                          this.widget.item.takenDays != 0
+                              ? DetailRow(
+                                  keyString: 'Taken Days',
+                                  valueString:
+                                      this.widget.item.takenDays.toString())
+                              : SizedBox(),
+
+                          ///Description
+                          this.widget.item.description != null &&
+                                  this.widget.item.description != ""
+                              ? SizedBox(
+                                  height: 30,
+                                  child: Divider(
+                                    color: Colors.black12,
+                                    thickness: 1,
+                                  ),
+                                )
+                              : SizedBox(),
+                          this.widget.item.description != null &&
+                                  this.widget.item.description != ""
+                              ? DetailRow(
+                                  keyString: 'Description', valueString: '')
+                              : SizedBox(),
+                          this.widget.item.description != null &&
+                                  this.widget.item.description != ""
+                              ? Text(
+                                  this.widget.item.description,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Source Sans Pro',
+                                    color: Colors.blueGrey[600],
+                                  ),
+                                )
+                              : SizedBox(),
+
+                          ///Reject reason
+                          this.widget.item.rejectReason != null &&
+                                  this.widget.item.rejectReason != ""
+                              ? SizedBox(
+                                  height: 30,
+                                  child: Divider(
+                                    color: Colors.black12,
+                                    thickness: 1,
+                                  ),
+                                )
+                              : SizedBox(),
+                          this.widget.item.rejectReason != null &&
+                                  this.widget.item.rejectReason != ""
+                              ? DetailRow(
+                                  keyString: 'Rejected Reason', valueString: '')
+                              : SizedBox(),
+                          this.widget.item.rejectReason != null &&
+                                  this.widget.item.rejectReason != ""
+                              ? Text(
+                                  this.widget.item.rejectReason,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Source Sans Pro',
+                                    color: Colors.blueGrey[600],
+                                  ),
+                                )
+                              : SizedBox(),
                           SizedBox(
                             height: 30,
                             child: Divider(
@@ -163,21 +339,9 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                               thickness: 1,
                             ),
                           ),
-                          DetailRow(keyString: 'Description', valueString: ''),
-                          Text(
-                            this.widget.item.leaveDescription,
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: Divider(
-                              color: Colors.black12,
-                              thickness: 1,
-                            ),
-                          ),
-                          this.widget.item.leaveStatus == LeaveStatus.REQUESTED
+
+                          ///Buttons
+                          this.widget.item.status == LeaveStatus.REQUESTED
                               ? TwoButtonRow(
                                   title1: 'Accept',
                                   title2: 'Reject',
@@ -187,7 +351,7 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                       onPressedYes: () async {
                                         int code =
                                             await _leaveService.acceptOrReject(
-                                                this.widget.item.leaveId,
+                                                this.widget.item.id,
                                                 'ACCEPTED');
                                         if (code == 202) {
                                           Navigator.pushNamed(
@@ -207,7 +371,7 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                       onPressedYes: () async {
                                         int code =
                                             await _leaveService.acceptOrReject(
-                                                this.widget.item.leaveId,
+                                                this.widget.item.id,
                                                 'REJECTED');
                                         if (code == 202) {
                                           Navigator.pushNamed(
@@ -228,8 +392,8 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                     )
                   ],
                 ),
-              ),
-            )),
+              )),
+        ),
       ),
     );
   }

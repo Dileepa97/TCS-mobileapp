@@ -15,8 +15,11 @@ class LeaveResponse {
   LeaveMethod startDayMethod;
   LeaveMethod endDayMethod;
   double leaveCount;
+  double takenDays;
   LeaveStatus leaveStatus;
+  String rejectReason;
   String userId;
+  String attachmentURL;
 
   LeaveResponse(
       this.leaveId,
@@ -29,8 +32,11 @@ class LeaveResponse {
       this.startDayMethod,
       this.endDayMethod,
       this.leaveCount,
+      this.takenDays,
       this.leaveStatus,
-      this.userId);
+      this.rejectReason,
+      this.userId,
+      this.attachmentURL);
 
   factory LeaveResponse.fromJson(dynamic json) {
     var leaveRes = LeaveResponse(
@@ -44,8 +50,11 @@ class LeaveResponse {
         EnumToString.fromString(LeaveMethod.values, json['startDayMethod']),
         EnumToString.fromString(LeaveMethod.values, json['endDayMethod']),
         json['days'] as double,
+        json['takenDays'] as double,
         EnumToString.fromString(LeaveStatus.values, json['status']),
-        json['userId'] as String);
+        json['rejectReason'] as String,
+        json['userId'] as String,
+        json['attachmentURL'] as String);
 
     // authRes.roles.forEach((element) {
     //   element = "$element";

@@ -45,6 +45,7 @@ dependencies:
   charts_flutter: ^0.9.0
   flutter_dotenv: ^2.1.0
   quartet: ^0.1.1
+  numberpicker: ^1.3.0
 
 
 
