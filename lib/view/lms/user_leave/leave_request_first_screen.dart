@@ -67,7 +67,7 @@ class _FirstRequestScreenState extends State<FirstRequestScreen> {
               SizedBox(
                 height: 20,
               ),
-              _buildUserID(),
+              // _buildUserID(),
               _buildLeaveType(),
               SizedBox(
                 height: 20,

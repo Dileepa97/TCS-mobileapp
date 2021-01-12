@@ -155,15 +155,9 @@ class LeaveService {
   ///Get logged user leaves by year -  logged user
   Future<dynamic> getLoggedUserLeaves(dynamic context, int year) async {
     try {
-      var params = {
-        'year': '$year',
-      };
-
-      var uri = Uri.http(apiAuth, 'api/leaves/logged-user', params);
-
       var authHeader = await generateAuthHeader();
 
-      var res = await http.get(uri, headers: {
+      var res = await http.get(API + '/logged-user-by-year/$year', headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });

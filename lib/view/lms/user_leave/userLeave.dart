@@ -17,7 +17,7 @@ class _UserLeaveState extends State<UserLeave> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'User Leave',
+          ' Leave',
         ),
         leading: BackButton(
           onPressed: () {
@@ -29,24 +29,6 @@ class _UserLeaveState extends State<UserLeave> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: RaisedButton(
-              color: Colors.blueAccent,
-              child: Text(
-                'Request Leave',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/requestFirstScreen');
-              },
-            ),
-          ),
           Container(
             height: 50,
             margin: EdgeInsets.symmetric(vertical: 5),

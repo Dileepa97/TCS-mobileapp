@@ -13,6 +13,24 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Container(
+          //   height: 50,
+          //   margin: EdgeInsets.symmetric(vertical: 5),
+          //   padding: EdgeInsets.symmetric(horizontal: 10),
+          //   child: RaisedButton(
+          //     color: Colors.blueAccent,
+          //     child: Text(
+          //       'Get leaves',
+          //       style: TextStyle(
+          //         fontSize: 20.0,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //     onPressed: () {
+          //       Navigator.pushNamed(context, '/adminGetLeaves');
+          //     },
+          //   ),
+          // ),
           Container(
             height: 50,
             margin: EdgeInsets.symmetric(vertical: 5),
@@ -20,14 +38,14 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
             child: RaisedButton(
               color: Colors.blueAccent,
               child: Text(
-                'Get leaves',
+                'By Month',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/adminGetLeaves');
+                Navigator.pushNamed(context, '/adminLeaveByMonth');
               },
             ),
           ),

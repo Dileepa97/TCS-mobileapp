@@ -54,8 +54,8 @@ class LeaveAvailabilityService {
         'year': '$year',
       };
 
-      var uri = Uri.http(
-          apiAuth, 'api/leave-availability-details/logged-user/year', params);
+      var uri = Uri.http(apiAuth,
+          'api/leave-availability-details/logged-user-by-year', params);
 
       var authHeader = await generateAuthHeader();
 
