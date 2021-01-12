@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/absent_user_detail_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_card.dart';
 
 import 'absent_day_card.dart';
 

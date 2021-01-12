@@ -7,8 +7,6 @@ import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/models/lms/day_amount.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
-
-import 'package:timecapturesystem/models/lms/leave_response.dart';
 import 'package:timecapturesystem/models/lms/leave_status.dart';
 import 'package:timecapturesystem/services/LMS/leave_service.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
@@ -44,8 +42,6 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
   double _takenDays;
 
   double _availableDays;
-
-  bool _dataAvailable = false;
 
   // @override
   // void initState() {

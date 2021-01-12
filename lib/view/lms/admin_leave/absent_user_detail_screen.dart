@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/leave_component/absent_user_card.dart';
-import 'package:timecapturesystem/models/lms/absent_user_data.dart';
+
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
 import 'package:intl/intl.dart';
 
