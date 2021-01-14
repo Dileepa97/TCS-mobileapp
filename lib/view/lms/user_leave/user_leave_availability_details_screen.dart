@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:timecapturesystem/components/leave_component/leave_option_builder.dart';
-import 'package:timecapturesystem/models/lms/leave_availability_detail.dart';
+
 import 'package:timecapturesystem/models/lms/leave_option.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
 

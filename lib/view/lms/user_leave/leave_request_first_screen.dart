@@ -5,7 +5,7 @@ import 'package:timecapturesystem/components/leave_component/donut_pie_chart.dar
 import 'package:timecapturesystem/components/leave_component/input_container.dart';
 import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/models/lms/day_amount.dart';
+
 import 'package:timecapturesystem/models/lms/leave_option.dart';
 
 import 'package:timecapturesystem/services/lms/leave_availability_service.dart';
