@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
-import 'package:timecapturesystem/managers/orientation.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin_service.dart';
@@ -56,39 +55,44 @@ class _UserDetailsState extends State<UserDetails> {
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
           child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            Text(
-              user.fullName,
-              style: TextStyle(
-                fontFamily: 'Pacifico',
-                fontSize: 40.0,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                user.fullName,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontSize: 40.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(
               height: 40.0,
             ),
-            CircleAvatar(
-              radius: 90.0,
-              backgroundImage: user.profileImageURL == 'default.png'
-                  ? AssetImage('images/default.png')
-                  : NetworkImage(fileAPI + user.profileImageURL),
+            Center(
+              child: CircleAvatar(
+                radius: 90.0,
+                backgroundImage: user.profileImageURL == 'default.png'
+                    ? AssetImage('images/default.png')
+                    : NetworkImage(fileAPI + user.profileImageURL),
+              ),
             ),
             SizedBox(
               height: 10.0,
             ),
-            Text(
-              user.username,
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                color: Colors.black87,
-                fontSize: 20.0,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                user.username,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: Colors.black87,
+                  fontSize: 20.0,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Row(
@@ -336,11 +340,9 @@ handleSuccess(success, context, userId) async {
 }
 
 _launchUrl(url) async {
-  // const url = "tel:1234567";
-  // var url = 'mailto:$toMailId?subject=$subject&body=$body';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    throw 'Could not launch $url';
+    print('Could not launch $url');
   }
 }
