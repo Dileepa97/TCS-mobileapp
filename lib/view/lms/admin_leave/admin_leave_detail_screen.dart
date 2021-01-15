@@ -96,7 +96,8 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ///User name
-                            UserNameText(item: widget.item, fontSize: 18),
+                            UserNameText(
+                                userId: widget.item.userId, fontSize: 18),
 
                             //Requested date
                             Text(
@@ -348,10 +349,18 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                         int code =
                                             await _leaveService.acceptOrReject(
                                                 this.widget.item.id,
-                                                'ACCEPTED');
-                                        if (code == 202) {
-                                          Navigator.pushNamed(
-                                              context, '/allLeaves');
+                                                'ACCEPTED',
+                                                "");
+                                        if (code == 200) {
+                                          // Navigator.pushReplacementNamed(
+                                          //     context, '/adminGetLeaves');
+                                          // ModalRoute.withName(
+                                          //     '/adminGetLeaves');
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                                  '/userLeave',
+                                                  (Route<dynamic> route) =>
+                                                      false);
                                         }
                                       },
                                       onPressedNo: () {
@@ -362,23 +371,40 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                     );
                                   },
                                   onPressed2: () async {
+                                    String reason = "";
                                     this._dialog.showConfirmationDialog(
                                       title: 'Confirm',
                                       onPressedYes: () async {
                                         int code =
                                             await _leaveService.acceptOrReject(
                                                 this.widget.item.id,
-                                                'REJECTED');
-                                        if (code == 202) {
-                                          Navigator.pushNamed(
-                                              context, '/allLeaves');
+                                                'REJECTED',
+                                                reason);
+                                        if (code == 200) {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                                  '/userLeave',
+                                                  (Route<dynamic> route) =>
+                                                      false);
                                         }
                                       },
                                       onPressedNo: () {
                                         Navigator.pop(context);
                                       },
                                       context: context,
-                                      children: [Text('Accept this leave')],
+                                      children: [
+                                        Text('Reject this leave'),
+                                        TextField(
+                                            decoration: InputDecoration(
+                                                // border: InputBorder.none,
+                                                hintText: 'Reason'),
+                                            maxLines: null,
+                                            onChanged: (text) {
+                                              setState(() {
+                                                reason = text;
+                                              });
+                                            })
+                                      ],
                                     );
                                   },
                                 )

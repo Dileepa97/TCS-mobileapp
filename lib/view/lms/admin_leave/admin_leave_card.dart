@@ -38,7 +38,7 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  UserNameText(item: widget.item, fontSize: 15),
+                  UserNameText(userId: widget.item.userId, fontSize: 15),
                   Text(
                     'Start date : ' +
                         widget.item.startDate

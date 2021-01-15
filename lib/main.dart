@@ -7,6 +7,7 @@ import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/get_all_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/get_requested_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/leave_by_month.dart';
@@ -101,6 +102,7 @@ class _MyAppState extends State<MyApp> {
                   TodayUnavailableUserScreen(),
               '/weekUnavailableUserScreen': (context) =>
                   WeekUnavailableUserScreen(),
+              '/adminLeaveDetailsPage': (context) => LeaveDetailsPage(),
             };
           } else {
             print("user not exist");

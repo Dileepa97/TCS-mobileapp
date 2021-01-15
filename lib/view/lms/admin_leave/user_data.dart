@@ -8,17 +8,17 @@ import 'admin_leave_card.dart';
 class UserNameText extends StatelessWidget {
   const UserNameText({
     Key key,
-    @required this.item,
+    @required this.userId,
     this.fontSize,
   }) : super(key: key);
 
-  final Leave item;
+  final String userId;
   final double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
-      future: UserService.getUserById(item.userId),
+      future: UserService.getUserById(userId),
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         Widget _name;
         if (snapshot.hasData) {
