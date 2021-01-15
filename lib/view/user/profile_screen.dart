@@ -32,35 +32,41 @@ class _ProfileState extends State<Profile> {
                   _user.verified ? Colors.lightGreenAccent : Colors.redAccent;
 
               children = <Widget>[
-                Text(
-                  _user.fullName,
-                  style: TextStyle(
-                    fontFamily: 'Maven Pro',
-                    fontSize: 40.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    _user.fullName,
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 40.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 40,
                 ),
-                CircleAvatar(
-                  radius: 140.0,
-                  backgroundImage: _user.profileImageURL == 'default.png'
-                      ? AssetImage('images/default.png')
-                      : NetworkImage(fileAPI + _user.profileImageURL),
+                Center(
+                  child: CircleAvatar(
+                    radius: 140.0,
+                    backgroundImage: _user.profileImageURL == 'default.png'
+                        ? AssetImage('images/default.png')
+                        : NetworkImage(fileAPI + _user.profileImageURL),
+                  ),
                 ),
                 SizedBox(
                   height: 20.0,
                 ),
-                Text(
-                  _user.username,
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Colors.black87,
-                    fontSize: 20.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    _user.username,
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      color: Colors.black87,
+                      fontSize: 20.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -183,9 +189,8 @@ class _ProfileState extends State<Profile> {
               ];
             }
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ListView(
+                shrinkWrap: true,
                 children: children,
               ),
             );
