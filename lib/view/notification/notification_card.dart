@@ -15,11 +15,13 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
+  var vIcon;
   @override
   Widget build(BuildContext context) {
     //TODO:make changes to below according to values of notification
-    var vIcon = Icons.email;
+
     var vIconColor = Colors.black87;
+    vIcon = notificationIcon(widget.notification.category);
     var category = widget.notification.category;
     return GestureDetector(
       //TODO: push according to notification
@@ -86,10 +88,12 @@ class _NotificationCardState extends State<NotificationCard> {
     switch (cat) {
       case 'reg':
         {
+          vIcon = Icons.account_circle;
           return UserManagementDashboard.id;
         }
       case 'leave-request':
         {
+          vIcon = Icons.directions_walk_outlined;
           //return lms path
           return '/allLeaves';
         }
@@ -117,5 +121,40 @@ class _NotificationCardState extends State<NotificationCard> {
         }
     }
     return '';
+  }
+
+  IconData notificationIcon(String cat) {
+    //
+    switch (cat) {
+      case 'reg':
+        {
+          return Icons.account_circle;
+        }
+      case 'leave-request':
+        {
+          return Icons.directions_walk_outlined;
+        }
+      case 'leave-status-change':
+        {
+          return Icons.directions_walk_outlined;
+        }
+      case 'leave-cancelled':
+        {
+          return Icons.directions_walk_outlined;
+        }
+      case 'profile-update-NA':
+        {
+          return Icons.account_circle;
+        }
+      case 'profile-update-A':
+        {
+          return Icons.account_circle;
+        }
+      case 'task-reassigned':
+        {
+          return Icons.notifications_none;
+        }
+    }
+    return Icons.notifications_none;
   }
 }
