@@ -34,6 +34,7 @@ class _NotificationCardState extends State<NotificationCard> {
               context, notificationClicked(widget.notification.category));
       },
       child: Container(
+        color: Colors.blueGrey,
         padding: EdgeInsets.all(0),
         height: 100,
         child: Card(
@@ -63,8 +64,12 @@ class _NotificationCardState extends State<NotificationCard> {
                       ],
                     ),
                     SizedBox(height: 5.0),
-                    Expanded(
-                      child: Text(widget.notification.content),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(widget.notification.content),
+                        ),
+                      ],
                     )
                   ],
                 ),
