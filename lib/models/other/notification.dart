@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'notification.g.dart';
+part 'notification.g.dart';
 
 @JsonSerializable()
 class Notification {
@@ -17,10 +17,10 @@ class Notification {
   Notification(this.id, this.userId, this.referencedId, this.title,
       this.category, this.content, this.createdAt, this.seen, this.instruction);
 
-  // factory Notification.fromJson(Map<String, dynamic> data) =>
-  //     _$NotificationFromJson(data);
-  //
-  // Map<String, dynamic> toJson() => _$NotificationToJson(this);
+  factory Notification.fromJson(Map<String, dynamic> data) =>
+      _$NotificationFromJson(data);
+
+  Map<String, dynamic> toJson() => _$NotificationToJson(this);
 
   @override
   String toString() {
