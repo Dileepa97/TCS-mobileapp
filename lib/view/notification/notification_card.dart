@@ -34,10 +34,10 @@ class _NotificationCardState extends State<NotificationCard> {
               context, notificationClicked(widget.notification.category));
       },
       child: Container(
-        color: Colors.blueGrey,
         padding: EdgeInsets.all(0),
         height: 100,
         child: Card(
+          color: widget.notification.seen ? Colors.white : Color(0xFFD2FBFF),
           child: Row(
             children: <Widget>[
               Icon(
