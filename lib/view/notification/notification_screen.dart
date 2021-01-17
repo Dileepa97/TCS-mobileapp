@@ -19,6 +19,9 @@ class _NotificationCenterState extends State<NotificationCenter> {
 
   void _onRefresh() async {
     notifications = await NotificationService.fetchMyNotifications(context);
+    if (notifications != [] || notifications.length > 0) {
+      notifications = notifications.reversed.toList();
+    }
     if (mounted) setState(() {});
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();

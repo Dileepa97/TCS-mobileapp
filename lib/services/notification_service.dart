@@ -39,4 +39,17 @@ class NotificationService {
     }
     return null;
   }
+
+  static seenNotifications(context) async {
+    var authHeader = await generateAuthHeader();
+    var res = await http.get(notificationAPI + '/read', headers: {
+      HttpHeaders.authorizationHeader: authHeader,
+      HttpHeaders.contentTypeHeader: contentTypeHeader
+    });
+  }
+  // this.http.get(API + '/read', httpOptions).subscribe(value => {
+  // }, error => {
+  // console.log(error);
+  // });
+
 }
