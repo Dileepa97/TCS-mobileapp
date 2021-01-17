@@ -63,11 +63,11 @@ class _MyAppState extends State<MyApp> {
           var routes;
           var initialRoute;
           if (userData != null) {
-            // TokenStorageService.clearStorage();
             //TODO: check if expired and resolve bug
             print("user exist");
             initialRoute = '/';
             routes = {
+              //add routes that user can access only after logging
               '/': (context) => HomePage(),
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
@@ -107,7 +107,7 @@ class _MyAppState extends State<MyApp> {
           } else {
             print("user not exist");
             initialRoute = LoginScreen.id;
-
+            //add routes that user can access without login
             routes = {
               '/': (context) => HomePage(),
               LoginScreen.id: (context) => LoginScreen(),

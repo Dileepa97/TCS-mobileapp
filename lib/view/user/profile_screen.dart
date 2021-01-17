@@ -4,8 +4,7 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
-// var apiEndpoint = DotEnv().env['API_URL'].toString();
-var apiEndpoint = DotEnv().env['K_IP2'].toString();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
 var fileAPI = apiEndpoint + 'files/';
 
 class Profile extends StatefulWidget {
@@ -48,7 +47,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 Center(
                   child: CircleAvatar(
-                    radius: 140.0,
+                    radius: 100.0,
                     backgroundImage: _user.profileImageURL == 'default.png'
                         ? AssetImage('images/default.png')
                         : NetworkImage(fileAPI + _user.profileImageURL),
@@ -133,7 +132,7 @@ class _ProfileState extends State<Profile> {
                     title: Text(
                       _user.email,
                       style: TextStyle(
-                          fontSize: 17.0,
+                          fontSize: 15.0,
                           color: Colors.blueGrey.shade900,
                           fontFamily: 'Source Sans Pro'),
                     ),

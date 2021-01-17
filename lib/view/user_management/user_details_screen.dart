@@ -63,14 +63,14 @@ class _UserDetailsState extends State<UserDetails> {
                 user.fullName,
                 style: TextStyle(
                   fontFamily: 'Roboto',
-                  fontSize: 40.0,
+                  fontSize: 35.0,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             SizedBox(
-              height: 40.0,
+              height: 27.0,
             ),
             Center(
               child: CircleAvatar(
@@ -151,7 +151,6 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             GestureDetector(
               onTap: () {
-                // var url = 'mailto:$toMailId?subject=$subject&body=$body';
                 var subject = "";
                 var body = "Dear " + user.fullName;
                 _launchUrl("mailto:${user.email}?subject=$subject&body=$body");
@@ -166,7 +165,7 @@ class _UserDetailsState extends State<UserDetails> {
                   title: Text(
                     user.email,
                     style: TextStyle(
-                        fontSize: 17.0,
+                        fontSize: 15.0,
                         color: Colors.blueGrey.shade900,
                         fontFamily: 'Source Sans Pro'),
                   ),
@@ -180,7 +179,7 @@ class _UserDetailsState extends State<UserDetails> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 50.0,
+                      height: 40.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
