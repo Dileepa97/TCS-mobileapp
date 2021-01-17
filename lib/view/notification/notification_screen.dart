@@ -25,6 +25,7 @@ class _NotificationCenterState extends State<NotificationCenter> {
     if (mounted) setState(() {});
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
+    NotificationService.seenNotifications();
   }
 
   void _onLoading() async {
