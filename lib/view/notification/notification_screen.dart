@@ -18,7 +18,6 @@ class _NotificationCenterState extends State<NotificationCenter> {
       RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
-    // monitor network fetch
     notifications = await NotificationService.fetchMyNotifications(context);
     if (mounted) setState(() {});
     // if failed,use refreshFailed()
@@ -26,7 +25,6 @@ class _NotificationCenterState extends State<NotificationCenter> {
   }
 
   void _onLoading() async {
-    // monitor network fetch
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
     _refreshController.loadComplete();
@@ -35,10 +33,13 @@ class _NotificationCenterState extends State<NotificationCenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Notification Center'),
+      ),
       body: SafeArea(
         child: SmartRefresher(
           enablePullDown: true,
-          header: WaterDropHeader(),
+          header: ClassicHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
