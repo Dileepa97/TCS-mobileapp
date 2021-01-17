@@ -19,6 +19,7 @@ import 'package:timecapturesystem/view/lms/user_leave/userLeave.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
+import 'package:timecapturesystem/view/user/notification_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 import 'managers/orientation.dart';
@@ -83,6 +84,7 @@ class _MyAppState extends State<MyApp> {
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
               ForgotPasswordChangeScreen.id: (context) =>
                   ForgotPasswordChangeScreen(),
+              NotificationCenter.id: (context) => NotificationCenter(),
               '/userLeave': (context) => UserLeave(),
               '/leaveRequest': (context) => LeaveRequest(),
               //  build the LeaveRequest widget.
