@@ -6,6 +6,7 @@ import 'package:timecapturesystem/services/auth_service.dart';
 import 'package:timecapturesystem/services/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
+import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
@@ -87,6 +88,21 @@ class _SideDrawerState extends State<SideDrawer> {
                   ListTile(
                     title: Row(
                       children: [
+                        Icon(Icons.notifications_active_outlined),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Notification Center'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, NotificationCenter.id);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
                         Icon(Icons.directions_walk_outlined),
                         SizedBox(
                           width: 5.0,
@@ -97,21 +113,6 @@ class _SideDrawerState extends State<SideDrawer> {
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/userLeave');
-                    },
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.person_outline),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Profile'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, Profile.id);
                     },
                   ),
                   ListTile(

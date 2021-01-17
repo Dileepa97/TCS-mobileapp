@@ -40,23 +40,31 @@ class _NotificationCenterState extends State<NotificationCenter> {
       ),
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
-        child: SmartRefresher(
-          enablePullDown: true,
-          header: ClassicHeader(
-            textStyle: TextStyle(color: Colors.white),
-          ),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-          child: ListView.builder(
-            itemBuilder: (c, i) => Center(
-              child: NotificationCard(notification: notifications[i]),
-            ),
-            itemExtent: 100.0,
-            itemCount: notifications.length,
-          ),
+          child: SmartRefresher(
+        enablePullDown: true,
+        header: ClassicHeader(
+          textStyle: TextStyle(color: Colors.white),
         ),
-      ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: notifications.length > 0
+            ? ListView.builder(
+                itemBuilder: (c, i) => Center(
+                  child: NotificationCard(notification: notifications[i]),
+                ),
+                itemExtent: 100.0,
+                itemCount: notifications.length,
+              )
+            : Center(
+                child: Container(
+                  child: Text(
+                    'No new notifications available',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+              ),
+      )),
     );
   }
 }
