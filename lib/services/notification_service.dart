@@ -10,7 +10,7 @@ import 'package:timecapturesystem/services/utils.dart';
 String contentTypeHeader = 'application/json';
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
-var notificationAPI = apiEndpoint + 'titles/';
+var notificationAPI = apiEndpoint + 'notification/';
 
 class NotificationService {
   static Future<List<Notification>> fetchMyNotifications(context) async {
@@ -24,15 +24,17 @@ class NotificationService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
+        print(resBody);
         List<Notification> _notificationList =
             (resBody as List).map((i) => Notification.fromJson(i)).toList();
 
+        print(_notificationList);
         return _notificationList;
       } else if (res.statusCode == 400) {
         displayDialog(context, "Error", "Bad Request");
       } else {
         displayDialog(
-            context, "Error", "An error occurred while fetching users");
+            context, "Error", "An error occurred while fetching notifications");
       }
     } catch (e) {
       displayDialog(context, "Error", e.toString());

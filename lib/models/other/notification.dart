@@ -11,7 +11,7 @@ class Notification {
   String category;
   String content;
   DateTime createdAt;
-  String seen;
+  bool seen;
   String instruction;
 
   Notification(this.id, this.userId, this.referencedId, this.title,

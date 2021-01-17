@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
-import 'package:timecapturesystem/view/user/notification_screen.dart';
+import 'package:timecapturesystem/view/notification/notification_screen.dart';
 
 ///time capture system user home page
 class HomePage extends StatefulWidget {

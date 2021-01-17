@@ -17,7 +17,7 @@ Notification _$NotificationFromJson(Map<String, dynamic> json) {
     json['createdAt'] == null
         ? null
         : DateTime.parse(json['createdAt'] as String),
-    json['seen'] as String,
+    json['seen'] as bool,
     json['instruction'] as String,
   );
 }
