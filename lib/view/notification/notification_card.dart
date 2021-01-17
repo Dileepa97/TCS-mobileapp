@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/models/other/notification.dart' as N;
+import 'package:timecapturesystem/models/notification/notification.dart' as N;
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 class NotificationCard extends StatefulWidget {

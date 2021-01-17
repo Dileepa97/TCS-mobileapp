@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
-import 'package:timecapturesystem/models/other/notification.dart';
+import 'package:timecapturesystem/models/notification/notification.dart';
 import 'package:timecapturesystem/services/utils.dart';
 
 String contentTypeHeader = 'application/json';
