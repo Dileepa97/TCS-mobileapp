@@ -56,13 +56,13 @@ class _HomePageState extends State<HomePage> {
             //   },
             //   title: 'Logout',
             // ),
-            RoundedButton(
-              color: Colors.green,
-              onPressed: () async {
-                Navigator.pushNamed(context, NotificationCenter.id);
-              },
-              title: 'Notification Center',
-            ),
+            // RoundedButton(
+            //   color: Colors.green,
+            //   onPressed: () async {
+            //     Navigator.pushNamed(context, NotificationCenter.id);
+            //   },
+            //   title: 'Notification Center',
+            // ),
             Center(
               child: Image(
                 image: AssetImage('images/logo.png'),
