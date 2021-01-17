@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/other/notification.dart' as N;
+import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 class NotificationCard extends StatefulWidget {
   final N.Notification notification;
@@ -19,16 +20,21 @@ class _NotificationCardState extends State<NotificationCard> {
     //TODO:make changes to below according to values of notification
     var vIcon = Icons.email;
     var vIconColor = Colors.black87;
+    var category = widget.notification.category;
     return GestureDetector(
       //TODO: push according to notification
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (context) => UserDetails(user: widget.notification)),
-        // );
+        if (category == 'reg' ||
+            category == 'profile-update-A' ||
+            category == 'profile-update-NA' ||
+            category == 'leave-request' ||
+            category == 'leave-status-change' ||
+            category == 'leave-cancelled')
+          Navigator.pushNamed(
+              context, notificationClicked(widget.notification.category));
       },
       child: Container(
+        padding: EdgeInsets.all(0),
         height: 100,
         child: Card(
           child: Row(
@@ -68,5 +74,43 @@ class _NotificationCardState extends State<NotificationCard> {
         ),
       ),
     );
+  }
+
+  String notificationClicked(String cat) {
+    //
+    switch (cat) {
+      case 'reg':
+        {
+          return UserManagementDashboard.id;
+        }
+      case 'leave-request':
+        {
+          //return lms path
+          return '/allLeaves';
+        }
+      case 'leave-status-change':
+        {
+          //return lms path
+          return '/ownLeave';
+        }
+      case 'leave-cancelled':
+        {
+          //return lms admin path
+          return '/allLeaves';
+        }
+      case 'profile-update-NA':
+        {
+          return UserManagementDashboard.id;
+        }
+      case 'profile-update-A':
+        {
+          return UserManagementDashboard.id;
+        }
+      case 'task-reassigned':
+        {
+          return '';
+        }
+    }
+    return '';
   }
 }

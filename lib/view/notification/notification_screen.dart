@@ -35,11 +35,16 @@ class _NotificationCenterState extends State<NotificationCenter> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notification Center'),
+        elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
       ),
+      backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
         child: SmartRefresher(
           enablePullDown: true,
-          header: ClassicHeader(),
+          header: ClassicHeader(
+            textStyle: TextStyle(color: Colors.white),
+          ),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,

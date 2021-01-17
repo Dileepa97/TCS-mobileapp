@@ -24,11 +24,9 @@ class NotificationService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
-        print(resBody);
         List<Notification> _notificationList =
             (resBody as List).map((i) => Notification.fromJson(i)).toList();
 
-        print(_notificationList);
         return _notificationList;
       } else if (res.statusCode == 400) {
         displayDialog(context, "Error", "Bad Request");
