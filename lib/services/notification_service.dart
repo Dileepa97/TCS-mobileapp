@@ -48,4 +48,17 @@ class NotificationService {
     });
     return res;
   }
+
+  static unseenNotificationCount() async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.get(notificationAPI + 'unseen-count', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      return res.body;
+    } catch (e) {
+      return 0;
+    }
+  }
 }

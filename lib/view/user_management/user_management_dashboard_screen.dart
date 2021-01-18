@@ -70,7 +70,7 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
             : Center(
                 child: Container(
                   child: Text(
-                    'No new notifications available',
+                    'No users to manage yet',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
@@ -85,39 +85,3 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
     super.dispose();
   }
 }
-
-// SafeArea(
-// child: FutureBuilder<List<User>>(
-// future: UserService.getAllUsers(context),
-// builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-// var child;
-// if (snapshot.hasData) {
-// var users = <Widget>[];
-// snapshot.data.forEach((user) {
-// users.add(UserCard(user: user));
-// });
-//
-// child = ListView(
-// children: users,
-// );
-// } else if (snapshot.hasError) {
-// child = Column(children: <Widget>[
-// Icon(
-// Icons.error_outline,
-// color: Colors.red,
-// size: 60,
-// ),
-// Padding(
-// padding: const EdgeInsets.only(top: 16),
-// child: Text('Error: ${snapshot.error}'),
-// )
-// ]);
-// } else {
-// child = Container(
-// child: CircularProgressIndicator(),
-// );
-// }
-// return Center(child: child);
-// },
-// ),
-// )
