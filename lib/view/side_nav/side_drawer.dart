@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/auth/auth_service.dart';
+import 'package:timecapturesystem/services/other/notification_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
@@ -22,6 +23,7 @@ class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
     User _user;
+    int seenCount = 0;
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -35,6 +37,7 @@ class _SideDrawerState extends State<SideDrawer> {
               if (snapshot.hasData) {
                 _user = snapshot.data;
 
+                seenCount = NotificationService.unseenNotificationCount();
                 _emailWidget = Text(
                   _user.email,
                   style: TextStyle(
@@ -94,6 +97,13 @@ class _SideDrawerState extends State<SideDrawer> {
                           width: 5.0,
                         ),
                         Text('Notification Center'),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          seenCount > 0 ? seenCount.toString() : '',
+                          style: TextStyle(color: Colors.red),
+                        )
                       ],
                     ),
                     onTap: () {
