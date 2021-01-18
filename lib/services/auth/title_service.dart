@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:quartet/quartet.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
-import 'package:timecapturesystem/services/utils.dart';
+import 'package:timecapturesystem/services/other/utils.dart';
 
 String contentTypeHeader = 'application/json';
 

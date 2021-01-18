@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:timecapturesystem/services/utils.dart';
+import 'package:timecapturesystem/services/other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 // var apiEndpoint =  DotEnv().env['API_URL'];

@@ -9,7 +9,7 @@ import 'package:timecapturesystem/models/lms/leave.dart';
 
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
 
-import '../utils.dart';
+import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 var API = apiEndpoint + 'leaves';

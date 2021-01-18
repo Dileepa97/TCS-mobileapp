@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();

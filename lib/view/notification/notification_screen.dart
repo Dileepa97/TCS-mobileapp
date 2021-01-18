@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timecapturesystem/models/notification/notification.dart' as N;
-import 'package:timecapturesystem/services/notification_service.dart';
+import 'package:timecapturesystem/services/other/notification_service.dart';
 import 'package:timecapturesystem/view/notification/notification_card.dart';
 
 class NotificationCenter extends StatefulWidget {

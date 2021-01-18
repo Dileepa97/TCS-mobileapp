@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave_availability_detail.dart';
 
-import '../utils.dart';
+import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 var API = apiEndpoint + 'leave-availability-details';

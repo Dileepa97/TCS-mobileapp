@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/user_service.dart';
+import 'package:timecapturesystem/services/user/user_service.dart';
 
 import 'admin_leave_card.dart';
 
