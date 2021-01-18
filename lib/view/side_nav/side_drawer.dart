@@ -21,6 +21,7 @@ class SideDrawer extends StatefulWidget {
 class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
+    User _user;
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -32,7 +33,7 @@ class _SideDrawerState extends State<SideDrawer> {
               Widget _avatar;
 
               if (snapshot.hasData) {
-                User _user = snapshot.data;
+                _user = snapshot.data;
 
                 _emailWidget = Text(
                   _user.email,
