@@ -99,25 +99,27 @@ class _SideDrawerState extends State<SideDrawer> {
                         SizedBox(
                           width: 5.0,
                         ),
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: new BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 22,
-                            minHeight: 22,
-                          ),
-                          child: new Text(
-                            unseenCount != '0' ? unseenCount : '',
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
+                        unseenCount != '0'
+                            ? Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: new BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 22,
+                                  minHeight: 22,
+                                ),
+                                child: new Text(
+                                  unseenCount,
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            : Text('')
                       ],
                     ),
                     onTap: () {
@@ -174,6 +176,8 @@ class _SideDrawerState extends State<SideDrawer> {
                   ListTile(
                     title: Row(
                       children: [
+                        Icon(Icons.logout),
+                        SizedBox(width: 6.0),
                         Text('Logout'),
                       ],
                     ),
