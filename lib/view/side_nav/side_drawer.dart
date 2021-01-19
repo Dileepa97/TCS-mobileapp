@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/auth/auth_service.dart';
-import 'package:timecapturesystem/services/other/notification_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
@@ -23,21 +22,21 @@ class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
     User _user;
-    int seenCount = 0;
+    String unseenCount = '0';
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder<User>(
-            future: UserService.getLoggedInUser(),
-            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        child: FutureBuilder<dynamic>(
+            future: UserService.getLoggedInUserAndNotificationCount(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               Widget _emailWidget;
               Widget _nameWidget;
               Widget _avatar;
 
               if (snapshot.hasData) {
-                _user = snapshot.data;
+                _user = snapshot.data[0];
+                unseenCount = snapshot.data[1];
 
-                seenCount = NotificationService.unseenNotificationCount();
                 _emailWidget = Text(
                   _user.email,
                   style: TextStyle(
@@ -100,9 +99,24 @@ class _SideDrawerState extends State<SideDrawer> {
                         SizedBox(
                           width: 5.0,
                         ),
-                        Text(
-                          seenCount > 0 ? seenCount.toString() : '',
-                          style: TextStyle(color: Colors.red),
+                        Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 22,
+                            minHeight: 22,
+                          ),
+                          child: new Text(
+                            unseenCount != '0' ? unseenCount : '',
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         )
                       ],
                     ),
