@@ -47,6 +47,15 @@ class UserService {
     }
   }
 
+  static Future<dynamic> getLoggedInUserJSON() async {
+    var res = await fetchLoggedInUser();
+    if (res.statusCode == 200) {
+      return res;
+    } else {
+      return null;
+    }
+  }
+
   static dynamic getLoggedInUserAndNotificationCount() async {
     var res = await fetchLoggedInUser();
     if (res.statusCode == 200) {
