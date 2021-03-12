@@ -412,11 +412,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  checkUsername(String username) {}
+  checkUsername() {
+    String username = _usernameController.text;
+    if (username.length < 5 || username.length > 20) {
+      _usernameInitColor = Colors.redAccent.shade700;
+      displayDialog(context, "Invalid Username",
+          "username must contain at least 5 characters or a maximum 20 character");
+      return;
+    }
+    if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      displayDialog(context, "Invalid Username Format",
+          "username can contain only alphanumeric characters");
+      return;
+    }
+  }
 
-  checkFullName(String fullName) {}
+  checkFullName() {
+    String fullName = _fullNameController.text;
 
-  checkEmail(String email) {}
+    if (fullName.length < 5 || fullName.length > 100) {
+      displayDialog(context, "Invalid Full Name",
+          "Full Name must contain at least 5 characters or a maximum of 100 characters");
+      return;
+    }
+    if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      displayDialog(context, "Invalid Full Name Format",
+          "Full Name can only contain letters");
+      return;
+    }
+  }
 
-  checkTelephone(String telephoneNumber) {}
+  checkEmail() {
+    String email = _emailController.text;
+    if (!validateMyInput(email,
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      displayDialog(context, "Invalid Email", "Please enter a valid email");
+      return;
+    }
+  }
+
+  checkTelephone() {
+    String telephoneNumber = _telephoneNumberController.text;
+    if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+      displayDialog(context, "Invalid telephone number",
+          "telephone number must contain at least 9 characters or a maximum of 14 characters");
+      return;
+    }
+    if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      displayDialog(context, "Invalid telephone number Format",
+          "Telephone Number can only contain '+' and numbers");
+      return;
+    }
+  }
+
+  bool validateMyInput(String value, String pattern) {
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return false;
+    else
+      return true;
+  }
 }
