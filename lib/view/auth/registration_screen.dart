@@ -287,7 +287,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       setState(() {
         _usernameInitColor = Colors.redAccent;
       });
-      return false;
     }
 
     if (_fullNameController.text.isEmpty) {
@@ -311,21 +310,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       });
     }
 
-    if (_passwordController.text.isEmpty) {
-      flag++;
-      setState(() {
-        _passwordInitColor = Colors.redAccent;
-      });
+    if (!checkPasswordMatch()) {
+      return false;
     }
-
-    if (_confirmPasswordController.text.isEmpty) {
-      flag++;
-      setState(() {
-        _confirmPasswordInitColor = Colors.redAccent;
-      });
-    }
-
-    checkPasswordMatch();
 
     if (gender == null) {
       flag++;
@@ -336,6 +323,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   checkPasswordMatch() {
+    bool isPWEmpty = false;
+    bool isPWCEmpty = false;
+    if (_passwordController.text.isEmpty) {
+      setState(() {
+        _passwordInitColor = Colors.redAccent;
+      });
+      isPWEmpty = true;
+    }
+
+    if (_confirmPasswordController.text.isEmpty) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent;
+      });
+
+      isPWCEmpty = false;
+    }
+
+    if (isPWEmpty) {
+      displayDialog(context, "Password empty", "You must enter a password");
+      return false;
+    } else if (isPWCEmpty) {
+      displayDialog(context, "Confirmation Password empty",
+          "You must confirm your password");
+      return false;
+    }
+
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
@@ -343,6 +356,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       });
       displayDialog(context, "Password Mismatch",
           "Confirmation password did not match with your password");
+      return false;
     } else {
       _confirmPasswordInitColor = Colors.blueAccent;
       _passwordInitColor = Colors.blueAccent;
