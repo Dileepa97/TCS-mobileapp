@@ -287,6 +287,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       setState(() {
         _usernameInitColor = Colors.redAccent;
       });
+      return false;
     }
 
     if (_fullNameController.text.isEmpty) {

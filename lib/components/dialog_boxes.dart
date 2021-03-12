@@ -136,7 +136,10 @@ Future<bool> displayConfirmationBox(context, content) async {
             content: Text(content),
             actions: [
               FlatButton(
-                child: Text("Confirm"),
+                child: Text(
+                  "Confirm",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
                 onPressed: () {
                   confirm = true;
                   Navigator.pop(context);
@@ -145,6 +148,7 @@ Future<bool> displayConfirmationBox(context, content) async {
               FlatButton(
                 child: Text(
                   "Cancel",
+                  style: TextStyle(color: Colors.redAccent),
                 ),
                 onPressed: () {
                   confirm = false;
