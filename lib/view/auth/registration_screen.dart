@@ -263,7 +263,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     });
                     //implement registration
                     if (checkValidity()) {
-                      await registerUser();
+                      bool status = await registerUser();
                       setState(() {
                         spin = false;
                       });
@@ -340,9 +340,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
+      } else {
+        return false;
       }
     } catch (e) {
       displayDialog(context, "Error", e.toString());
+      return false;
     }
   }
 
