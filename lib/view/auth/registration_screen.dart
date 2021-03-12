@@ -91,6 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //Do something with the user input.
                   },
                   onTap: () {
+                    checkUsername();
                     setState(() {
                       _fullNameInitColor = Colors.lightBlueAccent;
                     });
@@ -108,6 +109,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //Do something with the user input.
                   },
                   onTap: () {
+                    checkFullName();
                     setState(() {
                       _emailInitColor = Colors.lightBlueAccent;
                     });
@@ -126,6 +128,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   onTap: () {
                     setState(() {
+                      checkEmail();
                       _telephoneNumberInitColor = Colors.lightBlueAccent;
                     });
                   },
@@ -144,6 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //Do something with the user input.
                   },
                   onTap: () {
+                    checkTelephone();
                     setState(() {
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
@@ -279,7 +283,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  checkValidity() {
+  bool checkValidity() {
     int flag = 0;
     //TODO : add more validation
     if (_usernameController.text.isEmpty) {
@@ -371,7 +375,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   //form validation methods
 
-  checkPasswordMatch() {
+  bool checkPasswordMatch() {
     bool isPWEmpty = false;
     bool isPWCEmpty = false;
     if (_passwordController.text.isEmpty) {
@@ -406,21 +410,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Password Mismatch",
           "Confirmation password did not match with your password");
       return false;
-    } else {
-      _confirmPasswordInitColor = Colors.blueAccent;
-      _passwordInitColor = Colors.blueAccent;
     }
+    _confirmPasswordInitColor = Colors.blueAccent;
+    _passwordInitColor = Colors.blueAccent;
+
+    return true;
   }
 
   checkUsername() {
     String username = _usernameController.text;
     if (username.length < 5 || username.length > 20) {
-      _usernameInitColor = Colors.redAccent.shade700;
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid Username",
           "username must contain at least 5 characters or a maximum 20 character");
       return;
     }
     if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid Username Format",
           "username can contain only alphanumeric characters");
       return;
@@ -431,11 +441,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String fullName = _fullNameController.text;
 
     if (fullName.length < 5 || fullName.length > 100) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid Full Name",
           "Full Name must contain at least 5 characters or a maximum of 100 characters");
       return;
     }
     if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid Full Name Format",
           "Full Name can only contain letters");
       return;
@@ -446,6 +462,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String email = _emailController.text;
     if (!validateMyInput(email,
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid Email", "Please enter a valid email");
       return;
     }
@@ -454,11 +473,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   checkTelephone() {
     String telephoneNumber = _telephoneNumberController.text;
     if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid telephone number",
           "telephone number must contain at least 9 characters or a maximum of 14 characters");
       return;
     }
     if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
       displayDialog(context, "Invalid telephone number Format",
           "Telephone Number can only contain '+' and numbers");
       return;
