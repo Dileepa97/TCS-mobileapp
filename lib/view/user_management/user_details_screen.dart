@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
@@ -15,7 +17,6 @@ var fileAPI = apiEndpoint + 'files/';
 
 class UserDetails extends StatefulWidget {
   static const String id = "user_details_screen";
-
   final User user;
 
   const UserDetails({
@@ -31,7 +32,6 @@ class _UserDetailsState extends State<UserDetails> {
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
-    print(user.profileImageURL);
     var vIcon = user.verified ? Icons.verified : Icons.cancel;
     var vIconColor = user.verified ? Colors.greenAccent : Colors.redAccent;
 
@@ -54,272 +54,306 @@ class _UserDetailsState extends State<UserDetails> {
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
-          child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Center(
-              child: Text(
-                user.fullName,
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 35.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 27.0,
-            ),
-            Center(
-              child: CircleAvatar(
-                radius: 90.0,
-                backgroundImage: user.profileImageURL == 'default.png'
-                    ? AssetImage('images/default.png')
-                    : NetworkImage(fileAPI + user.profileImageURL),
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Center(
-              child: Text(
-                user.username,
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  color: Colors.black87,
-                  fontSize: 20.0,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      user.title == null ? '' : user.title.name,
-                      style: TextStyle(
-                        fontFamily: 'Source Sans Pro',
-                        color: Colors.white70,
-                        fontSize: 20.0,
-                        letterSpacing: 2.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.0,
-              width: 150.0,
-              child: Divider(
-                color: Colors.lightBlueAccent.shade100,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _launchUrl("tel:${user.telephoneNumber}");
-              },
-              child: Card(
-                  margin:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.phone,
-                      color: Colors.green.shade900,
-                    ),
-                    title: Text(
-                      user.telephoneNumber,
-                      style: TextStyle(
-                        color: Colors.blueGrey.shade900,
-                        fontFamily: 'Source Sans Pro',
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  )),
-            ),
-            GestureDetector(
-              onTap: () {
-                var subject = "";
-                var body = "Dear " + user.fullName;
-                _launchUrl("mailto:${user.email}?subject=$subject&body=$body");
-              },
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.email,
-                    color: Colors.blue.shade900,
-                  ),
-                  title: Text(
-                    user.email,
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.blueGrey.shade900,
-                        fontFamily: 'Source Sans Pro'),
-                  ),
-                ),
-              ),
-            ),
+          child: FutureBuilder<dynamic>(
+              future: UserService.getLoggedInUser(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                User loggedUser;
 
-            //TODO:icons for delete verify un-verify assign roles
-            Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.admin_panel_settings,
-                            color: isAdmin ? Colors.white : Colors.black87,
-                            size: 35.0,
-                          ),
-                          onPressed: () async {
-                            if (isAdmin) {
-                              var confirmed =
-                                  await displayDowngradeAdminSureDialog(
-                                      context);
-                              if (confirmed) {
-                                bool success = await AdminService
-                                    .handleAdminRoleAssignment(
-                                        user.username, isAdmin);
-                                handleSuccess(success, context, user.id);
-                              }
-                            } else {
-                              var confirmed =
-                                  await displayUpliftToAdminSureDialog(context);
-                              if (confirmed) {
-                                bool success = await AdminService
-                                    .handleAdminRoleAssignment(
-                                        user.username, isAdmin);
-
-                                await handleSuccess(success, context, user.id);
-                              }
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.accessibility_new,
-                            color: isTeamLead ? Colors.white : Colors.black87,
-                            size: 35.0,
-                          ),
-                          onPressed: () async {
-                            if (isTeamLead) {
-                              var confirmed =
-                                  await displayDowngradeTeamLeadSureDialog(
-                                      context);
-                              if (confirmed) {
-                                bool success = await AdminService
-                                    .handleTeamLeadRoleAssignment(
-                                        user.username, isTeamLead);
-                                await handleSuccess(success, context, user.id);
-                              }
-                            } else {
-                              var confirmed =
-                                  await displayUpliftToTeamLeadSureDialog(
-                                      context);
-                              if (confirmed) {
-                                bool success = await AdminService
-                                    .handleTeamLeadRoleAssignment(
-                                        user.username, isTeamLead);
-                                await handleSuccess(success, context, user.id);
-                              }
-                            }
-                          },
-                        ),
-                        if (user.updated)
-                          IconButton(
-                            icon: Icon(
-                              Icons.update,
-                              color: Colors.black,
-                              size: 35.0,
+                if (snapshot.hasData) {
+                  loggedUser = snapshot.data;
+                  return Center(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Center(
+                          child: Text(
+                            user.fullName,
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 35.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                            onPressed: () async {
-                              //TODO : get update history and pass or give ID and pass
-                              UserHistory uh =
-                                  await UserService.fetchUserHistoryById(
-                                      user.id);
-
-                              // displayHistory(context, user, uh);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          UserUpdateTable(user, uh)));
-                            },
                           ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete_forever,
-                            color:
-                                user.verified ? Colors.black87 : Colors.white,
-                            size: 35.0,
-                          ),
-                          onPressed: () async {
-                            if (user.verified) {
-                              displayDialog(context, "Invalid Operation",
-                                  "Only un-verified users can be deleted");
-                            } else {
-                              var confirmed =
-                                  await displayDeleteUserSureDialog(context);
-
-                              if (confirmed) {
-                                bool success =
-                                    await AdminService.deleteUser(user.id);
-                                if (success) {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, UserManagementDashboard.id);
-                                } else {
-                                  operationFailed(context);
-                                }
-                              }
-                            }
-                          },
                         ),
-                        IconButton(
-                          icon: Icon(
-                            vIcon,
-                            color: vIconColor,
-                            size: 35.0,
+                        SizedBox(
+                          height: 27.0,
+                        ),
+                        Center(
+                          child: CircleAvatar(
+                            radius: 90.0,
+                            backgroundImage: user.profileImageURL ==
+                                    'default.png'
+                                ? AssetImage('images/default.png')
+                                : NetworkImage(fileAPI + user.profileImageURL),
                           ),
-                          onPressed: () async {
-                            var confirmed = await handleVerifySureDialog(
-                                context, user.verified);
-
-                            if (confirmed) {
-                              bool success =
-                                  await AdminService.handleUserVerification(
-                                      user.id, user.verified);
-                              await handleSuccess(success, context, user.id);
-                            }
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Center(
+                          child: Text(
+                            user.username,
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: Colors.black87,
+                              fontSize: 20.0,
+                              letterSpacing: 2.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  user.title == null ? '' : user.title.name,
+                                  style: TextStyle(
+                                    fontFamily: 'Source Sans Pro',
+                                    color: Colors.white70,
+                                    fontSize: 20.0,
+                                    letterSpacing: 2.5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                          width: 150.0,
+                          child: Divider(
+                            color: Colors.lightBlueAccent.shade100,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _launchUrl("tel:${user.telephoneNumber}");
                           },
+                          child: Card(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 25.0),
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.phone,
+                                  color: Colors.green.shade900,
+                                ),
+                                title: Text(
+                                  user.telephoneNumber,
+                                  style: TextStyle(
+                                    color: Colors.blueGrey.shade900,
+                                    fontFamily: 'Source Sans Pro',
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                              )),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            var subject = "";
+                            var body = "Dear " + user.fullName;
+                            _launchUrl(
+                                "mailto:${user.email}?subject=$subject&body=$body");
+                          },
+                          child: Card(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 25.0),
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.email,
+                                color: Colors.blue.shade900,
+                              ),
+                              title: Text(
+                                user.email,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.blueGrey.shade900,
+                                    fontFamily: 'Source Sans Pro'),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        //TODO:icons for delete verify un-verify assign roles
+                        Container(
+                          margin: EdgeInsets.all(15),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 40.0,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  if (loggedUser.highestRoleIndex > 2)
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.admin_panel_settings,
+                                        color: isAdmin
+                                            ? Colors.white
+                                            : Colors.black87,
+                                        size: 35.0,
+                                      ),
+                                      onPressed: () async {
+                                        if (isAdmin) {
+                                          var confirmed =
+                                              await displayDowngradeAdminSureDialog(
+                                                  context);
+                                          if (confirmed) {
+                                            bool success = await AdminService
+                                                .handleAdminRoleAssignment(
+                                                    user.username, isAdmin);
+                                            handleSuccess(
+                                                success, context, user.id);
+                                          }
+                                        } else {
+                                          var confirmed =
+                                              await displayUpliftToAdminSureDialog(
+                                                  context);
+                                          if (confirmed) {
+                                            bool success = await AdminService
+                                                .handleAdminRoleAssignment(
+                                                    user.username, isAdmin);
+
+                                            await handleSuccess(
+                                                success, context, user.id);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.accessibility_new,
+                                      color: isTeamLead
+                                          ? Colors.white
+                                          : Colors.black87,
+                                      size: 35.0,
+                                    ),
+                                    onPressed: () async {
+                                      if (isTeamLead) {
+                                        var confirmed =
+                                            await displayDowngradeTeamLeadSureDialog(
+                                                context);
+                                        if (confirmed) {
+                                          bool success = await AdminService
+                                              .handleTeamLeadRoleAssignment(
+                                                  user.username, isTeamLead);
+                                          await handleSuccess(
+                                              success, context, user.id);
+                                        }
+                                      } else {
+                                        var confirmed =
+                                            await displayUpliftToTeamLeadSureDialog(
+                                                context);
+                                        if (confirmed) {
+                                          bool success = await AdminService
+                                              .handleTeamLeadRoleAssignment(
+                                                  user.username, isTeamLead);
+                                          await handleSuccess(
+                                              success, context, user.id);
+                                        }
+                                      }
+                                    },
+                                  ),
+                                  if (user.updated)
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.update,
+                                        color: Colors.black,
+                                        size: 35.0,
+                                      ),
+                                      onPressed: () async {
+                                        //TODO : get update history and pass or give ID and pass
+                                        UserHistory uh = await UserService
+                                            .fetchUserHistoryById(user.id);
+
+                                        // displayHistory(context, user, uh);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserUpdateTable(user, uh)));
+                                      },
+                                    ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.delete_forever,
+                                      color: user.verified
+                                          ? Colors.black87
+                                          : Colors.white,
+                                      size: 35.0,
+                                    ),
+                                    onPressed: () async {
+                                      if (user.verified) {
+                                        displayDialog(
+                                            context,
+                                            "Invalid Operation",
+                                            "Only un-verified users can be deleted");
+                                      } else {
+                                        var confirmed =
+                                            await displayDeleteUserSureDialog(
+                                                context);
+
+                                        if (confirmed) {
+                                          bool success =
+                                              await AdminService.deleteUser(
+                                                  user.id);
+                                          if (success) {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(context,
+                                                UserManagementDashboard.id);
+                                          } else {
+                                            operationFailed(context);
+                                          }
+                                        }
+                                      }
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      vIcon,
+                                      color: vIconColor,
+                                      size: 35.0,
+                                    ),
+                                    onPressed: () async {
+                                      var confirmed =
+                                          await handleVerifySureDialog(
+                                              context, user.verified);
+
+                                      if (confirmed) {
+                                        bool success = await AdminService
+                                            .handleUserVerification(
+                                                user.id, user.verified);
+                                        await handleSuccess(
+                                            success, context, user.id);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ],
-                    )
-                  ],
-                )),
-          ],
-        ),
-      )),
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Text('Error'),
+                  );
+                }
+              })),
     );
   }
 }
