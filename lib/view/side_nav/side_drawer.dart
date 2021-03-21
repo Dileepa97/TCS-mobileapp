@@ -6,7 +6,9 @@ import 'package:timecapturesystem/services/auth/auth_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
+import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
+import 'package:timecapturesystem/view/team/team_view.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
@@ -145,6 +147,23 @@ class _SideDrawerState extends State<SideDrawer> {
                   ListTile(
                     title: Row(
                       children: [
+                        Icon(Icons.people),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Team Management'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (BuildContext context)=>TeamView()
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
                         Icon(Icons.supervised_user_circle_outlined),
                         SizedBox(
                           width: 5.0,
@@ -170,6 +189,23 @@ class _SideDrawerState extends State<SideDrawer> {
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, TitleManagementScreen.id);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Icon(Icons.home),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Home'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (BuildContext context)=>HomePage()
+                      ));
                     },
                   ),
                   DividerBox(),

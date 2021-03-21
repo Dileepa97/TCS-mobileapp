@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/user/user_service.dart';
 
 import '../other/storage_service.dart';
 
@@ -38,6 +40,11 @@ class AuthService {
       await storage.write(key: "auth", value: authResponse.toJsonString());
       await storage.write(key: "jwt", value: authResponse.token);
 
+      http.Response user = await UserService.getLoggedInUserJSON();
+
+      if (user != null) {
+        await storage.write(key: "user", value: user.body);
+      }
       return 1;
     } else {
       return res.statusCode;
