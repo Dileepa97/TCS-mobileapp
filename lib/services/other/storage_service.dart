@@ -32,6 +32,11 @@ class TokenStorageService {
   }
 
   static Future<void> clearStorage() async {
-    storage.deleteAll();
+    var username = await storage.read(key: "username");
+    print(username);
+    await storage.deleteAll();
+    if (username != null) {
+      await storage.write(key: "username", value: username);
+    }
   }
 }

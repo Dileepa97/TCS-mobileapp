@@ -35,6 +35,7 @@ void main() async {
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
   var userData = await TokenStorageService.authDataOrEmpty;
+  var username = await storage.read(key: "username");
   if (userData != null) {
     DateTime dateTime = userData.tokenExpirationDate;
     if (dateTime.isBefore(DateTime.now())) {
@@ -42,12 +43,14 @@ void main() async {
       userData = null;
     }
   }
-  runApp(MyApp(userData));
+  runApp(MyApp(userData, username));
 }
 
 class MyApp extends StatefulWidget {
   final userData;
-  MyApp(this.userData);
+  final username;
+
+  MyApp(this.userData, this.username);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -55,6 +58,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   get userData => widget.userData;
+
+  get username => widget.username;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +115,9 @@ class _MyAppState extends State<MyApp> {
             //add routes that user can access without login
             routes = {
               '/': (context) => HomePage(),
-              LoginScreen.id: (context) => LoginScreen(),
+              LoginScreen.id: (context) => LoginScreen(
+                    username: username,
+                  ),
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
               RegistrationScreen.id: (context) => RegistrationScreen(),
               ForgotPasswordChangeScreen.id: (context) =>

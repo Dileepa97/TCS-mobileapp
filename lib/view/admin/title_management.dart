@@ -77,7 +77,7 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                       _titleInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_titleInitColor)
+                  decoration: inputDeco(_titleInitColor, _titleController)
                       .copyWith(hintText: 'Title Name'),
                 ),
                 SizedBox(

@@ -82,7 +82,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _usernameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_usernameInitColor)
+                  decoration: inputDeco(_usernameInitColor, _usernameController)
                       .copyWith(hintText: 'Username'),
                 ),
                 SizedBox(
@@ -99,7 +99,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _fullNameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_fullNameInitColor)
+                  decoration: inputDeco(_fullNameInitColor, _fullNameController)
                       .copyWith(hintText: 'Full Name'),
                 ),
                 SizedBox(
@@ -117,8 +117,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _emailInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration:
-                      inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
+                  decoration: inputDeco(_emailInitColor, _emailController)
+                      .copyWith(hintText: 'Email'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
@@ -135,13 +135,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _telephoneNumberInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_telephoneNumberInitColor)
+                  decoration: inputDeco(
+                          _telephoneNumberInitColor, _telephoneNumberController)
                       .copyWith(hintText: 'Telephone Number'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -157,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_passwordInitColor)
+                  decoration: inputDeco(_passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 Padding(
@@ -171,6 +173,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       }),
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -183,7 +186,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _confirmPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_confirmPasswordInitColor)
+                  decoration: inputDeco(
+                          _confirmPasswordInitColor, _confirmPasswordController)
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(

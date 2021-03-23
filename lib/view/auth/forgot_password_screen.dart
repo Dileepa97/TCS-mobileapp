@@ -57,8 +57,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       emailInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration:
-                      inputDeco(emailInitColor).copyWith(hintText: 'Email'),
+                  decoration: inputDeco(emailInitColor, _emailController)
+                      .copyWith(hintText: 'Email'),
                 ),
                 SizedBox(
                   height: 20.0,
