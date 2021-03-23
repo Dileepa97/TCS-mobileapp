@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
@@ -43,6 +44,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   titleModel.Title _title;
 
   var onProbationary = false;
+
+  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +147,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   autocorrect: false,
                   controller: _passwordController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    setState(() {
+                      password = value;
+                    });
                   },
                   onTap: () {
                     checkTelephone();
@@ -155,8 +160,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: inputDeco(_passwordInitColor)
                       .copyWith(hintText: 'Password'),
                 ),
-                SizedBox(
-                  height: spaceBetweenFields,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: FlutterPasswordStrength(
+                      backgroundColor: Colors.white,
+                      password: password,
+                      radius: 3,
+                      strengthCallback: (strength) {
+                        //callback function
+                      }),
                 ),
                 TextField(
                   obscureText: true,
