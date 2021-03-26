@@ -17,13 +17,15 @@ class _AbsentDayCardState extends State<AbsentDayCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       height: 90,
+      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        // border: Border(
+        //   bottom: BorderSide(
+        //     color: Colors.black12,
+        //     width: 1.0,
+        //   ),
+        // ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Row(

@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:timecapturesystem/services/other/storage_service.dart';
+import 'package:timecapturesystem/services/other/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as str;
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-
+import 'package:http_parser/http_parser.dart';
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
 
 import '../other/utils.dart';
@@ -16,7 +19,7 @@ var API = apiEndpoint + 'leaves';
 var apiAuth = DotEnv().env['API_Auth'].toString();
 String contentTypeHeader = 'application/json';
 
-final storage = FlutterSecureStorage();
+final storage = str.FlutterSecureStorage();
 Map<String, String> headers = {'Content-Type': 'application/json'};
 
 class LeaveService {
@@ -24,38 +27,100 @@ class LeaveService {
 
   //static const API = 'http://localhost:8080/api/leaves/';
 
-  Future<int> newLeave(
-      String leaveTitle,
-      String leaveType,
-      String leaveDescription,
-      String leaveStartDate,
-      String leaveEndDate,
-      String startDayMethod,
-      String endDayMethod,
-      String userId) async {
-    var body = jsonEncode({
-      "title": leaveTitle,
-      "type": leaveType,
-      "description": leaveDescription,
-      "startDate": leaveStartDate,
-      "endDate": leaveEndDate,
-      "startDayMethod": startDayMethod,
-      "endDayMethod": endDayMethod,
-      "userId": userId
-    });
+  ///Create new leave
+  Future<dynamic> newLeave(
+    String leaveTitle,
+    String leaveType,
+    String leaveDescription,
+    String leaveStartDate,
+    String leaveEndDate,
+    String startDayMethod,
+    String endDayMethod,
+  ) async {
+    try {
+      var authHeader = await generateAuthHeader();
 
-    var res = await http.post(API, body: body, headers: headers);
-    //print(res.statusCode);
+      var body = jsonEncode({
+        "title": leaveTitle,
+        "type": leaveType,
+        "description": leaveDescription,
+        "startDate": leaveStartDate,
+        "endDate": leaveEndDate,
+        "startDayMethod": startDayMethod,
+        "endDayMethod": endDayMethod,
+      });
 
-    if (res.statusCode == 201) {
-      // LeaveResponse leaveResponse =
-      //     LeaveResponse.fromJson(jsonDecode(res.body));
-      // storage.write(key: "leave", value: res.body);
-      //storage.write(key: "jwt", value: authResponse.token);
+      var res = await http.post(API, body: body, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
 
-      return 1;
-    } else {
-      return res.statusCode;
+      if (res.statusCode == 201) {
+        return 1;
+      } else {
+        return -1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  ///create new leave with attachement
+  Future<dynamic> newLeaveWithAttachment(
+    File file,
+    String leaveTitle,
+    String leaveType,
+    String leaveDescription,
+    String leaveStartDate,
+    String leaveEndDate,
+    String startDayMethod,
+    String endDayMethod,
+  ) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      Dio dio = Dio();
+
+      String fileType = file.path.split('.').last;
+      var id = await TokenStorageService.idOrEmpty;
+
+      String fileName = 'leave' +
+          id +
+          '@' +
+          DateTime.now().toIso8601String().replaceAll(RegExp("[-:.]*"), '') +
+          '.' +
+          fileType;
+
+      var body = jsonEncode({
+        "title": leaveTitle,
+        "type": leaveType,
+        "description": leaveDescription,
+        "startDate": leaveStartDate,
+        "endDate": leaveEndDate,
+        "startDayMethod": startDayMethod,
+        "endDayMethod": endDayMethod,
+      });
+
+      FormData formData = FormData.fromMap({
+        "leave": MultipartFile.fromString(body,
+            contentType: MediaType('application', 'json')),
+        "file": await MultipartFile.fromFile(file.path, filename: fileName)
+      });
+
+      Response res = await dio.post(API + '/with-upload',
+          data: formData,
+          options: Options(
+            headers: {HttpHeaders.authorizationHeader: authHeader},
+          ), onSendProgress: (int sent, int total) {
+        print("$sent $total");
+      });
+
+      if (res.statusCode == 201) {
+        return 1;
+      } else {
+        return -1;
+      }
+    } catch (e) {
+      return -1;
     }
   }
 
@@ -126,6 +191,7 @@ class LeaveService {
 
       var authHeader = await generateAuthHeader();
 
+      print(authHeader);
       var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -146,9 +212,8 @@ class LeaveService {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return 1;
     }
-    return null;
   }
 
   ///Get logged user leaves by year -  logged user
@@ -168,17 +233,14 @@ class LeaveService {
             (resBody as List).map((i) => Leave.fromJson(i)).toList();
 
         return _leaveList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
   ///Get leave by status(current year) -  admin
@@ -211,6 +273,65 @@ class LeaveService {
     return null;
   }
 
+  /// Check requested dates are existing -  user
+  Future<dynamic> leaveDateExist(
+      String leaveStartDate, String leaveEndDate) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      print(leaveEndDate);
+      var body =
+          jsonEncode({"startDate": leaveStartDate, "endDate": leaveEndDate});
+
+      http.Response res =
+          await http.post(API + '/date-available', body: body, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 204) {
+        return res.statusCode;
+      } else if (res.statusCode == 200) {
+        return res.body.characters.getRange(12).skipLast(2);
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  ///Check requested day count -user
+  Future<dynamic> checkLeaveDayCounts(
+    String leaveStartDate,
+    String startDayMethod,
+    String leaveEndDate,
+    String endDayMethod,
+  ) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var body = jsonEncode({
+        "startDate": leaveStartDate,
+        "startDayMethod": startDayMethod,
+        "endDate": leaveEndDate,
+        "endDayMethod": endDayMethod,
+      });
+
+      http.Response res =
+          await http.post(API + '/day-count-check', body: body, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        return res.body;
+      } else
+        return -1;
+    } catch (e) {
+      return -1;
+    }
+  }
+
   ///Get unavailable users in current date -  admin
   Future<dynamic> getUnavailableUsersToday(
       dynamic context, int year, int month, int day) async {
@@ -229,10 +350,9 @@ class LeaveService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
-        List<NotAvailableUsers> _userList = (resBody as List)
-            .map((i) => NotAvailableUsers.fromJson(i))
-            .toList();
+        NotAvailableUsers _userList = NotAvailableUsers.fromJson(resBody);
 
+        print('ok');
         return _userList;
       } else if (res.statusCode == 400) {
         return res.statusCode;
@@ -339,15 +459,46 @@ class LeaveService {
     }
   }
 
-  Future cancelLeave(String leaveId) async {
-    http.Response response = await http
-        .patch('http://192.168.8.169:8080/api/leaves/$leaveId/status/cancel');
-    if (response.statusCode == 202) {
-      //String data = response.body;
-      // print(data);
-      return (response.statusCode);
-    } else {
-      return (response.statusCode);
+  // Future cancelLeave(String leaveId) async {
+  //   http.Response response = await http
+  //       .patch('http://192.168.8.169:8080/api/leaves/$leaveId/status/cancel');
+  //   if (response.statusCode == 202) {
+  //     //String data = response.body;
+  //     // print(data);
+  //     return (response.statusCode);
+  //   } else {
+  //     return (response.statusCode);
+  //   }
+  // }
+
+  Future<dynamic> cancelLeave(String leaveId) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      // var params = {
+      //   'leaveId': '$leaveId',
+      //   'status': '$status',
+      //   'reason': '$reason'
+      // };
+
+      // var uri = Uri.http(apiAuth, '/api/leaves/change-status', params);
+
+      http.Response response =
+          await http.patch(API + '/cancel-leave/$leaveId', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (response.statusCode == 200) {
+        //String data = response.body;
+        //print('$status');
+        return (response.statusCode);
+        //return jsonDecode(data);
+      } else {
+        return (response.statusCode);
+      }
+    } catch (e) {
+      //displayDialog(context, "Error", e.toString());
     }
   }
 }

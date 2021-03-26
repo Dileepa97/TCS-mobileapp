@@ -13,33 +13,35 @@ class CustomDropDown extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // Text(
-        //   keyString + ' : ',
-        //   style: TextStyle(
-        //     fontSize: 14,
-        //     fontWeight: FontWeight.w600,
-        //   ),
-        // ),
         DropdownButton<String>(
           value: item,
+
+          ///hint text
           hint: Text(
             keyString,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 15,
               color: Colors.blue[700],
+              fontFamily: 'Source Sans Pro',
             ),
           ),
+
+          ///button icon
           icon: Icon(
             Icons.keyboard_arrow_down,
             color: Colors.blue[700],
           ),
           iconSize: 20,
-          // elevation: 16,
+
+          ///underline
           underline: Container(
-            // height: 4,
             color: Colors.white,
           ),
+
+          ///onchange
           onChanged: onChanged,
+
+          ///drop down lists
           items: items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -47,9 +49,9 @@ class CustomDropDown extends StatelessWidget {
                 value.substring(0, 1) +
                     value.substring(1).toLowerCase().replaceAll('_', '\n'),
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   color: Colors.blue[700],
-                  fontSize: 18,
+                  fontSize: 17,
                   fontFamily: 'Source Sans Pro',
                 ),
               ),

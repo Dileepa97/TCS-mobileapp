@@ -8,16 +8,18 @@ import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/get_all_leaves_screen.dart';
+
 import 'package:timecapturesystem/view/lms/admin_leave/get_requested_leaves_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/leave_by_month.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_all_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/today_unavailable_users.dart';
-import 'package:timecapturesystem/view/lms/user_leave/leave_request_first_screen.dart';
-import 'package:timecapturesystem/view/lms/user_leave/leave_request_main_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_confirmation_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_first_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_main_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/userLeave.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_details_page.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
@@ -26,7 +28,9 @@ import 'managers/orientation.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/homePage.dart';
-import 'view/lms/admin_leave/get_leaves_screen.dart';
+import 'view/lms/admin_leave/admin_user_leave_detail_screen.dart';
+import 'view/lms/admin_leave/change_allowed_days_screen.dart';
+
 import 'view/lms/admin_leave/week_unavailable_users.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
@@ -85,26 +89,32 @@ class _MyAppState extends State<MyApp> {
               ForgotPasswordChangeScreen.id: (context) =>
                   ForgotPasswordChangeScreen(),
               NotificationCenter.id: (context) => NotificationCenter(),
+
               '/userLeave': (context) => UserLeave(),
-              '/leaveRequest': (context) => LeaveRequest(),
+              LeaveRequestMainScreen.id: (context) => LeaveRequestMainScreen(),
               //  build the LeaveRequest widget.
-              '/ownLeave': (context) => OwnLeaves(),
+              OwnUserLeaves.id: (context) => OwnUserLeaves(),
               //  build the LeaveRequest widget.
-              '/allLeaves': (context) => AllLeave(),
+
               //  build the LeaveRequest widget.
               // build the Register widget.
-              '/requestFirstScreen': (context) => FirstRequestScreen(),
+              FirstRequestScreen.id: (context) => FirstRequestScreen(),
               '/allRequestedLeaves': (context) => AllRequestedLeaves(),
               '/availableUserLeaves': (context) => UserLeaveAvailable(),
-              '/adminLeaveDashboard': (context) => AdminLeaveDashBoard(),
-              '/adminGetLeaves': (context) => AdminGetLeaves(),
-              '/adminLeaveByMonth': (context) => AdminLeaveByMonth(),
-              '/userLeaveDashboard': (context) => UserLeaveDashboard(),
+              RequestConfirmationScreen.id: (context) =>
+                  RequestConfirmationScreen(),
+              //Admin leaves
+              AdminLeaveDashBoard.id: (context) => AdminLeaveDashBoard(),
+              AdminAllLeaves.id: (context) => AdminAllLeaves(),
+              UserLeaveDashboard.id: (context) => UserLeaveDashboard(),
+              MoreLeaveDetails.id: (context) => MoreLeaveDetails(),
               '/todayUnavailableUserScreen': (context) =>
                   TodayUnavailableUserScreen(),
               '/weekUnavailableUserScreen': (context) =>
                   WeekUnavailableUserScreen(),
-              '/adminLeaveDetailsPage': (context) => LeaveDetailsPage(),
+              UserLeaveDetailsPage.id: (context) => UserLeaveDetailsPage(),
+              AdminLeaveDetailsPage.id: (context) => AdminLeaveDetailsPage(),
+              ChangeAllowedDays.id: (context) => ChangeAllowedDays(),
             };
           } else {
             print("user not exist");

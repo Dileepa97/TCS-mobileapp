@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/day_amount.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
+import 'package:timecapturesystem/models/lms/leave_type.dart';
 import 'package:timecapturesystem/view/lms/check_leaves.dart';
 
 import 'divider_box.dart';
@@ -19,17 +20,14 @@ class LeaveOptionBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        // scrollDirection: Axis.horizontal,
         itemCount: list.length,
         itemBuilder: (context, index) {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.black12,
-                  width: 4.0,
-                ),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
               color: Colors.white,
             ),
             child: Column(
@@ -37,76 +35,47 @@ class LeaveOptionBuilder extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ///Leave type
-                      Row(
-                        children: [
-                          ///Icon
-                          CircleAvatar(
-                            child: CheckType(type: list[index].type).typeIcon(),
-                            radius: 14,
-                            backgroundColor: Colors.purple[900],
-                            foregroundColor: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-
-                          ///Type text
-                          Text(
-                            EnumToString.convertToString(list[index].type)
-                                    .substring(0, 1) +
-                                EnumToString.convertToString(list[index].type)
-                                    .substring(1)
-                                    .toLowerCase()
-                                    .replaceAll('_', ' '),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.purple[900],
-                              fontFamily: 'Source Sans Pro',
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
+                      ///Icon
+                      CircleAvatar(
+                        child: CheckType(type: list[index].type).typeIcon(),
+                        radius: 14,
+                        backgroundColor: Colors.purple[900],
+                        foregroundColor: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
                       ),
 
-                      GestureDetector(
-                        child: Text(
-                          'Request Leave',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
+                      ///Type text
+                      Text(
+                        EnumToString.convertToString(list[index].type)
+                                .substring(0, 1) +
+                            EnumToString.convertToString(list[index].type)
+                                .substring(1)
+                                .toLowerCase()
+                                .replaceAll('_', ' '),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple[900],
+                          fontFamily: 'Source Sans Pro',
+                          fontSize: 20,
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/requestFirstScreen');
-                        },
                       ),
                     ],
                   ),
                 ),
-                DividerBox(),
+
+                ///pie chart
                 Container(
                   height: 250.0,
+                  width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: list[index].allowedDays != 0.0
-                        ? DonutPieChart(
-                            _createChartData(list[index]),
-                            animate: true,
-                          )
-                        : Center(
-                            child: Text(EnumToString.convertToString(
-                                        list[index].type)
-                                    .substring(0, 1) +
-                                EnumToString.convertToString(list[index].type)
-                                    .substring(1)
-                                    .toLowerCase()
-                                    .replaceAll('_', ' ') +
-                                ' does not has any allowed leave yet.'),
-                          ),
+                    child: DonutPieChart(
+                      _createChartData(list[index]),
+                      animate: true,
+                    ),
                   ),
                 ),
               ],
@@ -115,20 +84,62 @@ class LeaveOptionBuilder extends StatelessWidget {
         });
   }
 
+  ///create chart data
   List<charts.Series<DayAmount, String>> _createChartData(LeaveOption option) {
-    double _availableDays = option.allowedDays -
-        (option.approvedDays + option.requestedDays + option.takenDays);
-    final data = [
-      new DayAmount(
-          "Available", _availableDays, charts.Color(r: 89, g: 255, b: 89)),
-      new DayAmount("Requested", option.requestedDays,
-          charts.Color(r: 89, g: 216, b: 255)),
-      new DayAmount(
-          "Approved", option.approvedDays, charts.Color(r: 255, g: 166, b: 89)),
-      new DayAmount(
-          "Taken", option.takenDays, charts.Color(r: 255, g: 89, b: 100)),
-    ];
+    dynamic data;
 
+    ///for extended_annual, extended_medical, and Lieu leaves
+    if (option.type == LeaveType.EXTENDED_ANNUAL ||
+        option.type == LeaveType.EXTENDED_MEDICAL ||
+        option.type == LeaveType.LIEU) {
+      double _availableDays = option.allowedDays -
+          (option.approvedDays + option.requestedDays + option.takenDays);
+
+      ///if available days exist
+      if (_availableDays > 0) {
+        data = [
+          new DayAmount(
+              "Available", _availableDays, charts.Color(r: 89, g: 255, b: 89)),
+          new DayAmount("Requested", option.requestedDays,
+              charts.Color(r: 89, g: 216, b: 255)),
+          new DayAmount("Approved", option.approvedDays,
+              charts.Color(r: 255, g: 166, b: 89)),
+          new DayAmount(
+              "Taken", option.takenDays, charts.Color(r: 255, g: 89, b: 100)),
+        ];
+      }
+
+      ///if available days not exist
+      else {
+        data = [
+          new DayAmount("Requested", option.requestedDays,
+              charts.Color(r: 89, g: 216, b: 255)),
+          new DayAmount("Approved", option.approvedDays,
+              charts.Color(r: 255, g: 166, b: 89)),
+          new DayAmount(
+              "Taken", option.takenDays, charts.Color(r: 255, g: 89, b: 100)),
+        ];
+      }
+    }
+
+    ///for another leave types
+    else {
+      double _availableDays = option.allowedDays -
+          (option.approvedDays + option.requestedDays + option.takenDays);
+
+      data = [
+        new DayAmount(
+            "Available", _availableDays, charts.Color(r: 89, g: 255, b: 89)),
+        new DayAmount("Requested", option.requestedDays,
+            charts.Color(r: 89, g: 216, b: 255)),
+        new DayAmount("Approved", option.approvedDays,
+            charts.Color(r: 255, g: 166, b: 89)),
+        new DayAmount(
+            "Taken", option.takenDays, charts.Color(r: 255, g: 89, b: 100)),
+      ];
+    }
+
+    ///build data
     return [
       new charts.Series<DayAmount, String>(
         id: 'dayAmount',

@@ -17,25 +17,20 @@ class _AbsentUserDetailScreenState extends State<AbsentUserDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.white,
+      backgroundColor: Colors.lightBlue.shade800,
 
       ///App Bar
       appBar: AppBar(
         title: Text(
           DateFormat.yMMMMd().format(widget.item.date),
           style: TextStyle(
-              color: Colors.blue[800],
+              // color: Colors.blue[800],
               fontFamily: 'Source Sans Pro',
               fontSize: 20),
         ),
-        leading: BackButton(
-          color: Colors.blue[800],
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
+        centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
       ),
 
       body: Column(

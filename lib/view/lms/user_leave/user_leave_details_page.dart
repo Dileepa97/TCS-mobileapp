@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
-import 'package:timecapturesystem/components/leave_component/date_format.dart';
+
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
@@ -13,7 +17,11 @@ import 'package:timecapturesystem/services/LMS/leave_service.dart';
 
 import '../check_leaves.dart';
 
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+var API = apiEndpoint + 'files/';
+
 class UserLeaveDetailsPage extends StatefulWidget {
+  static const String id = 'user_leave_details_page';
   UserLeaveDetailsPage({this.item});
   final Leave item;
 
@@ -24,11 +32,68 @@ class UserLeaveDetailsPage extends StatefulWidget {
 class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
   LeaveService _leaveService = LeaveService();
 
-  DateToString date = DateToString();
-
   ShowAlertDialog _dialog = ShowAlertDialog();
 
+  bool downloading = false;
+
+  String progress = '0';
+
+  bool isDownloaded = false;
+
   bool _spin = false;
+
+  // String uri = API +
+  //     '';
+
+  String filename;
+
+  Future<void> downloadFile(uri, fileName) async {
+    setState(() {
+      downloading = true;
+    });
+
+    String savePath = await getFilePath(fileName);
+
+    Dio dio = Dio();
+
+    dio.download(
+      uri,
+      savePath,
+      onReceiveProgress: (rcv, total) {
+        print(
+            'received: ${rcv.toStringAsFixed(0)} out of total: ${total.toStringAsFixed(0)}');
+
+        setState(() {
+          progress = ((rcv / total) * 100).toStringAsFixed(0);
+        });
+
+        if (progress == '100') {
+          setState(() {
+            isDownloaded = true;
+          });
+        } else if (double.parse(progress) < 100) {}
+      },
+      deleteOnError: true,
+    ).then((_) {
+      setState(() {
+        if (progress == '100') {
+          isDownloaded = true;
+        }
+
+        downloading = false;
+      });
+    });
+  }
+
+  Future<String> getFilePath(uniqueFileName) async {
+    String path = '';
+
+    // Directory dir = await getApplicationDocumentsDirectory();
+
+    // path = '${dir.path}/$uniqueFileName.pdf';
+
+    return path;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,6 +349,62 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
                                 ),
                               )
                             : SizedBox(),
+
+                        ///attachment url
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.attachmentURL != ""
+                            ? SizedBox(
+                                height: 30,
+                                child: Divider(
+                                  color: Colors.black12,
+                                  thickness: 1,
+                                ),
+                              )
+                            : SizedBox(),
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.attachmentURL != ""
+                            ? DetailRow(
+                                keyString: 'Attachment', valueString: '')
+                            : SizedBox(),
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.rejectReason != ""
+                            ? Column(
+                                children: [
+                                  Text(
+                                    this.widget.item.attachmentURL,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'Source Sans Pro',
+                                      color: Colors.blueGrey[600],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      downloadFile(
+                                          API + this.widget.item.attachmentURL,
+                                          this
+                                              .widget
+                                              .item
+                                              .attachmentURL
+                                              .split('.')
+                                              .first);
+                                    },
+                                    child: const Text("Download file"),
+                                  ),
+                                  Text('$progress%'),
+                                  isDownloaded
+                                      ? Text(
+                                          'File Downloaded! You can see your file in the application\'s directory',
+                                        )
+                                      : Text(
+                                          'Click the FloatingActionButton to start Downloading!'),
+                                ],
+                              )
+                            : SizedBox(),
+
                         SizedBox(
                           height: 30,
                           child: Divider(
@@ -305,10 +426,14 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
                                       //_spin = true;
                                       int code = await _leaveService
                                           .cancelLeave(this.widget.item.id);
-                                      if (code == 202) {
+                                      if (code == 200) {
                                         //_spin = false;
-                                        Navigator.pushNamed(
-                                            context, '/ownLeave');
+                                        // Navigator.pushNamed(
+                                        //     context, '/ownLeave');
+                                        var count = 0;
+                                        Navigator.popUntil(context, (route) {
+                                          return count++ == 3;
+                                        });
                                       }
                                     },
                                     onPressedNo: () {

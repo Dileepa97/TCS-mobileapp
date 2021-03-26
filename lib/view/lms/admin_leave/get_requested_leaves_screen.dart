@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:numberpicker/numberpicker.dart';
 import 'package:timecapturesystem/components/leave_component/custom_drop_down.dart';
-import 'package:timecapturesystem/components/leave_component/list_view_builder.dart';
+import 'package:timecapturesystem/components/leave_component/leave_list_view_builder.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/lms/leave_response.dart';
 
@@ -35,30 +35,24 @@ class _AllRequestedLeavesState extends State<AllRequestedLeaves> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text(
-          'Leaves by Status',
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: BackButton(
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
+        title: Text('Leave by status'),
+        centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
       ),
       body: Column(
         children: [
-          Divider(
-            height: 1,
-          ),
           Container(
             height: 50,
-            width: double.infinity,
-            color: Colors.white,
+            // width: double.infinity,
+            // color: Colors.white,
+            margin: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -18,20 +18,12 @@ class _WeekUnavailableUserScreen extends State<WeekUnavailableUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text(
-          'User Unavailability Week',
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: BackButton(
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
+        title: Text('Week absent users'),
+        centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
       ),
       body: Column(
         children: [

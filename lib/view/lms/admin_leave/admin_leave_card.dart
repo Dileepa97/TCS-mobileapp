@@ -2,14 +2,15 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/user_data.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import '../check_leaves.dart';
 
+///done
 var fileAPI = apiEndpoint + 'files/';
 
 class AdminLeaveCard extends StatefulWidget {
-  AdminLeaveCard({this.item});
   final Leave item;
+  AdminLeaveCard({this.item});
 
   @override
   _AdminLeaveCardState createState() => _AdminLeaveCardState();
@@ -19,26 +20,28 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-      height: 90,
+      height: 100,
+      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Row(
         children: <Widget>[
+          ///profile image
           UserProfileImage(userId: widget.item.userId, height: 60, width: 60),
+
+          ///details
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  ///user name
                   UserNameText(userId: widget.item.userId, fontSize: 15),
+
+                  ///start date
                   Text(
                     'Start date : ' +
                         widget.item.startDate
@@ -49,10 +52,12 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
                       fontFamily: 'Source Sans Pro',
                     ),
                   ),
+
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        ///leave type
                         Text(
                           EnumToString.convertToString(widget.item.type)
                                   .substring(0, 1) +
@@ -61,12 +66,13 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
                                   .toLowerCase()
                                   .replaceAll('_', '\n'),
                           style: TextStyle(
-                            // fontWeight: FontWeight.bold,
                             color: Colors.purple[900],
                             fontFamily: 'Source Sans Pro',
                             fontSize: 15,
                           ),
                         ),
+
+                        ///leave status
                         Text(
                           EnumToString.convertToString(widget.item.status)
                                   .substring(0, 1) +
@@ -80,6 +86,8 @@ class _AdminLeaveCardState extends State<AdminLeaveCard> {
                                 .statusColor(),
                           ),
                         ),
+
+                        ///icon
                         CircleAvatar(
                           child: CheckType(type: widget.item.type).typeIcon(),
                           radius: 15,

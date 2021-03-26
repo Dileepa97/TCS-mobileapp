@@ -7,7 +7,7 @@ import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/lms/leave_method.dart';
 import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/user_data.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/view/lms/check_leaves.dart';
 
 class AbsentUserCard extends StatefulWidget {
@@ -25,13 +25,15 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       height: 150,
+      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        // border: Border(
+        //   bottom: BorderSide(
+        //     color: Colors.black12,
+        //     width: 1.0,
+        //   ),
+        // ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Column(
@@ -122,7 +124,7 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LeaveDetailsPage(item: data),
+                        builder: (context) => AdminLeaveDetailsPage(item: data),
                       ),
                     );
                   },

@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 
-class DetailRow extends StatelessWidget {
+class DetailColumn extends StatelessWidget {
   final String keyString;
   final String valueString;
 
-  const DetailRow({Key key, this.keyString, this.valueString})
-      : super(key: key);
+  const DetailColumn({
+    Key key,
+    this.keyString,
+    this.valueString,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
         Text(
-          '${this.keyString} : ',
+          '${this.keyString}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Source Sans Pro',
-            fontSize: 16,
+            fontSize: 17,
           ),
         ),
+        SizedBox(height: 5),
         Text(
           '${this.valueString}',
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
-            fontSize: 17,
+            fontSize: 16,
           ),
-        )
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }

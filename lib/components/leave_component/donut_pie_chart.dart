@@ -13,14 +13,14 @@ class DonutPieChart extends StatelessWidget {
       seriesList,
       animate: animate,
       defaultRenderer: new charts.ArcRendererConfig(
-        arcWidth: 20,
+        arcWidth: 30,
         arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-            showLeaderLines: false,
-            outsideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 12),
-            // insideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
-            labelPosition: charts.ArcLabelPosition.outside,
-          )
+          // new charts.ArcLabelDecorator(
+          //   showLeaderLines: false,
+          //   outsideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 12),
+          //   // insideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
+          //   labelPosition: charts.ArcLabelPosition.outside,
+          // )
         ],
       ),
       behaviors: [

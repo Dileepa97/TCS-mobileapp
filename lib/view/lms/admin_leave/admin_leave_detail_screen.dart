@@ -2,7 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/button_row.dart';
-import 'package:timecapturesystem/components/leave_component/date_format.dart';
+
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/models/lms/day_amount.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
@@ -12,22 +12,22 @@ import 'package:timecapturesystem/services/LMS/leave_service.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:timecapturesystem/view/lms/admin_leave/user_data.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 
 import '../check_leaves.dart';
+import 'admin_user_leave_detail_screen.dart';
 
-class LeaveDetailsPage extends StatefulWidget {
-  LeaveDetailsPage({this.item});
+class AdminLeaveDetailsPage extends StatefulWidget {
+  static const String id = 'admin_leave_details_page';
+  AdminLeaveDetailsPage({this.item});
   final Leave item;
 
   @override
-  _LeaveDetailsPageState createState() => _LeaveDetailsPageState();
+  _AdminLeaveDetailsPageState createState() => _AdminLeaveDetailsPageState();
 }
 
-class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
+class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
   LeaveService _leaveService = LeaveService();
-
-  DateToString date = DateToString();
 
   ShowAlertDialog _dialog = ShowAlertDialog();
 
@@ -57,10 +57,10 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
 
       ///App Bar
       appBar: AppBar(
-        title: Text(
-          'Leave',
-          style: TextStyle(color: Colors.black),
-        ),
+        // title: Text(
+        //   'Leave',
+        //   style: TextStyle(color: Colors.black),
+        // ),
         leading: BackButton(
           color: Colors.black,
           onPressed: () {
@@ -337,6 +337,28 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                             ),
                           ),
 
+                          GestureDetector(
+                              child: Text(
+                                'More Details',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontFamily: 'Source Sans Pro',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {
+                                // Navigator.pushNamed(
+                                //     context, MoreLeaveDetails.id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MoreLeaveDetails(
+                                      userId: this.widget.item.userId,
+                                    ),
+                                  ),
+                                );
+                              }),
+
                           ///Buttons
                           this.widget.item.status == LeaveStatus.REQUESTED
                               ? TwoButtonRow(
@@ -356,11 +378,14 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                           //     context, '/adminGetLeaves');
                                           // ModalRoute.withName(
                                           //     '/adminGetLeaves');
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  '/userLeave',
-                                                  (Route<dynamic> route) =>
-                                                      false);
+                                          // Navigator.of(context)
+                                          //     .pushNamedAndRemoveUntil(
+                                          //         '/userLeave',
+                                          //         (Route<dynamic> route) =>
+                                          //             false);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
                                         }
                                       },
                                       onPressedNo: () {
@@ -381,11 +406,14 @@ class _LeaveDetailsPageState extends State<LeaveDetailsPage> {
                                                 'REJECTED',
                                                 reason);
                                         if (code == 200) {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  '/userLeave',
-                                                  (Route<dynamic> route) =>
-                                                      false);
+                                          // Navigator.of(context)
+                                          //     .pushNamedAndRemoveUntil(
+                                          //         '/userLeave',
+                                          //         (Route<dynamic> route) =>
+                                          //             false);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
                                         }
                                       },
                                       onPressedNo: () {

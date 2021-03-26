@@ -11,17 +11,43 @@ class ShowAlertDialog {
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) => AlertDialog(
-          title: Text('$title', style: TextStyle(color: color)),
+          ///title text
+          title: Text('$title',
+              style: TextStyle(
+                color: color,
+                fontSize: 18,
+                fontFamily: 'Source Sans Pro',
+              )),
+
+          ///dialog text
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('$body ', style: TextStyle(color: color)),
+                Text(
+                  '$body ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w100,
+                    color: color,
+                    // fontSize: 17,
+                    // fontFamily: 'Source Sans Pro',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
+
+          ///dialog button action
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok', style: TextStyle(color: color)),
+              child: Text(
+                'Ok',
+                style: TextStyle(
+                  color: color,
+                  fontSize: 16,
+                  fontFamily: 'Source Sans Pro',
+                ),
+              ),
               onPressed: onPressed,
             ),
           ],

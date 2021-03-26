@@ -14,8 +14,6 @@ class LeaveListViewBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(list);
-    // print(isUserLeave);
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -35,7 +33,8 @@ class LeaveListViewBuilder extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LeaveDetailsPage(item: list[index]),
+                  builder: (context) =>
+                      AdminLeaveDetailsPage(item: list[index]),
                 ),
               );
             }

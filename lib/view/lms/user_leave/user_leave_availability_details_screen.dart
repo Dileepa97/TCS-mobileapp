@@ -99,7 +99,7 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
               child = Center(child: Text("Please wait..."));
             }
 
-            return Expanded(child: child);
+            return child;
           },
         ),
       ]),
