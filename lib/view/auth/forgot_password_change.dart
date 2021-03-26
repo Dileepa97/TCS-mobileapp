@@ -62,13 +62,14 @@ class _ForgotPasswordChangeScreenState
                       codeInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration:
-                      inputDeco(codeInitColor).copyWith(hintText: 'Code'),
+                  decoration: inputDeco(codeInitColor, _codeController)
+                      .copyWith(hintText: 'Code'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -81,13 +82,14 @@ class _ForgotPasswordChangeScreenState
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_passwordInitColor)
+                  decoration: inputDeco(_passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -100,7 +102,8 @@ class _ForgotPasswordChangeScreenState
                       _confirmPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_confirmPasswordInitColor)
+                  decoration: inputDeco(
+                          _confirmPasswordInitColor, _confirmPasswordController)
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(

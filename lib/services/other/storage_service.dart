@@ -13,12 +13,6 @@ class TokenStorageService {
     return jwt;
   }
 
-  // static Future<dynamic> get expirationDateTime async {
-  //   var eDate = await storage.read(key: "expiration");
-  //   if (eDate == null) return null;
-  //   return DateTime.parse(eDate);
-  // }
-
   static Future<AuthResponse> get authDataOrEmpty async {
     var authData = await storage.read(key: "auth");
     if (authData == null) return null;
@@ -38,6 +32,11 @@ class TokenStorageService {
   }
 
   static Future<void> clearStorage() async {
-    storage.deleteAll();
+    var username = await storage.read(key: "username");
+    print(username);
+    await storage.deleteAll();
+    if (username != null) {
+      await storage.write(key: "username", value: username);
+    }
   }
 }

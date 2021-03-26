@@ -22,6 +22,7 @@ import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard.dart'
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_details_page.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
+import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
 import 'managers/orientation.dart';
@@ -39,6 +40,7 @@ void main() async {
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
   var userData = await TokenStorageService.authDataOrEmpty;
+  var username = await storage.read(key: "username");
   if (userData != null) {
     DateTime dateTime = userData.tokenExpirationDate;
     if (dateTime.isBefore(DateTime.now())) {
@@ -46,12 +48,14 @@ void main() async {
       userData = null;
     }
   }
-  runApp(MyApp(userData));
+  runApp(MyApp(userData, username));
 }
 
 class MyApp extends StatefulWidget {
   final userData;
-  MyApp(this.userData);
+  final username;
+
+  MyApp(this.userData, this.username);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -59,6 +63,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   get userData => widget.userData;
+
+  get username => widget.username;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +75,6 @@ class _MyAppState extends State<MyApp> {
           var initialRoute;
           if (userData != null) {
             //TODO: check if expired and resolve bug
-            print("user exist");
             initialRoute = '/';
             routes = {
               //add routes that user can access only after logging
@@ -117,12 +122,13 @@ class _MyAppState extends State<MyApp> {
               ChangeAllowedDays.id: (context) => ChangeAllowedDays(),
             };
           } else {
-            print("user not exist");
             initialRoute = LoginScreen.id;
             //add routes that user can access without login
             routes = {
               '/': (context) => HomePage(),
-              LoginScreen.id: (context) => LoginScreen(),
+              LoginScreen.id: (context) => LoginScreen(
+                  // username: username,
+                  ),
               ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
               RegistrationScreen.id: (context) => RegistrationScreen(),
               ForgotPasswordChangeScreen.id: (context) =>

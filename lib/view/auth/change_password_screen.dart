@@ -63,8 +63,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _oldPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_oldPasswordInitColor)
-                      .copyWith(hintText: 'Current Password'),
+                  decoration:
+                      inputDeco(_oldPasswordInitColor, _oldPasswordController)
+                          .copyWith(hintText: 'Current Password'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
@@ -82,7 +83,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_passwordInitColor)
+                  decoration: inputDeco(_passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 SizedBox(
@@ -101,7 +102,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _confirmPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_confirmPasswordInitColor)
+                  decoration: inputDeco(
+                          _confirmPasswordInitColor, _confirmPasswordController)
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(

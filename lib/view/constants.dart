@@ -18,8 +18,15 @@ const kMessageContainerDecoration = BoxDecoration(
   ),
 );
 
-inputDeco(Color color) {
+inputDeco(Color color, TextEditingController controller) {
   return InputDecoration(
+    suffixIcon: IconButton(
+      onPressed: controller.clear,
+      icon: Icon(
+        Icons.highlight_remove,
+        color: Colors.red,
+      ),
+    ),
     hintText: 'hint Text',
     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
     border: OutlineInputBorder(

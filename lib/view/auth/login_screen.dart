@@ -10,15 +10,25 @@ import '../constants.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key, this.username}) : super(key: key);
   static const String id = "login_screen";
+  final String username;
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(this.username);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  TextEditingController _usernameController;
   final TextEditingController _passwordController = TextEditingController();
+
+  _LoginScreenState(String username) {
+    if (username != null) {
+      this._usernameController = TextEditingController(text: username);
+      print(username);
+    } else
+      _usernameController = TextEditingController();
+  }
 
   bool spin = false;
 
@@ -67,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       usernameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(usernameInitColor)
+                  decoration: inputDeco(usernameInitColor, _usernameController)
                       .copyWith(hintText: 'Username'),
                 ),
                 SizedBox(
@@ -84,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(passwordInitColor)
+                  decoration: inputDeco(passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 SizedBox(
@@ -105,7 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           passwordInitColor = Colors.redAccent;
                         });
                       }
-
                       return;
                     }
 

@@ -15,24 +15,10 @@ void displayDialog(context, title, text) => showDialog(
             )),
     );
 
-void displayRegSuccessDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
-        actions: [
-          FlatButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+void displayRegSuccessDialog(context) => displayDialog(
+    context,
+    "Registration Success",
+    "You have successfully registered to time capture system, please check your email for confirmation link");
 
 void displayPWDResetSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
@@ -136,7 +122,10 @@ Future<bool> displayConfirmationBox(context, content) async {
             content: Text(content),
             actions: [
               FlatButton(
-                child: Text("Confirm"),
+                child: Text(
+                  "Confirm",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
                 onPressed: () {
                   confirm = true;
                   Navigator.pop(context);
@@ -145,6 +134,7 @@ Future<bool> displayConfirmationBox(context, content) async {
               FlatButton(
                 child: Text(
                   "Cancel",
+                  style: TextStyle(color: Colors.redAccent),
                 ),
                 onPressed: () {
                   confirm = false;
