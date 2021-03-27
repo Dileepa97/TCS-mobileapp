@@ -5,6 +5,7 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 
+import '../constants.dart';
 import 'pick_image_screen.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
@@ -174,7 +175,7 @@ class MapScreenState extends State<EditProfile>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
+                                      Text(
                                         'Username',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -187,32 +188,34 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration()
-                                          .copyWith(
-                                              hintText: _usernameHintText),
-                                      enabled: !_status,
-                                      autofocus: !_status,
-                                      controller: _usernameController,
+                                  Flexible(
+                                    child: TextField(
+                                      decoration: inputDecoForEdit(
+                                          _usernameInitColor,
+                                          _usernameController,
+                                          _usernameHintText,
+                                          _status),
+                                      onChanged: (value) {
+                                        checkUsername(value);
+                                      },
                                     ),
-                                  ),
+                                  )
                                 ],
                               )),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
+                                      Text(
                                         'Full Name',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -225,17 +228,16 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration()
-                                          .copyWith(
-                                              hintText: _fullNameHintText),
-                                      enabled: !_status,
-                                      autofocus: !_status,
-                                      controller: _fullNameController,
+                                  Flexible(
+                                    child: TextField(
+                                      decoration: inputDecoForEdit(
+                                          _fullNameInitColor,
+                                          _fullNameController,
+                                          _fullNameHintText,
+                                          _status),
                                     ),
                                   ),
                                 ],
@@ -243,14 +245,14 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
+                                      Text(
                                         'Email',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -263,30 +265,30 @@ class MapScreenState extends State<EditProfile>
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration()
-                                          .copyWith(hintText: _emailHintText),
-                                      enabled: !_status,
-                                      controller: _emailController,
-                                    ),
+                                  Flexible(
+                                    child: TextField(
+                                        decoration: inputDecoForEdit(
+                                            _emailInitColor,
+                                            _emailController,
+                                            _emailHintText,
+                                            _status)),
                                   ),
                                 ],
                               )),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
+                                      Text(
                                         'Telephone Number',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -304,13 +306,11 @@ class MapScreenState extends State<EditProfile>
                                 children: <Widget>[
                                   Flexible(
                                     child: TextField(
-                                      decoration: InputDecoration().copyWith(
-                                          hintText: _telephoneNumberHintText),
-                                      enabled: !_status,
-                                      controller: _telephoneNumberController,
-                                      onChanged: (value) {
-                                        setState(() {});
-                                      },
+                                      decoration: inputDecoForEdit(
+                                          _telephoneNumberInitColor,
+                                          _telephoneNumberController,
+                                          _telephoneNumberHintText,
+                                          _status),
                                     ),
                                   ),
                                 ],
@@ -340,7 +340,7 @@ class MapScreenState extends State<EditProfile>
   Widget _getActionButtons() {
     return Padding(
       padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
-      child: new Row(
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -486,81 +486,65 @@ class MapScreenState extends State<EditProfile>
         ),
       );
 
-  checkUsername() {
-    String username = _usernameController.text.trim();
-    if (username.length < 5 || username.length > 20) {
+  checkUsername(username) {
+    if (username.length < 5 ||
+        username.length > 20 ||
+        !validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
       setState(() {
         _usernameInitColor = Colors.redAccent.shade700;
       });
-      displayDialog(context, "Invalid Username",
-          "username must contain at least 5 characters or a maximum 20 character");
-      return;
-    }
-    if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+    } else {
       setState(() {
-        _usernameInitColor = Colors.redAccent.shade700;
+        _usernameInitColor = Colors.green.shade700;
       });
-      displayDialog(context, "Invalid Username Format",
-          "username can contain only alphanumeric characters");
-      return;
     }
   }
 
-  checkFullName() {
-    String fullName = _fullNameController.text.trim();
-
-    if (fullName.length < 5 || fullName.length > 100) {
+  checkFullName(fullName) {
+    if (fullName.length < 5 ||
+        fullName.length > 100 ||
+        !validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
       setState(() {
         _fullNameInitColor = Colors.redAccent.shade700;
       });
-      displayDialog(context, "Invalid Full Name",
-          "Full Name must contain at least 5 characters or a maximum of 100 characters");
-      return;
-    }
-    if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+    } else {
       setState(() {
-        _fullNameInitColor = Colors.redAccent.shade700;
+        _usernameInitColor = Colors.green.shade700;
       });
-      displayDialog(context, "Invalid Full Name Format",
-          "Full Name can only contain letters");
-      return;
     }
   }
 
-  checkEmail() {
-    String email = _emailController.text.trim();
+  checkEmail(email) {
     if (!validateMyInput(email,
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
       setState(() {
         _emailInitColor = Colors.redAccent.shade700;
       });
-      displayDialog(context, "Invalid Email", "Please enter a valid email");
       return;
+    } else {
+      setState(() {
+        _usernameInitColor = Colors.green.shade700;
+      });
     }
   }
 
-  checkTelephone() {
-    String telephoneNumber = _telephoneNumberController.text.trim();
-    if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+  checkTelephone(telephoneNumber) {
+    if (telephoneNumber.length < 9 ||
+        telephoneNumber.length > 14 ||
+        !validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
       setState(() {
         _telephoneNumberInitColor = Colors.redAccent.shade700;
       });
-      displayDialog(context, "Invalid telephone number",
-          "telephone number must contain at least 9 characters or a maximum of 14 characters");
       return;
-    }
-    if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+    } else {
       setState(() {
-        _telephoneNumberInitColor = Colors.redAccent.shade700;
+        _usernameInitColor = Colors.green.shade700;
       });
-      displayDialog(context, "Invalid telephone number Format",
-          "Telephone Number can only contain '+' and numbers");
-      return;
     }
   }
 
   bool validateMyInput(String value, String pattern) {
-    RegExp regex = new RegExp(pattern);
+    RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value))
       return false;
     else

@@ -517,7 +517,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   bool validateMyInput(String value, String pattern) {
-    RegExp regex = new RegExp(pattern);
+    RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value))
       return false;
     else
