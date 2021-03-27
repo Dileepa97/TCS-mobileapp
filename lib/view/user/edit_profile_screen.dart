@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
+import 'package:timecapturesystem/view/auth/login_screen.dart';
 
 import '../constants.dart';
 import 'pick_image_screen.dart';
@@ -353,12 +355,13 @@ class MapScreenState extends State<EditProfile>
                 textColor: Colors.white,
                 color: Colors.lightBlue.shade700,
                 onPressed: () async {
-                  if (_usernameController.text.trim().isNotEmpty ||
-                      _fullNameController.text.trim().isNotEmpty ||
-                      _emailController.text.trim().isNotEmpty ||
-                      _telephoneNumberController.text.trim().isNotEmpty) {
-                    //send request
+                  if (_usernameController.text.trim() != null ||
+                      _fullNameController.text.trim() != null ||
+                      _emailController.text.trim() != null ||
+                      _telephoneNumberController.text.trim() != null) {
                     displayUpdateDialog(context);
+
+                    //send request
                   } else {
                     displayDialog(context, "Form Empty",
                         "You must fill at least one value to update");
@@ -458,19 +461,24 @@ class MapScreenState extends State<EditProfile>
                 Navigator.pop(context);
                 Navigator.pop(context);
 
-                bool success = await UserService.updateUser(
-                    context,
-                    _usernameController.text.trim(),
-                    _fullNameController.text.trim(),
-                    _emailController.text.trim(),
-                    _telephoneNumberController.text.trim());
+                bool success = false;
+
+                // await UserService.updateUser(
+                //     context,
+                //     _usernameController.text.trim(),
+                //     _fullNameController.text.trim(),
+                //     _emailController.text.trim(),
+                //     _telephoneNumberController.text.trim());
+
+                print(_usernameController.text.trim());
+                print(_fullNameController.text.trim());
+                print(_emailController.text.trim());
+                print(_telephoneNumberController.text.trim());
 
                 if (success) {
-                  //if success login page
-                  updateSuccessDialog(context);
-                } else {
-                  Navigator.pop(context);
-                }
+                  await TokenStorageService.clearStorage();
+                  Navigator.pushReplacementNamed(context, LoginScreen.id);
+                } else {}
               },
             ),
             FlatButton(
@@ -550,4 +558,117 @@ class MapScreenState extends State<EditProfile>
     else
       return true;
   }
+//
+//   checkUsernameValidity() {
+//     String username = _usernameController.text.trim();
+//     if (username.length < 5 || username.length > 20) {
+//       setState(() {
+//         _usernameInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid Username",
+//           "username must contain at least 5 characters or a maximum 20 character");
+//       return false;
+//     }
+//     if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+//       setState(() {
+//         _usernameInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid Username Format",
+//           "username can contain only alphanumeric characters");
+//       return false;
+//     }
+//     return true;
+//   }
+//
+//   checkFullNameValidity() {
+//     String fullName = _fullNameController.text.trim();
+//
+//     if (fullName.length < 5 || fullName.length > 100) {
+//       setState(() {
+//         _fullNameInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid Full Name",
+//           "Full Name must contain at least 5 characters or a maximum of 100 characters");
+//       return false;
+//     }
+//     if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+//       setState(() {
+//         _fullNameInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid Full Name Format",
+//           "Full Name can only contain letters");
+//       return false;
+//     }
+//
+//     return true;
+//   }
+//
+//   checkEmailValidity() {
+//     String email = _emailController.text.trim();
+//     if (!validateMyInput(email,
+//         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+//       setState(() {
+//         _emailInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid Email", "Please enter a valid email");
+//       return false;
+//     }
+//
+//     return true;
+//   }
+//
+//   checkTelephoneValidity() {
+//     String telephoneNumber = _telephoneNumberController.text.trim();
+//     if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+//       setState(() {
+//         _telephoneNumberInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid telephone number",
+//           "telephone number must contain at least 9 characters or a maximum of 14 characters");
+//       return false;
+//     }
+//     if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+//       setState(() {
+//         _telephoneNumberInitColor = Colors.redAccent.shade700;
+//       });
+//       displayDialog(context, "Invalid telephone number Format",
+//           "Telephone Number can only contain '+' and numbers");
+//       return false;
+//     }
+//
+//     return true;
+//   }
+//
+//   isValid() {
+//     int flag = 0;
+//     if (_usernameController.text.trim() != null ||
+//         _usernameController.text.trim() != '') {
+//       if (checkUsernameValidity()) {
+//         flag++;
+//       }
+//     }
+//
+//     if (_emailController.text.trim() != null ||
+//         _emailController.text.trim() != '') {
+//       if (checkEmailValidity()) {
+//         flag++;
+//       }
+//     }
+//
+//     if (_fullNameController.text.trim() != null ||
+//         _fullNameController.text.trim() != '') {
+//       if (checkFullNameValidity()) {
+//         flag++;
+//       }
+//     }
+//
+//     if (_telephoneNumberController.text.trim() != null ||
+//         _telephoneNumberController.text.trim() != '') {
+//       if (checkTelephoneValidity()) {
+//         flag++;
+//       }
+//     }
+//     return flag == 0;
+//   }
+
 }

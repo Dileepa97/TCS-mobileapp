@@ -8,6 +8,7 @@ import 'package:timecapturesystem/services/auth/auth_service.dart';
 import 'package:timecapturesystem/services/auth/title_service.dart';
 
 import '../constants.dart';
+import 'login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = "registration_screen";
@@ -281,6 +282,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     if (checkValidity()) {
                       bool status = await registerUser();
                       if (status) {
+                        Future.delayed(const Duration(milliseconds: 2000), () {
+                          Navigator.pushReplacementNamed(
+                              context, LoginScreen.id);
+                        });
                         setState(() {
                           spin = false;
                         });
@@ -362,6 +367,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
+        return true;
       } else {
         return false;
       }
