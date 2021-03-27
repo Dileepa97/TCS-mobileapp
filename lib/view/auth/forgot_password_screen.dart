@@ -66,14 +66,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_emailController.text.isEmpty) {
+                    if (_emailController.text.trim().isEmpty) {
                       setState(() {
                         emailInitColor = Colors.redAccent;
                       });
 
                       return;
                     } else {
-                      if (!isEmail(_emailController.text)) {
+                      if (!isEmail(_emailController.text.trim())) {
                         setState(() {
                           emailInitColor = Colors.redAccent;
                         });
@@ -88,7 +88,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     //implement login
                     try {
                       int code = await AuthService.forgotPassword(
-                        _emailController.text,
+                        _emailController.text.trim(),
                       );
                       if (code == 200) {
                         Navigator.popAndPushNamed(

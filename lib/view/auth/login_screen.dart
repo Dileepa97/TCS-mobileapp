@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   _LoginScreenState(String username) {
     if (username != null) {
       this._usernameController = TextEditingController(text: username);
-      print(username);
     } else
       _usernameController = TextEditingController();
   }
@@ -103,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_usernameController.text.isEmpty ||
-                        _passwordController.text.isEmpty) {
-                      if (_usernameController.text.isEmpty) {
+                    if (_usernameController.text.trim().isEmpty ||
+                        _passwordController.text.trim().isEmpty) {
+                      if (_usernameController.text.trim().isEmpty) {
                         setState(() {
                           usernameInitColor = Colors.redAccent;
                         });
                       }
-                      if (_passwordController.text.isEmpty) {
+                      if (_passwordController.text.trim().isEmpty) {
                         setState(() {
                           passwordInitColor = Colors.redAccent;
                         });
@@ -124,7 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     //implement login
                     try {
                       int code = await AuthService.login(
-                          _usernameController.text, _passwordController.text);
+                          _usernameController.text.trim(),
+                          _passwordController.text.trim());
                       if (code == 1) {
                         //login success
                         app.main();

@@ -31,6 +31,11 @@ class MapScreenState extends State<EditProfile>
   TextEditingController _emailController = TextEditingController();
   TextEditingController _telephoneNumberController = TextEditingController();
 
+  Color _usernameInitColor = Colors.lightBlueAccent;
+  Color _fullNameInitColor = Colors.lightBlueAccent;
+  Color _emailInitColor = Colors.lightBlueAccent;
+  Color _telephoneNumberInitColor = Colors.lightBlueAccent;
+
   @override
   void initState() {
     super.initState();
@@ -303,6 +308,9 @@ class MapScreenState extends State<EditProfile>
                                           hintText: _telephoneNumberHintText),
                                       enabled: !_status,
                                       controller: _telephoneNumberController,
+                                      onChanged: (value) {
+                                        setState(() {});
+                                      },
                                     ),
                                   ),
                                 ],
@@ -345,10 +353,10 @@ class MapScreenState extends State<EditProfile>
                 textColor: Colors.white,
                 color: Colors.lightBlue.shade700,
                 onPressed: () async {
-                  if (_usernameController.text.isNotEmpty ||
-                      _fullNameController.text.isNotEmpty ||
-                      _emailController.text.isNotEmpty ||
-                      _telephoneNumberController.text.isNotEmpty) {
+                  if (_usernameController.text.trim().isNotEmpty ||
+                      _fullNameController.text.trim().isNotEmpty ||
+                      _emailController.text.trim().isNotEmpty ||
+                      _telephoneNumberController.text.trim().isNotEmpty) {
                     //send request
                     displayUpdateDialog(context);
                   } else {
@@ -452,10 +460,10 @@ class MapScreenState extends State<EditProfile>
 
                 bool success = await UserService.updateUser(
                     context,
-                    _usernameController.text,
-                    _fullNameController.text,
-                    _emailController.text,
-                    _telephoneNumberController.text);
+                    _usernameController.text.trim(),
+                    _fullNameController.text.trim(),
+                    _emailController.text.trim(),
+                    _telephoneNumberController.text.trim());
 
                 if (success) {
                   //if success login page
@@ -477,4 +485,85 @@ class MapScreenState extends State<EditProfile>
           ],
         ),
       );
+
+  checkUsername() {
+    String username = _usernameController.text.trim();
+    if (username.length < 5 || username.length > 20) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Username",
+          "username must contain at least 5 characters or a maximum 20 character");
+      return;
+    }
+    if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Username Format",
+          "username can contain only alphanumeric characters");
+      return;
+    }
+  }
+
+  checkFullName() {
+    String fullName = _fullNameController.text.trim();
+
+    if (fullName.length < 5 || fullName.length > 100) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Full Name",
+          "Full Name must contain at least 5 characters or a maximum of 100 characters");
+      return;
+    }
+    if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Full Name Format",
+          "Full Name can only contain letters");
+      return;
+    }
+  }
+
+  checkEmail() {
+    String email = _emailController.text.trim();
+    if (!validateMyInput(email,
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Email", "Please enter a valid email");
+      return;
+    }
+  }
+
+  checkTelephone() {
+    String telephoneNumber = _telephoneNumberController.text.trim();
+    if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid telephone number",
+          "telephone number must contain at least 9 characters or a maximum of 14 characters");
+      return;
+    }
+    if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid telephone number Format",
+          "Telephone Number can only contain '+' and numbers");
+      return;
+    }
+  }
+
+  bool validateMyInput(String value, String pattern) {
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return false;
+    else
+      return true;
+  }
 }

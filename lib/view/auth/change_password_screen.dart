@@ -113,19 +113,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
                     var flag = 0;
-                    if (_passwordController.text.isEmpty) {
+                    if (_passwordController.text.trim().isEmpty) {
                       setState(() {
                         _passwordInitColor = Colors.redAccent;
                       });
                       flag++;
                     }
-                    if (_confirmPasswordController.text.isEmpty) {
+                    if (_confirmPasswordController.text.trim().isEmpty) {
                       setState(() {
                         _confirmPasswordInitColor = Colors.redAccent;
                       });
                       flag++;
                     }
-                    if (_oldPasswordController.text.isEmpty) {
+                    if (_oldPasswordController.text.trim().isEmpty) {
                       setState(() {
                         _oldPasswordInitColor = Colors.redAccent;
                       });
@@ -190,7 +190,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   passwordsMatch() {
-    if (_passwordController.text != _confirmPasswordController.text) {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
         _passwordInitColor = Colors.redAccent.shade700;
