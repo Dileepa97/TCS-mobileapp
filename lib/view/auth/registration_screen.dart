@@ -283,6 +283,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       bool status = await registerUser();
                       if (status) {
                         Future.delayed(const Duration(milliseconds: 2000), () {
+                          Navigator.pop(context);
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.id);
                         });
