@@ -431,7 +431,7 @@ class MapScreenState extends State<EditProfile>
                           _telephoneNumberController.text.trim());
 
                       if (success) {
-                        //TODO : apply to other places require, Test below
+                        //TODO : apply to other places require
                         if (loggedUser.highestRoleIndex < 3) {
                           await TokenStorageService.clearStorage();
                           Navigator.pushNamedAndRemoveUntil(context,
@@ -671,15 +671,6 @@ class MapScreenState extends State<EditProfile>
   }
 
   isValid() {
-    // (_usernameController.text.trim() != null &&
-    //     _usernameController.text.trim() != '') ||
-    //     (_fullNameController.text.trim() != null &&
-    //         _fullNameController.text.trim() != '') ||
-    //     (_emailController.text.trim() != null &&
-    //         _emailController.text.trim() != '') ||
-    //     (_telephoneNumberController.text.trim() != null &&
-    //         _telephoneNumberController.text.trim() != '')
-
     int flag = 0;
     if (_usernameController.text.trim() != null &&
         _usernameController.text.trim() != '') {

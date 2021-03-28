@@ -180,8 +180,6 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                           ),
                         ),
-
-                        //TODO:icons for delete verify un-verify assign roles
                         Container(
                           margin: EdgeInsets.all(15),
                           child: Column(
@@ -271,7 +269,6 @@ class _UserDetailsState extends State<UserDetails> {
                                         size: 35.0,
                                       ),
                                       onPressed: () async {
-                                        //TODO : get update history and pass or give ID and pass
                                         UserHistory uh = await UserService
                                             .fetchUserHistoryById(user.id);
 

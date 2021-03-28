@@ -311,7 +311,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   bool checkValidity() {
     int flag = 0;
-    //TODO : add more validation
     if (_usernameController.text.trim().isEmpty) {
       flag++;
       setState(() {
