@@ -356,7 +356,9 @@ class MapScreenState extends State<EditProfile>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  !_status ? _getActionButtons() : Container()
+                                  !_status
+                                      ? _getActionButtons(loggedUser)
+                                      : Container()
                                 ],
                               ),
                             ),
@@ -381,7 +383,7 @@ class MapScreenState extends State<EditProfile>
     super.dispose();
   }
 
-  Widget _getActionButtons() {
+  Widget _getActionButtons(User loggedUser) {
     return Padding(
       padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
       child: Row(
@@ -417,10 +419,15 @@ class MapScreenState extends State<EditProfile>
                           _telephoneNumberController.text.trim());
 
                       if (success) {
-                        await TokenStorageService.clearStorage();
-                        //TODO : apply to other places require
-                        Navigator.pushNamedAndRemoveUntil(context,
-                            LoginScreen.id, (Route<dynamic> route) => false);
+                        //TODO : apply to other places require, Test below
+                        if (loggedUser.highestRoleIndex < 3) {
+                          await TokenStorageService.clearStorage();
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              LoginScreen.id, (Route<dynamic> route) => false);
+                        } else {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        }
                       } else {
                         Navigator.pop(context);
                       }
