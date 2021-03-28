@@ -269,6 +269,9 @@ class MapScreenState extends State<EditProfile>
                                                   _fullNameController,
                                                   _fullNameHintText,
                                                   _status),
+                                              onChanged: (value) {
+                                                checkFullName(value);
+                                              },
                                             ),
                                           ),
                                         ],
@@ -303,12 +306,16 @@ class MapScreenState extends State<EditProfile>
                                         children: <Widget>[
                                           Flexible(
                                             child: TextField(
-                                                controller: _emailController,
-                                                decoration: inputDecoForEdit(
-                                                    _emailInitColor,
-                                                    _emailController,
-                                                    _emailHintText,
-                                                    _status)),
+                                              controller: _emailController,
+                                              decoration: inputDecoForEdit(
+                                                  _emailInitColor,
+                                                  _emailController,
+                                                  _emailHintText,
+                                                  _status),
+                                              onChanged: (value) {
+                                                checkEmail(value);
+                                              },
+                                            ),
                                           ),
                                         ],
                                       )),
@@ -349,6 +356,9 @@ class MapScreenState extends State<EditProfile>
                                                   _telephoneNumberController,
                                                   _telephoneNumberHintText,
                                                   _status),
+                                              onChanged: (value) {
+                                                checkTelephone(value);
+                                              },
                                             ),
                                           ),
                                         ],
@@ -455,6 +465,10 @@ class MapScreenState extends State<EditProfile>
                 color: Colors.red,
                 onPressed: () {
                   setState(() {
+                    _usernameController.clear();
+                    _fullNameController.clear();
+                    _emailController.clear();
+                    _telephoneNumberController.clear();
                     _status = true;
 
                     FocusScope.of(context).requestFocus(FocusNode());
@@ -525,7 +539,7 @@ class MapScreenState extends State<EditProfile>
     }
   }
 
-  checkFullName(fullName) {
+  checkFullName(String fullName) {
     if (fullName.length < 5 ||
         fullName.length > 100 ||
         !validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
@@ -534,7 +548,7 @@ class MapScreenState extends State<EditProfile>
       });
     } else {
       setState(() {
-        _usernameInitColor = Colors.green.shade700;
+        _fullNameInitColor = Colors.green.shade700;
       });
     }
   }
@@ -545,10 +559,9 @@ class MapScreenState extends State<EditProfile>
       setState(() {
         _emailInitColor = Colors.redAccent.shade700;
       });
-      return;
     } else {
       setState(() {
-        _usernameInitColor = Colors.green.shade700;
+        _emailInitColor = Colors.green.shade700;
       });
     }
   }
@@ -560,20 +573,16 @@ class MapScreenState extends State<EditProfile>
       setState(() {
         _telephoneNumberInitColor = Colors.redAccent.shade700;
       });
-      return;
     } else {
       setState(() {
-        _usernameInitColor = Colors.green.shade700;
+        _telephoneNumberInitColor = Colors.green.shade700;
       });
     }
   }
 
   bool validateMyInput(String value, String pattern) {
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return false;
-    else
-      return true;
+    return regex.hasMatch(value);
   }
 
   checkUsernameValidity() {
