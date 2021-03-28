@@ -282,10 +282,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     if (checkValidity()) {
                       bool status = await registerUser();
                       if (status) {
-                        Future.delayed(const Duration(milliseconds: 2000), () {
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, LoginScreen.id);
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              LoginScreen.id, (Route<dynamic> route) => false);
                         });
                         setState(() {
                           spin = false;

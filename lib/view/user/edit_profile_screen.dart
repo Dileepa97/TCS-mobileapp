@@ -380,6 +380,7 @@ class MapScreenState extends State<EditProfile>
 
                       if (success) {
                         await TokenStorageService.clearStorage();
+                        //TODO : apply to other places require
                         Navigator.pushNamedAndRemoveUntil(context,
                             LoginScreen.id, (Route<dynamic> route) => false);
                       } else {
