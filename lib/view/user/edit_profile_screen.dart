@@ -55,284 +55,322 @@ class MapScreenState extends State<EditProfile>
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 250.0,
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+          child: FutureBuilder(
+              future: UserService.getLoggedInUser(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                User loggedUser;
+                if (snapshot.hasData) {
+                  loggedUser = snapshot.data;
+                  return ListView(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            height: 250.0,
+                            color: Colors.white,
+                            child: Column(
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 110.0, right: 110, bottom: 20),
-                                  child: Text('Edit Profile',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0,
-                                          fontFamily: 'sans-serif-light',
-                                          color: Colors.black)),
+                                    padding:
+                                        EdgeInsets.only(left: 20.0, top: 20.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 110.0,
+                                              right: 110,
+                                              bottom: 20),
+                                          child: Text('Edit Profile',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20.0,
+                                                  fontFamily:
+                                                      'sans-serif-light',
+                                                  color: Colors.black)),
+                                        )
+                                      ],
+                                    )),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 2.0),
+                                  child: Stack(
+                                      fit: StackFit.loose,
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                                width: 140.0,
+                                                height: 140.0,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: user == null
+                                                        ? ExactAssetImage(
+                                                            'images/as.png')
+                                                        : NetworkImage(fileAPI +
+                                                            user.profileImageURL),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 90.0, right: 100.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pushNamed(context,
+                                                        PickImageScreen.id);
+                                                  },
+                                                  child: CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.redAccent,
+                                                    radius: 25.0,
+                                                    child: Icon(
+                                                      Icons.camera_alt,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )),
+                                      ]),
                                 )
                               ],
-                            )),
-                        Padding(
-                          padding: EdgeInsets.only(top: 2.0),
-                          child: Stack(fit: StackFit.loose, children: <Widget>[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                    width: 140.0,
-                                    height: 140.0,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: user == null
-                                            ? ExactAssetImage('images/as.png')
-                                            : NetworkImage(
-                                                fileAPI + user.profileImageURL),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                              ],
                             ),
-                            Padding(
-                                padding:
-                                    EdgeInsets.only(top: 90.0, right: 100.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pushNamed(
-                                            context, PickImageScreen.id);
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.redAccent,
-                                        radius: 25.0,
-                                        child: Icon(
-                                          Icons.camera_alt,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ]),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    color: Color(0xffFFFFFF),
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 2.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 18.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        'Personal Information',
-                                        style: TextStyle(
-                                            fontSize: 19.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      _status ? (_getEditIcon()) : Container(),
-                                    ],
-                                  )
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        'Username',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextField(
-                                      controller: _usernameController,
-                                      decoration: inputDecoForEdit(
-                                          _usernameInitColor,
-                                          _usernameController,
-                                          _usernameHintText,
-                                          _status),
-                                      onChanged: (value) {
-                                        checkUsername(value);
-                                      },
-                                    ),
-                                  )
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        'Full Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextField(
-                                      controller: _fullNameController,
-                                      decoration: inputDecoForEdit(
-                                          _fullNameInitColor,
-                                          _fullNameController,
-                                          _fullNameHintText,
-                                          _status),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        'Email',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextField(
-                                        controller: _emailController,
-                                        decoration: inputDecoForEdit(
-                                            _emailInitColor,
-                                            _emailController,
-                                            _emailHintText,
-                                            _status)),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        'Telephone Number',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextField(
-                                      controller: _telephoneNumberController,
-                                      decoration: inputDecoForEdit(
-                                          _telephoneNumberInitColor,
-                                          _telephoneNumberController,
-                                          _telephoneNumberHintText,
-                                          _status),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          SizedBox(
-                            height: 20,
                           ),
-                          !_status ? _getActionButtons() : Container()
+                          Container(
+                            color: Color(0xffFFFFFF),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 2.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 18.0, right: 25.0, top: 2.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Personal Information',
+                                                style: TextStyle(
+                                                    fontSize: 19.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              _status
+                                                  ? (_getEditIcon())
+                                                  : Container(),
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 25.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Username',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 2.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: TextField(
+                                              controller: _usernameController,
+                                              decoration: inputDecoForEdit(
+                                                  _usernameInitColor,
+                                                  _usernameController,
+                                                  _usernameHintText,
+                                                  _status),
+                                              onChanged: (value) {
+                                                checkUsername(value);
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 25.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Full Name',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 2.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: TextField(
+                                              controller: _fullNameController,
+                                              decoration: inputDecoForEdit(
+                                                  _fullNameInitColor,
+                                                  _fullNameController,
+                                                  _fullNameHintText,
+                                                  _status),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 25.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Email',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 2.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: TextField(
+                                                controller: _emailController,
+                                                decoration: inputDecoForEdit(
+                                                    _emailInitColor,
+                                                    _emailController,
+                                                    _emailHintText,
+                                                    _status)),
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 25.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Telephone Number',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 2.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: TextField(
+                                              controller:
+                                                  _telephoneNumberController,
+                                              decoration: inputDecoForEdit(
+                                                  _telephoneNumberInitColor,
+                                                  _telephoneNumberController,
+                                                  _telephoneNumberHintText,
+                                                  _status),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  !_status ? _getActionButtons() : Container()
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Text('Error'),
+                  );
+                }
+              }),
         ));
   }
 

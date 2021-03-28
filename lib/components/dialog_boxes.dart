@@ -20,24 +20,8 @@ void displayRegSuccessDialog(context) => displayDialog(
     "Registration Success",
     "You have successfully registered to time capture system, please check your email for confirmation link");
 
-void displayPWDResetSuccessDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Success"),
-        content: Text(
-            "You have successfully reset your password, now you can login with your new password"),
-        actions: [
-          FlatButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+void displayPWDResetSuccessDialog(context) => displayDialog(context, "Success",
+    "You have successfully reset your password, now you can login with your new password");
 
 void displayPWDChangedSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
