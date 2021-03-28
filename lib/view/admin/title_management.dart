@@ -70,7 +70,15 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 TextField(
                   controller: _titleController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    if (value.trim() != null && !(value.trim().length > 2)) {
+                      setState(() {
+                        _titleInitColor = Colors.redAccent;
+                      });
+                    } else {
+                      setState(() {
+                        _titleInitColor = Colors.greenAccent;
+                      });
+                    }
                   },
                   onTap: () {
                     setState(() {
@@ -86,22 +94,34 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                 RoundedButton(
                   color: Colors.green,
                   onPressed: () async {
-                    var confirmed = await displayAddTitleSureDialog(context);
+                    var confirmed = true;
+                    if (_titleController.text.trim() != null &&
+                        !(_titleController.text.trim().length > 2)) {
+                      setState(() {
+                        _titleInitColor = Colors.redAccent;
+                      });
+                      confirmed = false;
+                    } else {
+                      setState(() {
+                        _titleInitColor = Colors.greenAccent;
+                      });
+                      confirmed = true;
+                    }
+
+                    if (confirmed)
+                      confirmed = await displayAddTitleSureDialog(context);
+                    else
+                      displayDialog(context, "Invalid Title",
+                          "Title must contain at least 3 characters");
 
                     if (confirmed) {
-                      if (_titleController.text.isEmpty) {
-                        setState(() {
-                          _titleInitColor = Colors.redAccent;
-                        });
-                        return;
-                      }
                       setState(() {
                         spin = true;
                       });
                       //implement login
                       try {
                         int code = await TitleService.addTitle(
-                          _titleController.text,
+                          _titleController.text.trim(),
                         );
                         if (code == 200) {
                           displayDialog(context, "Success",
