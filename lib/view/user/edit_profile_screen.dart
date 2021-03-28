@@ -367,7 +367,25 @@ class MapScreenState extends State<EditProfile>
                           _emailController.text.trim() != '') ||
                       (_telephoneNumberController.text.trim() != null &&
                           _telephoneNumberController.text.trim() != '')) {
-                    displayUpdateDialog(context);
+                    bool confirm = await displayUpdateDialog(context);
+
+                    if (confirm) {
+                      //
+                      bool success = await UserService.updateUser(
+                          context,
+                          _usernameController.text.trim(),
+                          _fullNameController.text.trim(),
+                          _emailController.text.trim(),
+                          _telephoneNumberController.text.trim());
+
+                      if (success) {
+                        await TokenStorageService.clearStorage();
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            LoginScreen.id, (Route<dynamic> route) => false);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    }
 
                     //send request
                   } else {
@@ -446,50 +464,6 @@ class MapScreenState extends State<EditProfile>
       ],
     );
   }
-
-  void displayUpdateDialog(context) => showDialog(
-        barrierColor: Colors.white70,
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Confirm Update"),
-          content: Text(
-              "Since your're updating profile you'll get UNVERIFIED\n\nHence an admin must verify your account for you to log back into the system again"),
-          actions: [
-            FlatButton(
-              child: Text(
-                "Confirm",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Colors.green,
-              onPressed: () async {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-
-                bool success = await UserService.updateUser(
-                    context,
-                    _usernameController.text.trim(),
-                    _fullNameController.text.trim(),
-                    _emailController.text.trim(),
-                    _telephoneNumberController.text.trim());
-
-                if (success) {
-                  await TokenStorageService.clearStorage();
-                  Navigator.pushReplacementNamed(context, LoginScreen.id);
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                color: Colors.redAccent,
-                child: Text("Cancel"))
-          ],
-        ),
-      );
 
   checkUsername(username) {
     if (username.length < 5 ||

@@ -198,3 +198,10 @@ Future<bool> displayChangeTitleSureDialog(context) {
   return displayConfirmationBox(context,
       "This will change the title of users who have already been assigned to this title");
 }
+
+Future<bool> displayUpdateDialog(context) {
+  return displayConfirmationBox(
+      context,
+      "Since your're updating profile you'll get un-verified, "
+      "Hence an admin must verify your account for you to log back into the system again");
+}

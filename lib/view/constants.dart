@@ -45,13 +45,3 @@ inputDecoForEdit(Color color, TextEditingController controller, String hintText,
     ),
   );
 }
-
-/*
-
-
-InputDecoration().copyWith(
-hintText: _usernameHintText),
-enabled: !_status,
-autofocus: !_status,
-controller: _usernameController,
- */
