@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(
-                  height: 40.0,
+                  height: 30.0,
                 ),
                 Hero(
                   tag: 'logo',
@@ -60,9 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Image.asset(
                       'images/logo.png',
                     ),
-                    height: 160,
+                    height: 120,
                   ),
                 ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                // Center(
+                //     child: Text(
+                //   'Time Capture System',
+                //   style: TextStyle(
+                //       fontSize: 30,
+                //       fontFamily: 'Roboto',
+                //       fontWeight: FontWeight.w800),
+                // )),
                 SizedBox(
                   height: 50.0,
                 ),

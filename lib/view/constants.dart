@@ -7,6 +7,7 @@ inputDeco(Color color, TextEditingController controller) {
       icon: Icon(
         Icons.close,
         color: Colors.red,
+        size: 20,
       ),
     ),
     hintText: 'hint Text',
@@ -33,6 +34,7 @@ inputDecoForEdit(Color color, TextEditingController controller, String hintText,
       icon: Icon(
         Icons.close,
         color: Colors.red,
+        size: 20,
       ),
     ),
     enabled: !status,
