@@ -118,7 +118,6 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                         }
                       } catch (e) {
                         displayDialog(context, "Error", e.toString());
-                        print(e.toString());
                         setState(() {
                           spin = false;
                         });
@@ -181,7 +180,6 @@ class _TitleManagementScreenState extends State<TitleManagementScreen> {
                         }
                       } catch (e) {
                         displayDialog(context, "Error", e.toString());
-                        print(e.toString());
                         setState(() {
                           spin = false;
                         });

@@ -111,7 +111,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });

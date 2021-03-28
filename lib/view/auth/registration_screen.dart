@@ -214,7 +214,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (value) {
                         setState(() {
                           gender = value;
-                          print(gender);
                         });
                       },
                     ),

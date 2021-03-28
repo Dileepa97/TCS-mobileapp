@@ -373,7 +373,5 @@ handleSuccess(success, context, userId) async {
 _launchUrl(url) async {
   if (await canLaunch(url)) {
     await launch(url);
-  } else {
-    print('Could not launch $url');
   }
 }

@@ -25,7 +25,7 @@ class EditProfile extends StatefulWidget {
 
 class MapScreenState extends State<EditProfile>
     with SingleTickerProviderStateMixin {
-  bool _status = true;
+  bool _lock = true;
 
   final FocusNode myFocusNode = FocusNode();
 
@@ -183,7 +183,7 @@ class MapScreenState extends State<EditProfile>
                                                 MainAxisAlignment.end,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              _status
+                                              _lock
                                                   ? (_getEditIcon())
                                                   : Container(),
                                             ],
@@ -225,7 +225,7 @@ class MapScreenState extends State<EditProfile>
                                                   _usernameInitColor,
                                                   _usernameController,
                                                   _usernameHintText,
-                                                  _status),
+                                                  _lock),
                                               onChanged: (value) {
                                                 checkUsername(value);
                                               },
@@ -268,7 +268,7 @@ class MapScreenState extends State<EditProfile>
                                                   _fullNameInitColor,
                                                   _fullNameController,
                                                   _fullNameHintText,
-                                                  _status),
+                                                  _lock),
                                               onChanged: (value) {
                                                 checkFullName(value);
                                               },
@@ -311,7 +311,7 @@ class MapScreenState extends State<EditProfile>
                                                   _emailInitColor,
                                                   _emailController,
                                                   _emailHintText,
-                                                  _status),
+                                                  _lock),
                                               onChanged: (value) {
                                                 checkEmail(value);
                                               },
@@ -355,7 +355,7 @@ class MapScreenState extends State<EditProfile>
                                                   _telephoneNumberInitColor,
                                                   _telephoneNumberController,
                                                   _telephoneNumberHintText,
-                                                  _status),
+                                                  _lock),
                                               onChanged: (value) {
                                                 checkTelephone(value);
                                               },
@@ -366,7 +366,7 @@ class MapScreenState extends State<EditProfile>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  !_status
+                                  !_lock
                                       ? _getActionButtons(loggedUser)
                                       : Container()
                                 ],
@@ -417,10 +417,12 @@ class MapScreenState extends State<EditProfile>
                           _emailController.text.trim() != '') ||
                       (_telephoneNumberController.text.trim() != null &&
                           _telephoneNumberController.text.trim() != '')) {
-                    bool confirm = await displayUpdateDialog(context);
+                    bool confirm = false;
+                    if (isValid()) {
+                      confirm = await displayUpdateDialog(context);
+                    }
 
                     if (confirm) {
-                      //
                       bool success = await UserService.updateUser(
                           context,
                           _usernameController.text.trim(),
@@ -442,8 +444,6 @@ class MapScreenState extends State<EditProfile>
                         Navigator.pop(context);
                       }
                     }
-
-                    //send request
                   } else {
                     displayDialog(context, "Form Empty",
                         "You must fill at least one value to update");
@@ -459,24 +459,25 @@ class MapScreenState extends State<EditProfile>
             child: Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Container(
-                  child: RaisedButton(
-                child: Text("Cancel"),
-                textColor: Colors.white,
-                color: Colors.red,
-                onPressed: () {
-                  setState(() {
-                    _usernameController.clear();
-                    _fullNameController.clear();
-                    _emailController.clear();
-                    _telephoneNumberController.clear();
-                    _status = true;
+                child: RaisedButton(
+                  child: Text("Cancel"),
+                  textColor: Colors.white,
+                  color: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      _usernameController.clear();
+                      _fullNameController.clear();
+                      _emailController.clear();
+                      _telephoneNumberController.clear();
+                      _lock = true;
 
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-              )),
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
             ),
             flex: 2,
           ),
@@ -516,9 +517,11 @@ class MapScreenState extends State<EditProfile>
             ),
           ),
           onTap: () async {
-            setState(() {
-              _status = false;
-            });
+            setState(
+              () {
+                _lock = false;
+              },
+            );
           },
         ),
       ],
@@ -547,9 +550,11 @@ class MapScreenState extends State<EditProfile>
         _fullNameInitColor = Colors.redAccent.shade700;
       });
     } else {
-      setState(() {
-        _fullNameInitColor = Colors.green.shade700;
-      });
+      setState(
+        () {
+          _fullNameInitColor = Colors.green.shade700;
+        },
+      );
     }
   }
 
@@ -666,31 +671,40 @@ class MapScreenState extends State<EditProfile>
   }
 
   isValid() {
+    // (_usernameController.text.trim() != null &&
+    //     _usernameController.text.trim() != '') ||
+    //     (_fullNameController.text.trim() != null &&
+    //         _fullNameController.text.trim() != '') ||
+    //     (_emailController.text.trim() != null &&
+    //         _emailController.text.trim() != '') ||
+    //     (_telephoneNumberController.text.trim() != null &&
+    //         _telephoneNumberController.text.trim() != '')
+
     int flag = 0;
-    if (_usernameController.text.trim() != null ||
+    if (_usernameController.text.trim() != null &&
         _usernameController.text.trim() != '') {
-      if (checkUsernameValidity()) {
+      if (!checkUsernameValidity()) {
         flag++;
       }
     }
 
-    if (_emailController.text.trim() != null ||
+    if (_emailController.text.trim() != null &&
         _emailController.text.trim() != '') {
-      if (checkEmailValidity()) {
+      if (!checkEmailValidity()) {
         flag++;
       }
     }
 
-    if (_fullNameController.text.trim() != null ||
+    if (_fullNameController.text.trim() != null &&
         _fullNameController.text.trim() != '') {
-      if (checkFullNameValidity()) {
+      if (!checkFullNameValidity()) {
         flag++;
       }
     }
 
-    if (_telephoneNumberController.text.trim() != null ||
+    if (_telephoneNumberController.text.trim() != null &&
         _telephoneNumberController.text.trim() != '') {
-      if (checkTelephoneValidity()) {
+      if (!checkTelephoneValidity()) {
         flag++;
       }
     }

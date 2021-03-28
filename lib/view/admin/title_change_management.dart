@@ -139,7 +139,6 @@ class _TitleChangeManagementScreenState
                         }
                       } catch (e) {
                         displayDialog(context, "Error", e.toString());
-                        print(e.toString());
                         setState(() {
                           spin = false;
                         });

@@ -173,7 +173,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });

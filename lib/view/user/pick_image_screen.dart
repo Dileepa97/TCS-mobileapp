@@ -43,7 +43,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
         _imageFile = imageFile;
       });
     } catch (e) {
-      print(e);
+      displayDialog(context, "Error", e.toString());
     }
   }
 
