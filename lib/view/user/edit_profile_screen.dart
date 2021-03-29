@@ -437,14 +437,9 @@ class MapScreenState extends State<EditProfile>
 
                       if (success) {
                         //TODO : apply to other places require
-                        if (loggedUser.highestRoleIndex < 3) {
-                          await TokenStorageService.clearStorage();
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              LoginScreen.id, (Route<dynamic> route) => false);
-                        } else {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        }
+                        await TokenStorageService.clearStorage();
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            LoginScreen.id, (Route<dynamic> route) => false);
                       } else {
                         Navigator.pop(context);
                       }

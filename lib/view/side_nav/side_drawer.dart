@@ -156,9 +156,10 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (BuildContext context)=>TeamView()
-                      ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => TeamView()));
                     },
                   ),
                   ListTile(
@@ -203,9 +204,10 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (BuildContext context)=>HomePage()
-                      ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => HomePage()));
                     },
                   ),
                   DividerBox(),
@@ -219,7 +221,8 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                     onTap: () async {
                       await AuthService.logout();
-                      Navigator.pushReplacementNamed(context, LoginScreen.id);
+                      Navigator.pushNamedAndRemoveUntil(context, LoginScreen.id,
+                          (Route<dynamic> route) => false);
                       ModalRoute.withName('/');
                     },
                   ),
