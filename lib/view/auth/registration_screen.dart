@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth/auth_service.dart';
+import 'package:timecapturesystem/services/auth/credential_availability_service.dart';
 import 'package:timecapturesystem/services/auth/title_service.dart';
 
 import '../constants.dart';
@@ -601,5 +602,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return false;
     else
       return true;
+  }
+
+  // async validators
+
+  Future<bool> checkUsernameExist(username) async {
+    return await CredentialAvailabilityService.checkUsernameAvailability(
+        username);
+  }
+
+  Future<bool> checkEmailExist(email) async {
+    return await CredentialAvailabilityService.checkEmailAvailability(email);
+  }
+
+  Future<bool> checkTelephoneNumberExist(telephoneNumber) async {
+    return await CredentialAvailabilityService.checkTelephoneAvailability(
+        telephoneNumber);
   }
 }
