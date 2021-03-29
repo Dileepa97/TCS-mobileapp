@@ -76,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextField(
                   controller: _usernameController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkUsernameOnChange(value);
                   },
                   onTap: () {
                     setState(() {
@@ -92,7 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextField(
                   controller: _fullNameController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkFullNameOnChange(value);
                   },
                   onTap: () {
                     checkUsername();
@@ -110,7 +110,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkEmailOnChange(value);
                   },
                   onTap: () {
                     checkFullName();
@@ -128,7 +128,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   controller: _telephoneNumberController,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkTelephoneOnChange(value);
                   },
                   onTap: () {
                     setState(() {
@@ -440,10 +440,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Password Mismatch",
           "Confirmation password did not match with your password");
       return false;
+    } else {
+      setState(() {
+        _confirmPasswordInitColor = Colors.blueAccent;
+        _passwordInitColor = Colors.blueAccent;
+      });
     }
-    _confirmPasswordInitColor = Colors.blueAccent;
-    _passwordInitColor = Colors.blueAccent;
-
     return true;
   }
 
@@ -517,6 +519,79 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid telephone number Format",
           "Telephone Number can only contain '+' and numbers");
       return;
+    }
+  }
+
+  checkUsernameOnChange(username) {
+    if (username.length < 5 ||
+        username.length > 20 ||
+        !validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _usernameInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkFullNameOnChange(String fullName) {
+    if (fullName.length < 5 ||
+        fullName.length > 100 ||
+        !validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(
+        () {
+          _fullNameInitColor = Colors.green.shade700;
+        },
+      );
+    }
+  }
+
+  checkEmailOnChange(email) {
+    if (!validateMyInput(email,
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _emailInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkTelephoneOnChange(telephoneNumber) {
+    if (telephoneNumber.length < 9 ||
+        telephoneNumber.length > 14 ||
+        !validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _telephoneNumberInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkPasswordMisMatch() {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent.shade700;
+        _passwordInitColor = Colors.redAccent.shade700;
+      });
+      return false;
+    } else {
+      setState(() {
+        _confirmPasswordInitColor = Colors.blueAccent;
+        _passwordInitColor = Colors.blueAccent;
+      });
     }
   }
 
