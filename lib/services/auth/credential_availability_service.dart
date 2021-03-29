@@ -40,4 +40,19 @@ class CredentialAvailabilityService {
   static bool toBool(value) {
     return value.toLowerCase() == 'true';
   }
+
+//methods to use in views
+  static Future<bool> checkUsernameExist(username) async {
+    return await CredentialAvailabilityService.checkUsernameAvailability(
+        username);
+  }
+
+  static Future<bool> checkEmailExist(email) async {
+    return await CredentialAvailabilityService.checkEmailAvailability(email);
+  }
+
+  static Future<bool> checkTelephoneNumberExist(telephoneNumber) async {
+    return await CredentialAvailabilityService.checkTelephoneAvailability(
+        telephoneNumber);
+  }
 }

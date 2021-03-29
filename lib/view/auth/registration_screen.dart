@@ -181,7 +181,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   autocorrect: false,
                   controller: _confirmPasswordController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkPasswordMisMatch();
                   },
                   onTap: () {
                     setState(() {
@@ -469,13 +469,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    bool usernameTaken = await checkUsernameExist(username);
+    bool usernameTaken =
+        await CredentialAvailabilityService.checkUsernameExist(username);
     if (usernameTaken) {
       setState(() {
         _usernameInitColor = Colors.redAccent.shade700;
       });
-      displayDialog(context, "Username already taken",
-          "username " + username + " is in the system");
+      displayDialog(context, "Username Unavailable",
+          "username " + username + " is already in the system");
     }
   }
 
@@ -500,7 +501,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  checkEmail() {
+  checkEmail() async {
     String email = _emailController.text.trim();
     if (!validateMyInput(email,
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
@@ -510,9 +511,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid Email", "Please enter a valid email");
       return;
     }
+    bool emailTaken =
+        await CredentialAvailabilityService.checkEmailExist(email);
+    if (emailTaken) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Email Unavailable",
+          "Email " + email + " is already in the system");
+    }
   }
 
-  checkTelephone() {
+  checkTelephone() async {
     String telephoneNumber = _telephoneNumberController.text.trim();
     if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
       setState(() {
@@ -529,6 +539,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid telephone number Format",
           "Telephone Number can only contain '+' and numbers");
       return;
+    }
+
+    bool telephoneNumberTaken =
+        await CredentialAvailabilityService.checkTelephoneNumberExist(
+            telephoneNumber);
+    if (telephoneNumberTaken) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Telephone Number Unavailable",
+          telephoneNumber + " is already in the system");
     }
   }
 
@@ -617,17 +638,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   // async validators
 
-  Future<bool> checkUsernameExist(username) async {
-    return await CredentialAvailabilityService.checkUsernameAvailability(
-        username);
-  }
-
-  Future<bool> checkEmailExist(email) async {
-    return await CredentialAvailabilityService.checkEmailAvailability(email);
-  }
-
-  Future<bool> checkTelephoneNumberExist(telephoneNumber) async {
-    return await CredentialAvailabilityService.checkTelephoneAvailability(
-        telephoneNumber);
-  }
 }
