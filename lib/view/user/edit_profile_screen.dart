@@ -34,6 +34,11 @@ class MapScreenState extends State<EditProfile>
   TextEditingController _emailController = TextEditingController();
   TextEditingController _telephoneNumberController = TextEditingController();
 
+  String _usernameHintText;
+  String _fullNameHintText;
+  String _emailHintText;
+  String _telephoneNumberHintText;
+
   Color _usernameInitColor = Colors.lightBlueAccent;
   Color _fullNameInitColor = Colors.lightBlueAccent;
   Color _emailInitColor = Colors.lightBlueAccent;
@@ -47,10 +52,10 @@ class MapScreenState extends State<EditProfile>
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
-    String _usernameHintText = user.username;
-    String _fullNameHintText = user.fullName;
-    String _emailHintText = user.email;
-    String _telephoneNumberHintText = user.telephoneNumber;
+    _usernameHintText = user.username;
+    _fullNameHintText = user.fullName;
+    _emailHintText = user.email;
+    _telephoneNumberHintText = user.telephoneNumber;
     setState(() {});
     return Scaffold(
         backgroundColor: Colors.white,
@@ -600,6 +605,14 @@ class MapScreenState extends State<EditProfile>
           "username must contain at least 5 characters or a maximum 20 character");
       return false;
     }
+    if (username == _usernameHintText) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(
+          context, "Error", "username must be different from the current one");
+      return false;
+    }
     if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
       setState(() {
         _usernameInitColor = Colors.redAccent.shade700;
@@ -622,6 +635,16 @@ class MapScreenState extends State<EditProfile>
           "Full Name must contain at least 5 characters or a maximum of 100 characters");
       return false;
     }
+
+    if (fullName == _fullNameHintText) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(
+          context, "Error", "Full name must be different from the current one");
+      return false;
+    }
+
     if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
       setState(() {
         _fullNameInitColor = Colors.redAccent.shade700;
@@ -644,6 +667,14 @@ class MapScreenState extends State<EditProfile>
       displayDialog(context, "Invalid Email", "Please enter a valid email");
       return false;
     }
+    if (email == _emailHintText) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(
+          context, "Error", "Email must be different from the current one");
+      return false;
+    }
 
     return true;
   }
@@ -664,6 +695,14 @@ class MapScreenState extends State<EditProfile>
       });
       displayDialog(context, "Invalid telephone number Format",
           "Telephone Number can only contain '+' and numbers");
+      return false;
+    }
+    if (telephoneNumber == _telephoneNumberHintText) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Error",
+          "telephone number must be different from the current one");
       return false;
     }
 
