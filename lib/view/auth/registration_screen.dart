@@ -450,7 +450,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return true;
   }
 
-  checkUsername() {
+  checkUsername() async {
     String username = _usernameController.text.trim();
     if (username.length < 5 || username.length > 20) {
       setState(() {
@@ -467,6 +467,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid Username Format",
           "username can contain only alphanumeric characters");
       return;
+    }
+
+    bool usernameTaken = await checkUsernameExist(username);
+    if (usernameTaken) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Username already taken",
+          "username " + username + " is in the system");
     }
   }
 
@@ -522,6 +531,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
   }
+
+  // Validation On change
 
   checkUsernameOnChange(username) {
     if (username.length < 5 ||
