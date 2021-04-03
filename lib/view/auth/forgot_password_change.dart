@@ -122,7 +122,7 @@ class _ForgotPasswordChangeScreenState
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_codeController.text.isEmpty) {
+                    if (_codeController.text.trim().isEmpty) {
                       setState(() {
                         codeInitColor = Colors.redAccent;
                       });
@@ -139,7 +139,8 @@ class _ForgotPasswordChangeScreenState
                     //implement login
                     try {
                       int code = await AuthService.forgotPasswordChange(
-                          _passwordController.text, _codeController.text);
+                          _passwordController.text.trim(),
+                          _codeController.text.trim());
                       if (code == 1) {
                         displayPWDResetSuccessDialog(context);
                         setState(() {
@@ -163,7 +164,6 @@ class _ForgotPasswordChangeScreenState
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });
@@ -181,7 +181,8 @@ class _ForgotPasswordChangeScreenState
 
   // ignore: non_constant_identifier_names
   PasswordsMatch() {
-    if (_passwordController.text != _confirmPasswordController.text) {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
         _passwordInitColor = Colors.redAccent.shade700;

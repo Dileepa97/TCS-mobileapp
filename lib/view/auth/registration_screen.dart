@@ -8,6 +8,7 @@ import 'package:timecapturesystem/services/auth/auth_service.dart';
 import 'package:timecapturesystem/services/auth/title_service.dart';
 
 import '../constants.dart';
+import 'login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = "registration_screen";
@@ -213,7 +214,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (value) {
                         setState(() {
                           gender = value;
-                          print(gender);
                         });
                       },
                     ),
@@ -280,9 +280,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //implement registration
                     if (checkValidity()) {
                       bool status = await registerUser();
-                      setState(() {
-                        spin = false;
-                      });
+                      if (status) {
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              LoginScreen.id, (Route<dynamic> route) => false);
+                        });
+                        setState(() {
+                          spin = false;
+                        });
+                      } else {
+                        setState(() {
+                          spin = false;
+                        });
+                      }
                     } else {
                       setState(() {
                         spin = false;
@@ -301,29 +311,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   bool checkValidity() {
     int flag = 0;
-    //TODO : add more validation
-    if (_usernameController.text.isEmpty) {
+    if (_usernameController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _usernameInitColor = Colors.redAccent;
       });
     }
 
-    if (_fullNameController.text.isEmpty) {
+    if (_fullNameController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _fullNameInitColor = Colors.redAccent;
       });
     }
 
-    if (_emailController.text.isEmpty) {
+    if (_emailController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _emailInitColor = Colors.redAccent;
       });
     }
 
-    if (_telephoneNumberController.text.isEmpty) {
+    if (_telephoneNumberController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _telephoneNumberInitColor = Colors.redAccent;
@@ -356,6 +365,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
+        return true;
       } else {
         return false;
       }
@@ -397,14 +407,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool checkPasswordMatch() {
     bool isPWEmpty = false;
     bool isPWCEmpty = false;
-    if (_passwordController.text.isEmpty) {
+    if (_passwordController.text.trim().isEmpty) {
       setState(() {
         _passwordInitColor = Colors.redAccent;
       });
       isPWEmpty = true;
     }
 
-    if (_confirmPasswordController.text.isEmpty) {
+    if (_confirmPasswordController.text.trim().isEmpty) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent;
       });
@@ -421,7 +431,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return false;
     }
 
-    if (_passwordController.text != _confirmPasswordController.text) {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
         _passwordInitColor = Colors.redAccent.shade700;
@@ -437,7 +448,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   checkUsername() {
-    String username = _usernameController.text;
+    String username = _usernameController.text.trim();
     if (username.length < 5 || username.length > 20) {
       setState(() {
         _usernameInitColor = Colors.redAccent.shade700;
@@ -457,7 +468,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   checkFullName() {
-    String fullName = _fullNameController.text;
+    String fullName = _fullNameController.text.trim();
 
     if (fullName.length < 5 || fullName.length > 100) {
       setState(() {
@@ -478,7 +489,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   checkEmail() {
-    String email = _emailController.text;
+    String email = _emailController.text.trim();
     if (!validateMyInput(email,
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
       setState(() {
@@ -490,7 +501,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   checkTelephone() {
-    String telephoneNumber = _telephoneNumberController.text;
+    String telephoneNumber = _telephoneNumberController.text.trim();
     if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
       setState(() {
         _telephoneNumberInitColor = Colors.redAccent.shade700;
@@ -510,7 +521,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   bool validateMyInput(String value, String pattern) {
-    RegExp regex = new RegExp(pattern);
+    RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value))
       return false;
     else

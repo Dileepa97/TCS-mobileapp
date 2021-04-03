@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   _LoginScreenState(String username) {
     if (username != null) {
       this._usernameController = TextEditingController(text: username);
-      print(username);
     } else
       _usernameController = TextEditingController();
   }
@@ -53,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(
-                  height: 40.0,
+                  height: 30.0,
                 ),
                 Hero(
                   tag: 'logo',
@@ -61,9 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Image.asset(
                       'images/logo.png',
                     ),
-                    height: 160,
+                    height: 120,
                   ),
                 ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                // Center(
+                //     child: Text(
+                //   'Time Capture System',
+                //   style: TextStyle(
+                //       fontSize: 30,
+                //       fontFamily: 'Roboto',
+                //       fontWeight: FontWeight.w800),
+                // )),
                 SizedBox(
                   height: 50.0,
                 ),
@@ -103,14 +113,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_usernameController.text.isEmpty ||
-                        _passwordController.text.isEmpty) {
-                      if (_usernameController.text.isEmpty) {
+                    if (_usernameController.text.trim().isEmpty ||
+                        _passwordController.text.trim().isEmpty) {
+                      if (_usernameController.text.trim().isEmpty) {
                         setState(() {
                           usernameInitColor = Colors.redAccent;
                         });
                       }
-                      if (_passwordController.text.isEmpty) {
+                      if (_passwordController.text.trim().isEmpty) {
                         setState(() {
                           passwordInitColor = Colors.redAccent;
                         });
@@ -124,7 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     //implement login
                     try {
                       int code = await AuthService.login(
-                          _usernameController.text, _passwordController.text);
+                          _usernameController.text.trim(),
+                          _passwordController.text.trim());
                       if (code == 1) {
                         //login success
                         app.main();
@@ -148,7 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });
