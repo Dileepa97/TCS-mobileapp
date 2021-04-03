@@ -6,7 +6,7 @@ import 'package:timecapturesystem/components/leave_component/custom_drop_down.da
 import 'package:timecapturesystem/components/leave_component/display_card.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/lms/leave_day_allocation.dart';
-import 'package:timecapturesystem/services/lms/leave_day_allocation_controller.dart';
+import 'package:timecapturesystem/services/lms/leave_day_allocation_service.dart';
 
 class ChangeAllowedDays extends StatefulWidget {
   static const String id = "change_allowed_day_screen";
@@ -37,10 +37,14 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
+
+      ///app bar
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.lightBlue.shade800,
       ),
+
+      ///body
       body: SafeArea(
         child: Column(
           children: [
@@ -59,7 +63,7 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: FutureBuilder<dynamic>(
-                  future: _allocationService.getAllLeaves(context),
+                  future: _allocationService.getAllLeaveAllocations(context),
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     Widget child;
@@ -196,7 +200,6 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
                             this._dialog.showConfirmationDialog(
                               title: 'Confirm',
                               onPressedYes: () async {
-                                print(days);
                                 int code =
                                     await _allocationService.changeAllowedDays(
                                         this.leaveType, this.days);

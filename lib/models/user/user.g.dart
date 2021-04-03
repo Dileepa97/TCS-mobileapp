@@ -30,7 +30,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
         : Title.fromJson(json['title'] as Map<String, dynamic>),
     json['probationary'] as bool,
     json['gender'] as String,
-  );
+  )..teamId = json['teamId'] as String;
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -51,4 +51,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'title': instance.title?.toJson(),
       'probationary': instance.probationary,
       'gender': instance.gender,
+      'teamId': instance.teamId,
     };

@@ -17,7 +17,9 @@ final storage = str.FlutterSecureStorage();
 Map<String, String> headers = {'Content-Type': 'application/json'};
 
 class LeaveDayAllocationService {
-  Future<List<LeaveDayAllocation>> getAllLeaves(dynamic context) async {
+  ///get all leave allocation details - admin
+  Future<List<LeaveDayAllocation>> getAllLeaveAllocations(
+      dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
       var res = await http.get(API, headers: {

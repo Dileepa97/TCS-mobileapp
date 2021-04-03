@@ -13,14 +13,16 @@ class LeaveOptionBuilder extends StatelessWidget {
   const LeaveOptionBuilder({
     Key key,
     @required this.list,
+    this.isHorizontal,
   }) : super(key: key);
 
   final List<LeaveOption> list;
+  final bool isHorizontal;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        // scrollDirection: Axis.horizontal,
+        scrollDirection: isHorizontal ? Axis.horizontal : Axis.vertical,
         itemCount: list.length,
         itemBuilder: (context, index) {
           return Container(
@@ -69,7 +71,7 @@ class LeaveOptionBuilder extends StatelessWidget {
                 ///pie chart
                 Container(
                   height: 250.0,
-                  width: double.infinity,
+                  width: isHorizontal ? 300 : double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: DonutPieChart(

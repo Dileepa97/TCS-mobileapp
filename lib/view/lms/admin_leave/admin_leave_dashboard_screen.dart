@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/dashboard_button.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_all_leaves_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leaves_by_status_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/change_allowed_days_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/today_unavailable_users_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/week_unavailable_users_screen.dart';
 
 //done
 class AdminLeaveDashBoard extends StatefulWidget {
@@ -71,7 +75,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                         child: LeaveDashBoardButton(
                           height: 50.0,
                           title: 'Today absent',
-                          route: '/todayUnavailableUserScreen',
+                          route: TodayUnavailableUserScreen.id,
                         ),
                       ),
 
@@ -80,7 +84,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                         child: LeaveDashBoardButton(
                           height: 50.0,
                           title: 'Week absent',
-                          route: '/weekUnavailableUserScreen',
+                          route: WeekUnavailableUserScreen.id,
                         ),
                       ),
                     ],
@@ -98,7 +102,15 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                   LeaveDashBoardButton(
                     icon: Icons.view_list_outlined,
                     title: 'Leaves by status',
-                    route: '/allRequestedLeaves',
+                    route: AdminLeaveByStatus.id,
+                    isIcon: true,
+                  ),
+
+                  ///leave cancellation manager button
+                  LeaveDashBoardButton(
+                    icon: Icons.view_list_outlined,
+                    title: 'Ongoing leave cancellation manager',
+                    route: OngoingLeaveCancellationManager.id,
                     isIcon: true,
                   ),
 

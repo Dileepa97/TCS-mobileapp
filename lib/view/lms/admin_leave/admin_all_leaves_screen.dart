@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:timecapturesystem/components/home_button.dart';
+import 'package:timecapturesystem/components/leave_component/error_texts.dart';
 
 import 'package:timecapturesystem/components/leave_component/leave_list_view_builder.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
@@ -20,6 +21,7 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
   LeaveService _leaveService = LeaveService();
   int _year = DateTime.now().year;
   int _month = DateTime.now().month;
+  List<Leave> _leaves;
 
   @override
   Widget build(BuildContext context) {
@@ -38,148 +40,115 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
         ),
         centerTitle: true,
         actions: [
+          GestureDetector(
+            child: Icon(
+              Icons.refresh,
+            ),
+            onTap: () {
+              if (_leaves != null) {
+                setState(() {
+                  _leaves.removeRange(0, _leaves.length);
+                });
+              } else {
+                setState(() {});
+              }
+            },
+          ),
           HomeButton(),
         ],
       ),
 
       ///body
-      body: Column(
-        children: [
-          ///top menu
-          Container(
-            height: 50,
-            margin: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+      body: SafeArea(
+        child: Column(
+          children: [
+            ///top menu
+            Container(
+              height: 50,
+              margin: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ///icon
+                  CircleAvatar(
+                    child: Icon(
+                      Icons.calendar_today_rounded,
+                      size: 20,
+                    ),
+                  ),
+
+                  ///Year picker
+                  GestureDetector(
+                    child: Text(
+                      'Year : $_year',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue[700],
+                        fontSize: 17,
+                        fontFamily: 'Source Sans Pro',
+                      ),
+                    ),
+                    onTap: () {
+                      _showIntDialog(DateTime.now().year - 1,
+                          DateTime.now().year, this._year, true);
+                    },
+                  ),
+
+                  ///month picker
+                  GestureDetector(
+                    child: Text(
+                      'Month : $_month',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue[700],
+                        fontSize: 17,
+                        fontFamily: 'Source Sans Pro',
+                      ),
+                    ),
+                    onTap: () {
+                      _showIntDialog(1, 12, this._month, false);
+                    },
+                  ),
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ///icon
-                CircleAvatar(
-                  child: Icon(
-                    Icons.calendar_today_rounded,
-                    size: 20,
-                  ),
-                ),
 
-                ///Year picker
-                GestureDetector(
-                  child: Text(
-                    'Year : $_year',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.blue[700],
-                      fontSize: 18,
-                      fontFamily: 'Source Sans Pro',
-                    ),
-                  ),
-                  onTap: () {
-                    _showIntDialog(DateTime.now().year - 1, DateTime.now().year,
-                        this._year, true);
-                  },
-                ),
+            ///leave list builder
+            FutureBuilder<dynamic>(
+              future: _leaveService.getLeavesByMonth(context, _year, _month),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                Widget child;
 
-                ///month picker
-                GestureDetector(
-                  child: Text(
-                    'Month : $_month',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.blue[700],
-                      fontSize: 18,
-                      fontFamily: 'Source Sans Pro',
-                    ),
-                  ),
-                  onTap: () {
-                    _showIntDialog(1, 12, this._month, false);
-                  },
-                ),
-              ],
-            ),
-          ),
+                if (snapshot.hasData) {
+                  if (snapshot.data == 204) {
+                    child = CustomErrorText(
+                        text: "No leave data available for this month");
+                  } else if (snapshot.data == 1) {
+                    child = ServerErrorText();
+                  } else if (snapshot.data == -1) {
+                    child = ConnectionErrorText();
+                  } else {
+                    _leaves = snapshot.data;
+                    _leaves.sort((b, a) => a.startDate.compareTo(b.startDate));
 
-          ///leave list builder
-          FutureBuilder<dynamic>(
-            future: _leaveService.getLeavesByMonth(context, _year, _month),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              Widget child;
-              List<Leave> leaves;
-
-              if (snapshot.hasData) {
-                ///Bad request
-                if (snapshot.data == 400) {
-                  child = Center(
-                    child: Text(
-                      "Bad request",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
+                    child = LeaveListViewBuilder(
+                      list: _leaves,
+                      isUserLeave: false,
+                    );
+                  }
+                } else {
+                  child = LoadingText();
                 }
 
-                ///No data
-                else if (snapshot.data == 204) {
-                  child = Center(
-                    child: Text(
-                      "No leave data available for this month",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }
-
-                ///Unknown error
-                else if (snapshot.data == 1) {
-                  child = Center(
-                    child: Text(
-                      "An unknown error occured",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }
-
-                ///OK
-                else {
-                  leaves = snapshot.data;
-                  leaves.sort((b, a) => a.startDate.compareTo(b.reqDate));
-
-                  child = LeaveListViewBuilder(
-                    list: leaves,
-                    isUserLeave: false,
-                  );
-                }
-              }
-
-              ///loading
-              else {
-                child = Center(
-                  child: Column(
-                    children: [
-                      SpinKitCircle(
-                        color: Colors.white,
-                        size: 50.0,
-                      ),
-                      Text(
-                        "Please wait...",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }
-
-              return Expanded(child: child);
-            },
-          )
-        ],
+                return Expanded(child: child);
+              },
+            )
+          ],
+        ),
       ),
     );
   }

@@ -150,7 +150,7 @@ class LeaveService {
     return null;
   }
 
-  ///Get leave by id
+  ///Get leave by id - anyone
   Future<dynamic> getLeaveById(String id) async {
     try {
       var authHeader = await generateAuthHeader();
@@ -166,17 +166,14 @@ class LeaveService {
         Leave _leaveList = Leave.fromJson(resBody);
 
         return _leaveList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      // displayDialog( "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
   //Get all leave by month - admin
@@ -191,7 +188,6 @@ class LeaveService {
 
       var authHeader = await generateAuthHeader();
 
-      print(authHeader);
       var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
@@ -204,15 +200,13 @@ class LeaveService {
             (resBody as List).map((i) => Leave.fromJson(i)).toList();
 
         return _leaveList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      return 1;
+      return -1;
     }
   }
 
@@ -243,12 +237,19 @@ class LeaveService {
     }
   }
 
-  ///Get leave by status(current year) -  admin
-  Future<dynamic> getLeavesByStatus(dynamic context, String status) async {
+  ///Get leave by status -  admin
+  Future<dynamic> getLeavesByStatus(
+      dynamic context, String status, int year) async {
     try {
+      var params = {
+        'year': '$year',
+      };
+
+      var uri = Uri.http(apiAuth, 'api/leaves/status/$status', params);
+
       var authHeader = await generateAuthHeader();
 
-      var res = await http.get(API + '/status/$status', headers: {
+      var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
@@ -260,17 +261,14 @@ class LeaveService {
             (resBody as List).map((i) => Leave.fromJson(i)).toList();
 
         return _leaveList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
   /// Check requested dates are existing -  user
@@ -352,22 +350,55 @@ class LeaveService {
 
         NotAvailableUsers _userList = NotAvailableUsers.fromJson(resBody);
 
-        print('ok');
         return _userList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
-  ///Get unavailable users in current week -  admin
+  ///Get team unavailable users in current date -  team leader
+  Future<dynamic> getTeamUnavailableUsersToday(
+      dynamic context, int year, int month, int day, String teamId) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var params = {
+        'year': '$year',
+        'month': '$month',
+        'day': '$day',
+        'teamId': '$teamId'
+      };
+
+      var uri =
+          Uri.http(apiAuth, 'api/leaves/team-user-not-available/date', params);
+
+      var res = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        NotAvailableUsers _userList = NotAvailableUsers.fromJson(resBody);
+
+        return _userList;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  ///Get unavailable users in ahead week -  admin
   Future<dynamic> getUnavailableUsersWeek(dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
@@ -386,17 +417,48 @@ class LeaveService {
             .toList();
 
         return _userList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
+  }
+
+  ///Get team unavailable users in ahead week -  team leader
+  Future<dynamic> getTeamUnavailableUsersWeek(
+      dynamic context, String teamId) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var params = {'teamId': '$teamId'};
+
+      var uri = Uri.http(
+          apiAuth, 'api/leaves/team-users-not-available-week-ahead', params);
+
+      var res = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<NotAvailableUsers> _userList = (resBody as List)
+            .map((i) => NotAvailableUsers.fromJson(i))
+            .toList();
+
+        return _userList;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
   }
 
   Future getData() async {
@@ -416,6 +478,7 @@ class LeaveService {
     }
   }
 
+  ///accept or reject leave  - user
   Future<dynamic> acceptOrReject(
       String leaveId, String status, String reason) async {
     try {
@@ -435,15 +498,12 @@ class LeaveService {
       });
 
       if (response.statusCode == 200) {
-        //String data = response.body;
-        //print('$status');
         return (response.statusCode);
-        //return jsonDecode(data);
       } else {
-        return (response.statusCode);
+        return -1;
       }
     } catch (e) {
-      //displayDialog(context, "Error", e.toString());
+      return -1;
     }
   }
 
@@ -471,17 +531,10 @@ class LeaveService {
   //   }
   // }
 
+  ///cancel leave  - user
   Future<dynamic> cancelLeave(String leaveId) async {
     try {
       var authHeader = await generateAuthHeader();
-
-      // var params = {
-      //   'leaveId': '$leaveId',
-      //   'status': '$status',
-      //   'reason': '$reason'
-      // };
-
-      // var uri = Uri.http(apiAuth, '/api/leaves/change-status', params);
 
       http.Response response =
           await http.patch(API + '/cancel-leave/$leaveId', headers: {
@@ -490,15 +543,12 @@ class LeaveService {
       });
 
       if (response.statusCode == 200) {
-        //String data = response.body;
-        //print('$status');
         return (response.statusCode);
-        //return jsonDecode(data);
       } else {
-        return (response.statusCode);
+        return -1;
       }
     } catch (e) {
-      //displayDialog(context, "Error", e.toString());
+      return -1;
     }
   }
 }

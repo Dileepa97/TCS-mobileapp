@@ -70,17 +70,14 @@ class LeaveAvailabilityService {
         var data = LeaveAvailabilityDetail.fromJson(resBody);
 
         return data.leaveOptionList;
-      } else if (res.statusCode == 400) {
-        return res.statusCode;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
         return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
   ///Get user leave availability details by year -  admin

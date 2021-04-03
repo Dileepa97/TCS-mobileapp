@@ -81,6 +81,6 @@ const _$LeaveStatusEnumMap = {
   LeaveStatus.REJECTED: 'REJECTED',
   LeaveStatus.CANCELLED: 'CANCELLED',
   LeaveStatus.ONGOING: 'ONGOING',
-  LeaveStatus.ONGOING_CANCELED: 'ONGOING_CANCELED',
+  LeaveStatus.ONGOING_CANCELLED: 'ONGOING_CANCELLED',
   LeaveStatus.EXPIRED: 'EXPIRED',
 };

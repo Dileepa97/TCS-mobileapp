@@ -47,58 +47,58 @@ class _MoreLeaveDetailsState extends State<MoreLeaveDetails> {
               ],
             ),
 
-            Text(
-              "Leave Summary",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            // Text(
+            //   "Leave Summary",
+            //   style: TextStyle(
+            //     fontSize: 18,
+            //     color: Colors.white,
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
 
-            Container(
-              height: 200,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Requested'), Text('00')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Accepted'), Text('00')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Rejected'), Text('00')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Cancelled'), Text('01')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Ongoing'), Text('01')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Ongoing Cancelled'), Text('00')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('Expired'), Text('00')],
-                  )
-                ],
-              ),
-            ),
+            // Container(
+            //   height: 200,
+            //   margin: EdgeInsets.all(10),
+            //   padding: EdgeInsets.all(15),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.all(Radius.circular(10)),
+            //     color: Colors.white,
+            //   ),
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //     crossAxisAlignment: CrossAxisAlignment.stretch,
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Requested'), Text('00')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Accepted'), Text('00')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Rejected'), Text('00')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Cancelled'), Text('01')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Ongoing'), Text('01')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Ongoing Cancelled'), Text('00')],
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [Text('Expired'), Text('00')],
+            //       )
+            //     ],
+            //   ),
+            // ),
 
             Text(
               "Leave Availability Details",
@@ -131,7 +131,10 @@ class _MoreLeaveDetailsState extends State<MoreLeaveDetails> {
                       child = Center(child: Text("An unknown error occured"));
                     } else {
                       list = snapshot.data;
-                      child = LeaveOptionBuilder(list: list);
+                      child = LeaveOptionBuilder(
+                        list: list,
+                        isHorizontal: true,
+                      );
                     }
                   } else {
                     child = Center(child: Text("Please wait..."));

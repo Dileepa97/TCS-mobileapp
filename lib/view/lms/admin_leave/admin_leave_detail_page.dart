@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/button_row.dart';
 
@@ -10,15 +17,19 @@ import 'package:timecapturesystem/models/lms/leave_option.dart';
 import 'package:timecapturesystem/models/lms/leave_status.dart';
 import 'package:timecapturesystem/services/LMS/leave_service.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 
 import '../check_leaves.dart';
 import 'admin_user_leave_detail_screen.dart';
 
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+var API = apiEndpoint + 'files/';
+
 class AdminLeaveDetailsPage extends StatefulWidget {
   static const String id = 'admin_leave_details_page';
+
   AdminLeaveDetailsPage({this.item});
   final Leave item;
 
@@ -28,19 +39,19 @@ class AdminLeaveDetailsPage extends StatefulWidget {
 
 class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
   LeaveService _leaveService = LeaveService();
+  LeaveAvailabilityService _availabilityService = LeaveAvailabilityService();
 
   ShowAlertDialog _dialog = ShowAlertDialog();
 
-  LeaveAvailabilityService _availabilityService = LeaveAvailabilityService();
+  bool downloading = false;
+  String progress = '0';
+  bool isDownloaded = false;
+  String filePath;
 
   double _allowedDays;
-
   double _requestedDays;
-
   double _approvedDays;
-
   double _takenDays;
-
   double _availableDays;
 
   // @override
@@ -51,16 +62,79 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
   // }
 
   @override
+  void initState() {
+    getPermission();
+  }
+
+  ///get storage permission
+  void getPermission() async {
+    await Permission.storage.request();
+  }
+
+  ///get file from url
+  Future downloadFile(String url, String savePath) async {
+    try {
+      setState(() {
+        downloading = true;
+      });
+
+      filePath = savePath;
+
+      Dio dio = Dio();
+
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: showDownloadProgress,
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+
+      //write in download folder
+      File file = File(savePath);
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+
+      setState(() {
+        isDownloaded = true;
+      });
+    } catch (e) {
+      ///if error
+      setState(() {
+        downloading = false;
+      });
+      this._dialog.showAlertDialog(
+            context: context,
+            title: 'Download Error',
+            body: 'This file cannot download',
+            color: Colors.redAccent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          );
+    }
+  }
+
+  ///progress indicator
+  void showDownloadProgress(received, total) {
+    if (total != -1) {
+      setState(() {
+        progress = (received / total * 100).toStringAsFixed(0);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
 
       ///App Bar
       appBar: AppBar(
-        // title: Text(
-        //   'Leave',
-        //   style: TextStyle(color: Colors.black),
-        // ),
         leading: BackButton(
           color: Colors.black,
           onPressed: () {
@@ -73,14 +147,16 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
       ),
 
       ///Body
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: <Widget>[
+                    ///
                     Row(
                       children: [
                         ///Profile image
@@ -126,6 +202,8 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                         ),
                       ],
                     ),
+
+                    ///
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -170,7 +248,7 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                                 ),
                               ),
 
-                              ///Icon
+                              ///type & status Icon
                               CircleAvatar(
                                 child: CheckType(type: widget.item.type)
                                     .typeIcon(),
@@ -329,6 +407,93 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                                   ),
                                 )
                               : SizedBox(),
+
+                          ///attachment url
+                          this.widget.item.attachmentURL != null &&
+                                  this.widget.item.attachmentURL != ""
+                              ? SizedBox(
+                                  height: 30,
+                                  child: Divider(
+                                    color: Colors.black12,
+                                    thickness: 1,
+                                  ),
+                                )
+                              : SizedBox(),
+                          this.widget.item.attachmentURL != null &&
+                                  this.widget.item.attachmentURL != ""
+                              ? DetailRow(
+                                  keyString: 'Attachment', valueString: '')
+                              : SizedBox(),
+                          this.widget.item.attachmentURL != null &&
+                                  this.widget.item.attachmentURL != ""
+                              ? Column(
+                                  children: [
+                                    ///attachment name
+                                    Text(
+                                      this.widget.item.attachmentURL,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Source Sans Pro',
+                                        color: Colors.blueGrey[600],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+
+                                    ///Download button
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        Directory dir =
+                                            await getApplicationDocumentsDirectory();
+                                        String path = dir.path +
+                                            '/' +
+                                            this.widget.item.attachmentURL;
+
+                                        ///storage/emulated/0/Download   --> android download directory
+                                        await downloadFile(
+                                            API +
+                                                this.widget.item.attachmentURL,
+                                            path);
+                                      },
+                                      child: const Text("Download file"),
+                                    ),
+
+                                    ///downloading progress
+                                    downloading
+                                        ? Text('$progress%')
+                                        : SizedBox(),
+
+                                    ///open file
+                                    isDownloaded
+                                        ? Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              GestureDetector(
+                                                child: Text(
+                                                  'File Downloaded! Click here to open',
+                                                  style: TextStyle(
+                                                    color: Colors.blueAccent,
+                                                    fontFamily:
+                                                        'Source Sans Pro',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  OpenFile.open(filePath);
+                                                },
+                                              ),
+                                            ],
+                                          )
+                                        : SizedBox(),
+                                  ],
+                                )
+                              : SizedBox(),
+
+                          ///
                           SizedBox(
                             height: 30,
                             child: Divider(
@@ -337,15 +502,29 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                             ),
                           ),
 
+                          ///user leave detail button
                           GestureDetector(
-                              child: Text(
-                                'More Details',
-                                style: TextStyle(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 3),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2.0, color: Colors.blue),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15.0)),
+                                  color: Colors.white,
+                                ),
+                                child: Text(
+                                  'User Leave Details',
+                                  style: TextStyle(
                                     color: Colors.blue,
                                     fontFamily: 'Source Sans Pro',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
+
+                              ///on tap function
                               onTap: () {
                                 // Navigator.pushNamed(
                                 //     context, MoreLeaveDetails.id);
@@ -359,81 +538,141 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                                 );
                               }),
 
+                          ///
+                          SizedBox(
+                            height: 30,
+                            child: Divider(
+                              color: Colors.black12,
+                              thickness: 1,
+                            ),
+                          ),
+
                           ///Buttons
                           this.widget.item.status == LeaveStatus.REQUESTED
                               ? TwoButtonRow(
                                   title1: 'Accept',
                                   title2: 'Reject',
+
+                                  ///accept leave
                                   onPressed1: () {
                                     this._dialog.showConfirmationDialog(
-                                      title: 'Confirm',
-                                      onPressedYes: () async {
-                                        int code =
-                                            await _leaveService.acceptOrReject(
-                                                this.widget.item.id,
-                                                'ACCEPTED',
-                                                "");
-                                        if (code == 200) {
-                                          // Navigator.pushReplacementNamed(
-                                          //     context, '/adminGetLeaves');
-                                          // ModalRoute.withName(
-                                          //     '/adminGetLeaves');
-                                          // Navigator.of(context)
-                                          //     .pushNamedAndRemoveUntil(
-                                          //         '/userLeave',
-                                          //         (Route<dynamic> route) =>
-                                          //             false);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      onPressedNo: () {
-                                        Navigator.pop(context);
-                                      },
-                                      context: context,
-                                      children: [Text('Accept this leave')],
-                                    );
+                                          title: 'Confirm',
+                                          context: context,
+
+                                          ///dialog body
+                                          children: [
+                                            Text(
+                                                'Do you want to accept this leave request?')
+                                          ],
+
+                                          ///on pressed yes
+                                          onPressedYes: () async {
+                                            int code = await _leaveService
+                                                .acceptOrReject(
+                                                    this.widget.item.id,
+                                                    'ACCEPTED',
+                                                    "");
+                                            if (code == 200) {
+                                              Navigator.pop(context);
+                                              this._dialog.showAlertDialog(
+                                                    context: context,
+                                                    title: 'Accepted',
+                                                    body:
+                                                        'Leave accepted successfully.',
+                                                    color: Colors.blueAccent,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                            } else {
+                                              Navigator.pop(context);
+                                              this._dialog.showAlertDialog(
+                                                    context: context,
+                                                    title: 'Error occured',
+                                                    body:
+                                                        'Cannot accept this leave. \nTry again later',
+                                                    color: Colors.redAccent,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                            }
+                                          },
+
+                                          ///on pressed no
+                                          onPressedNo: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
                                   },
+
+                                  ///reject leave
                                   onPressed2: () async {
                                     String reason = "";
+
                                     this._dialog.showConfirmationDialog(
-                                      title: 'Confirm',
-                                      onPressedYes: () async {
-                                        int code =
-                                            await _leaveService.acceptOrReject(
-                                                this.widget.item.id,
-                                                'REJECTED',
-                                                reason);
-                                        if (code == 200) {
-                                          // Navigator.of(context)
-                                          //     .pushNamedAndRemoveUntil(
-                                          //         '/userLeave',
-                                          //         (Route<dynamic> route) =>
-                                          //             false);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      onPressedNo: () {
-                                        Navigator.pop(context);
-                                      },
-                                      context: context,
-                                      children: [
-                                        Text('Reject this leave'),
-                                        TextField(
-                                            decoration: InputDecoration(
-                                                // border: InputBorder.none,
-                                                hintText: 'Reason'),
-                                            maxLines: null,
-                                            onChanged: (text) {
-                                              setState(() {
-                                                reason = text;
-                                              });
-                                            })
-                                      ],
-                                    );
+                                          title: 'Confirm',
+                                          context: context,
+
+                                          ///dialog body
+                                          children: [
+                                            Text(
+                                                'Do you want to reject this leave request?'),
+                                            TextField(
+                                                decoration: InputDecoration(
+                                                    hintText: 'Reason'),
+                                                maxLines: null,
+                                                onChanged: (text) {
+                                                  setState(() {
+                                                    reason = text;
+                                                  });
+                                                })
+                                          ],
+
+                                          ///on pressed yes
+                                          onPressedYes: () async {
+                                            int code = await _leaveService
+                                                .acceptOrReject(
+                                                    this.widget.item.id,
+                                                    'REJECTED',
+                                                    reason);
+
+                                            if (code == 200) {
+                                              Navigator.pop(context);
+                                              this._dialog.showAlertDialog(
+                                                    context: context,
+                                                    title: 'Rejected',
+                                                    body:
+                                                        'Leave rejected successfully.',
+                                                    color: Colors.blueAccent,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                            } else {
+                                              Navigator.pop(context);
+                                              this._dialog.showAlertDialog(
+                                                    context: context,
+                                                    title: 'Error occured',
+                                                    body:
+                                                        'Cannot reject this leave. \nTry again later',
+                                                    color: Colors.redAccent,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                            }
+                                          },
+
+                                          ///on pressed no
+                                          onPressedNo: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
                                   },
                                 )
                               : SizedBox(),
@@ -442,47 +681,11 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                     )
                   ],
                 ),
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );
-  }
-
-  List<charts.Series<DayAmount, String>> _createChartData() {
-    final data = [
-      new DayAmount(
-          "Available", this._availableDays, charts.Color(r: 89, g: 255, b: 89)),
-      new DayAmount("Requested", this._requestedDays,
-          charts.Color(r: 89, g: 216, b: 255)),
-      new DayAmount(
-          "Approved", this._approvedDays, charts.Color(r: 255, g: 166, b: 89)),
-      new DayAmount(
-          "Taken", this._takenDays, charts.Color(r: 255, g: 89, b: 100)),
-    ];
-
-    return [
-      new charts.Series<DayAmount, String>(
-        id: 'dayAmount',
-        domainFn: (DayAmount dayAmount, _) => dayAmount.dayCategory,
-        measureFn: (DayAmount dayAmount, _) => dayAmount.days,
-        colorFn: (DayAmount dayAmount, _) => dayAmount.color,
-        // labelAccessorFn: (DayAmount dayAmount, _) =>
-        //     '${dayAmount.dayCategory}\n${dayAmount.days}',
-        data: data,
-      )
-    ];
-  }
-
-  void userLeaveTypeData(String userId, String type) async {
-    var data = await _availabilityService.getAvailableData(userId, type);
-
-    LeaveOption option = LeaveOption.fromJson(data);
-
-    this._allowedDays = option.allowedDays;
-    this._requestedDays = option.requestedDays;
-    this._approvedDays = option.approvedDays;
-    this._takenDays = option.takenDays;
-    this._availableDays = this._allowedDays -
-        (this._requestedDays + this._approvedDays + this._takenDays);
   }
 }

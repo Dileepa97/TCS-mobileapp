@@ -42,11 +42,13 @@ class LeaveDashBoardButton extends StatelessWidget {
                   SizedBox(
                     width: 30.0,
                   ),
-                  Text(
-                    this.title,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.lightBlue.shade800,
+                  Expanded(
+                    child: Text(
+                      this.title,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.lightBlue.shade800,
+                      ),
                     ),
                   ),
                 ],

@@ -120,8 +120,8 @@ class _FirstRequestScreenState extends State<FirstRequestScreen> {
                     ),
                   ),
                   onTap: () {
-                    _showIntDialog(DateTime.now().year, DateTime.now().year + 1,
-                        this._year);
+                    _showIntDialog(
+                        DateTime.now().year, DateTime.now().year, this._year);
                   },
                 ),
 
@@ -200,7 +200,10 @@ class _FirstRequestScreenState extends State<FirstRequestScreen> {
                 } else {
                   this._option = snapshot.data;
                   list.add(this._option);
-                  this._child = LeaveOptionBuilder(list: list);
+                  this._child = LeaveOptionBuilder(
+                    list: list,
+                    isHorizontal: false,
+                  );
 
                   this._availableDays = this._option.allowedDays -
                       (this._option.requestedDays +
@@ -318,9 +321,18 @@ class _FirstRequestScreenState extends State<FirstRequestScreen> {
       builder: (BuildContext context) {
         return new NumberPickerDialog.integer(
           minValue: min,
-          maxValue: max,
+          maxValue: DateTime.now().month == 12 ? max + 1 : max,
           step: 1,
           initialIntegerValue: init,
+          textStyle: TextStyle(
+            fontFamily: 'Source Sans Pro',
+            fontSize: 20,
+          ),
+          selectedTextStyle: TextStyle(
+            fontFamily: 'Source Sans Pro',
+            fontSize: 25,
+            color: Colors.lightBlue.shade800,
+          ),
         );
       },
     ).then((num value) {

@@ -40,6 +40,8 @@ class User {
 
   String gender;
 
+  String teamId;
+
   User(
       this.id,
       this.username,

@@ -5,9 +5,6 @@ import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import '../check_leaves.dart';
 
-///done
-var fileAPI = apiEndpoint + 'files/';
-
 class AdminLeaveCard extends StatefulWidget {
   final Leave item;
   AdminLeaveCard({this.item});

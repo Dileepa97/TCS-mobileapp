@@ -520,6 +520,14 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
 
   ///leave start date widget
   Widget _buildStartDate() {
+    DateTime initDate = DateTime.now();
+
+    if (initDate.weekday == 6) {
+      initDate = initDate.add(Duration(days: 2));
+    } else if (initDate.weekday == 7) {
+      initDate = initDate.add(Duration(days: 1));
+    }
+
     return InputContainer(
       height: 45.0,
       child: InputDate(
@@ -528,8 +536,8 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
         onTap: () {
           showDatePicker(
                   context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
+                  initialDate: initDate,
+                  firstDate: initDate,
                   lastDate: DateTime.now().add(Duration(days: 365)),
                   selectableDayPredicate: (DateTime val) =>
                       val.weekday == 6 || val.weekday == 7 ? false : true,

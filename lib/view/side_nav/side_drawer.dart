@@ -7,8 +7,8 @@ import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard.dart';
-import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/team/team_view.dart';
@@ -36,7 +36,6 @@ class _SideDrawerState extends State<SideDrawer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUser();
   }
