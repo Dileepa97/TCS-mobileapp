@@ -8,43 +8,47 @@ import 'package:timecapturesystem/view/widgets/team_leader_drawer.dart';
 
 // ignore: must_be_immutable
 class ProductDashboard extends StatelessWidget {
+  static const String id = "product_dashboard";
 
-  String productId;
+  // String productId;
 
-  ProductDashboard(String productId){
-    this.productId = productId;
-  }
+  // ProductDashboard(String productId) {
+  //   this.productId = productId;
+  // }
 
-  Widget taskDashboardCard(String optionTitle, BuildContext context, IconData optionIcon, ){
+  Widget taskDashboardCard(
+    String optionTitle,
+    BuildContext context,
+    IconData optionIcon,
+  ) {
     return Container(
-      decoration: BoxDecoration(
-          color: Colors.lightBlueAccent
-      ),
+      decoration: BoxDecoration(color: Colors.lightBlueAccent),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(optionIcon,
+              Icon(
+                optionIcon,
                 color: Colors.white,
                 size: 40,
               ),
-              SizedBox(height: 40,),
-              Text(optionTitle,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20
-                ),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                optionTitle,
+                style: TextStyle(color: Colors.white, fontSize: 20),
               )
             ],
           ),
         ),
-        onTap: (){
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (BuildContext context)=>ViewTasks("110")
-          )
-          );
+        onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => ViewTasks("110")));
         },
       ),
     );
@@ -52,19 +56,16 @@ class ProductDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var size = MediaQuery.of(context).size;
 
     /*24 is for notification bar on Android*/
-    final double itemHeight = (size.height - kToolbarHeight -24) / 2;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product Dashboard",
-            style: TextStyle(
-                color: Colors.black87
-            )),
+        title:
+            Text("Product Dashboard", style: TextStyle(color: Colors.black87)),
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
@@ -75,127 +76,121 @@ class ProductDashboard extends StatelessWidget {
       body: Center(
         child: GridView.count(
           crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           shrinkWrap: true,
           childAspectRatio: (itemWidth / itemHeight),
           physics: ScrollPhysics(),
           children: [
-
             Material(
               elevation: 10,
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white
-                ),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.search,
+                        Icon(
+                          Icons.search,
                           color: Colors.black87,
                           size: 40,
                         ),
-                        SizedBox(height: 40,),
-                        Text("View Task",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20
-                          ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "View Task",
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>ViewTasks("110")
-                    )
-                    );
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ViewTasks("110")));
                   },
                 ),
               ),
             ),
-
             Material(
               elevation: 10,
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white
-                ),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add,
+                        Icon(
+                          Icons.add,
                           color: Colors.black87,
                           size: 40,
                         ),
-                        SizedBox(height: 40,),
-                        Text("Add Task",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20
-                          ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "Add Task",
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>AddTask()
-                    )
-                    );
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => AddTask()));
                   },
                 ),
               ),
             ),
-            
             Material(
               elevation: 10,
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white
-                ),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.settings,
+                        Icon(
+                          Icons.settings,
                           color: Colors.black87,
                           size: 40,
                         ),
-                        SizedBox(height: 40,),
-                        Text("Update Task",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20
-                          ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "Update Task",
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UpdateTask()
-                    )
-                    );
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => UpdateTask()));
                   },
                 ),
               ),
             ),
-            
             Material(
               elevation: 10,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                  color: Colors.white,
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -203,25 +198,26 @@ class ProductDashboard extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.delete,
+                        Icon(
+                          Icons.delete,
                           color: Colors.black87,
                           size: 40,
                         ),
-                        SizedBox(height: 40,),
-                        Text("Delete Task",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20
-                          ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "Delete Task",
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>DeleteTask()
-                    )
-                    );
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => DeleteTask()));
                   },
                 ),
               ),

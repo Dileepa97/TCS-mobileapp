@@ -7,6 +7,9 @@ import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/change_password_screen.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_change.dart';
 import 'package:timecapturesystem/view/auth/forgot_password_screen.dart';
+import 'package:timecapturesystem/view/customer/add_customer_screen.dart';
+import 'package:timecapturesystem/view/customer/customer_dashboard_screen.dart';
+import 'package:timecapturesystem/view/customer/update_customer.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
 
@@ -24,6 +27,7 @@ import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_details_page.dart';
+import 'package:timecapturesystem/view/task/product_dashboard.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
@@ -130,6 +134,14 @@ class _MyAppState extends State<MyApp> {
                   TLTodayUnavailableUserScreen(),
               TLWeekUnavailableUserScreen.id: (context) =>
                   TLWeekUnavailableUserScreen(),
+
+              ///Product
+              ProductDashboard.id: (context) => ProductDashboard(),
+
+              ///customer
+              CustomerDashboard.id: (context) => CustomerDashboard(),
+              AddCustomerScreen.id: (context) => AddCustomerScreen(),
+              UpdateCustomerScreen.id: (context) => UpdateCustomerScreen(),
             };
           } else {
             initialRoute = LoginScreen.id;

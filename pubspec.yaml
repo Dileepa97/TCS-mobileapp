@@ -54,6 +54,7 @@ dependencies:
   flutter_password_strength: ^0.1.5
   path_provider: ^1.6.0
   open_file: 2.1.0
+  email_validator: ^1.0.6
   
 
 #flutter_icons:

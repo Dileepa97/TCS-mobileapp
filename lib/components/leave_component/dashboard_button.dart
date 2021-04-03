@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 //done
-class LeaveDashBoardButton extends StatelessWidget {
+class DashBoardButton extends StatelessWidget {
   final IconData icon;
   final String title;
   final String route;
   final double height;
   final bool isIcon;
 
-  const LeaveDashBoardButton(
+  const DashBoardButton(
       {Key key,
       this.icon,
       this.title,

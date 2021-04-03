@@ -248,7 +248,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
   ///check if any required data missed
   bool _checkCondition() {
     ///if leave title missing
-    if (this._leaveTitle == null) {
+    if (this._leaveTitle == null || this._leaveTitle.trim() == '') {
       check.showAlertDialog(
         title: 'Something Missing !',
         body: 'Enter leave title',

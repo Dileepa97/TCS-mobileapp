@@ -286,7 +286,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                               Navigator.pop(context);
                               this._dialog.showAlertDialog(
                                     context: context,
-                                    title: 'Error occured',
+                                    title: 'Error occurred',
                                     body:
                                         'Cannot complete this task. \nTry again later',
                                     color: Colors.redAccent,

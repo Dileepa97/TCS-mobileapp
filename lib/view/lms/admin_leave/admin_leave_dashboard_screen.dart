@@ -72,7 +72,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                     children: [
                       ///Today absent button
                       Expanded(
-                        child: LeaveDashBoardButton(
+                        child: DashBoardButton(
                           height: 50.0,
                           title: 'Today absent',
                           route: TodayUnavailableUserScreen.id,
@@ -81,7 +81,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
 
                       /// week absent button
                       Expanded(
-                        child: LeaveDashBoardButton(
+                        child: DashBoardButton(
                           height: 50.0,
                           title: 'Week absent',
                           route: WeekUnavailableUserScreen.id,
@@ -91,7 +91,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                   ),
 
                   ///all leaves button
-                  LeaveDashBoardButton(
+                  DashBoardButton(
                     icon: Icons.view_list_outlined,
                     title: 'All leaves',
                     route: AdminAllLeaves.id,
@@ -99,7 +99,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                   ),
 
                   ///leaves by status button
-                  LeaveDashBoardButton(
+                  DashBoardButton(
                     icon: Icons.view_list_outlined,
                     title: 'Leaves by status',
                     route: AdminLeaveByStatus.id,
@@ -107,7 +107,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                   ),
 
                   ///leave cancellation manager button
-                  LeaveDashBoardButton(
+                  DashBoardButton(
                     icon: Icons.view_list_outlined,
                     title: 'Ongoing leave cancellation manager',
                     route: OngoingLeaveCancellationManager.id,
@@ -115,7 +115,7 @@ class _AdminLeaveDashBoardState extends State<AdminLeaveDashBoard> {
                   ),
 
                   ///leave allocation manager button
-                  LeaveDashBoardButton(
+                  DashBoardButton(
                     icon: Icons.view_list_outlined,
                     title: 'Leaves allocation manager',
                     route: ChangeAllowedDays.id,

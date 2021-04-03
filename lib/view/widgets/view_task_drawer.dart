@@ -17,8 +17,7 @@ Widget viewTaskDrawer(BuildContext context) {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        ProductDashboard("110")));
+                    builder: (BuildContext context) => ProductDashboard()));
           },
         ),
         ListTile(

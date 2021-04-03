@@ -116,7 +116,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
                             children: [
                               ///Today absent button
                               Expanded(
-                                child: LeaveDashBoardButton(
+                                child: DashBoardButton(
                                   height: 50.0,
                                   title: 'Today absent',
                                   route: TLTodayUnavailableUserScreen.id,
@@ -125,7 +125,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
 
                               /// week absent button
                               Expanded(
-                                child: LeaveDashBoardButton(
+                                child: DashBoardButton(
                                   height: 50.0,
                                   title: 'Week absent',
                                   route: TLWeekUnavailableUserScreen.id,
@@ -136,7 +136,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
                         : SizedBox(),
 
                     ///leave request button
-                    LeaveDashBoardButton(
+                    DashBoardButton(
                       icon: Icons.view_list_outlined,
                       title: 'Request Leave',
                       route: FirstRequestScreen.id,
@@ -144,7 +144,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
                     ),
 
                     ///my leaves button
-                    LeaveDashBoardButton(
+                    DashBoardButton(
                       icon: Icons.view_list_outlined,
                       title: 'My Leaves',
                       route: OwnUserLeaves.id,
@@ -152,7 +152,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
                     ),
 
                     /// leave availabilty button
-                    LeaveDashBoardButton(
+                    DashBoardButton(
                       icon: Icons.view_list_outlined,
                       title: 'My Leave Availability',
                       route: UserLeaveAvailable.id,
