@@ -12,6 +12,7 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) {
     json['organizationID'] as String,
     json['organizationName'] as String,
     json['email'] as String,
+    (json['productIdList'] as List)?.map((e) => e as String)?.toList(),
   );
 }
 
@@ -20,4 +21,5 @@ Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
       'organizationID': instance.organizationID,
       'organizationName': instance.organizationName,
       'email': instance.email,
+      'productIdList': instance.productIdList,
     };

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/add_tasks.dart';
 import 'package:timecapturesystem/view/task/delete_task.dart';
@@ -9,6 +10,10 @@ import 'package:timecapturesystem/view/widgets/team_leader_drawer.dart';
 // ignore: must_be_immutable
 class ProductDashboard extends StatelessWidget {
   static const String id = "product_dashboard";
+
+  final Product product;
+
+  const ProductDashboard({Key key, this.product}) : super(key: key);
 
   // String productId;
 

@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/dashboard_button.dart';
 import 'package:timecapturesystem/components/leave_component/error_texts.dart';
-import 'package:timecapturesystem/models/customer/customer.dart';
-import 'package:timecapturesystem/services/customer/customer_service.dart';
-import 'package:timecapturesystem/view/customer/add_customer_screen.dart';
-import 'package:timecapturesystem/view/customer/customer_card.dart';
-import 'package:timecapturesystem/view/customer/customer_detail_page.dart';
+import 'package:timecapturesystem/models/product/product.dart';
+import 'package:timecapturesystem/services/product/product_service.dart';
+import 'package:timecapturesystem/view/product/add_product_screen.dart';
+import 'package:timecapturesystem/view/product/product_card.dart';
+import 'package:timecapturesystem/view/product/product_detail_page.dart';
 
-class CustomerDashboard extends StatefulWidget {
-  static const String id = "customer_dashboard";
+class ProductManagementDashboard extends StatefulWidget {
+  static const String id = "product_management_dashboard";
   @override
-  _CustomerDashboardState createState() => _CustomerDashboardState();
+  _ProductManagementDashboardState createState() =>
+      _ProductManagementDashboardState();
 }
 
-class _CustomerDashboardState extends State<CustomerDashboard> {
-  CustomerService _customerService = CustomerService();
-  List<Customer> _customerList;
+class _ProductManagementDashboardState
+    extends State<ProductManagementDashboard> {
+  ProductService _productService = ProductService();
+  List<Product> _productList;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,9 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
               Icons.refresh,
             ),
             onTap: () {
-              if (_customerList != null) {
+              if (_productList != null) {
                 setState(() {
-                  _customerList.removeRange(0, _customerList.length);
+                  _productList.removeRange(0, _productList.length);
                 });
               } else {
                 setState(() {});
@@ -46,13 +48,13 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
         ],
       ),
 
-      ///Body
+      ///body
       body: SafeArea(
         child: Column(
           children: [
             /// Dashboard title
             Text(
-              "Customer Management Dashboard",
+              "Product Management Dashboard",
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,
@@ -66,11 +68,11 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
               ),
             ),
 
-            ///add customer button
+            ///add product button
             DashBoardButton(
               icon: Icons.view_list_outlined,
-              title: 'Add Customer',
-              route: AddCustomerScreen.id,
+              title: 'Add Product',
+              route: AddProductScreen.id,
               isIcon: false,
               height: 45,
             ),
@@ -78,9 +80,9 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
               height: 10,
             ),
 
-            ///customer list title
+            ///product list title
             Text(
-              'Customer List',
+              'Product List',
               style: TextStyle(
                 fontFamily: 'Source Sans Pro',
                 fontSize: 17,
@@ -95,36 +97,36 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
               ),
             ),
 
-            ///customer list builder
+            ///product list builder
             FutureBuilder<dynamic>(
-              future: _customerService.getAllCustomers(context),
+              future: _productService.getAllProducts(context),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 Widget child;
 
                 if (snapshot.hasData) {
                   if (snapshot.data == 204) {
                     child = CustomErrorText(
-                        text: "Customer data not available to show");
+                        text: "Product data not available to show");
                   } else if (snapshot.data == 1) {
                     child = ServerErrorText();
                   } else if (snapshot.data == -1) {
                     child = ConnectionErrorText();
                   } else {
-                    _customerList = snapshot.data;
+                    _productList = snapshot.data;
 
                     child = ListView.builder(
-                      itemCount: _customerList.length,
+                      itemCount: _productList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          child: CustomerCard(
-                            customer: _customerList[index],
+                          child: ProductCard(
+                            product: _productList[index],
                           ),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CustomerDetailPage(
-                                  customer: _customerList[index],
+                                builder: (context) => ProductDetailPage(
+                                  product: _productList[index],
                                 ),
                               ),
                             );

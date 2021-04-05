@@ -7,24 +7,42 @@ import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/components/leave_component/input_container.dart';
 import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/services/customer/customer_detail_availability_service.dart';
 import 'package:timecapturesystem/services/customer/customer_service.dart';
 
-class AddCustomerScreen extends StatefulWidget {
-  static const String id = "add_customer";
+class UpdateCustomerScreen extends StatefulWidget {
+  static const String id = "update_customer";
+
+  final Customer customer;
+
+  const UpdateCustomerScreen({Key key, this.customer}) : super(key: key);
+
   @override
-  _AddCustomerScreenState createState() => _AddCustomerScreenState();
+  _UpdateCustomerScreenState createState() => _UpdateCustomerScreenState();
 }
 
-class _AddCustomerScreenState extends State<AddCustomerScreen> {
+class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
   bool _spin = false;
 
   String _orgId;
   String _orgName;
   String _orgEmail;
 
+  String _orgIdNew;
+  String _orgNameNew;
+  String _orgEmailNew;
+
   ShowAlertDialog _alertDialog = ShowAlertDialog();
   CustomerService _customerService = CustomerService();
+
+  @override
+  void initState() {
+    super.initState();
+    _orgId = widget.customer.organizationID;
+    _orgName = widget.customer.organizationName;
+    _orgEmail = widget.customer.email;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +54,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         elevation: 0,
         backgroundColor: Colors.lightBlue.shade800,
         title: Text(
-          'Add Customer',
+          'Update Customer',
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
           ),
@@ -58,7 +76,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
 
-          ///customer form
+          ///customer update form
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -67,7 +85,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   height: 15,
                 ),
                 Text(
-                  'Enter Customer Details',
+                  'Change $_orgName details',
                   style: TextStyle(
                     fontFamily: 'Source Sans Pro',
                     color: Colors.lightBlue.shade800,
@@ -77,68 +95,144 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 ),
                 DividerBox(),
 
+                ///Instruction
+                Text(
+                  'Note:',
+                  style: TextStyle(
+                    fontFamily: 'Source Sans Pro',
+                    color: Colors.blueGrey,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                  child: Text(
+                    'Fill feilds that you only want to update. If you don\'t want to upadte any feild keep it blank or empty.',
+                    style: TextStyle(
+                      fontFamily: 'Source Sans Pro',
+                      color: Colors.blueGrey,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                DividerBox(),
+
                 ///Organization id
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Id*',
+                    labelText: 'Organization Id',
                     onChanged: (text) {
                       setState(() {
-                        this._orgId = text;
+                        this._orgIdNew = text;
                       });
                     },
                   ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 15),
+                    Text(
+                      'Previous : $_orgId',
+                      style: TextStyle(
+                        fontFamily: 'Source Sans Pro',
+                        color: Colors.blueGrey,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
                 ),
 
                 ///Organization name
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Name*',
+                    labelText: 'Organization Name',
                     onChanged: (text) {
                       setState(() {
-                        this._orgName = text;
+                        this._orgNameNew = text;
                       });
                     },
                   ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 15),
+                    Text(
+                      'Previous : $_orgName',
+                      style: TextStyle(
+                        fontFamily: 'Source Sans Pro',
+                        color: Colors.blueGrey,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
                 ),
 
                 ///email
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Email*',
+                    labelText: 'Email',
                     onChanged: (text) {
                       setState(() {
-                        this._orgEmail = text;
+                        this._orgEmailNew = text;
                       });
                     },
                   ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 15),
+                    Text(
+                      'Previous : $_orgEmail',
+                      style: TextStyle(
+                        fontFamily: 'Source Sans Pro',
+                        color: Colors.blueGrey,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
                 ),
 
                 ///button
                 RoundedButton(
                   color: Colors.blueAccent[200],
-                  title: 'Submit',
+                  title: 'Update',
                   minWidth: 200.0,
                   onPressed: () async {
-                    if (_checkConditions() && await _checkOrgId()) {
+                    if (await _checkOrgId() && setValues()) {
                       setState(() {
                         _spin = true;
                       });
 
-                      dynamic response = await _customerService.newCustomer(
-                          this._orgId, this._orgName, this._orgEmail);
+                      dynamic response = await _customerService.updateCustomer(
+                          widget.customer.id,
+                          this._orgIdNew,
+                          this._orgNameNew,
+                          this._orgEmailNew);
 
                       ///successful
-                      if (response == 201) {
+                      if (response == 200) {
                         setState(() {
                           _spin = false;
                         });
 
                         this._alertDialog.showAlertDialog(
                               context: context,
-                              title: 'Customer Added',
-                              body: 'New customer added succesfully',
+                              title: 'Customer Updated',
+                              body: 'Customer updated succesfully!',
                               color: Colors.blueAccent,
                               onPressed: () {
+                                Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
@@ -156,7 +250,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               context: context,
                               title: 'Error',
                               body:
-                                  'Cannot add this customer. Check inserted data and try again later. ',
+                                  'Cannot update this customer. Check inserted data and try again later. ',
                               color: Colors.redAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -192,54 +286,23 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     );
   }
 
-  bool _checkConditions() {
-    ///if organization id missing
-    if (this._orgId == null || this._orgId.trim() == '') {
-      _alertDialog.showAlertDialog(
-        title: 'Something Missing !',
-        body: 'Enter organization id',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+  bool setValues() {
+    ///set missing values as a previous values
+    if (this._orgIdNew == null || this._orgIdNew.trim() == '') {
+      this._orgIdNew = this._orgId;
+    }
+    if (this._orgNameNew == null || this._orgNameNew.trim() == '') {
+      this._orgNameNew = this._orgName;
+    }
+    if (this._orgEmailNew == null || this._orgEmailNew.trim() == '') {
+      this._orgEmailNew = this._orgEmail;
     }
 
-    ///if organization name missing
-    else if (this._orgName == null || this._orgName.trim() == '') {
-      _alertDialog.showAlertDialog(
-        title: 'Something Missing !',
-        body: 'Enter organization name',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if organization email missing
-    else if (this._orgEmail == null || this._orgEmail.trim() == '') {
-      _alertDialog.showAlertDialog(
-        title: 'Something Missing !',
-        body: 'Enter organization email',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if email is not valid
-    else if (!EmailValidator.validate(this._orgEmail)) {
+    ///validate email
+    if (!EmailValidator.validate(this._orgEmailNew)) {
       _alertDialog.showAlertDialog(
         title: 'Bad Input !',
-        body: 'Email is not valid',
+        body: 'New email is not valid',
         color: Colors.redAccent,
         context: context,
         onPressed: () {
@@ -249,20 +312,20 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       return false;
     }
 
-    ///if nothing missed
+    ///if ok
     return true;
   }
 
   Future<bool> _checkOrgId() async {
     dynamic res =
-        await CustomerDetailAvailabilityService.checkOrgId(this._orgId);
+        await CustomerDetailAvailabilityService.checkOrgId(this._orgIdNew);
 
     if (res == true) {
       ///if org Id exist
 
       _alertDialog.showAlertDialog(
         title: 'Bad Input !',
-        body: 'This organization id already exist. \nTry another id',
+        body: 'This new organization id already exist. \nTry another id',
         color: Colors.redAccent,
         context: context,
         onPressed: () {

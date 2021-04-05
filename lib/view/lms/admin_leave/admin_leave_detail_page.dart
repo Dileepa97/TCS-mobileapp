@@ -39,7 +39,6 @@ class AdminLeaveDetailsPage extends StatefulWidget {
 
 class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
   LeaveService _leaveService = LeaveService();
-  LeaveAvailabilityService _availabilityService = LeaveAvailabilityService();
 
   ShowAlertDialog _dialog = ShowAlertDialog();
 
@@ -48,21 +47,9 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
   bool isDownloaded = false;
   String filePath;
 
-  double _allowedDays;
-  double _requestedDays;
-  double _approvedDays;
-  double _takenDays;
-  double _availableDays;
-
-  // @override
-  // void initState() {
-  //   userLeaveTypeData(
-  //       widget.item.userId, EnumToString.convertToString(widget.item.type));
-  //   super.initState();
-  // }
-
   @override
   void initState() {
+    super.initState();
     getPermission();
   }
 

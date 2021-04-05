@@ -163,9 +163,9 @@ class LeaveService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
-        Leave _leaveList = Leave.fromJson(resBody);
+        Leave _leave = Leave.fromJson(resBody);
 
-        return _leaveList;
+        return _leave;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {

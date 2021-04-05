@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
-import 'package:timecapturesystem/components/leave_component/divider_box.dart';
-import 'package:timecapturesystem/models/customer/customer.dart';
-import 'package:timecapturesystem/services/customer/customer_service.dart';
-import 'package:timecapturesystem/view/customer/update_customer_screen.dart';
+import 'package:timecapturesystem/models/product/product.dart';
 
-class CustomerCard extends StatefulWidget {
-  final Customer customer;
+class ProductCard extends StatefulWidget {
+  final Product product;
 
-  const CustomerCard({
-    Key key,
-    this.customer,
-  }) : super(key: key);
-
+  const ProductCard({Key key, this.product}) : super(key: key);
   @override
-  _CustomerCardState createState() => _CustomerCardState();
+  _ProductCardState createState() => _ProductCardState();
 }
 
-class _CustomerCardState extends State<CustomerCard> {
+class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-      height: 60,
+      height: 90,
       margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -34,7 +26,7 @@ class _CustomerCardState extends State<CustomerCard> {
         children: [
           ///icon
           CircleAvatar(
-            child: Icon(Icons.work),
+            child: Icon(Icons.outbox),
             radius: 20,
             foregroundColor: Colors.white,
           ),
@@ -49,21 +41,34 @@ class _CustomerCardState extends State<CustomerCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ///Customer name
+                  ///product name
                   Text(
-                    widget.customer.organizationName,
+                    widget.product.productName,
                     style: TextStyle(
                       color: Colors.blue[800],
                       fontFamily: 'Source Sans Pro',
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                   ),
 
-                  ///number of products
+                  ///number of customers
                   Text(
-                    widget.customer.productIdList.length == 1
-                        ? '${widget.customer.productIdList.length} product available'
-                        : '${widget.customer.productIdList.length} products available',
+                    widget.product.customerIdList.length == 1
+                        ? '${widget.product.customerIdList.length} customer'
+                        : '${widget.product.customerIdList.length} customers',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontFamily: 'Source Sans Pro',
+                      fontSize: 15,
+                    ),
+                  ),
+
+                  ///number of tasks
+                  Text(
+                    // widget.item.users.length == 1
+                    //     ? '${widget.item.users.length} user unavailable record'
+                    //     : '${widget.item.users.length} user unavailable records',
+                    'Number of tasks for this product',
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontFamily: 'Source Sans Pro',
@@ -73,7 +78,7 @@ class _CustomerCardState extends State<CustomerCard> {
                 ],
               ),
             ),
-          ),
+          )
         ],
       ),
     );

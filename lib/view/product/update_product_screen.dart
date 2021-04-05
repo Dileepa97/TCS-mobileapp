@@ -1,6 +1,6 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:smart_select/smart_select.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
@@ -8,39 +8,58 @@ import 'package:timecapturesystem/components/leave_component/input_container.dar
 import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/customer/customer.dart';
+import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/customer/customer_service.dart';
+import 'package:timecapturesystem/services/product/product_service.dart';
 
-class UpdateCustomerScreen extends StatefulWidget {
-  static const String id = "update_customer";
+class UpdateProductScreen extends StatefulWidget {
+  static const String id = "update_product";
 
-  final Customer customer;
+  final Product product;
 
-  const UpdateCustomerScreen({Key key, this.customer}) : super(key: key);
-
+  const UpdateProductScreen({Key key, this.product}) : super(key: key);
   @override
-  _UpdateCustomerScreenState createState() => _UpdateCustomerScreenState();
+  _UpdateProductScreenState createState() => _UpdateProductScreenState();
 }
 
-class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
+class _UpdateProductScreenState extends State<UpdateProductScreen> {
   bool _spin = false;
+  bool _isData = false;
 
-  String _orgId;
-  String _orgName;
-  String _orgEmail;
+  String _productName;
+  String _description;
+  List<String> _customerIdList;
 
-  String _orgIdNew;
-  String _orgNameNew;
-  String _orgEmailNew;
+  String _productNameNew;
+  String _descriptionNew;
 
   ShowAlertDialog _alertDialog = ShowAlertDialog();
   CustomerService _customerService = CustomerService();
+  ProductService _productService = ProductService();
+  List<Customer> _customerList;
 
   @override
   void initState() {
     super.initState();
-    _orgId = widget.customer.organizationID;
-    _orgName = widget.customer.organizationName;
-    _orgEmail = widget.customer.email;
+    _productName = widget.product.productName;
+    _description = widget.product.productDescription;
+    _customerIdList = widget.product.customerIdList;
+    getIdList();
+  }
+
+  ///get customer list
+  void getIdList() async {
+    dynamic res = await _customerService.getAllCustomers(context);
+
+    if (res == 204 || res == 1 || res == -1) {
+      return;
+    } else {
+      _customerList = res;
+
+      setState(() {
+        _isData = true;
+      });
+    }
   }
 
   @override
@@ -64,7 +83,6 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
         ],
       ),
 
-      ///body
       body: ModalProgressHUD(
         inAsyncCall: _spin,
         child: Container(
@@ -75,7 +93,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
 
-          ///customer update form
+          ///product update form
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -84,7 +102,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   height: 15,
                 ),
                 Text(
-                  'Change $_orgName details',
+                  'Change $_productName product details',
                   style: TextStyle(
                     fontFamily: 'Source Sans Pro',
                     color: Colors.lightBlue.shade800,
@@ -118,13 +136,13 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                 ),
                 DividerBox(),
 
-                ///Organization id
+                ///Product name
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Id',
+                    labelText: 'Product name',
                     onChanged: (text) {
                       setState(() {
-                        this._orgIdNew = text;
+                        this._productNameNew = text;
                       });
                     },
                   ),
@@ -133,7 +151,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   children: [
                     SizedBox(width: 15),
                     Text(
-                      'Previous : $_orgId',
+                      'Previous : $_productName',
                       style: TextStyle(
                         fontFamily: 'Source Sans Pro',
                         color: Colors.blueGrey,
@@ -146,13 +164,14 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   height: 12,
                 ),
 
-                ///Organization name
+                ///Product description
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Name',
+                    maxLines: null,
+                    labelText: 'Product description',
                     onChanged: (text) {
                       setState(() {
-                        this._orgNameNew = text;
+                        this._descriptionNew = text;
                       });
                     },
                   ),
@@ -161,7 +180,9 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   children: [
                     SizedBox(width: 15),
                     Text(
-                      'Previous : $_orgName',
+                      _description != null
+                          ? 'Previous : $_description'
+                          : 'Previous : No description',
                       style: TextStyle(
                         fontFamily: 'Source Sans Pro',
                         color: Colors.blueGrey,
@@ -174,32 +195,50 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   height: 12,
                 ),
 
-                ///email
+                ///update customer list
                 InputContainer(
-                  child: InputTextField(
-                    labelText: 'Email',
-                    onChanged: (text) {
-                      setState(() {
-                        this._orgEmailNew = text;
-                      });
-                    },
-                  ),
-                ),
-                Row(
-                  children: [
-                    SizedBox(width: 15),
-                    Text(
-                      'Previous : $_orgEmail',
-                      style: TextStyle(
-                        fontFamily: 'Source Sans Pro',
-                        color: Colors.blueGrey,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 12,
+                  height: 70,
+                  child: _isData
+                      ? SmartSelect<String>.multiple(
+                          title: 'Custormers',
+                          modalTitle: 'Select customers',
+                          placeholder: 'Choose one or more',
+                          modalHeaderStyle: S2ModalHeaderStyle(
+                            textStyle: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 18,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          choiceStyle: S2ChoiceStyle(
+                            color: Colors.blueGrey,
+                            titleStyle: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 17,
+                            ),
+                          ),
+                          onChange: (selected) {
+                            setState(() => _customerIdList = selected.value);
+                          },
+                          choiceItems: S2Choice.listFrom<String, Customer>(
+                            source: _customerList,
+                            title: (index, item) => item.organizationName,
+                            value: (index, item) => item.id,
+                          ),
+                          choiceGrouped: false,
+                          modalType: S2ModalType.popupDialog,
+                          modalFilter: true,
+                          tileBuilder: (context, state) {
+                            return S2Tile.fromState(
+                              state,
+                              isTwoLine: true,
+                            );
+                          },
+                          value: _customerIdList,
+                        )
+                      : Center(
+                          child: Text('Waiting for customers...'),
+                        ),
                 ),
 
                 ///button
@@ -207,17 +246,19 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   color: Colors.blueAccent[200],
                   title: 'Update',
                   minWidth: 200.0,
+
+                  ///on pressed
                   onPressed: () async {
                     if (setValues()) {
                       setState(() {
                         _spin = true;
                       });
 
-                      dynamic response = await _customerService.updateCustomer(
-                          widget.customer.id,
-                          this._orgIdNew,
-                          this._orgNameNew,
-                          this._orgEmailNew);
+                      dynamic response = await _productService.updateProduct(
+                          widget.product.id,
+                          this._productNameNew,
+                          this._descriptionNew,
+                          this._customerIdList);
 
                       ///successful
                       if (response == 200) {
@@ -227,10 +268,11 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
 
                         this._alertDialog.showAlertDialog(
                               context: context,
-                              title: 'Customer Updated',
-                              body: 'Customer updated succesfully!',
+                              title: 'Product Updated',
+                              body: 'Product updated succesfully!',
                               color: Colors.blueAccent,
                               onPressed: () {
+                                Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
@@ -248,7 +290,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                               context: context,
                               title: 'Error',
                               body:
-                                  'Cannot update this customer. Check inserted data and try again later. ',
+                                  'Cannot update this product. try again later. ',
                               color: Colors.redAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -275,7 +317,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                       }
                     }
                   },
-                )
+                ),
               ],
             ),
           ),
@@ -286,31 +328,13 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
 
   bool setValues() {
     ///set missing values as a previous values
-    if (this._orgIdNew == null || this._orgIdNew.trim() == '') {
-      this._orgIdNew = this._orgId;
+    if (this._productNameNew == null || this._productNameNew.trim() == '') {
+      this._productNameNew = this._productName;
     }
-    if (this._orgNameNew == null || this._orgNameNew.trim() == '') {
-      this._orgNameNew = this._orgName;
-    }
-    if (this._orgEmailNew == null || this._orgEmailNew.trim() == '') {
-      this._orgEmailNew = this._orgEmail;
+    if (this._descriptionNew == null || this._descriptionNew.trim() == '') {
+      this._descriptionNew = this._description;
     }
 
-    ///validate email
-    if (!EmailValidator.validate(this._orgEmailNew)) {
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'New email is not valid',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if ok
     return true;
   }
 }

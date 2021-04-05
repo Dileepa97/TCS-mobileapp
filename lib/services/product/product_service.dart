@@ -2,27 +2,26 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:timecapturesystem/models/customer/customer.dart';
-
+import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API'].toString();
-var API = apiEndpoint + 'customers';
+var API = apiEndpoint + 'products';
 var apiAuth = DotEnv().env['API_Auth'].toString();
 String contentTypeHeader = 'application/json';
 
-class CustomerService {
-  ///add new customer
-  Future<dynamic> newCustomer(
-      String orgId, String orgName, String orgEmail) async {
+class ProductService {
+  ///add new product
+  Future<dynamic> newProduct(
+      String productName, String description, List<String> custIdList) async {
     try {
       var authHeader = await generateAuthHeader();
 
       var body = jsonEncode({
-        "organizationID": orgId,
-        "organizationName": orgName,
-        "email": orgEmail
+        "productName": productName,
+        "productDescription": description,
+        "customerIdList": custIdList
       });
 
       var res = await http.post(API, body: body, headers: {
@@ -40,8 +39,8 @@ class CustomerService {
     }
   }
 
-  ///Get all customers
-  Future<dynamic> getAllCustomers(dynamic context) async {
+  ///Get all products
+  Future<dynamic> getAllProducts(dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
 
@@ -53,13 +52,12 @@ class CustomerService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
-        List<Customer> _customerList =
-            (resBody as List).map((i) => Customer.fromJson(i)).toList();
+        List<Product> _productList =
+            (resBody as List).map((i) => Product.fromJson(i)).toList();
 
-        _customerList
-            .sort((a, b) => a.organizationName.compareTo(b.organizationName));
+        _productList.sort((a, b) => a.productName.compareTo(b.productName));
 
-        return _customerList;
+        return _productList;
       } else if (res.statusCode == 204) {
         return res.statusCode;
       } else {
@@ -70,8 +68,8 @@ class CustomerService {
     }
   }
 
-  ///get customer by id
-  static Future<dynamic> getCustomerById(String id) async {
+  ///get product by id
+  static Future<dynamic> getProductById(String id) async {
     try {
       var authHeader = await generateAuthHeader();
 
@@ -83,7 +81,7 @@ class CustomerService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
-        Customer _customer = Customer.fromJson(resBody);
+        Product _customer = Product.fromJson(resBody);
 
         return _customer;
       } else {
@@ -94,8 +92,8 @@ class CustomerService {
     }
   }
 
-  ///delete customer
-  Future<dynamic> deleteCustomer(String id) async {
+  ///delete product
+  Future<dynamic> deleteProduct(String id) async {
     try {
       var authHeader = await generateAuthHeader();
 
@@ -114,16 +112,16 @@ class CustomerService {
     }
   }
 
-  ///update customer
-  Future<dynamic> updateCustomer(
-      String id, String orgId, String orgName, String orgEmail) async {
+  ///update product
+  Future<dynamic> updateProduct(String id, String productName,
+      String description, List<String> custIdList) async {
     try {
       var authHeader = await generateAuthHeader();
 
       var body = jsonEncode({
-        "organizationID": orgId,
-        "organizationName": orgName,
-        "email": orgEmail
+        "productName": productName,
+        "productDescription": description,
+        "customerIdList": custIdList
       });
 
       var res = await http.put(API + '/$id', body: body, headers: {

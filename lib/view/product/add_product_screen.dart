@@ -1,30 +1,55 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:smart_select/smart_select.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/components/leave_component/input_container.dart';
 import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/services/customer/customer_detail_availability_service.dart';
+import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/services/customer/customer_service.dart';
+import 'package:timecapturesystem/services/product/product_service.dart';
 
-class AddCustomerScreen extends StatefulWidget {
-  static const String id = "add_customer";
+class AddProductScreen extends StatefulWidget {
+  static const String id = "add_product";
   @override
-  _AddCustomerScreenState createState() => _AddCustomerScreenState();
+  _AddProductScreenState createState() => _AddProductScreenState();
 }
 
-class _AddCustomerScreenState extends State<AddCustomerScreen> {
+class _AddProductScreenState extends State<AddProductScreen> {
   bool _spin = false;
+  bool _isData = false;
 
-  String _orgId;
-  String _orgName;
-  String _orgEmail;
+  String _productName;
+  String _description;
+  List<String> _customerIdList;
 
   ShowAlertDialog _alertDialog = ShowAlertDialog();
   CustomerService _customerService = CustomerService();
+  ProductService _productService = ProductService();
+  List<Customer> _customerList;
+
+  @override
+  void initState() {
+    super.initState();
+    getIdList();
+  }
+
+  ///get customer list
+  void getIdList() async {
+    dynamic res = await _customerService.getAllCustomers(context);
+
+    if (res == 204 || res == 1 || res == -1) {
+      return;
+    } else {
+      _customerList = res;
+
+      setState(() {
+        _isData = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +61,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         elevation: 0,
         backgroundColor: Colors.lightBlue.shade800,
         title: Text(
-          'Add Customer',
+          'Add Product',
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
           ),
@@ -58,7 +83,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
 
-          ///customer form
+          ///product form
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -67,7 +92,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   height: 15,
                 ),
                 Text(
-                  'Enter Customer Details',
+                  'Enter Product Details',
                   style: TextStyle(
                     fontFamily: 'Source Sans Pro',
                     color: Colors.lightBlue.shade800,
@@ -77,40 +102,75 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 ),
                 DividerBox(),
 
-                ///Organization id
+                ///Product name
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Id*',
+                    labelText: 'Product name*',
                     onChanged: (text) {
                       setState(() {
-                        this._orgId = text;
+                        this._productName = text;
                       });
                     },
                   ),
                 ),
 
-                ///Organization name
+                ///Product description
                 InputContainer(
                   child: InputTextField(
-                    labelText: 'Organization Name*',
+                    maxLines: null,
+                    labelText: 'Product description (optional)',
                     onChanged: (text) {
                       setState(() {
-                        this._orgName = text;
+                        this._description = text;
                       });
                     },
                   ),
                 ),
 
-                ///email
+                ///Select customers
                 InputContainer(
-                  child: InputTextField(
-                    labelText: 'Email*',
-                    onChanged: (text) {
-                      setState(() {
-                        this._orgEmail = text;
-                      });
-                    },
-                  ),
+                  height: 70,
+                  child: _isData
+                      ? SmartSelect<String>.multiple(
+                          title: 'Custormers',
+                          modalTitle: 'Select customers',
+                          placeholder: 'Choose one or more',
+                          modalHeaderStyle: S2ModalHeaderStyle(
+                            textStyle: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 18,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          choiceStyle: S2ChoiceStyle(
+                            color: Colors.blueGrey,
+                            titleStyle: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 17,
+                            ),
+                          ),
+                          onChange: (selected) {
+                            setState(() => _customerIdList = selected.value);
+                          },
+                          choiceItems: S2Choice.listFrom<String, Customer>(
+                            source: _customerList,
+                            title: (index, item) => item.organizationName,
+                            value: (index, item) => item.id,
+                          ),
+                          choiceGrouped: false,
+                          modalType: S2ModalType.popupDialog,
+                          modalFilter: true,
+                          tileBuilder: (context, state) {
+                            return S2Tile.fromState(
+                              state,
+                              isTwoLine: true,
+                            );
+                          },
+                          value: [],
+                        )
+                      : Center(
+                          child: Text('Waiting for customers...'),
+                        ),
                 ),
 
                 ///button
@@ -118,14 +178,18 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   color: Colors.blueAccent[200],
                   title: 'Submit',
                   minWidth: 200.0,
+
+                  ///on pressed
                   onPressed: () async {
-                    if (_checkConditions() && await _checkOrgId()) {
+                    if (_checkConditions()) {
                       setState(() {
                         _spin = true;
                       });
 
-                      dynamic response = await _customerService.newCustomer(
-                          this._orgId, this._orgName, this._orgEmail);
+                      dynamic response = await _productService.newProduct(
+                          this._productName,
+                          this._description,
+                          this._customerIdList);
 
                       ///successful
                       if (response == 201) {
@@ -135,8 +199,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
                         this._alertDialog.showAlertDialog(
                               context: context,
-                              title: 'Customer Added',
-                              body: 'New customer added succesfully',
+                              title: 'Product Added',
+                              body: 'New product added succesfully',
                               color: Colors.blueAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -156,7 +220,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               context: context,
                               title: 'Error',
                               body:
-                                  'Cannot add this customer. Check inserted data and try again later. ',
+                                  'Cannot add this product. Check inserted data and try again later. ',
                               color: Colors.redAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -183,7 +247,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                       }
                     }
                   },
-                )
+                ),
               ],
             ),
           ),
@@ -192,12 +256,13 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     );
   }
 
+  ///check inputs
   bool _checkConditions() {
-    ///if organization id missing
-    if (this._orgId == null || this._orgId.trim() == '') {
+    ///if product name missing
+    if (this._productName == null || this._productName.trim() == '') {
       _alertDialog.showAlertDialog(
         title: 'Something Missing !',
-        body: 'Enter organization id',
+        body: 'Enter product name',
         color: Colors.redAccent,
         context: context,
         onPressed: () {
@@ -207,85 +272,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       return false;
     }
 
-    ///if organization name missing
-    else if (this._orgName == null || this._orgName.trim() == '') {
-      _alertDialog.showAlertDialog(
-        title: 'Something Missing !',
-        body: 'Enter organization name',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if organization email missing
-    else if (this._orgEmail == null || this._orgEmail.trim() == '') {
-      _alertDialog.showAlertDialog(
-        title: 'Something Missing !',
-        body: 'Enter organization email',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if email is not valid
-    else if (!EmailValidator.validate(this._orgEmail)) {
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'Email is not valid',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
-
-    ///if nothing missed
+    ///is ok
     return true;
-  }
-
-  Future<bool> _checkOrgId() async {
-    dynamic res =
-        await CustomerDetailAvailabilityService.checkOrgId(this._orgId);
-
-    if (res == true) {
-      ///if org Id exist
-
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'This organization id already exist. \nTry another id',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (res == false) {
-      return true;
-    } else {
-      /// if any error occured
-
-      _alertDialog.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking organization id is exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    }
   }
 }
