@@ -13,6 +13,8 @@ import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_scree
 import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/product/product_managemnet_dashboard_screen.dart';
+import 'package:timecapturesystem/view/task/product_list.dart';
+import 'package:timecapturesystem/view/task/user_tasks/user_task_dashboard.dart';
 import 'package:timecapturesystem/view/team/team_view.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
@@ -215,63 +217,115 @@ class _SideDrawerState extends State<SideDrawer> {
                         )
                       : SizedBox(),
 
-                  ///customer management
-                  //TODO: Roll assign
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.work),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Customer Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, CustomerDashboard.id);
-                    },
-                  ),
+                  ///customer management - admin
+                  _userAvailable && user.highestRoleIndex == 2
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.business_outlined),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Customer Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, CustomerDashboard.id);
+                          },
+                        )
+                      : SizedBox(),
 
-                  ///product management
-                  //TODO: Roll assign
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.outbox),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Product Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(
-                          context, ProductManagementDashboard.id);
-                    },
-                  ),
+                  ///product management - admin
+                  _userAvailable && user.highestRoleIndex == 2
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.outbox),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Product Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, ProductManagementDashboard.id);
+                          },
+                        )
+                      : SizedBox(),
 
-                  ///Team management
-                  //TODO: Roll assign
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.people),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Team Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => TeamView()));
-                    },
-                  ),
+                  ///Task management - admin
+                  _userAvailable && user.highestRoleIndex == 2
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.business_center),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Task Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        TaskPanel()));
+                          },
+                        )
+                      : SizedBox(),
+
+                  ///Task details - team leader, team member
+                  _userAvailable && user.highestRoleIndex < 2
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.widgets),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Task Details'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        UserTaskDashboard("184180F")));
+                          },
+                        )
+                      : SizedBox(),
+
+                  ///Team management - admin, team leader
+                  _userAvailable &&
+                          (user.highestRoleIndex == 2 ||
+                              user.highestRoleIndex == 1)
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Team Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        TeamView()));
+                          },
+                        )
+                      : SizedBox(),
 
                   ///title management - super admin , admin
                   _userAvailable && user.highestRoleIndex > 1
