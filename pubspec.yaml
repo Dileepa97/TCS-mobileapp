@@ -56,7 +56,7 @@ dependencies:
   open_file: 2.1.0
   email_validator: ^1.0.6
   smart_select: ^4.3.2
-  
+
 
 #flutter_icons:
 #  image_path: "images/icon.png"
