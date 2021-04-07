@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/view/LMS/user_leave/leave_request_main_screen.dart';
 import 'package:timecapturesystem/view/task/add_tasks.dart';
-import 'package:timecapturesystem/view/task/product_dashboard.dart';
+import 'package:timecapturesystem/view/task/task_dashboard.dart';
 
 Widget viewTaskDrawer(BuildContext context) {
   return Drawer(
@@ -15,7 +15,7 @@ Widget viewTaskDrawer(BuildContext context) {
           title: Text("Dashboard"),
           onTap: () async{
             Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (BuildContext context) => ProductDashboard("110")
+                builder: (BuildContext context) => TaskDashboard("110")
             )
             );
           },

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
+import 'package:timecapturesystem/services/other/notification_service.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 
 import '../other/storage_service.dart';
@@ -41,6 +42,26 @@ class UserService {
     var res = await fetchLoggedInUser();
     if (res.statusCode == 200) {
       return User.fromJson(jsonDecode(res.body));
+    } else {
+      return null;
+    }
+  }
+
+  static Future<dynamic> getLoggedInUserJSON() async {
+    var res = await fetchLoggedInUser();
+    if (res.statusCode == 200) {
+      return res;
+    } else {
+      return null;
+    }
+  }
+
+  static dynamic getLoggedInUserAndNotificationCount() async {
+    var res = await fetchLoggedInUser();
+    if (res.statusCode == 200) {
+      var uc = await NotificationService.unseenNotificationCount();
+      var list = [User.fromJson(jsonDecode(res.body)), uc];
+      return list;
     } else {
       return null;
     }

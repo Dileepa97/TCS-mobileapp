@@ -23,18 +23,21 @@ class SideDrawer extends StatefulWidget {
 class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
+    User _user;
+    String unseenCount = '0';
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder<User>(
-            future: UserService.getLoggedInUser(),
-            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+        child: FutureBuilder<dynamic>(
+            future: UserService.getLoggedInUserAndNotificationCount(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               Widget _emailWidget;
               Widget _nameWidget;
               Widget _avatar;
 
               if (snapshot.hasData) {
-                User _user = snapshot.data;
+                _user = snapshot.data[0];
+                unseenCount = snapshot.data[1];
 
                 _emailWidget = Text(
                   _user.email,
@@ -95,6 +98,30 @@ class _SideDrawerState extends State<SideDrawer> {
                           width: 5.0,
                         ),
                         Text('Notification Center'),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        unseenCount != '0'
+                            ? Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: new BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 22,
+                                  minHeight: 22,
+                                ),
+                                child: new Text(
+                                  unseenCount,
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            : Text('')
                       ],
                     ),
                     onTap: () {
@@ -164,6 +191,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       Navigator.pushNamed(context, TitleManagementScreen.id);
                     },
                   ),
+                  DividerBox(),
                   ListTile(
                     title: Row(
                       children: [
@@ -181,10 +209,11 @@ class _SideDrawerState extends State<SideDrawer> {
                       ));
                     },
                   ),
-                  DividerBox(),
                   ListTile(
                     title: Row(
                       children: [
+                        Icon(Icons.logout),
+                        SizedBox(width: 6.0),
                         Text('Logout'),
                       ],
                     ),

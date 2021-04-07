@@ -49,7 +49,7 @@ class NotificationService {
     return res;
   }
 
-  static unseenNotificationCount() async {
+  static Future<String> unseenNotificationCount() async {
     try {
       var authHeader = await generateAuthHeader();
       var res = await http.get(notificationAPI + 'unseen-count', headers: {
@@ -58,7 +58,7 @@ class NotificationService {
       });
       return res.body;
     } catch (e) {
-      return 0;
+      return '0';
     }
   }
 }

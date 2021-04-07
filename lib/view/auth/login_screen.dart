@@ -28,6 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Time Capture System'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: spin,
@@ -38,17 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(
-                  height: 80.0,
+                  height: 40.0,
                 ),
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    height: 200.0,
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset(
+                      'images/logo.png',
+                    ),
+                    height: 160,
                   ),
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 50.0,
                 ),
                 TextField(
                   controller: _usernameController,
