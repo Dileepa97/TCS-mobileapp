@@ -7,9 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/Auth/auth_response.dart';
 import 'package:timecapturesystem/models/auth/title.dart';
-import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
-
 import '../other/storage_service.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
@@ -33,6 +31,7 @@ class AuthService {
         headers: {HttpHeaders.contentTypeHeader: contentTypeHeader});
 
     if (res.statusCode == 200) {
+      await storage.write(key: "username", value: username);
       AuthResponse authResponse = AuthResponse.fromJson(jsonDecode(res.body));
       authResponse.tokenExpirationDate =
           DateTime.now().add(new Duration(days: 1));

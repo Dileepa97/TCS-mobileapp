@@ -1,56 +1,62 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
-import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/lms/absent_user_data.dart';
-import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/models/lms/leave_method.dart';
 import 'package:timecapturesystem/services/lms/leave_service.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/user_data.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
 import 'package:timecapturesystem/view/lms/check_leaves.dart';
+import 'package:timecapturesystem/view/lms/team_leader/TL_leave_detail_screen.dart';
 
 class AbsentUserCard extends StatefulWidget {
   final AbsentUser userData;
+  final bool isTeam;
 
-  const AbsentUserCard({Key key, this.userData}) : super(key: key);
+  const AbsentUserCard({Key key, this.userData, this.isTeam}) : super(key: key);
+
   @override
   _AbsentUserCardState createState() => _AbsentUserCardState();
 }
 
 class _AbsentUserCardState extends State<AbsentUserCard> {
   LeaveService _leaveService = LeaveService();
+  ShowAlertDialog _dialog = ShowAlertDialog();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       height: 150,
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Column(
         children: [
+          ///Row1
           Row(
             children: [
+              ///profile image
               UserProfileImage(
                   userId: widget.userData.userId, height: 35, width: 35),
+
+              ///user name
               UserNameText(
                 userId: widget.userData.userId,
                 fontSize: 16,
               )
             ],
           ),
+
+          ///Row2
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ///leave type
                 Text(
                   EnumToString.convertToString(widget.userData.type)
                           .substring(0, 1) +
@@ -59,12 +65,13 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                           .toLowerCase()
                           .replaceAll('_', '\n'),
                   style: TextStyle(
-                    // fontWeight: FontWeight.bold,
                     color: Colors.purple[900],
                     fontFamily: 'Source Sans Pro',
-                    fontSize: 15,
+                    fontSize: 16,
                   ),
                 ),
+
+                ///leave status
                 Text(
                   EnumToString.convertToString(widget.userData.status)
                           .substring(0, 1) +
@@ -78,6 +85,8 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                         .statusColor(),
                   ),
                 ),
+
+                ///type & status icon
                 CircleAvatar(
                   child: CheckType(type: widget.userData.type).typeIcon(),
                   radius: 15,
@@ -88,23 +97,28 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
               ],
             ),
           ),
+
+          ///Row3
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ///unavailable time
                 DetailRow(
                   keyString: 'Unavailable in',
                   valueString: CheckMethod(method: widget.userData.method)
                       .methodString(),
                 ),
+
+                ///buuton to leave detail page
                 GestureDetector(
                   child: Container(
-                    padding: const EdgeInsets.all(3.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 3),
                     child: Text(
                       'Leave',
                       style: TextStyle(
-                        // fontWeight: FontWeight.bold,
                         color: Colors.blue,
                         fontFamily: 'Source Sans Pro',
                         fontSize: 15,
@@ -117,14 +131,35 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                     ),
                   ),
                   onTap: () async {
-                    Leave data = await _leaveService
+                    dynamic data = await _leaveService
                         .getLeaveById(widget.userData.leaveId);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LeaveDetailsPage(item: data),
-                      ),
-                    );
+                    if (data == 204 || data == 1 || data == -1) {
+                      this._dialog.showAlertDialog(
+                            context: context,
+                            title: 'Error occured',
+                            body: 'Cannot fetch this leave data',
+                            color: Colors.redAccent,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                    } else {
+                      widget.isTeam
+                          ? Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    TLLeaveDetailsPage(item: data),
+                              ),
+                            )
+                          : Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminLeaveDetailsPage(item: data),
+                              ),
+                            );
+                    }
                   },
                 )
               ],

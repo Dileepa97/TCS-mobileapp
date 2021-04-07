@@ -6,8 +6,10 @@ import 'absent_day_card.dart';
 
 class AbsentUserListViewBuilder extends StatelessWidget {
   final List<NotAvailableUsers> list;
+  final bool isTeam;
 
-  const AbsentUserListViewBuilder({Key key, this.list}) : super(key: key);
+  const AbsentUserListViewBuilder({Key key, this.list, this.isTeam})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +17,17 @@ class AbsentUserListViewBuilder extends StatelessWidget {
       itemCount: list.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          child: AbsentDayCard(item: list[index]),
+          child: AbsentDayCard(
+            item: list[index],
+          ),
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AbsentUserDetailScreen(item: list[index]),
+                builder: (context) => AbsentUserDetailScreen(
+                  item: list[index],
+                  isTeam: isTeam,
+                ),
               ),
             );
           },

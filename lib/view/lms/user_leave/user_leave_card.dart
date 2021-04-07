@@ -17,18 +17,15 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-      height: 90,
+      height: 100,
+      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Row(
         children: <Widget>[
+          ///leave icon
           CircleAvatar(
             child: CheckType(type: widget.item.type).typeIcon(),
             radius: 25,
@@ -39,12 +36,15 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
           SizedBox(
             width: 5,
           ),
+
+          ///details
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  ///leave title
                   Text(
                     this.widget.item.title,
                     style: TextStyle(
@@ -54,6 +54,8 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
+                  ///leave start date
                   Text(
                     'Start date : ' +
                         widget.item.startDate
@@ -68,6 +70,7 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        ///leave type
                         Text(
                           EnumToString.convertToString(widget.item.type)
                                   .substring(0, 1) +
@@ -76,12 +79,13 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                                   .toLowerCase()
                                   .replaceAll('_', ' '),
                           style: TextStyle(
-                            // fontWeight: FontWeight.bold,
                             color: Colors.purple[900],
                             fontFamily: 'Source Sans Pro',
                             fontSize: 15,
                           ),
                         ),
+
+                        ///leave status
                         Text(
                           EnumToString.convertToString(widget.item.status)
                                   .substring(0, 1) +

@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 
-const kSendButtonTextStyle = TextStyle(
-  color: Colors.lightBlueAccent,
-  fontWeight: FontWeight.bold,
-  fontSize: 18.0,
-);
-
-const kMessageTextFieldDecoration = InputDecoration(
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  hintText: 'Type your message here...',
-  border: InputBorder.none,
-);
-
-const kMessageContainerDecoration = BoxDecoration(
-  border: Border(
-    top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-  ),
-);
-
-inputDeco(Color color) {
+inputDeco(Color color, TextEditingController controller) {
   return InputDecoration(
+    suffixIcon: IconButton(
+      onPressed: controller.clear,
+      icon: Icon(
+        Icons.close,
+        color: Colors.red,
+        size: 20,
+      ),
+    ),
     hintText: 'hint Text',
     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
     border: OutlineInputBorder(
@@ -36,5 +26,24 @@ inputDeco(Color color) {
   );
 }
 
-//
-// const kTextFieldDecoration =
+inputDecoForEdit(Color color, TextEditingController controller, String hintText,
+    bool status) {
+  return InputDecoration(
+    suffixIcon: IconButton(
+      onPressed: controller.clear,
+      icon: Icon(
+        Icons.close,
+        color: Colors.red,
+        size: 20,
+      ),
+    ),
+    enabled: !status,
+    hintText: hintText,
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: color),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: color),
+    ),
+  );
+}

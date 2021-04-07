@@ -10,15 +10,24 @@ import '../constants.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key, this.username}) : super(key: key);
   static const String id = "login_screen";
+  final String username;
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(this.username);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  TextEditingController _usernameController;
   final TextEditingController _passwordController = TextEditingController();
+
+  _LoginScreenState(String username) {
+    if (username != null) {
+      this._usernameController = TextEditingController(text: username);
+    } else
+      _usernameController = TextEditingController();
+  }
 
   bool spin = false;
 
@@ -43,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(
-                  height: 40.0,
+                  height: 30.0,
                 ),
                 Hero(
                   tag: 'logo',
@@ -51,9 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Image.asset(
                       'images/logo.png',
                     ),
-                    height: 160,
+                    height: 120,
                   ),
                 ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                // Center(
+                //     child: Text(
+                //   'Time Capture System',
+                //   style: TextStyle(
+                //       fontSize: 30,
+                //       fontFamily: 'Roboto',
+                //       fontWeight: FontWeight.w800),
+                // )),
                 SizedBox(
                   height: 50.0,
                 ),
@@ -67,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       usernameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(usernameInitColor)
+                  decoration: inputDeco(usernameInitColor, _usernameController)
                       .copyWith(hintText: 'Username'),
                 ),
                 SizedBox(
@@ -84,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(passwordInitColor)
+                  decoration: inputDeco(passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 SizedBox(
@@ -93,19 +113,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 RoundedButton(
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    if (_usernameController.text.isEmpty ||
-                        _passwordController.text.isEmpty) {
-                      if (_usernameController.text.isEmpty) {
+                    if (_usernameController.text.trim().isEmpty ||
+                        _passwordController.text.trim().isEmpty) {
+                      if (_usernameController.text.trim().isEmpty) {
                         setState(() {
                           usernameInitColor = Colors.redAccent;
                         });
                       }
-                      if (_passwordController.text.isEmpty) {
+                      if (_passwordController.text.trim().isEmpty) {
                         setState(() {
                           passwordInitColor = Colors.redAccent;
                         });
                       }
-
                       return;
                     }
 
@@ -115,7 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     //implement login
                     try {
                       int code = await AuthService.login(
-                          _usernameController.text, _passwordController.text);
+                          _usernameController.text.trim(),
+                          _passwordController.text.trim());
                       if (code == 1) {
                         //login success
                         app.main();
@@ -139,7 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });

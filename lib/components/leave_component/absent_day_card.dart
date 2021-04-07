@@ -17,17 +17,14 @@ class _AbsentDayCardState extends State<AbsentDayCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       height: 90,
+      margin: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black12,
-            width: 1.0,
-          ),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       child: Row(
         children: [
+          ///icon
           CircleAvatar(
             child: Icon(Icons.today_outlined),
             radius: 20,
@@ -36,12 +33,15 @@ class _AbsentDayCardState extends State<AbsentDayCard> {
           SizedBox(
             width: 8,
           ),
+
+          ///details
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ///date
                   Text(
                     DateFormat.yMMMMd().format(widget.item.date),
                     style: TextStyle(
@@ -49,6 +49,8 @@ class _AbsentDayCardState extends State<AbsentDayCard> {
                         fontFamily: 'Source Sans Pro',
                         fontSize: 20),
                   ),
+
+                  ///week day
                   Text(
                     DateFormat.EEEE().format(widget.item.date),
                     style: TextStyle(
@@ -57,6 +59,8 @@ class _AbsentDayCardState extends State<AbsentDayCard> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
+
+                  ///number of records
                   Text(
                     widget.item.users.length == 1
                         ? '${widget.item.users.length} user unavailable record'

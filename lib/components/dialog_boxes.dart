@@ -15,43 +15,13 @@ void displayDialog(context, title, text) => showDialog(
             )),
     );
 
-void displayRegSuccessDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Registration Success"),
-        content: Text(
-            "You have successfully registered to time capture system\nPlease check your email for confirmation link"),
-        actions: [
-          FlatButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+void displayRegSuccessDialog(context) => displayDialog(
+    context,
+    "Registration Success",
+    "You have successfully registered to time capture system, please check your email for confirmation link");
 
-void displayPWDResetSuccessDialog(context) => showDialog(
-      barrierColor: Colors.black54,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Success"),
-        content: Text(
-            "You have successfully reset your password, now you can login with your new password"),
-        actions: [
-          FlatButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
+void displayPWDResetSuccessDialog(context) => displayDialog(context, "Success",
+    "You have successfully reset your password, now you can login with your new password");
 
 void displayPWDChangedSuccessDialog(context) => showDialog(
       barrierColor: Colors.black54,
@@ -136,7 +106,10 @@ Future<bool> displayConfirmationBox(context, content) async {
             content: Text(content),
             actions: [
               FlatButton(
-                child: Text("Confirm"),
+                child: Text(
+                  "Confirm",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
                 onPressed: () {
                   confirm = true;
                   Navigator.pop(context);
@@ -145,6 +118,7 @@ Future<bool> displayConfirmationBox(context, content) async {
               FlatButton(
                 child: Text(
                   "Cancel",
+                  style: TextStyle(color: Colors.redAccent),
                 ),
                 onPressed: () {
                   confirm = false;
@@ -207,4 +181,11 @@ Future<bool> displayDeleteTitleSureDialog(context) {
 Future<bool> displayChangeTitleSureDialog(context) {
   return displayConfirmationBox(context,
       "This will change the title of users who have already been assigned to this title");
+}
+
+Future<bool> displayUpdateDialog(context) {
+  return displayConfirmationBox(
+      context,
+      "Since your're updating profile you'll get un-verified, "
+      "Hence an admin must verify your account for you to log back into the system again");
 }

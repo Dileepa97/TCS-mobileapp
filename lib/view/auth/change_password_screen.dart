@@ -63,8 +63,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _oldPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_oldPasswordInitColor)
-                      .copyWith(hintText: 'Current Password'),
+                  decoration:
+                      inputDeco(_oldPasswordInitColor, _oldPasswordController)
+                          .copyWith(hintText: 'Current Password'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
@@ -82,7 +83,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_passwordInitColor)
+                  decoration: inputDeco(_passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
                 SizedBox(
@@ -101,7 +102,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       _confirmPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_confirmPasswordInitColor)
+                  decoration: inputDeco(
+                          _confirmPasswordInitColor, _confirmPasswordController)
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(
@@ -111,19 +113,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
                     var flag = 0;
-                    if (_passwordController.text.isEmpty) {
+                    if (_passwordController.text.trim().isEmpty) {
                       setState(() {
                         _passwordInitColor = Colors.redAccent;
                       });
                       flag++;
                     }
-                    if (_confirmPasswordController.text.isEmpty) {
+                    if (_confirmPasswordController.text.trim().isEmpty) {
                       setState(() {
                         _confirmPasswordInitColor = Colors.redAccent;
                       });
                       flag++;
                     }
-                    if (_oldPasswordController.text.isEmpty) {
+                    if (_oldPasswordController.text.trim().isEmpty) {
                       setState(() {
                         _oldPasswordInitColor = Colors.redAccent;
                       });
@@ -171,7 +173,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       }
                     } catch (e) {
                       displayDialog(context, "Error", e.toString());
-                      print(e.toString());
                       setState(() {
                         spin = false;
                       });
@@ -188,7 +189,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   passwordsMatch() {
-    if (_passwordController.text != _confirmPasswordController.text) {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
       setState(() {
         _confirmPasswordInitColor = Colors.redAccent.shade700;
         _passwordInitColor = Colors.redAccent.shade700;

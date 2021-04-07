@@ -4,7 +4,7 @@ import 'package:timecapturesystem/view/task/task_detail.dart';
 // ignore: must_be_immutable
 class ViewTasks extends StatefulWidget {
   String taskId;
-  ViewTasks(String taskId){
+  ViewTasks(String taskId) {
     this.taskId = taskId;
   }
   @override
@@ -12,34 +12,38 @@ class ViewTasks extends StatefulWidget {
 }
 
 class _ViewTasksState extends State<ViewTasks> {
+  List<String> taskList = [
+    'Task 1',
+    'Task 2',
+    'Task 3',
+    'Task 4',
+    'Task 5',
+    'Task 6'
+  ];
 
-  List<String> taskList = ['Task 1','Task 2','Task 3','Task 4','Task 5','Task 6'];
-
-  Widget searchBar(){
+  Widget searchBar() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       child: TextFormField(
-        decoration: InputDecoration(
-          hintText: "Search",
-          contentPadding: EdgeInsets.symmetric(horizontal: 20),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: (){
-              print("Pressed");
-            },
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50),
-          )
-        )
-      ),
+          decoration: InputDecoration(
+              hintText: "Search",
+              contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  print("Pressed");
+                },
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+              ))),
     );
   }
 
-  Widget taskListView(List<String> tasks){
+  Widget taskListView(List<String> tasks) {
     List<Widget> tasksList = new List<Widget>();
 
-    for(int i = 0; i<tasks.length; i++){
+    for (int i = 0; i < tasks.length; i++) {
       tasksList.add(Container(
         // width: MediaQuery.of(context).size.width * 0.95,
         child: new Card(
@@ -56,12 +60,15 @@ class _ViewTasksState extends State<ViewTasks> {
             ),
             trailing: IconButton(
               icon: Icon(Icons.more_vert_rounded),
+              onPressed: () {},
             ),
             subtitle: Text("tap to more information"),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context)=>TaskDetail("dwwd1019")
-              ));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          TaskDetail("dwwd1019")));
             },
             contentPadding: EdgeInsets.symmetric(horizontal: 12),
           ),
@@ -77,10 +84,8 @@ class _ViewTasksState extends State<ViewTasks> {
     return Scaffold(
       appBar: AppBar(
         title: Text("All Tasks",
-            style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w600
-            )),
+            style:
+                TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)),
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
@@ -89,15 +94,18 @@ class _ViewTasksState extends State<ViewTasks> {
       ),
       // drawer: viewTaskDrawer(context),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 25,),
-            Center(child: searchBar()),
-            SizedBox(height: 25,),
-            taskListView(this.taskList)
-          ],
-        )
-      ),
+          child: Column(
+        children: [
+          SizedBox(
+            height: 25,
+          ),
+          Center(child: searchBar()),
+          SizedBox(
+            height: 25,
+          ),
+          taskListView(this.taskList)
+        ],
+      )),
     );
   }
 }

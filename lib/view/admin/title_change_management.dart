@@ -101,7 +101,7 @@ class _TitleChangeManagementScreenState
                       _titleInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_titleInitColor)
+                  decoration: inputDeco(_titleInitColor, _titleController)
                       .copyWith(hintText: 'New Title Name'),
                 ),
                 SizedBox(
@@ -139,7 +139,6 @@ class _TitleChangeManagementScreenState
                         }
                       } catch (e) {
                         displayDialog(context, "Error", e.toString());
-                        print(e.toString());
                         setState(() {
                           spin = false;
                         });

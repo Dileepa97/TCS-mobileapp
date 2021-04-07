@@ -12,10 +12,12 @@ class InputTextField extends StatelessWidget {
     return TextField(
       autocorrect: true,
       maxLines: maxLines,
+      style: TextStyle(
+        fontFamily: 'Source Sans Pro',
+      ),
       textCapitalization: TextCapitalization.sentences,
       //textInputAction: TextInputAction.continueAction,
       decoration: InputDecoration(
-        //hintText: 'Leave Title',
         border: InputBorder.none,
         labelText: labelText,
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
@@ -7,6 +8,7 @@ import 'package:timecapturesystem/services/auth/auth_service.dart';
 import 'package:timecapturesystem/services/auth/title_service.dart';
 
 import '../constants.dart';
+import 'login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = "registration_screen";
@@ -44,6 +46,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   var onProbationary = false;
 
+  String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +83,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _usernameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_usernameInitColor)
+                  decoration: inputDeco(_usernameInitColor, _usernameController)
                       .copyWith(hintText: 'Username'),
                 ),
                 SizedBox(
@@ -91,11 +95,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //Do something with the user input.
                   },
                   onTap: () {
+                    checkUsername();
                     setState(() {
                       _fullNameInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_fullNameInitColor)
+                  decoration: inputDeco(_fullNameInitColor, _fullNameController)
                       .copyWith(hintText: 'Full Name'),
                 ),
                 SizedBox(
@@ -108,12 +113,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     //Do something with the user input.
                   },
                   onTap: () {
+                    checkFullName();
                     setState(() {
                       _emailInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration:
-                      inputDeco(_emailInitColor).copyWith(hintText: 'Email'),
+                  decoration: inputDeco(_emailInitColor, _emailController)
+                      .copyWith(hintText: 'Email'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
@@ -126,35 +132,49 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   onTap: () {
                     setState(() {
+                      checkEmail();
                       _telephoneNumberInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_telephoneNumberInitColor)
+                  decoration: inputDeco(
+                          _telephoneNumberInitColor, _telephoneNumberController)
                       .copyWith(hintText: 'Telephone Number'),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
                   controller: _passwordController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    setState(() {
+                      password = value;
+                    });
                   },
                   onTap: () {
+                    checkTelephone();
                     setState(() {
                       _passwordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_passwordInitColor)
+                  decoration: inputDeco(_passwordInitColor, _passwordController)
                       .copyWith(hintText: 'Password'),
                 ),
-                SizedBox(
-                  height: spaceBetweenFields,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: FlutterPasswordStrength(
+                      backgroundColor: Colors.white,
+                      password: password,
+                      radius: 3,
+                      strengthCallback: (strength) {
+                        //callback function
+                      }),
                 ),
                 TextField(
+                  enableInteractiveSelection: false,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -167,7 +187,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       _confirmPasswordInitColor = Colors.lightBlueAccent;
                     });
                   },
-                  decoration: inputDeco(_confirmPasswordInitColor)
+                  decoration: inputDeco(
+                          _confirmPasswordInitColor, _confirmPasswordController)
                       .copyWith(hintText: 'Confirm password'),
                 ),
                 SizedBox(
@@ -193,7 +214,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (value) {
                         setState(() {
                           gender = value;
-                          print(gender);
                         });
                       },
                     ),
@@ -259,10 +279,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     });
                     //implement registration
                     if (checkValidity()) {
-                      await registerUser();
-                      setState(() {
-                        spin = false;
-                      });
+                      bool status = await registerUser();
+                      if (status) {
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              LoginScreen.id, (Route<dynamic> route) => false);
+                        });
+                        setState(() {
+                          spin = false;
+                        });
+                      } else {
+                        setState(() {
+                          spin = false;
+                        });
+                      }
                     } else {
                       setState(() {
                         spin = false;
@@ -279,52 +309,39 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  checkValidity() {
+  bool checkValidity() {
     int flag = 0;
-    //TODO : add more validation
-    if (_usernameController.text.isEmpty) {
+    if (_usernameController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _usernameInitColor = Colors.redAccent;
       });
     }
 
-    if (_fullNameController.text.isEmpty) {
+    if (_fullNameController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _fullNameInitColor = Colors.redAccent;
       });
     }
 
-    if (_emailController.text.isEmpty) {
+    if (_emailController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _emailInitColor = Colors.redAccent;
       });
     }
 
-    if (_telephoneNumberController.text.isEmpty) {
+    if (_telephoneNumberController.text.trim().isEmpty) {
       flag++;
       setState(() {
         _telephoneNumberInitColor = Colors.redAccent;
       });
     }
 
-    if (_passwordController.text.isEmpty) {
-      flag++;
-      setState(() {
-        _passwordInitColor = Colors.redAccent;
-      });
+    if (!checkPasswordMatch()) {
+      return false;
     }
-
-    if (_confirmPasswordController.text.isEmpty) {
-      flag++;
-      setState(() {
-        _confirmPasswordInitColor = Colors.redAccent;
-      });
-    }
-
-    checkPasswordMatch();
 
     if (gender == null) {
       flag++;
@@ -332,20 +349,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
 
     return flag == 0;
-  }
-
-  checkPasswordMatch() {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() {
-        _confirmPasswordInitColor = Colors.redAccent.shade700;
-        _passwordInitColor = Colors.redAccent.shade700;
-      });
-      displayDialog(context, "Password Mismatch",
-          "Confirmation password did not match with your password");
-    } else {
-      _confirmPasswordInitColor = Colors.blueAccent;
-      _passwordInitColor = Colors.blueAccent;
-    }
   }
 
   registerUser() async {
@@ -362,9 +365,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onProbationary);
       if (registered) {
         displayRegSuccessDialog(context);
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       displayDialog(context, "Error", e.toString());
+      return false;
     }
   }
 
@@ -393,5 +400,131 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
       ),
     );
+  }
+
+  //form validation methods
+
+  bool checkPasswordMatch() {
+    bool isPWEmpty = false;
+    bool isPWCEmpty = false;
+    if (_passwordController.text.trim().isEmpty) {
+      setState(() {
+        _passwordInitColor = Colors.redAccent;
+      });
+      isPWEmpty = true;
+    }
+
+    if (_confirmPasswordController.text.trim().isEmpty) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent;
+      });
+
+      isPWCEmpty = false;
+    }
+
+    if (isPWEmpty) {
+      displayDialog(context, "Password empty", "You must enter a password");
+      return false;
+    } else if (isPWCEmpty) {
+      displayDialog(context, "Confirmation Password empty",
+          "You must confirm your password");
+      return false;
+    }
+
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent.shade700;
+        _passwordInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Password Mismatch",
+          "Confirmation password did not match with your password");
+      return false;
+    }
+    _confirmPasswordInitColor = Colors.blueAccent;
+    _passwordInitColor = Colors.blueAccent;
+
+    return true;
+  }
+
+  checkUsername() {
+    String username = _usernameController.text.trim();
+    if (username.length < 5 || username.length > 20) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Username",
+          "username must contain at least 5 characters or a maximum 20 character");
+      return;
+    }
+    if (!validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Username Format",
+          "username can contain only alphanumeric characters");
+      return;
+    }
+  }
+
+  checkFullName() {
+    String fullName = _fullNameController.text.trim();
+
+    if (fullName.length < 5 || fullName.length > 100) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Full Name",
+          "Full Name must contain at least 5 characters or a maximum of 100 characters");
+      return;
+    }
+    if (!validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Full Name Format",
+          "Full Name can only contain letters");
+      return;
+    }
+  }
+
+  checkEmail() {
+    String email = _emailController.text.trim();
+    if (!validateMyInput(email,
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid Email", "Please enter a valid email");
+      return;
+    }
+  }
+
+  checkTelephone() {
+    String telephoneNumber = _telephoneNumberController.text.trim();
+    if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid telephone number",
+          "telephone number must contain at least 9 characters or a maximum of 14 characters");
+      return;
+    }
+    if (!validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Invalid telephone number Format",
+          "Telephone Number can only contain '+' and numbers");
+      return;
+    }
+  }
+
+  bool validateMyInput(String value, String pattern) {
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return false;
+    else
+      return true;
   }
 }
