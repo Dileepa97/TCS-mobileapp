@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool spin = false;
-  bool passwordInvisible = false;
+  bool passwordInvisible = true;
   IconData visibilityIcon = Icons.visibility;
 
   Color usernameInitColor = Colors.lightBlueAccent;
