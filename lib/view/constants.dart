@@ -5,8 +5,8 @@ inputDeco(Color color, TextEditingController controller) {
     suffixIcon: IconButton(
       onPressed: controller.clear,
       icon: Icon(
-        Icons.close,
-        color: Colors.red,
+        Icons.backspace_outlined,
+        color: Colors.black38,
         size: 20,
       ),
     ),
