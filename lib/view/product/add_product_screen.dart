@@ -9,6 +9,7 @@ import 'package:timecapturesystem/components/leave_component/input_text_field.da
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/services/customer/customer_service.dart';
+import 'package:timecapturesystem/services/product/product_detail_availability_service.dart';
 import 'package:timecapturesystem/services/product/product_service.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -181,7 +182,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                   ///on pressed
                   onPressed: () async {
-                    if (_checkConditions()) {
+                    if (_checkConditions() && await _checkProductName()) {
                       setState(() {
                         _spin = true;
                       });
@@ -274,5 +275,42 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     ///is ok
     return true;
+  }
+
+  ///Check product name exist
+  Future<bool> _checkProductName() async {
+    dynamic res = await ProductDetailAvailabilityService.checkProductName(
+        this._productName);
+
+    if (res == true) {
+      ///if product name exist
+
+      _alertDialog.showAlertDialog(
+        title: 'Bad Input !',
+        body: 'This product name already exist. \nTry another name',
+        color: Colors.redAccent,
+        context: context,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      return false;
+    } else if (res == false) {
+      return true;
+    } else {
+      /// if any error occured
+
+      _alertDialog.showAlertDialog(
+        title: 'Error occured !',
+        body:
+            'Error occured while checking product name is exist. \nTry again ',
+        color: Colors.redAccent,
+        context: context,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      return false;
+    }
   }
 }

@@ -123,7 +123,7 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
       ///App Bar
       appBar: AppBar(
         leading: BackButton(
-          color: Colors.black,
+          color: Colors.lightBlue.shade800,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -131,6 +131,9 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
         elevation: 0,
+        actions: [
+          HomeButton(color: Colors.lightBlue.shade800),
+        ],
       ),
 
       ///Body

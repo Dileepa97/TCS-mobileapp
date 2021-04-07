@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
-import 'package:timecapturesystem/models/lms/leave_cancel_details.dart';
-import 'package:timecapturesystem/services/lms/leave_cancel_service.dart';
+import 'package:timecapturesystem/models/lms/leave.dart';
+
+import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
 
 class LeaveCancelCard extends StatefulWidget {
-  final LeaveCancelDetails data;
+  final Leave data;
 
   const LeaveCancelCard({Key key, this.data}) : super(key: key);
 
@@ -18,7 +19,7 @@ class LeaveCancelCard extends StatefulWidget {
 
 class _LeaveCancelCardState extends State<LeaveCancelCard> {
   ShowAlertDialog _dialog = ShowAlertDialog();
-  LeaveCancelService _cancelService = LeaveCancelService();
+  LeaveService _leaveService = LeaveService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,11 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
             children: [
               ///profile image
               UserProfileImage(
-                  userId: widget.data.leave.userId, height: 35, width: 35),
+                  userId: widget.data.userId, height: 35, width: 35),
 
               ///user name
               UserNameText(
-                userId: widget.data.leave.userId,
+                userId: widget.data.userId,
                 fontSize: 16,
               ),
 
@@ -69,7 +70,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          AdminLeaveDetailsPage(item: widget.data.leave),
+                          AdminLeaveDetailsPage(item: widget.data),
                     ),
                   );
                 },
@@ -85,9 +86,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
               //start date
               Text(
                 'Start date : ' +
-                    widget.data.leave.startDate
-                        .toIso8601String()
-                        .substring(0, 10),
+                    widget.data.startDate.toIso8601String().substring(0, 10),
                 style: TextStyle(
                   color: Colors.blueGrey,
                   fontFamily: 'Source Sans Pro',
@@ -96,10 +95,10 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
               ),
 
               ///end date
-              widget.data.leave.endDate != null
+              widget.data.endDate != null
                   ? Text(
                       'End date : ' +
-                          widget.data.leave.endDate
+                          widget.data.endDate
                               .toIso8601String()
                               .substring(0, 10),
                       style: TextStyle(
@@ -118,10 +117,10 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
             children: [
               //start day method
               Text(
-                EnumToString.convertToString(widget.data.leave.startDayMethod)
+                EnumToString.convertToString(widget.data.startDayMethod)
                         .substring(0, 1) +
                     EnumToString.convertToString(
-                            this.widget.data.leave.startDayMethod)
+                            this.widget.data.startDayMethod)
                         .substring(1)
                         .toLowerCase()
                         .replaceAll('_', ' '),
@@ -133,13 +132,12 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
               ),
 
               ///end day method
-              widget.data.leave.endDate != null
+              widget.data.endDate != null
                   ? Text(
-                      EnumToString.convertToString(
-                                  widget.data.leave.endDayMethod)
+                      EnumToString.convertToString(widget.data.endDayMethod)
                               .substring(0, 1) +
                           EnumToString.convertToString(
-                                  this.widget.data.leave.endDayMethod)
+                                  this.widget.data.endDayMethod)
                               .substring(1)
                               .toLowerCase()
                               .replaceAll('_', ' '),
@@ -158,7 +156,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
             height: 4,
           ),
           Text(
-            'Leave days : ' + widget.data.leave.days.toString(),
+            'Leave days : ' + widget.data.days.toString(),
             style: TextStyle(
               color: Colors.purple,
               fontFamily: 'Source Sans Pro',
@@ -213,7 +211,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                     ///on pressed yes
                     onPressedYes: () {
                       //if taken days field is empty
-                      if (days == null || days == "") {
+                      if (days == null || days.trim() == '') {
                         _dialog.showAlertDialog(
                           title: 'Something Missing !',
                           body: 'Enter taken days',
@@ -225,8 +223,21 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                         );
                       }
 
+                      ///if input is not valid
+                      else if (double.tryParse(days) == null) {
+                        _dialog.showAlertDialog(
+                          title: 'Invalid Input !',
+                          body: 'Please enter valid number',
+                          color: Colors.redAccent,
+                          context: context,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+
                       ///if entered day count is greater than leave days
-                      else if (double.tryParse(days) > widget.data.leave.days) {
+                      else if (double.tryParse(days) > widget.data.days) {
                         _dialog.showAlertDialog(
                           title: 'Invalid input !',
                           body:
@@ -240,11 +251,11 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                       }
 
                       ///if entered day count is lesser than 0
-                      else if (double.tryParse(days) < 0) {
+                      else if (double.tryParse(days).isNegative) {
                         _dialog.showAlertDialog(
                           title: 'Invalid input !',
                           body:
-                              'Entered number of taken days cannot be lesser than 0',
+                              'Entered number of taken days cannot be negative',
                           color: Colors.redAccent,
                           context: context,
                           onPressed: () {
@@ -261,7 +272,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                           color: Colors.blueAccent,
                           context: context,
                           onPressed: () async {
-                            int code = await _cancelService.setTakenDays(
+                            int code = await _leaveService.setTakenDays(
                                 widget.data.id, days);
 
                             ///if changed successfully

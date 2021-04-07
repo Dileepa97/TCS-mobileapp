@@ -34,6 +34,7 @@ class _AdminLeaveByStatusState extends State<AdminLeaveByStatus> {
     'REJECTED',
     'CANCELLED',
     'ONGOING',
+    'ONGOING_CANCEL_REQUESTED',
     'ONGOING_CANCELLED',
     'EXPIRED'
   ];
@@ -124,8 +125,8 @@ class _AdminLeaveByStatusState extends State<AdminLeaveByStatus> {
 
             ///leave list builder
             FutureBuilder<dynamic>(
-              future:
-                  _leaveService.getLeavesByStatus(context, _leaveStatus, _year),
+              future: _leaveService.getLeavesByStatusAndYear(
+                  context, _leaveStatus, _year),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 Widget child;
                 if (snapshot.hasData) {

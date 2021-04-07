@@ -23,6 +23,8 @@ class CheckStatus {
       return Colors.black;
     } else if (status == LeaveStatus.ONGOING_CANCELLED) {
       return Colors.black;
+    } else if (status == LeaveStatus.ONGOING_CANCEL_REQUESTED) {
+      return Colors.blueAccent;
     } else
       return Colors.black;
   }

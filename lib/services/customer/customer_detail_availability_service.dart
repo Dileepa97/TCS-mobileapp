@@ -31,4 +31,25 @@ class CustomerDetailAvailabilityService {
       return -1;
     }
   }
+
+  ///check org name exist or not
+  static Future<dynamic> checkOrgName(String orgName) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(API + '/orgName/$orgName', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+        return resBody;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
 }

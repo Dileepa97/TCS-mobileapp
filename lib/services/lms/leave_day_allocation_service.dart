@@ -13,19 +13,20 @@ var API = apiEndpoint + 'leave-day-allocation';
 var apiAuth = DotEnv().env['API_Auth'].toString();
 String contentTypeHeader = 'application/json';
 
-final storage = str.FlutterSecureStorage();
-Map<String, String> headers = {'Content-Type': 'application/json'};
+// final storage = str.FlutterSecureStorage();
+// Map<String, String> headers = {'Content-Type': 'application/json'};
 
 class LeaveDayAllocationService {
   ///get all leave allocation details - admin
-  Future<List<LeaveDayAllocation>> getAllLeaveAllocations(
-      dynamic context) async {
+  Future<dynamic> getAllLeaveAllocations(dynamic context) async {
     try {
       var authHeader = await generateAuthHeader();
+
       var res = await http.get(API, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
+
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
 
@@ -34,25 +35,21 @@ class LeaveDayAllocationService {
             .toList();
 
         return _leaveList;
-      } else if (res.statusCode == 400) {
-        displayDialog(context, "Error", "Bad Request");
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
       } else {
-        displayDialog(
-            context, "Error", "An error occurred while fetching users");
+        return 1;
       }
     } catch (e) {
-      displayDialog(context, "Error", e.toString());
+      return -1;
     }
-    return null;
   }
 
+  ///change allowed day count - admin
   Future<dynamic> changeAllowedDays(String type, String allowedDays) async {
     try {
-      print('done');
-      print(allowedDays);
-      print(type);
       double days = double.tryParse(allowedDays);
-      print(days);
+
       var authHeader = await generateAuthHeader();
 
       var params = {
@@ -69,18 +66,44 @@ class LeaveDayAllocationService {
       });
 
       if (response.statusCode == 200) {
-        //String data = response.body;
-        //print('$status');
-        print(response);
         return (response.statusCode);
-        //return jsonDecode(data);
       } else {
-        print(response);
-        return (response.statusCode);
+        return 1;
       }
     } catch (e) {
-      print(e);
-      //displayDialog(context, "Error", e.toString());
+      return -1;
+    }
+  }
+
+  ///change single allowed day count - admin
+  Future<dynamic> changeSingleAllowedDays(
+      String id, String type, String allowedDays) async {
+    try {
+      double days = double.tryParse(allowedDays);
+
+      var authHeader = await generateAuthHeader();
+
+      var params = {
+        'id': '$id',
+        'type': '$type',
+        'allowedDays': '$days',
+      };
+
+      var uri = Uri.http(
+          apiAuth, '/api/leave-day-allocation/change-user-allowed', params);
+
+      http.Response response = await http.patch(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (response.statusCode == 200) {
+        return (response.statusCode);
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
     }
   }
 }

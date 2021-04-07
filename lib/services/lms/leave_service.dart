@@ -238,7 +238,7 @@ class LeaveService {
   }
 
   ///Get leave by status -  admin
-  Future<dynamic> getLeavesByStatus(
+  Future<dynamic> getLeavesByStatusAndYear(
       dynamic context, String status, int year) async {
     try {
       var params = {
@@ -546,6 +546,35 @@ class LeaveService {
         return (response.statusCode);
       } else {
         return -1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  ///set taken days for ongoing cancel leave - admin
+  Future<dynamic> setTakenDays(String id, String takenDays) async {
+    try {
+      double days = double.tryParse(takenDays);
+
+      var authHeader = await generateAuthHeader();
+
+      var params = {
+        'leaveId': '$id',
+        'takenDays': '$days',
+      };
+
+      var uri = Uri.http(apiAuth, '/api/leaves/accept-leave-cancel', params);
+
+      http.Response response = await http.patch(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (response.statusCode == 200) {
+        return (response.statusCode);
+      } else {
+        return 1;
       }
     } catch (e) {
       return -1;

@@ -119,7 +119,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   title: 'Submit',
                   minWidth: 200.0,
                   onPressed: () async {
-                    if (_checkConditions() && await _checkOrgId()) {
+                    if (_checkConditions() &&
+                        await _checkOrgId() &&
+                        await _checkOrgName()) {
                       setState(() {
                         _spin = true;
                       });
@@ -192,6 +194,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     );
   }
 
+  ///check inputs
   bool _checkConditions() {
     ///if organization id missing
     if (this._orgId == null || this._orgId.trim() == '') {
@@ -253,6 +256,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     return true;
   }
 
+  ///check orgId exist
   Future<bool> _checkOrgId() async {
     dynamic res =
         await CustomerDetailAvailabilityService.checkOrgId(this._orgId);
@@ -279,6 +283,43 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         title: 'Error occured !',
         body:
             'Error occured while checking organization id is exist. \nTry again ',
+        color: Colors.redAccent,
+        context: context,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      return false;
+    }
+  }
+
+  ///Check org name exist
+  Future<bool> _checkOrgName() async {
+    dynamic res =
+        await CustomerDetailAvailabilityService.checkOrgName(this._orgName);
+
+    if (res == true) {
+      ///if org name exist
+
+      _alertDialog.showAlertDialog(
+        title: 'Bad Input !',
+        body: 'This organization name already exist. \nTry another name',
+        color: Colors.redAccent,
+        context: context,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      return false;
+    } else if (res == false) {
+      return true;
+    } else {
+      /// if any error occured
+
+      _alertDialog.showAlertDialog(
+        title: 'Error occured !',
+        body:
+            'Error occured while checking organization name is exist. \nTry again ',
         color: Colors.redAccent,
         context: context,
         onPressed: () {

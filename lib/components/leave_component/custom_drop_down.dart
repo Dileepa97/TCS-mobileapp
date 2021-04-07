@@ -15,6 +15,8 @@ class CustomDropDown extends StatelessWidget {
       children: [
         DropdownButton<String>(
           value: item,
+          // isExpanded: true,
+          // itemHeight: 10,
 
           ///hint text
           hint: Text(
@@ -47,7 +49,11 @@ class CustomDropDown extends StatelessWidget {
               value: value,
               child: Text(
                 value.substring(0, 1) +
-                    value.substring(1).toLowerCase().replaceAll('_', '\n'),
+                    value
+                        .substring(1)
+                        .toLowerCase()
+                        .replaceFirst('_', '\n')
+                        .replaceFirst('_', ' '),
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: Colors.blue[700],
