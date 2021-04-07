@@ -1,20 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as str;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave_day_allocation.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
-var API = apiEndpoint + 'leave-day-allocation';
-var apiAuth = DotEnv().env['API_Auth'].toString();
-String contentTypeHeader = 'application/json';
+String endPointName = 'leave-day-allocation';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
 
-// final storage = str.FlutterSecureStorage();
-// Map<String, String> headers = {'Content-Type': 'application/json'};
+String contentTypeHeader = 'application/json';
 
 class LeaveDayAllocationService {
   ///get all leave allocation details - admin
@@ -45,7 +41,7 @@ class LeaveDayAllocationService {
     }
   }
 
-  ///change allowed day count - admin
+  ///change all allowed day count - admin
   Future<dynamic> changeAllowedDays(String type, String allowedDays) async {
     try {
       double days = double.tryParse(allowedDays);
@@ -57,8 +53,8 @@ class LeaveDayAllocationService {
         'allowedDays': '$days',
       };
 
-      var uri = Uri.http(
-          apiAuth, '/api/leave-day-allocation/change-allowed-days', params);
+      var uri =
+          Uri.http(apiAuth, '/api/$endPointName/change-allowed-days', params);
 
       http.Response response = await http.patch(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -89,8 +85,8 @@ class LeaveDayAllocationService {
         'allowedDays': '$days',
       };
 
-      var uri = Uri.http(
-          apiAuth, '/api/leave-day-allocation/change-user-allowed', params);
+      var uri =
+          Uri.http(apiAuth, '/api/$endPointName/change-user-allowed', params);
 
       http.Response response = await http.patch(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,

@@ -5,29 +5,21 @@ import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as str;
 import 'package:http/http.dart' as http;
-import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
-
 import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
-var API = apiEndpoint + 'leaves';
-var apiAuth = DotEnv().env['API_Auth'].toString();
+String endPointName = 'leaves';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
+
 String contentTypeHeader = 'application/json';
 
-final storage = str.FlutterSecureStorage();
-Map<String, String> headers = {'Content-Type': 'application/json'};
-
 class LeaveService {
-  //static const API = 'http://192.168.8.169:8080/api/leaves';
-
-  //static const API = 'http://localhost:8080/api/leaves/';
-
-  ///Create new leave
+  ///Create new leave - user
   Future<dynamic> newLeave(
     String leaveTitle,
     String leaveType,
@@ -65,7 +57,7 @@ class LeaveService {
     }
   }
 
-  ///create new leave with attachement
+  ///create new leave with attachement - user
   Future<dynamic> newLeaveWithAttachment(
     File file,
     String leaveTitle,
@@ -124,32 +116,6 @@ class LeaveService {
     }
   }
 
-  Future<List<Leave>> getAllLeaves(dynamic context) async {
-    try {
-      var authHeader = await generateAuthHeader();
-      var res = await http.get(API, headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      });
-      if (res.statusCode == 200) {
-        var resBody = json.decode(res.body);
-
-        List<Leave> _leaveList =
-            (resBody as List).map((i) => Leave.fromJson(i)).toList();
-
-        return _leaveList;
-      } else if (res.statusCode == 400) {
-        displayDialog(context, "Error", "Bad Request");
-      } else {
-        displayDialog(
-            context, "Error", "An error occurred while fetching users");
-      }
-    } catch (e) {
-      displayDialog(context, "Error", e.toString());
-    }
-    return null;
-  }
-
   ///Get leave by id - anyone
   Future<dynamic> getLeaveById(String id) async {
     try {
@@ -184,7 +150,7 @@ class LeaveService {
         'month': '$month',
       };
 
-      var uri = Uri.http(apiAuth, 'api/leaves/by-month', params);
+      var uri = Uri.http(apiAuth, 'api/$endPointName/by-month', params);
 
       var authHeader = await generateAuthHeader();
 
@@ -245,7 +211,7 @@ class LeaveService {
         'year': '$year',
       };
 
-      var uri = Uri.http(apiAuth, 'api/leaves/status/$status', params);
+      var uri = Uri.http(apiAuth, 'api/$endPointName/status/$status', params);
 
       var authHeader = await generateAuthHeader();
 
@@ -276,7 +242,7 @@ class LeaveService {
       String leaveStartDate, String leaveEndDate) async {
     try {
       var authHeader = await generateAuthHeader();
-      print(leaveEndDate);
+
       var body =
           jsonEncode({"startDate": leaveStartDate, "endDate": leaveEndDate});
 
@@ -338,7 +304,8 @@ class LeaveService {
 
       var params = {'year': '$year', 'month': '$month', 'day': '$day'};
 
-      var uri = Uri.http(apiAuth, 'api/leaves/user-not-available/date', params);
+      var uri = Uri.http(
+          apiAuth, 'api/$endPointName/user-not-available/date', params);
 
       var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -374,8 +341,8 @@ class LeaveService {
         'teamId': '$teamId'
       };
 
-      var uri =
-          Uri.http(apiAuth, 'api/leaves/team-user-not-available/date', params);
+      var uri = Uri.http(
+          apiAuth, 'api/$endPointName/team-user-not-available/date', params);
 
       var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -435,8 +402,8 @@ class LeaveService {
 
       var params = {'teamId': '$teamId'};
 
-      var uri = Uri.http(
-          apiAuth, 'api/leaves/team-users-not-available-week-ahead', params);
+      var uri = Uri.http(apiAuth,
+          'api/$endPointName/team-users-not-available-week-ahead', params);
 
       var res = await http.get(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -461,24 +428,7 @@ class LeaveService {
     }
   }
 
-  Future getData() async {
-    var authHeader = await generateAuthHeader();
-    http.Response res = await http.get(
-      API,
-      headers: {
-        HttpHeaders.authorizationHeader: authHeader,
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      },
-    );
-    if (res.statusCode == 200) {
-      String data = res.body;
-      return jsonDecode(data);
-    } else {
-      return (res.statusCode);
-    }
-  }
-
-  ///accept or reject leave  - user
+  ///accept or reject leave  - admin
   Future<dynamic> acceptOrReject(
       String leaveId, String status, String reason) async {
     try {
@@ -490,7 +440,7 @@ class LeaveService {
         'reason': '$reason'
       };
 
-      var uri = Uri.http(apiAuth, '/api/leaves/change-status', params);
+      var uri = Uri.http(apiAuth, '/api/$endPointName/change-status', params);
 
       http.Response response = await http.patch(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,
@@ -506,30 +456,6 @@ class LeaveService {
       return -1;
     }
   }
-
-  Future getAUserLeaves(String userId) async {
-    http.Response response =
-        await http.get('http://192.168.8.169:8080/api/leaves/user/$userId');
-    if (response.statusCode == 200) {
-      String data = response.body;
-      // print(data);
-      return jsonDecode(data);
-    } else {
-      return (response.statusCode);
-    }
-  }
-
-  // Future cancelLeave(String leaveId) async {
-  //   http.Response response = await http
-  //       .patch('http://192.168.8.169:8080/api/leaves/$leaveId/status/cancel');
-  //   if (response.statusCode == 202) {
-  //     //String data = response.body;
-  //     // print(data);
-  //     return (response.statusCode);
-  //   } else {
-  //     return (response.statusCode);
-  //   }
-  // }
 
   ///cancel leave  - user
   Future<dynamic> cancelLeave(String leaveId) async {
@@ -564,7 +490,8 @@ class LeaveService {
         'takenDays': '$days',
       };
 
-      var uri = Uri.http(apiAuth, '/api/leaves/accept-leave-cancel', params);
+      var uri =
+          Uri.http(apiAuth, '/api/$endPointName/accept-leave-cancel', params);
 
       http.Response response = await http.patch(uri, headers: {
         HttpHeaders.authorizationHeader: authHeader,

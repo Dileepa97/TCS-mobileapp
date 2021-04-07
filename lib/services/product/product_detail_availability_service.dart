@@ -6,8 +6,10 @@ import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
-var API = apiEndpoint + 'available-product';
-var apiAuth = DotEnv().env['API_Auth'].toString();
+String endPointName = 'available-product';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
+
 String contentTypeHeader = 'application/json';
 
 class ProductDetailAvailabilityService {
