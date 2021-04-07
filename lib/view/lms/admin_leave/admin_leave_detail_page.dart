@@ -641,6 +641,7 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                                                       Navigator.pop(context);
                                                       Navigator.pop(context);
                                                       Navigator.pop(context);
+                                                      // setState(() {});
                                                     },
                                                   );
                                             } else {
