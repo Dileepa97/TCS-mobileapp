@@ -73,7 +73,8 @@ class _PickImageScreenState extends State<PickImageScreen> {
         ],
       );
     } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
+      return Text('Pick or take an image to start',
+          style: TextStyle(fontSize: 18.0));
     }
   }
 

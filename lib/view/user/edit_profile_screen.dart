@@ -114,9 +114,11 @@ class MapScreenState extends State<EditProfile>
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
-                                                    image: user == null
+                                                    image: (user == null ||
+                                                            user.profileImageURL ==
+                                                                'default.png')
                                                         ? ExactAssetImage(
-                                                            'images/as.png')
+                                                            'images/default.png')
                                                         : NetworkImage(fileAPI +
                                                             user.profileImageURL),
                                                     fit: BoxFit.cover,
