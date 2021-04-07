@@ -31,18 +31,23 @@ class _NotificationCardState extends State<NotificationCard> {
       //TODO: push according to notification
       onTap: () {
         if (category == 'reg' ||
-            category == 'profile-update-A' ||
-            category == 'profile-update-NA' ||
+            category == 'unverified' ||
             category == 'leave-request' ||
             category == 'leave-status-change' ||
             category == 'leave-cancelled' ||
-            category == 'leave-data-created' ||
-            category == 'leave-availability-update' ||
+            category == 'leave-cancellation-accepted' ||
             category == 'leave-start' ||
             category == 'leave-end' ||
             category == 'remain-annual-leave' ||
             category == 'annual-leave-over' ||
-            category == 'leave-cancellation-accepted')
+            category == 'leave-cancellation-accepted' ||
+            category == 'profile-update-A' ||
+            category == 'profile-update-NA' ||
+            category == 'leave-availability-update' ||
+            category == 'leave-data-created' ||
+            category == 'role-update' ||
+            category == 'team-lead-assigned' ||
+            category == 'team-member-assigned')
           Navigator.pushNamed(
               context, notificationClicked(widget.notification.category));
       },
@@ -96,7 +101,7 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 
   String notificationClicked(String cat) {
-    //
+    //TODO : dileepa add the relevant paths
     switch (cat) {
       case 'reg':
         {
