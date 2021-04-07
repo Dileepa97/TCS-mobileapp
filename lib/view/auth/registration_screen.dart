@@ -5,6 +5,7 @@ import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth/auth_service.dart';
+import 'package:timecapturesystem/services/auth/credential_availability_service.dart';
 import 'package:timecapturesystem/services/auth/title_service.dart';
 
 import '../constants.dart';
@@ -76,7 +77,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextField(
                   controller: _usernameController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkUsernameOnChange(value);
                   },
                   onTap: () {
                     setState(() {
@@ -92,7 +93,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextField(
                   controller: _fullNameController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkFullNameOnChange(value);
                   },
                   onTap: () {
                     checkUsername();
@@ -110,7 +111,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkEmailOnChange(value);
                   },
                   onTap: () {
                     checkFullName();
@@ -128,7 +129,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   controller: _telephoneNumberController,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkTelephoneOnChange(value);
                   },
                   onTap: () {
                     setState(() {
@@ -180,7 +181,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   autocorrect: false,
                   controller: _confirmPasswordController,
                   onChanged: (value) {
-                    //Do something with the user input.
+                    checkPasswordMisMatch();
                   },
                   onTap: () {
                     setState(() {
@@ -440,14 +441,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Password Mismatch",
           "Confirmation password did not match with your password");
       return false;
+    } else {
+      setState(() {
+        _confirmPasswordInitColor = Colors.blueAccent;
+        _passwordInitColor = Colors.blueAccent;
+      });
     }
-    _confirmPasswordInitColor = Colors.blueAccent;
-    _passwordInitColor = Colors.blueAccent;
-
     return true;
   }
 
-  checkUsername() {
+  checkUsername() async {
     String username = _usernameController.text.trim();
     if (username.length < 5 || username.length > 20) {
       setState(() {
@@ -464,6 +467,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid Username Format",
           "username can contain only alphanumeric characters");
       return;
+    }
+
+    bool usernameTaken =
+        await CredentialAvailabilityService.checkUsernameExist(username);
+    if (usernameTaken) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Username Unavailable",
+          "username " + username + " is already in the system");
     }
   }
 
@@ -488,7 +501,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  checkEmail() {
+  checkEmail() async {
     String email = _emailController.text.trim();
     if (!validateMyInput(email,
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
@@ -498,9 +511,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       displayDialog(context, "Invalid Email", "Please enter a valid email");
       return;
     }
+    bool emailTaken =
+        await CredentialAvailabilityService.checkEmailExist(email);
+    if (emailTaken) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Email Unavailable",
+          "Email " + email + " is already in the system");
+    }
   }
 
-  checkTelephone() {
+  checkTelephone() async {
     String telephoneNumber = _telephoneNumberController.text.trim();
     if (telephoneNumber.length < 9 || telephoneNumber.length > 14) {
       setState(() {
@@ -518,6 +540,92 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           "Telephone Number can only contain '+' and numbers");
       return;
     }
+
+    bool telephoneNumberTaken =
+        await CredentialAvailabilityService.checkTelephoneNumberExist(
+            telephoneNumber);
+    if (telephoneNumberTaken) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+      displayDialog(context, "Telephone Number Unavailable",
+          telephoneNumber + " is already in the system");
+    }
+  }
+
+  // Validation On change
+
+  checkUsernameOnChange(username) {
+    if (username.length < 5 ||
+        username.length > 20 ||
+        !validateMyInput(username, r'^(?!\s*$)[a-zA-Z0-9]{5,20}$')) {
+      setState(() {
+        _usernameInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _usernameInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkFullNameOnChange(String fullName) {
+    if (fullName.length < 5 ||
+        fullName.length > 100 ||
+        !validateMyInput(fullName, r'^(?!\s*$)[a-zA-Z ]{5,100}$')) {
+      setState(() {
+        _fullNameInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(
+        () {
+          _fullNameInitColor = Colors.green.shade700;
+        },
+      );
+    }
+  }
+
+  checkEmailOnChange(email) {
+    if (!validateMyInput(email,
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")) {
+      setState(() {
+        _emailInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _emailInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkTelephoneOnChange(telephoneNumber) {
+    if (telephoneNumber.length < 9 ||
+        telephoneNumber.length > 14 ||
+        !validateMyInput(telephoneNumber, r'^(?!\s*$)[0-9+]{9,14}$')) {
+      setState(() {
+        _telephoneNumberInitColor = Colors.redAccent.shade700;
+      });
+    } else {
+      setState(() {
+        _telephoneNumberInitColor = Colors.green.shade700;
+      });
+    }
+  }
+
+  checkPasswordMisMatch() {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      setState(() {
+        _confirmPasswordInitColor = Colors.redAccent.shade700;
+        _passwordInitColor = Colors.redAccent.shade700;
+      });
+      return false;
+    } else {
+      setState(() {
+        _confirmPasswordInitColor = Colors.blueAccent;
+        _passwordInitColor = Colors.blueAccent;
+      });
+    }
   }
 
   bool validateMyInput(String value, String pattern) {
@@ -527,4 +635,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     else
       return true;
   }
+
+  // async validators
+
 }

@@ -280,7 +280,8 @@ class _SideDrawerState extends State<SideDrawer> {
                     ),
                     onTap: () async {
                       await AuthService.logout();
-                      Navigator.pushReplacementNamed(context, LoginScreen.id);
+                      Navigator.pushNamedAndRemoveUntil(context, LoginScreen.id,
+                          (Route<dynamic> route) => false);
                       ModalRoute.withName('/');
                     },
                   ),
