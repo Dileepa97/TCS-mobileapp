@@ -36,15 +36,14 @@ class _NotificationCardState extends State<NotificationCard> {
             category == 'leave-status-change' ||
             category == 'leave-cancelled' ||
             category == 'leave-cancellation-accepted' ||
+            category == 'leave-data-created' ||
+            category == 'leave-availability-update' ||
             category == 'leave-start' ||
             category == 'leave-end' ||
             category == 'remain-annual-leave' ||
             category == 'annual-leave-over' ||
-            category == 'leave-cancellation-accepted' ||
             category == 'profile-update-A' ||
             category == 'profile-update-NA' ||
-            category == 'leave-availability-update' ||
-            category == 'leave-data-created' ||
             category == 'role-update' ||
             category == 'team-lead-assigned' ||
             category == 'team-member-assigned')
@@ -214,6 +213,10 @@ class _NotificationCardState extends State<NotificationCard> {
           return Icons.directions_walk_outlined;
         }
       case 'annual-leave-over':
+        {
+          return Icons.directions_walk_outlined;
+        }
+      case 'leave-cancellation-accepted':
         {
           return Icons.directions_walk_outlined;
         }
