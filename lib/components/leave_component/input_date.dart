@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'convert.dart';
+import 'string_builder.dart';
 
 class InputDate extends StatelessWidget {
   final String keyString;
@@ -18,13 +18,22 @@ class InputDate extends StatelessWidget {
           Icon(
             Icons.calendar_today,
             size: 20.0,
-            //color: Colors.blueAccent,
           ),
-          Text(keyString),
+          Text(
+            keyString,
+            style: TextStyle(
+              fontFamily: 'Source Sans Pro',
+              fontSize: 15,
+            ),
+          ),
           Text(
             date == null
                 ? 'Choose a Date'
                 : '${Convert(date: date).stringDate()}',
+            style: TextStyle(
+              fontFamily: 'Source Sans Pro',
+              fontSize: 15,
+            ),
           ),
         ],
       ),

@@ -21,8 +21,10 @@ class CheckStatus {
       return Colors.orange;
     } else if (status == LeaveStatus.EXPIRED) {
       return Colors.black;
-    } else if (status == LeaveStatus.ONGOING_CANCELED) {
+    } else if (status == LeaveStatus.ONGOING_CANCELLED) {
       return Colors.black;
+    } else if (status == LeaveStatus.ONGOING_CANCEL_REQUESTED) {
+      return Colors.blueAccent;
     } else
       return Colors.black;
   }

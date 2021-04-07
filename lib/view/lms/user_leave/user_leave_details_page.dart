@@ -1,19 +1,31 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import 'package:open_file/open_file.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
-import 'package:timecapturesystem/components/leave_component/date_format.dart';
+
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timecapturesystem/models/lms/leave_status.dart';
 
 import 'package:timecapturesystem/services/LMS/leave_service.dart';
 
 import '../check_leaves.dart';
+import 'package:path_provider/path_provider.dart';
+
+var apiEndpoint = DotEnv().env['API_URL'].toString();
+var API = apiEndpoint + 'files/';
 
 class UserLeaveDetailsPage extends StatefulWidget {
+  static const String id = 'user_leave_details_page';
+
   UserLeaveDetailsPage({this.item});
   final Leave item;
 
@@ -24,11 +36,79 @@ class UserLeaveDetailsPage extends StatefulWidget {
 class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
   LeaveService _leaveService = LeaveService();
 
-  DateToString date = DateToString();
+  ShowAlertDialog _alertDialog = ShowAlertDialog();
 
-  ShowAlertDialog _dialog = ShowAlertDialog();
+  bool downloading = false;
+  String progress = '0';
+  bool isDownloaded = false;
+  String filePath;
 
-  bool _spin = false;
+  @override
+  void initState() {
+    getPermission();
+  }
+
+  ///get storage permission
+  void getPermission() async {
+    await Permission.storage.request();
+  }
+
+  ///get file from url
+  Future downloadFile(String url, String savePath) async {
+    try {
+      setState(() {
+        downloading = true;
+      });
+
+      filePath = savePath;
+
+      Dio dio = Dio();
+
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: showDownloadProgress,
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+
+      //write in download folder
+      File file = File(savePath);
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+
+      setState(() {
+        isDownloaded = true;
+      });
+    } catch (e) {
+      ///if error
+      setState(() {
+        downloading = false;
+      });
+      this._alertDialog.showAlertDialog(
+            context: context,
+            title: 'Download Error',
+            body: 'This file cannot download',
+            color: Colors.redAccent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          );
+    }
+  }
+
+  ///progress indicator
+  void showDownloadProgress(received, total) {
+    if (total != -1) {
+      setState(() {
+        progress = (received / total * 100).toStringAsFixed(0);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +143,10 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
       ),
 
       ///Body
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
               margin: EdgeInsets.all(5.0),
               child: Padding(
                 padding: const EdgeInsets.all(26.0),
@@ -284,6 +365,89 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
                                 ),
                               )
                             : SizedBox(),
+
+                        ///attachment url
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.attachmentURL != ""
+                            ? SizedBox(
+                                height: 30,
+                                child: Divider(
+                                  color: Colors.black12,
+                                  thickness: 1,
+                                ),
+                              )
+                            : SizedBox(),
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.attachmentURL != ""
+                            ? DetailRow(
+                                keyString: 'Attachment', valueString: '')
+                            : SizedBox(),
+                        this.widget.item.attachmentURL != null &&
+                                this.widget.item.attachmentURL != ""
+                            ? Column(
+                                children: [
+                                  ///attachment name
+                                  Text(
+                                    this.widget.item.attachmentURL,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'Source Sans Pro',
+                                      color: Colors.blueGrey[600],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+
+                                  ///Download button
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      Directory dir =
+                                          await getApplicationDocumentsDirectory();
+                                      String path = dir.path +
+                                          '/' +
+                                          this.widget.item.attachmentURL;
+
+                                      ///storage/emulated/0/Download   --> android download directory
+                                      await downloadFile(
+                                          API + this.widget.item.attachmentURL,
+                                          path);
+                                    },
+                                    child: const Text("Download file"),
+                                  ),
+
+                                  ///downloading progress
+                                  downloading ? Text('$progress%') : SizedBox(),
+
+                                  ///open file
+                                  isDownloaded
+                                      ? Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            GestureDetector(
+                                              child: Text(
+                                                'File Downloaded! Click here to open',
+                                                style: TextStyle(
+                                                  color: Colors.blueAccent,
+                                                  fontFamily: 'Source Sans Pro',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                OpenFile.open(filePath);
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                ],
+                              )
+                            : SizedBox(),
+
+                        ///
                         SizedBox(
                           height: 30,
                           child: Divider(
@@ -294,31 +458,68 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
 
                         ///Button
                         this.widget.item.status == LeaveStatus.REQUESTED ||
-                                this.widget.item.status == LeaveStatus.ACCEPTED
+                                this.widget.item.status ==
+                                    LeaveStatus.ACCEPTED ||
+                                this.widget.item.status == LeaveStatus.ONGOING
                             ? RoundedButton(
                                 title: 'Cancel Leave',
                                 color: Colors.redAccent,
                                 onPressed: () {
-                                  this._dialog.showConfirmationDialog(
-                                    title: 'Confirm',
-                                    onPressedYes: () async {
-                                      //_spin = true;
-                                      int code = await _leaveService
-                                          .cancelLeave(this.widget.item.id);
-                                      if (code == 202) {
-                                        //_spin = false;
-                                        Navigator.pushNamed(
-                                            context, '/ownLeave');
-                                      }
-                                    },
-                                    onPressedNo: () {
-                                      Navigator.pop(context);
-                                    },
-                                    context: context,
-                                    children: [
-                                      Text('Do you want to cancel this leave ?')
-                                    ],
-                                  );
+                                  Widget child = SizedBox();
+
+                                  ///alert dialog
+                                  this._alertDialog.showConfirmationDialog(
+                                        title: 'Confirm',
+                                        context: context,
+                                        children: [
+                                          Text(
+                                              'Do you want to cancel this leave ?'),
+                                          child
+                                        ],
+
+                                        ///on pressed yes
+                                        onPressedYes: () async {
+                                          setState(() {
+                                            child = CircularProgressIndicator();
+                                          });
+                                          int code = await _leaveService
+                                              .cancelLeave(this.widget.item.id);
+
+                                          ///if cancelled
+                                          if (code == 200) {
+                                            Navigator.pop(context);
+                                            this._alertDialog.showAlertDialog(
+                                                  context: context,
+                                                  title: 'Cancelled',
+                                                  body:
+                                                      'Leave cancelled successfully.',
+                                                  color: Colors.blueAccent,
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+                                          } else {
+                                            Navigator.pop(context);
+                                            this._alertDialog.showAlertDialog(
+                                                  context: context,
+                                                  title: 'Error occured',
+                                                  body:
+                                                      'Cannot cancel this leave. \nTry again later',
+                                                  color: Colors.redAccent,
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+                                          }
+                                        },
+
+                                        ///on pressed no
+                                        onPressedNo: () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
                                 },
                               )
                             : SizedBox(),
@@ -326,7 +527,9 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
                     )
                   ],
                 ),
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );

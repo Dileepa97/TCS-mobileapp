@@ -17,14 +17,14 @@ class DetailRow extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Source Sans Pro',
-            fontSize: 15,
+            fontSize: 16,
           ),
         ),
         Text(
           '${this.valueString}',
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
-            fontSize: 16,
+            fontSize: 17,
           ),
         )
       ],

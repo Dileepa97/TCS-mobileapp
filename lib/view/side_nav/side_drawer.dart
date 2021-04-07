@@ -3,11 +3,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/auth/auth_service.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
 import 'package:timecapturesystem/view/auth/login_screen.dart';
+import 'package:timecapturesystem/view/customer/customer_dashboard_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
+import 'package:timecapturesystem/view/product/product_managemnet_dashboard_screen.dart';
+import 'package:timecapturesystem/view/task/product_dashboard.dart';
 import 'package:timecapturesystem/view/team/team_view.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
@@ -21,8 +27,26 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> {
+  User user;
+  bool _userAvailable = false;
+
+  void getUser() async {
+    user = await TokenStorageService.userDataOrEmpty;
+    setState(() {
+      _userAvailable = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // getUser();
+    if (_userAvailable) print(user.fullName);
     User _user;
     String unseenCount = '0';
     return Drawer(
@@ -140,8 +164,14 @@ class _SideDrawerState extends State<SideDrawer> {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/userLeave');
+                      if (_userAvailable) {
+                        Navigator.pop(context);
+                        if (user.highestRoleIndex == 2) {
+                          Navigator.pushNamed(context, AdminLeaveDashBoard.id);
+                        } else if (user.highestRoleIndex < 2) {
+                          Navigator.pushNamed(context, UserLeaveDashboard.id);
+                        }
+                      }
                     },
                   ),
                   ListTile(
@@ -165,7 +195,7 @@ class _SideDrawerState extends State<SideDrawer> {
                   ListTile(
                     title: Row(
                       children: [
-                        Icon(Icons.supervised_user_circle_outlined),
+                        Icon(Icons.person),
                         SizedBox(
                           width: 5.0,
                         ),
@@ -175,6 +205,37 @@ class _SideDrawerState extends State<SideDrawer> {
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, UserManagementDashboard.id);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Icon(Icons.outbox),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Product Management'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                          context, ProductManagementDashboard.id);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Icon(Icons.work),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Customer Management'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, CustomerDashboard.id);
                     },
                   ),
                   ListTile(

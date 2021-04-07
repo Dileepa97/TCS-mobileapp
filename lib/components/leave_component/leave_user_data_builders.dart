@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 
-import 'admin_leave_card.dart';
+//done
+var fileAPI = apiEndpoint + 'files/';
 
+///user name builder
 class UserNameText extends StatelessWidget {
   const UserNameText({
     Key key,
@@ -41,6 +42,7 @@ class UserNameText extends StatelessWidget {
   }
 }
 
+///user profile image builder
 class UserProfileImage extends StatelessWidget {
   const UserProfileImage({
     Key key,
@@ -59,6 +61,8 @@ class UserProfileImage extends StatelessWidget {
       future: UserService.getUserById(userId),
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
         Widget _avatar;
+
+        ///creating image
         if (snapshot.hasData) {
           User _user = snapshot.data;
 
@@ -74,6 +78,8 @@ class UserProfileImage extends StatelessWidget {
             backgroundColor: Colors.white,
           );
         }
+
+        ///display image
         return Container(
             height: height,
             width: width,
