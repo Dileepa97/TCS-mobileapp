@@ -29,6 +29,7 @@ class _SideDrawerState extends State<SideDrawer> {
   User user;
   bool _userAvailable = false;
 
+  ///get logged in user
   void getUser() async {
     user = await TokenStorageService.userDataOrEmpty;
     setState(() {
@@ -45,73 +46,88 @@ class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
     if (_userAvailable) print(user.fullName);
-    User _user;
     String unseenCount = '0';
+
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<dynamic>(
             future: UserService.getLoggedInUserAndNotificationCount(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              Widget _emailWidget;
-              Widget _nameWidget;
-              Widget _avatar;
-
               if (snapshot.hasData) {
-                _user = snapshot.data[0];
                 unseenCount = snapshot.data[1];
-
-                _emailWidget = Text(
-                  _user.email,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                );
-                _nameWidget = Text(
-                  _user.username,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                );
-                _avatar = CircleAvatar(
-                  backgroundImage: _user.profileImageURL == 'default.png'
-                      ? AssetImage('images/default.png')
-                      : NetworkImage(fileAPI + _user.profileImageURL),
-                  backgroundColor: Colors.white,
-                );
               } else if (snapshot.hasError) {
-                _emailWidget = null;
-                _nameWidget = null;
-                _avatar = CircleAvatar(
-                  backgroundColor: Colors.white,
-                );
-              } else {
-                _emailWidget = null;
-                _nameWidget = null;
-                _avatar = CircleAvatar(
-                  backgroundColor: Colors.white,
-                );
-              }
+              } else {}
 
               return ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
+                  ///Drawer header
                   UserAccountsDrawerHeader(
-                    accountEmail: _emailWidget,
-                    accountName: _nameWidget,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+
+                    ///Account email
+                    accountEmail: _userAvailable
+                        ? Text(
+                            user.email,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          )
+                        : Text(
+                            'email',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+
+                    ///Account name
+                    accountName: _userAvailable
+                        ? Text(
+                            user.fullName.split(' ').length < 2
+                                ? user.fullName.split(' ').elementAt(0)
+                                : user.fullName.split(' ').elementAt(0) +
+                                    '  ' +
+                                    user.fullName.split(' ').elementAt(1),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          )
+                        : Text(
+                            'user name',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+
+                    ///Account picture
                     currentAccountPicture: GestureDetector(
-                      child: _avatar,
+                      child: _userAvailable
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  user.profileImageURL == 'default.png'
+                                      ? AssetImage('images/default.png')
+                                      : NetworkImage(
+                                          fileAPI + user.profileImageURL),
+                              backgroundColor: Colors.white,
+                            )
+                          : CircleAvatar(
+                              backgroundImage: AssetImage('images/default.png'),
+                              backgroundColor: Colors.white,
+                            ),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, Profile.id);
                       },
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
                   ),
+
+                  ///Drawer items
+                  ///Notification center - all users
                   ListTile(
                     title: Row(
                       children: [
@@ -151,27 +167,93 @@ class _SideDrawerState extends State<SideDrawer> {
                       Navigator.pushNamed(context, NotificationCenter.id);
                     },
                   ),
+
+                  ///User management - super admin, admin
+                  _userAvailable && user.highestRoleIndex > 1
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.person),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('User Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, UserManagementDashboard.id);
+                          },
+                        )
+                      : SizedBox(),
+
+                  ///Leave management system -  admin, teamleader, team member
+                  _userAvailable && user.highestRoleIndex < 3
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.directions_walk_outlined),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Leave Management System'),
+                            ],
+                          ),
+                          onTap: () {
+                            if (_userAvailable) {
+                              Navigator.pop(context);
+                              if (user.highestRoleIndex == 2) {
+                                Navigator.pushNamed(
+                                    context, AdminLeaveDashBoard.id);
+                              } else if (user.highestRoleIndex < 2) {
+                                Navigator.pushNamed(
+                                    context, UserLeaveDashboard.id);
+                              }
+                            }
+                          },
+                        )
+                      : SizedBox(),
+
+                  ///customer management
+                  //TODO: Roll assign
                   ListTile(
                     title: Row(
                       children: [
-                        Icon(Icons.directions_walk_outlined),
+                        Icon(Icons.work),
                         SizedBox(
                           width: 5.0,
                         ),
-                        Text('Leave Management System'),
+                        Text('Customer Management'),
                       ],
                     ),
                     onTap: () {
-                      if (_userAvailable) {
-                        Navigator.pop(context);
-                        if (user.highestRoleIndex == 2) {
-                          Navigator.pushNamed(context, AdminLeaveDashBoard.id);
-                        } else if (user.highestRoleIndex < 2) {
-                          Navigator.pushNamed(context, UserLeaveDashboard.id);
-                        }
-                      }
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, CustomerDashboard.id);
                     },
                   ),
+
+                  ///product management
+                  //TODO: Roll assign
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Icon(Icons.outbox),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text('Product Management'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                          context, ProductManagementDashboard.id);
+                    },
+                  ),
+
+                  ///Team management
+                  //TODO: Roll assign
                   ListTile(
                     title: Row(
                       children: [
@@ -190,68 +272,29 @@ class _SideDrawerState extends State<SideDrawer> {
                               builder: (BuildContext context) => TeamView()));
                     },
                   ),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.person),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('User Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, UserManagementDashboard.id);
-                    },
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.outbox),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Product Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(
-                          context, ProductManagementDashboard.id);
-                    },
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.work),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Customer Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, CustomerDashboard.id);
-                    },
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(Icons.list_alt_outlined),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text('Title Management'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, TitleManagementScreen.id);
-                    },
-                  ),
+
+                  ///title management - super admin , admin
+                  _userAvailable && user.highestRoleIndex > 1
+                      ? ListTile(
+                          title: Row(
+                            children: [
+                              Icon(Icons.list_alt_outlined),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text('Title Management'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, TitleManagementScreen.id);
+                          },
+                        )
+                      : SizedBox(),
                   DividerBox(),
+
+                  ///home - all user
                   ListTile(
                     title: Row(
                       children: [
@@ -270,6 +313,8 @@ class _SideDrawerState extends State<SideDrawer> {
                               builder: (BuildContext context) => HomePage()));
                     },
                   ),
+
+                  ///log out - all user
                   ListTile(
                     title: Row(
                       children: [

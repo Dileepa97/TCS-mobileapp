@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_screen.dart';
 
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
@@ -17,6 +21,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  User user;
+  bool _userAvailable = false;
+
+  ///get logged in user
+  void getUser() async {
+    user = await TokenStorageService.userDataOrEmpty;
+    setState(() {
+      _userAvailable = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,13 +120,17 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 35,),
+            SizedBox(
+              height: 35,
+            ),
             Center(
               child: Image(
                 image: AssetImage('images/logo.png'),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             GridView.count(
               // Create a grid with 2 columns. If you change the scrollDirection to
               // horizontal, this produces 2 rows.
@@ -124,8 +149,8 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.blue.shade700,
-                      borderRadius: BorderRadius.circular(15),
+                        color: Colors.blue.shade700,
+                        borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
@@ -133,22 +158,35 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.notifications_active_outlined,color: Colors.white,size: 40,),
-                        SizedBox(height: 10,),
+                        Icon(
+                          Icons.notifications_active_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text("Notification Center")
                       ],
                     ),
                   ),
                 ),
+
+                ///leave
                 InkWell(
                   onTap: () {
-                    // Navigator.pop(context);
-                    Navigator.pushNamed(context, '/userLeave');
+                    if (_userAvailable) {
+                      Navigator.pop(context);
+                      if (user.highestRoleIndex == 2) {
+                        Navigator.pushNamed(context, AdminLeaveDashBoard.id);
+                      } else if (user.highestRoleIndex < 2) {
+                        Navigator.pushNamed(context, UserLeaveDashboard.id);
+                      }
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -161,17 +199,22 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.directions_walk_outlined,color: Colors.white,size: 40,),
-                            SizedBox(height: 10,),
-                            Text("Leave Management")
-                            ],
-                          ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.directions_walk_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Leave Management")
+                      ],
                     ),
+                  ),
                 ),
                 InkWell(
                   onTap: () {
@@ -189,13 +232,18 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.supervised_user_circle_outlined,color: Colors.white,size: 40,),
-                        SizedBox(height: 10,),
+                        Icon(
+                          Icons.supervised_user_circle_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text("User Management")
                       ],
                     ),
@@ -204,9 +252,10 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     // Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>TeamView()
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => TeamView()));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -219,16 +268,21 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
+                        ]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.people,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Team Management")
+                      ],
                     ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.people,color: Colors.white,size: 40,),
-                          SizedBox(height: 10,),
-                          Text("Team Management")
-                        ],
-                      ),
                   ),
                 ),
                 InkWell(
@@ -247,23 +301,29 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
+                        ]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.list_alt_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Title Management")
+                      ],
                     ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.list_alt_outlined,color: Colors.white,size: 40,),
-                          SizedBox(height: 10,),
-                          Text("Title Management")
-                        ],
-                      ),
                   ),
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>TaskPanel()
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => TaskPanel()));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -276,13 +336,18 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.settings_backup_restore,color: Colors.white,size: 40,),
-                        SizedBox(height: 10,),
+                        Icon(
+                          Icons.settings_backup_restore,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text("Partial Tasks")
                       ],
                     ),
@@ -290,9 +355,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>TaskPanel()
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => TaskPanel()));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -305,13 +371,18 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.business_center,color: Colors.white,size: 40,),
-                        SizedBox(height: 10,),
+                        Icon(
+                          Icons.business_center,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text("Product Dashboard")
                       ],
                     ),
@@ -319,9 +390,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UserTaskDashboard("184180F")
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                UserTaskDashboard("184180F")));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -334,13 +407,18 @@ class _HomePageState extends State<HomePage> {
                             blurRadius: 4,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
-                        ]
-                    ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.widgets,color: Colors.white,size: 40,),
-                        SizedBox(height: 10,),
+                        Icon(
+                          Icons.widgets,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text("Task Details")
                       ],
                     ),
