@@ -25,6 +25,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Color _passwordInitColor = Colors.lightBlueAccent;
   Color _confirmPasswordInitColor = Colors.lightBlueAccent;
 
+  bool passwordInvisible = true;
+  IconData visibilityIcon = Icons.visibility;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +68,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   },
                   decoration:
                       inputDeco(_oldPasswordInitColor, _oldPasswordController)
-                          .copyWith(hintText: 'Current Password'),
+                          .copyWith(
+                    hintText: 'Current Password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          passwordInvisible = !passwordInvisible;
+                          visibilityIcon = visibilityIcon == Icons.visibility
+                              ? Icons.visibility_off
+                              : Icons.visibility;
+                        });
+                      },
+                      icon: Icon(
+                        visibilityIcon,
+                        color: Colors.black38,
+                        size: 20,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
@@ -84,13 +104,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     });
                   },
                   decoration: inputDeco(_passwordInitColor, _passwordController)
-                      .copyWith(hintText: 'Password'),
+                      .copyWith(
+                    hintText: 'New Password',
+                  ),
                 ),
                 SizedBox(
                   height: spaceBetweenFields,
                 ),
                 TextField(
-                  obscureText: true,
+                  obscureText: passwordInvisible,
                   enableSuggestions: false,
                   autocorrect: false,
                   controller: _confirmPasswordController,

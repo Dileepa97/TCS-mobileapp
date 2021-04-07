@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,8 +31,6 @@ class PickImageScreen extends StatefulWidget {
 }
 
 class _PickImageScreenState extends State<PickImageScreen> {
-  //final ImagePicker _imagePicker = ImagePickerChannel();
-
   File _imageFile;
   bool spin = false;
 
@@ -73,7 +71,8 @@ class _PickImageScreenState extends State<PickImageScreen> {
         ],
       );
     } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
+      return Text('Pick or take an image to start',
+          style: TextStyle(fontSize: 18.0));
     }
   }
 
@@ -155,6 +154,14 @@ class _PickImageScreenState extends State<PickImageScreen> {
     var authHeader = await generateAuthHeader();
     var id = await TokenStorageService.idOrEmpty;
     Dio dio = Dio();
+    var timer = Timer(Duration(seconds: 10), () {
+      setState(() {
+        spin = false;
+      });
+      displayDialog(context, "Error", "Request Timeout");
+      Navigator.pop(context);
+      Navigator.pop(context);
+    });
     try {
       String fileName = id + '@' + DateTime.now().toIso8601String();
       FormData formData = FormData.fromMap({
@@ -165,24 +172,38 @@ class _PickImageScreenState extends State<PickImageScreen> {
           data: formData,
           options:
               Options(headers: {"accept": "*/*", "Authorization": authHeader}));
-      if (res != null) {
-        if (res.statusCode == 200) {
-          setState(() {
-            spin = false;
-          });
 
+      if (res != null) {
+        timer.cancel();
+        if (res.statusCode == 200) {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, Profile.id);
+        } else if (res.statusCode == 417) {
+          Navigator.pop(context);
+          displayDialog(context, "Error", "File too large");
         } else {
           displayDialog(
               context, "Error", "An error occurred while uploading image");
-          setState(() {
-            spin = false;
-          });
         }
+        setState(() {
+          spin = false;
+        });
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while uploading image");
       }
-    } catch (e) {}
+      setState(() {
+        spin = false;
+      });
+    } catch (e) {
+      timer.cancel();
+      setState(() {
+        spin = false;
+      });
+      displayDialog(
+          context, "Upload Error", "An error occurred while uploading image ");
+    }
   }
 }
