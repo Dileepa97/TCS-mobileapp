@@ -225,6 +225,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  email_validator:
+    dependency: "direct main"
+    description:
+      name: email_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   enum_to_string:
     dependency: "direct main"
     description:
@@ -513,6 +520,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  open_file:
+    dependency: "direct main"
+    description:
+      name: open_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   package_config:
     dependency: transitive
     description:
@@ -528,7 +542,7 @@ packages:
     source: hosted
     version: "1.8.0-nullsafety.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -679,6 +693,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smart_select:
+    dependency: "direct main"
+    description:
+      name: smart_select
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.3.2"
   source_gen:
     dependency: transitive
     description:

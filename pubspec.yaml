@@ -51,7 +51,10 @@ dependencies:
   flutter_spinkit: ^4.1.2
   local_auth: ^0.6.3+1
   flutter_password_strength: ^0.1.5
-
+  path_provider: ^1.6.0
+  open_file: 2.1.0
+  email_validator: ^1.0.6
+  smart_select: ^4.3.2
 #flutter_icons:
 #  image_path: "images/icon.png"
 #  android: true
