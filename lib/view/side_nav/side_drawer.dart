@@ -13,7 +13,6 @@ import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_scree
 import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/product/product_managemnet_dashboard_screen.dart';
-import 'package:timecapturesystem/view/task/product_dashboard.dart';
 import 'package:timecapturesystem/view/team/team_view.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
@@ -45,7 +44,6 @@ class _SideDrawerState extends State<SideDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // getUser();
     if (_userAvailable) print(user.fullName);
     User _user;
     String unseenCount = '0';
@@ -253,6 +251,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       Navigator.pushNamed(context, TitleManagementScreen.id);
                     },
                   ),
+                  DividerBox(),
                   ListTile(
                     title: Row(
                       children: [
@@ -271,7 +270,6 @@ class _SideDrawerState extends State<SideDrawer> {
                               builder: (BuildContext context) => HomePage()));
                     },
                   ),
-                  DividerBox(),
                   ListTile(
                     title: Row(
                       children: [

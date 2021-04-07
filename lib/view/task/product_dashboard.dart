@@ -15,11 +15,6 @@ class ProductDashboard extends StatelessWidget {
 
   const ProductDashboard({Key key, this.product}) : super(key: key);
 
-  // String productId;
-
-  // ProductDashboard(String productId) {
-  //   this.productId = productId;
-  // }
 
   Widget taskDashboardCard(
     String optionTitle,
@@ -89,7 +84,7 @@ class ProductDashboard extends StatelessWidget {
           physics: ScrollPhysics(),
           children: [
             Material(
-              elevation: 10,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
@@ -124,7 +119,7 @@ class ProductDashboard extends StatelessWidget {
               ),
             ),
             Material(
-              elevation: 10,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
@@ -158,7 +153,7 @@ class ProductDashboard extends StatelessWidget {
               ),
             ),
             Material(
-              elevation: 10,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
@@ -192,7 +187,7 @@ class ProductDashboard extends StatelessWidget {
               ),
             ),
             Material(
-              elevation: 10,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
