@@ -112,7 +112,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   height: spaceBetweenFields,
                 ),
                 TextField(
-                  obscureText: true,
+                  obscureText: passwordInvisible,
                   enableSuggestions: false,
                   autocorrect: false,
                   controller: _confirmPasswordController,
