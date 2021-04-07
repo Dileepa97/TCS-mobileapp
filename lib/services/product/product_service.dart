@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API'].toString();
-var API = apiEndpoint + 'products';
-var apiAuth = DotEnv().env['API_Auth'].toString();
+String endPointName = 'products';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
 String contentTypeHeader = 'application/json';
 
 class ProductService {
-  ///add new product
+  ///add new product - admin
   Future<dynamic> newProduct(
       String productName, String description, List<String> custIdList) async {
     try {

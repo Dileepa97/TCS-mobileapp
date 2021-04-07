@@ -1,52 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:timecapturesystem/components/dialog_boxes.dart';
 import 'package:timecapturesystem/models/lms/leave_availability_detail.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
-
 import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
-var API = apiEndpoint + 'leave-availability-details';
-var apiAuth = DotEnv().env['API_Auth'].toString();
+String endPointName = 'leave-availability-details';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
+
 String contentTypeHeader = 'application/json';
 
-final storage = FlutterSecureStorage();
-Map<String, String> headers = {'Content-Type': 'application/json'};
-
 class LeaveAvailabilityService {
-  Future getAvailableData(String userId, String type) async {
-    var params = {'type': '$type'};
-
-    var uri = Uri.http('192.168.8.169:8080',
-        '/api/leave-availability-details/user/$userId/type', params);
-    http.Response response = await http.get(uri);
-    if (response.statusCode == 200) {
-      String data = response.body;
-      // print(data);
-      return jsonDecode(data);
-    } else {
-      return (response.statusCode);
-    }
-  }
-
-  Future getUserLeaveAvailableData(String userId) async {
-    var uri = Uri.http(
-        '192.168.8.169:8080', '/api/leave-availability-details/user/$userId');
-    http.Response response = await http.get(uri);
-    if (response.statusCode == 200) {
-      String data = response.body;
-      // print(data);
-      return jsonDecode(data);
-    } else {
-      return (response.statusCode);
-    }
-  }
-
   ///Get logged user leave availability details by year -  logged user
   Future<dynamic> getLoggedUserLeaveAvailability(
       dynamic context, int year) async {
@@ -55,8 +22,8 @@ class LeaveAvailabilityService {
         'year': '$year',
       };
 
-      var uri = Uri.http(apiAuth,
-          'api/leave-availability-details/logged-user-by-year', params);
+      var uri =
+          Uri.http(apiAuth, 'api/$endPointName/logged-user-by-year', params);
 
       var authHeader = await generateAuthHeader();
 
@@ -89,8 +56,7 @@ class LeaveAvailabilityService {
         'year': '$year',
       };
 
-      var uri = Uri.http(
-          apiAuth, 'api/leave-availability-details/user-by-year', params);
+      var uri = Uri.http(apiAuth, 'api/$endPointName/user-by-year', params);
 
       var authHeader = await generateAuthHeader();
 
@@ -114,7 +80,7 @@ class LeaveAvailabilityService {
     }
   }
 
-  ///Get logged user leave availability details by year -  logged user
+  ///Get logged user leave availability details by year and type -  logged user
   Future<dynamic> getLoggedUserLeaveAvailabilityByType(
       dynamic context, int year, String type) async {
     try {
@@ -123,8 +89,8 @@ class LeaveAvailabilityService {
         'year': '$year',
       };
 
-      var uri = Uri.http(
-          apiAuth, 'api/leave-availability-details/logged-user/option', params);
+      var uri =
+          Uri.http(apiAuth, 'api/$endPointName/logged-user/option', params);
 
       var authHeader = await generateAuthHeader();
 

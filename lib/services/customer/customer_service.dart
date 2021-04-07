@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/models/customer/customer.dart';
-
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API'].toString();
-var API = apiEndpoint + 'customers';
-var apiAuth = DotEnv().env['API_Auth'].toString();
+String endPointName = 'customers';
+var API = apiEndpoint + endPointName;
+var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
+
 String contentTypeHeader = 'application/json';
 
 class CustomerService {
-  ///add new customer
+  ///add new customer - admin
   Future<dynamic> newCustomer(
       String orgId, String orgName, String orgEmail) async {
     try {
