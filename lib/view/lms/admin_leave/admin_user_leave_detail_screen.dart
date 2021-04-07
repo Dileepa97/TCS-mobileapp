@@ -123,14 +123,15 @@ class _MoreLeaveDetailsState extends State<MoreLeaveDetails> {
               ///user details -----------------------------------------------------------------
               Container(
                 margin: EdgeInsets.all(5),
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ///user profile
+                    ///uder profile image
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: UserProfileImage(
@@ -139,6 +140,31 @@ class _MoreLeaveDetailsState extends State<MoreLeaveDetails> {
 
                     ///user name
                     UserNameText(userId: widget.userId, fontSize: 18),
+                    DividerBox(),
+
+                    ///user leaves
+                    GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 3),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 2.0, color: Colors.blue),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          'User Leaves',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontFamily: 'Source Sans Pro',
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),

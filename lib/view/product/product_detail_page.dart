@@ -108,42 +108,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         )
                       : SizedBox(),
 
-                  ///product task details button
-                  GestureDetector(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 3),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2.0, color: Colors.blue),
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        color: Colors.white,
-                      ),
-                      child: Text(
-                        'Product Tasks',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontFamily: 'Source Sans Pro',
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-
-                    ///onTap
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductDashboard(
-                            product: widget.product,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
                   ///button row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -302,7 +266,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   child: Row(
                                     children: [
                                       ///icon
-                                      Icon(Icons.work),
+                                      Icon(Icons.business_outlined),
 
                                       ///Customer name
                                       FutureBuilder(
