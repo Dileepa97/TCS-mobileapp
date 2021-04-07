@@ -41,7 +41,8 @@ class _NotificationCardState extends State<NotificationCard> {
             category == 'leave-start' ||
             category == 'leave-end' ||
             category == 'remain-annual-leave' ||
-            category == 'annual-leave-over')
+            category == 'annual-leave-over' ||
+            category == 'leave-cancellation-accepted')
           Navigator.pushNamed(
               context, notificationClicked(widget.notification.category));
       },
@@ -143,6 +144,10 @@ class _NotificationCardState extends State<NotificationCard> {
       case 'annual-leave-over':
         {
           return UserLeaveAvailable.id;
+        }
+      case 'leave-cancellation-accepted':
+        {
+          return OwnUserLeaves.id;
         }
 
       ///
