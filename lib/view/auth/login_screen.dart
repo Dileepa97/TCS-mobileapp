@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool spin = false;
+  bool passwordInvisible = false;
+  IconData visibilityIcon = Icons.visibility;
 
   Color usernameInitColor = Colors.lightBlueAccent;
   Color passwordInitColor = Colors.lightBlueAccent;
@@ -94,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 16.0,
                 ),
                 TextField(
-                  obscureText: true,
+                  obscureText: passwordInvisible,
                   controller: _passwordController,
                   onChanged: (value) {
                     //Do something with the user input.
@@ -105,7 +107,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   },
                   decoration: inputDeco(passwordInitColor, _passwordController)
-                      .copyWith(hintText: 'Password'),
+                      .copyWith(
+                    hintText: 'Password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          passwordInvisible = !passwordInvisible;
+                          visibilityIcon = visibilityIcon == Icons.visibility
+                              ? Icons.visibility_off
+                              : Icons.visibility;
+                        });
+                      },
+                      icon: Icon(
+                        visibilityIcon,
+                        color: Colors.black38,
+                        size: 20,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 20.0,
