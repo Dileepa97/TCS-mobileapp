@@ -125,6 +125,7 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                               MaterialPageRoute(
                                 builder: (context) => CustomerDetailPage(
                                   customer: _customerList[index],
+                                  disableLoadMore: false,
                                 ),
                               ),
                             );

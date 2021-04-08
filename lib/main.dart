@@ -14,6 +14,7 @@ import 'package:timecapturesystem/view/lms/admin_leave/admin_all_leaves_screen.d
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leaves_by_status_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_list_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/today_unavailable_users_screen.dart';
 import 'package:timecapturesystem/view/lms/team_leader/TL_today_unavailable_user_screen.dart';
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
             initialRoute = '/';
             routes = {
               //add routes that user can access only after logging
-              '/': (context) => HomePage(),
+              HomePage.id: (context) => HomePage(),
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
@@ -128,6 +129,8 @@ class _MyAppState extends State<MyApp> {
               ChangeAllowedDays.id: (context) => ChangeAllowedDays(),
               OngoingLeaveCancellationManager.id: (context) =>
                   OngoingLeaveCancellationManager(),
+              AdminUserLeaveListScreen.id: (context) =>
+                  AdminUserLeaveListScreen(),
 
               ///Team leader leaves
               TLTodayUnavailableUserScreen.id: (context) =>

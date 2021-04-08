@@ -1,47 +1,31 @@
-import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/models/task/task_status.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Task{
+part 'task.g.dart';
+
+@JsonSerializable()
+class Task {
   String taskId;
+
   String taskName;
-  String taskStatus;
+
   int estimatedHours;
-  String startTime;
-  String endTime;
-  Customer customer;
 
-  Task({
-  this.taskId,
-  this.taskName,
-  this.taskStatus,
-  this.estimatedHours,
-  this.startTime,
-  this.endTime,
-  this.customer
-  });
+  DateTime createdAt;
 
-  factory Task.formJson(Map<String, dynamic> data){
-    return Task(
-      taskId: data['taskId'],
-      taskName: data['taskName'],
-      taskStatus: data['taskStatus'],
-      startTime: data['startTime'],
-      endTime: data['endTime'],
-      customer: data['customer'],
-      estimatedHours: data['estimatedHours'],
-    );
-  }
+  TaskStatus taskStatus;
 
-  Map<String, dynamic> toJson(){
-    return {
-        "taskId": this.taskId,
-        "taskName": this.taskName,
-        "taskStatus": this.taskStatus,
-        "startTime": this.startTime,
-        "endTime": this.startTime,
-        "customer": this.customer,
-        "estimatedHours": this.estimatedHours
-    };
-  }
+  String productId;
 
+  Task(
+      {this.taskId,
+      this.taskName,
+      this.estimatedHours,
+      this.createdAt,
+      this.taskStatus,
+      this.productId});
+
+  factory Task.fromJson(Map<String, dynamic> data) => _$TaskFromJson(data);
+
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
 }

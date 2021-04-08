@@ -10,25 +10,24 @@ import 'package:timecapturesystem/services/customer/customer_service.dart';
 import 'package:timecapturesystem/services/product/product_service.dart';
 import 'package:timecapturesystem/view/customer/customer_detail_page.dart';
 import 'package:timecapturesystem/view/product/update_product_screen.dart';
-import 'package:timecapturesystem/view/task/product_dashboard.dart';
 
 class ProductDetailPage extends StatefulWidget {
   static const String id = 'product_details_page';
 
   final Product product;
+  final bool disableLoadMore;
 
-  const ProductDetailPage({Key key, this.product}) : super(key: key);
+  const ProductDetailPage({Key key, this.product, this.disableLoadMore})
+      : super(key: key);
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _spin = false;
-  bool _isCustomer = false;
 
   ShowAlertDialog _dialog = ShowAlertDialog();
   ProductService _productService = ProductService();
-  Customer _customer;
 
   @override
   Widget build(BuildContext context) {
@@ -243,9 +242,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           size: 22,
                         ),
                         onTap: () {
-                          setState(() {
-                            _isCustomer = false;
-                          });
+                          setState(() {});
                         },
                       ),
                     ],
@@ -260,79 +257,97 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ? ListView.builder(
                             itemCount: widget.product.customerIdList.length,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
-                                child: InputContainer(
-                                  height: 50,
-                                  child: Row(
-                                    children: [
-                                      ///icon
-                                      Icon(Icons.business_outlined),
+                              return FutureBuilder(
+                                future: CustomerService.getCustomerById(
+                                    widget.product.customerIdList[index]),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  Widget child;
 
-                                      ///Customer name
-                                      FutureBuilder(
-                                        future: CustomerService.getCustomerById(
-                                            widget
-                                                .product.customerIdList[index]),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<dynamic> snapshot) {
-                                          Widget child;
+                                  if (snapshot.hasData) {
+                                    ///if error
+                                    if (snapshot.data == 1 ||
+                                        snapshot.data == -1) {
+                                      child = InputContainer(
+                                        height: 50,
+                                        child: Center(
+                                          child: Text(
+                                            'Cannot fetch data',
+                                            style: TextStyle(
+                                              fontFamily: 'Source Sans Pro',
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }
 
-                                          if (snapshot.hasData) {
-                                            if (snapshot.data == 1 ||
-                                                snapshot.data == -1) {
-                                              child = Text(
-                                                'Cannot fetch data',
-                                                style: TextStyle(
-                                                  fontFamily: 'Source Sans Pro',
-                                                  fontSize: 16,
+                                    ///if data arrive
+                                    else {
+                                      Customer _customer = snapshot.data;
+
+                                      child = GestureDetector(
+                                        child: InputContainer(
+                                          height: 50,
+                                          child: Row(
+                                            children: [
+                                              ///icon
+                                              Icon(Icons.business_outlined),
+
+                                              ///customer name
+                                              Expanded(
+                                                child: Text(
+                                                  _customer.organizationName,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Source Sans Pro',
+                                                    fontSize: 16,
+                                                  ),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                textAlign: TextAlign.center,
-                                              );
-                                              _isCustomer = false;
-                                            } else {
-                                              _customer = snapshot.data;
-                                              child = Text(
-                                                _customer.organizationName,
-                                                style: TextStyle(
-                                                  fontFamily: 'Source Sans Pro',
-                                                  fontSize: 16,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              );
-                                              _isCustomer = true;
-                                            }
-                                          } else {
-                                            child = Text(
-                                              'Wait...',
-                                              style: TextStyle(
-                                                fontFamily: 'Source Sans Pro',
-                                                fontSize: 16,
                                               ),
-                                              textAlign: TextAlign.center,
+                                            ],
+                                          ),
+                                        ),
+
+                                        ///on tap
+                                        onTap: () {
+                                          if (widget.disableLoadMore == false) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CustomerDetailPage(
+                                                  customer: _customer,
+                                                  disableLoadMore: true,
+                                                ),
+                                              ),
                                             );
-                                            _isCustomer = false;
                                           }
-
-                                          return Expanded(child: child);
                                         },
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                      );
+                                    }
+                                  }
 
-                                ///on tap
-                                onTap: () {
-                                  if (_isCustomer) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CustomerDetailPage(
-                                          customer: _customer,
+                                  /// if data fetching
+                                  else {
+                                    child = InputContainer(
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(
+                                          'Wait...',
+                                          style: TextStyle(
+                                            fontFamily: 'Source Sans Pro',
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     );
                                   }
+
+                                  return child;
                                 },
                               );
                             },

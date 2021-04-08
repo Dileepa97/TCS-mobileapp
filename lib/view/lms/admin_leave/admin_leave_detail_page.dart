@@ -11,27 +11,35 @@ import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart'
 import 'package:timecapturesystem/components/leave_component/button_row.dart';
 
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
-import 'package:timecapturesystem/models/lms/day_amount.dart';
+
 import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/models/lms/leave_option.dart';
+
 import 'package:timecapturesystem/models/lms/leave_status.dart';
 import 'package:timecapturesystem/services/LMS/leave_service.dart';
-import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
+
 import 'package:path_provider/path_provider.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
 
 import '../check_leaves.dart';
 import 'admin_user_leave_detail_screen.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
+// ignore: non_constant_identifier_names
 var API = apiEndpoint + 'files/';
 
 class AdminLeaveDetailsPage extends StatefulWidget {
   static const String id = 'admin_leave_details_page';
 
-  AdminLeaveDetailsPage({this.item});
+  AdminLeaveDetailsPage({this.item, this.isMoreUserLeave, this.isOngoing});
   final Leave item;
+  final bool isMoreUserLeave;
+  final bool isOngoing;
+
+  //                 widget  =>|  show  | not show
+  // isMoreUserLeave           | fasle  | true
+  // isOngoing                 | false  | true
 
   @override
   _AdminLeaveDetailsPageState createState() => _AdminLeaveDetailsPageState();
@@ -493,49 +501,88 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                           ),
 
                           ///user leave detail button
-                          GestureDetector(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 3),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2.0, color: Colors.blue),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.0)),
-                                  color: Colors.white,
-                                ),
-                                child: Text(
-                                  'User Leave Details',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontFamily: 'Source Sans Pro',
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-
-                              ///on tap function
-                              onTap: () {
-                                // Navigator.pushNamed(
-                                //     context, MoreLeaveDetails.id);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MoreLeaveDetails(
-                                      userId: this.widget.item.userId,
+                          widget.isMoreUserLeave == false
+                              ? GestureDetector(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2.0, color: Colors.blue),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                      color: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'User Leave Details',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontFamily: 'Source Sans Pro',
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
-                                );
-                              }),
+
+                                  ///on tap function
+                                  onTap: () {
+                                    // Navigator.pushNamed(
+                                    //     context, MoreLeaveDetails.id);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MoreLeaveDetails(
+                                          userId: this.widget.item.userId,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : SizedBox(),
 
                           ///
-                          SizedBox(
-                            height: 30,
-                            child: Divider(
-                              color: Colors.black12,
-                              thickness: 1,
-                            ),
-                          ),
+                          widget.isMoreUserLeave == false
+                              ? SizedBox(
+                                  height: 30,
+                                  child: Divider(
+                                    color: Colors.black12,
+                                    thickness: 1,
+                                  ),
+                                )
+                              : SizedBox(),
+
+                          ///ongoing cancel  request page button
+
+                          this.widget.item.status ==
+                                      LeaveStatus.ONGOING_CANCEL_REQUESTED &&
+                                  widget.isOngoing == false
+                              ? GestureDetector(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2.0, color: Colors.blue),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                      color: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'Ongoing Leave Cancel',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontFamily: 'Source Sans Pro',
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+
+                                  ///on tap function
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                        OngoingLeaveCancellationManager.id);
+                                  },
+                                )
+                              : SizedBox(),
 
                           ///Buttons
                           this.widget.item.status == LeaveStatus.REQUESTED

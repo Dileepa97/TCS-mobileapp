@@ -86,25 +86,31 @@ class _SideDrawerState extends State<SideDrawer> {
                           ),
 
                     ///Account name
-                    accountName: _userAvailable
-                        ? Text(
-                            user.fullName.split(' ').length < 2
-                                ? user.fullName.split(' ').elementAt(0)
-                                : user.fullName.split(' ').elementAt(0) +
-                                    '  ' +
-                                    user.fullName.split(' ').elementAt(1),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                    accountName: GestureDetector(
+                      child: _userAvailable
+                          ? Text(
+                              user.fullName.split(' ').length < 2
+                                  ? user.fullName.split(' ').elementAt(0)
+                                  : user.fullName.split(' ').elementAt(0) +
+                                      '  ' +
+                                      user.fullName.split(' ').elementAt(1),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            )
+                          : Text(
+                              'user name',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
-                          )
-                        : Text(
-                            'user name',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, Profile.id);
+                      },
+                    ),
 
                     ///Account picture
                     currentAccountPicture: GestureDetector(
@@ -318,7 +324,7 @@ class _SideDrawerState extends State<SideDrawer> {
                           ),
                           onTap: () {
                             Navigator.pop(context);
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>

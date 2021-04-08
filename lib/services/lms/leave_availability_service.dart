@@ -8,6 +8,7 @@ import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 String endPointName = 'leave-availability-details';
+// ignore: non_constant_identifier_names
 var API = apiEndpoint + endPointName;
 var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
 

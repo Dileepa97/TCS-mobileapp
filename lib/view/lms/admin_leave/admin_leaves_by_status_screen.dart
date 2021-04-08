@@ -20,8 +20,7 @@ class AdminLeaveByStatus extends StatefulWidget {
 class _AdminLeaveByStatusState extends State<AdminLeaveByStatus> {
   LeaveService _leaveService = LeaveService();
   List<LeaveResponse> list = List<LeaveResponse>();
-  bool _spin = true;
-  bool _dataAvailable = false;
+
   int _year = DateTime.now().year;
 
   List<Leave> _leaves;

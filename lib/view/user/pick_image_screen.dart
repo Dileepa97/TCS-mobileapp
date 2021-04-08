@@ -41,6 +41,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
         _imageFile = imageFile;
       });
     } catch (e) {
+      print('error');
       displayDialog(context, "Error", e.toString());
     }
   }
@@ -163,7 +164,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
       Navigator.pop(context);
     });
     try {
-      String fileName = id + '@' + DateTime.now().toIso8601String();
+      String fileName = id +
+          '@' +
+          DateTime.now().toIso8601String().replaceAll(RegExp("[-:.]*"), '');
+
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(imageFile.path, filename: fileName)
       });
@@ -179,7 +183,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, Profile.id);
+          // Navigator.pushReplacementNamed(context, Profile.id);
         } else if (res.statusCode == 417) {
           Navigator.pop(context);
           displayDialog(context, "Error", "File too large");
@@ -202,6 +206,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
       setState(() {
         spin = false;
       });
+      print(e.toString());
       displayDialog(
           context, "Upload Error", "An error occurred while uploading image ");
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/auth/auth_service.dart';
 
@@ -32,6 +33,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
+        actions: [
+          HomeButton(color: Colors.black87),
+        ],
+      ),
       body: ModalProgressHUD(
         inAsyncCall: spin,
         child: SafeArea(

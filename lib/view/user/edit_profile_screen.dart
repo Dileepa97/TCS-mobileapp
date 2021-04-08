@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
@@ -59,6 +60,17 @@ class MapScreenState extends State<EditProfile>
     setState(() {});
     return Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.black87,
+          ),
+          actions: [
+            HomeButton(color: Colors.black87),
+          ],
+        ),
         body: SafeArea(
           child: FutureBuilder(
               future: UserService.getLoggedInUser(),

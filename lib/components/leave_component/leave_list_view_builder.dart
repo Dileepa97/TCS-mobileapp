@@ -33,8 +33,11 @@ class LeaveListViewBuilder extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      AdminLeaveDetailsPage(item: list[index]),
+                  builder: (context) => AdminLeaveDetailsPage(
+                    item: list[index],
+                    isMoreUserLeave: false,
+                    isOngoing: false,
+                  ),
                 ),
               );
             }

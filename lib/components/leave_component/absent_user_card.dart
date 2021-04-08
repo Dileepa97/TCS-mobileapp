@@ -155,8 +155,11 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                           : Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    AdminLeaveDetailsPage(item: data),
+                                builder: (context) => AdminLeaveDetailsPage(
+                                  item: data,
+                                  isMoreUserLeave: false,
+                                  isOngoing: false,
+                                ),
                               ),
                             );
                     }
