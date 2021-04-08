@@ -28,12 +28,12 @@ class SideDrawer extends StatefulWidget {
 }
 
 class _SideDrawerState extends State<SideDrawer> {
-  User user;
+  User _loggedUser;
   bool _userAvailable = false;
 
   ///get logged in user
   void getUser() async {
-    user = await TokenStorageService.userDataOrEmpty;
+    _loggedUser = await TokenStorageService.userDataOrEmpty;
     setState(() {
       _userAvailable = true;
     });
@@ -47,8 +47,10 @@ class _SideDrawerState extends State<SideDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    if (_userAvailable) print(user.fullName);
+    if (_userAvailable) print(_loggedUser.fullName);
     String unseenCount = '0';
+    User _fetchedUser;
+    String _profileUrl = '';
 
     return Drawer(
       child: Padding(
@@ -57,7 +59,10 @@ class _SideDrawerState extends State<SideDrawer> {
             future: UserService.getLoggedInUserAndNotificationCount(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
+                _fetchedUser = snapshot.data[0];
                 unseenCount = snapshot.data[1];
+
+                _profileUrl = _fetchedUser.profileImageURL;
               } else if (snapshot.hasError) {
               } else {}
 
@@ -73,7 +78,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     ///Account email
                     accountEmail: _userAvailable
                         ? Text(
-                            user.email,
+                            _loggedUser.email,
                             style: TextStyle(
                               color: Colors.black,
                             ),
@@ -89,11 +94,15 @@ class _SideDrawerState extends State<SideDrawer> {
                     accountName: GestureDetector(
                       child: _userAvailable
                           ? Text(
-                              user.fullName.split(' ').length < 2
-                                  ? user.fullName.split(' ').elementAt(0)
-                                  : user.fullName.split(' ').elementAt(0) +
+                              _loggedUser.fullName.split(' ').length < 2
+                                  ? _loggedUser.fullName.split(' ').elementAt(0)
+                                  : _loggedUser.fullName
+                                          .split(' ')
+                                          .elementAt(0) +
                                       '  ' +
-                                      user.fullName.split(' ').elementAt(1),
+                                      _loggedUser.fullName
+                                          .split(' ')
+                                          .elementAt(1),
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -114,13 +123,11 @@ class _SideDrawerState extends State<SideDrawer> {
 
                     ///Account picture
                     currentAccountPicture: GestureDetector(
-                      child: _userAvailable
+                      child: _profileUrl != '' && _profileUrl != null
                           ? CircleAvatar(
-                              backgroundImage:
-                                  user.profileImageURL == 'default.png'
-                                      ? AssetImage('images/default.png')
-                                      : NetworkImage(
-                                          fileAPI + user.profileImageURL),
+                              backgroundImage: _profileUrl == 'default.png'
+                                  ? AssetImage('images/default.png')
+                                  : NetworkImage(fileAPI + _profileUrl),
                               backgroundColor: Colors.white,
                             )
                           : CircleAvatar(
@@ -177,7 +184,7 @@ class _SideDrawerState extends State<SideDrawer> {
                   ),
 
                   ///User management - super admin, admin
-                  _userAvailable && user.highestRoleIndex > 1
+                  _userAvailable && _loggedUser.highestRoleIndex > 1
                       ? ListTile(
                           title: Row(
                             children: [
@@ -197,7 +204,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///Leave management system -  admin, teamleader, team member
-                  _userAvailable && user.highestRoleIndex < 3
+                  _userAvailable && _loggedUser.highestRoleIndex < 3
                       ? ListTile(
                           title: Row(
                             children: [
@@ -211,10 +218,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           onTap: () {
                             if (_userAvailable) {
                               Navigator.pop(context);
-                              if (user.highestRoleIndex == 2) {
+                              if (_loggedUser.highestRoleIndex == 2) {
                                 Navigator.pushNamed(
                                     context, AdminLeaveDashBoard.id);
-                              } else if (user.highestRoleIndex < 2) {
+                              } else if (_loggedUser.highestRoleIndex < 2) {
                                 Navigator.pushNamed(
                                     context, UserLeaveDashboard.id);
                               }
@@ -224,7 +231,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///customer management - admin
-                  _userAvailable && user.highestRoleIndex == 2
+                  _userAvailable && _loggedUser.highestRoleIndex == 2
                       ? ListTile(
                           title: Row(
                             children: [
@@ -243,7 +250,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///product management - admin
-                  _userAvailable && user.highestRoleIndex == 2
+                  _userAvailable && _loggedUser.highestRoleIndex == 2
                       ? ListTile(
                           title: Row(
                             children: [
@@ -263,7 +270,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///Task management - admin
-                  _userAvailable && user.highestRoleIndex == 2
+                  _userAvailable && _loggedUser.highestRoleIndex == 2
                       ? ListTile(
                           title: Row(
                             children: [
@@ -286,7 +293,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///Task details - team leader, team member
-                  _userAvailable && user.highestRoleIndex < 2
+                  _userAvailable && _loggedUser.highestRoleIndex < 2
                       ? ListTile(
                           title: Row(
                             children: [
@@ -310,8 +317,8 @@ class _SideDrawerState extends State<SideDrawer> {
 
                   ///Team management - admin, team leader
                   _userAvailable &&
-                          (user.highestRoleIndex == 2 ||
-                              user.highestRoleIndex == 1)
+                          (_loggedUser.highestRoleIndex == 2 ||
+                              _loggedUser.highestRoleIndex == 1)
                       ? ListTile(
                           title: Row(
                             children: [
@@ -334,7 +341,7 @@ class _SideDrawerState extends State<SideDrawer> {
                       : SizedBox(),
 
                   ///title management - super admin , admin
-                  _userAvailable && user.highestRoleIndex > 1
+                  _userAvailable && _loggedUser.highestRoleIndex > 1
                       ? ListTile(
                           title: Row(
                             children: [

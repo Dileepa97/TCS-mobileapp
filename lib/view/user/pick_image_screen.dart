@@ -194,7 +194,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
         if (res.statusCode == 200) {
           Navigator.pop(context);
           Navigator.pop(context);
-          // Navigator.pop(context);
+          Navigator.pop(context);
           // Navigator.pushReplacementNamed(context, Profile.id);
         } else if (res.statusCode == 417) {
           Navigator.pop(context);
