@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/task/task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -16,7 +17,7 @@ class UserOngoingTasks extends StatefulWidget {
 
 class _UserOngoingTasksState extends State<UserOngoingTasks> {
 
-  List<Task> ongoingTaskList;
+  List<TeamMemberTask> ongoingTaskList;
 
   bool loading = true;
 
@@ -38,7 +39,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
   }
 
   Future getOngoingTasks() async{
-    List<Task> tasks = await  TeamMemberTaskService.getOngoingTasks("5fa9997450cfb564dc765c5b");
+    List<TeamMemberTask> tasks = await  TeamMemberTaskService.getOngoingTasks(widget.userId);
     return tasks;
   }
 
@@ -54,7 +55,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].taskName,
+            Text("Task Name",
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.white

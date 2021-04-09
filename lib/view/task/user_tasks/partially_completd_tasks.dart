@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/task/task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -37,7 +38,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
   }
 
   Future getOngoingTasks() async{
-    List<Task> tasks = await  TeamMemberTaskService.getCompletedTasks("5fa9997450cfb564dc765c5b");
+    List<TeamMemberTask> tasks = await  TeamMemberTaskService.getCompletedTasks(widget.userId);
     return tasks;
   }
 

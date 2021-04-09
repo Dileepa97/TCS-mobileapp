@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/user_tasks/completed_tasks.dart';
@@ -18,7 +20,25 @@ class UserTaskDashboard extends StatefulWidget {
 
 class _UserTaskDashboardState extends State<UserTaskDashboard> {
 
+  User user;
+  bool _userAvailable = false;
+
   TeamMemberTaskService teamMemberTaskService = new TeamMemberTaskService();
+
+  void getUser() async {
+    user = await TokenStorageService.userDataOrEmpty;
+    print(user);
+    setState(() {
+      _userAvailable = true;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this.getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +101,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=> UserPickedTasks("userId")
+                        builder: (BuildContext context)=> UserPickedTasks(user.id)
                      )
                     );
 //                    Navigator.push(context, MaterialPageRoute(
@@ -121,7 +141,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=> UserOngoingTasks("userId")
+                        builder: (BuildContext context)=> UserOngoingTasks(user.id)
                     )
                     );
                   },
@@ -157,7 +177,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UserCompletedTasks("1234")
+                        builder: (BuildContext context)=>UserCompletedTasks(user.id)
                     )
                     );
                   },
@@ -193,7 +213,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UserPartiallyCompletedTasks("abcd")
+                        builder: (BuildContext context)=>UserPartiallyCompletedTasks(user.id)
                     )
                     );
                   },

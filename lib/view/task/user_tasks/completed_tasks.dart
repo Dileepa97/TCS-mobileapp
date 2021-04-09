@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/task/task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -15,8 +18,10 @@ class UserCompletedTasks extends StatefulWidget {
 
 class _UserCompletedTasksState extends State<UserCompletedTasks> {
 
-  List<Task> ongoingTaskList;
+
+  List<TeamMemberTask> ongoingTaskList;
   bool loading = true;
+
 
   @override
   void initState() {
@@ -36,7 +41,8 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
   }
 
   Future getCompletedTasks() async{
-    List<Task> tasks = await  TeamMemberTaskService.getCompletedTasks("5fa9997450cfb564dc765c5b");
+    List<TeamMemberTask> tasks = await  TeamMemberTaskService.getCompletedTasks(widget.userId);
+    print(tasks);
     return tasks;
   }
 
@@ -52,7 +58,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].taskName,
+            Text("Task Name",
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.white
