@@ -7,6 +7,7 @@ import 'package:timecapturesystem/models/lms/leave.dart';
 
 import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_detail_screen.dart';
 
 class LeaveCancelCard extends StatefulWidget {
   final Leave data;
@@ -69,8 +70,11 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          AdminLeaveDetailsPage(item: widget.data),
+                      builder: (context) => AdminLeaveDetailsPage(
+                        item: widget.data,
+                        isMoreUserLeave: true,
+                        isOngoing: true,
+                      ),
                     ),
                   );
                 },
@@ -162,6 +166,42 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
               fontFamily: 'Source Sans Pro',
               fontSize: 16,
             ),
+          ),
+          DividerBox(),
+
+          ///user leave detail button
+          GestureDetector(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 3),
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.0, color: Colors.blue),
+                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                color: Colors.white,
+              ),
+              child: Text(
+                'User Leave Details',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontFamily: 'Source Sans Pro',
+                  fontSize: 16,
+                ),
+              ),
+            ),
+
+            ///on tap function
+            onTap: () {
+              // Navigator.pushNamed(
+              //     context, MoreLeaveDetails.id);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MoreLeaveDetails(
+                    userId: this.widget.data.userId,
+                  ),
+                ),
+              );
+            },
           ),
           DividerBox(),
 

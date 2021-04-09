@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin/admin_service.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_detail_screen.dart';
 import 'package:timecapturesystem/view/user_management/update_table_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,6 +30,23 @@ class UserDetails extends StatefulWidget {
 }
 
 class _UserDetailsState extends State<UserDetails> {
+  User _loggedUser;
+  bool _userAvailable = false;
+
+  ///get logged in user
+  void getUser() async {
+    _loggedUser = await TokenStorageService.userDataOrEmpty;
+    setState(() {
+      _userAvailable = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
@@ -51,6 +71,11 @@ class _UserDetailsState extends State<UserDetails> {
 
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
+        actions: [HomeButton()],
+      ),
       body: SafeArea(
           child: FutureBuilder<dynamic>(
               future: UserService.getLoggedInUser(),
@@ -180,6 +205,52 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                           ),
                         ),
+
+                        ///user leave data
+                        if (_userAvailable &&
+                            _loggedUser.highestRoleIndex == 2 &&
+                            user.highestRoleIndex < 2)
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 20.0,
+                                child: Divider(
+                                  color: Colors.lightBlueAccent.shade100,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MoreLeaveDetails(
+                                        userId: user.id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 25.0),
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.directions_walk,
+                                      color: Colors.blueAccent,
+                                      size: 28,
+                                    ),
+                                    title: Text(
+                                      'User Leave Details',
+                                      style: TextStyle(
+                                        fontSize: 17.0,
+                                        color: Colors.blueGrey.shade900,
+                                        fontFamily: 'Source Sans Pro',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         Container(
                           margin: EdgeInsets.all(15),
                           child: Column(

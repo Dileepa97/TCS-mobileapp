@@ -64,17 +64,26 @@ class _ProductCardState extends State<ProductCard> {
                   ),
 
                   ///number of tasks
-                  Text(
-                    // widget.item.users.length == 1
-                    //     ? '${widget.item.users.length} user unavailable record'
-                    //     : '${widget.item.users.length} user unavailable records',
-                    'Number of tasks for this product',
-                    style: TextStyle(
-                      color: Colors.blueGrey,
-                      fontFamily: 'Source Sans Pro',
-                      fontSize: 15,
-                    ),
-                  ),
+                  widget.product.tasks != null &&
+                          widget.product.tasks.length > 0
+                      ? Text(
+                          widget.product.tasks.length == 1
+                              ? '${widget.product.tasks.length} task available'
+                              : '${widget.product.tasks.length} tasks available',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontFamily: 'Source Sans Pro',
+                            fontSize: 15,
+                          ),
+                        )
+                      : Text(
+                          'Tasks unavailable',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontFamily: 'Source Sans Pro',
+                            fontSize: 15,
+                          ),
+                        ),
                 ],
               ),
             ),

@@ -127,6 +127,7 @@ class _ProductManagementDashboardState
                               MaterialPageRoute(
                                 builder: (context) => ProductDetailPage(
                                   product: _productList[index],
+                                  disableLoadMore: false,
                                 ),
                               ),
                             );

@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
-
 import 'package:numberpicker/numberpicker.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/error_texts.dart';
-import 'package:timecapturesystem/components/leave_component/leave_list_view_builder.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/services/LMS/leave_service.dart';
+import 'package:timecapturesystem/services/lms/leave_service.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
+import 'package:timecapturesystem/view/lms/user_leave/user_leave_card.dart';
 
-class OwnUserLeaves extends StatefulWidget {
-  static const String id = "user_all_leaves";
+class AdminUserLeaveListScreen extends StatefulWidget {
+  static const String id = "admin_user_leave_list";
+
+  final String userId;
+
+  const AdminUserLeaveListScreen({Key key, this.userId}) : super(key: key);
+
   @override
-  _OwnUserLeavesState createState() => _OwnUserLeavesState();
+  _AdminUserLeaveListScreenState createState() =>
+      _AdminUserLeaveListScreenState();
 }
 
-class _OwnUserLeavesState extends State<OwnUserLeaves> {
-  LeaveService _leaveService = LeaveService();
+class _AdminUserLeaveListScreenState extends State<AdminUserLeaveListScreen> {
+  List<Leave> _leaves;
 
-  List<Leave> leaves = [];
   int _year = DateTime.now().year;
-  Widget _child;
+
+  LeaveService _leaveService = LeaveService();
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +36,23 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.lightBlue.shade800,
-        title: Text(
-          'All Leaves',
-          style: TextStyle(
-            fontFamily: 'Source Sans Pro',
-          ),
-        ),
+        title: UserNameText(userId: widget.userId, fontSize: 18),
         centerTitle: true,
         actions: [
+          GestureDetector(
+            child: Icon(
+              Icons.refresh,
+            ),
+            onTap: () {
+              if (_leaves != null) {
+                setState(() {
+                  _leaves.removeRange(0, _leaves.length);
+                });
+              } else {
+                setState(() {});
+              }
+            },
+          ),
           HomeButton(),
         ],
       ),
@@ -45,7 +61,7 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
       body: SafeArea(
         child: Column(
           children: [
-            ///top menu
+            ///year menu
             Container(
               height: 50,
               margin: EdgeInsets.all(5),
@@ -56,22 +72,13 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ///Icon
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.calendar_today_rounded,
-                      size: 20,
-                    ),
-                  ),
-
                   ///year picker
                   GestureDetector(
                     child: Text(
                       'Year : $_year',
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
                         color: Colors.blue[700],
-                        fontSize: 17,
+                        fontSize: 18,
                         fontFamily: 'Source Sans Pro',
                       ),
                     ),
@@ -80,54 +87,59 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
                           DateTime.now().year - 1, DateTime.now().year, _year);
                     },
                   ),
-
-                  ///refresh button
-                  GestureDetector(
-                    child: Icon(
-                      Icons.refresh,
-                      size: 25,
-                      color: Colors.lightBlue.shade800,
-                    ),
-                    onTap: () {
-                      if (leaves != null) {
-                        setState(() {
-                          leaves.removeRange(0, leaves.length);
-                        });
-                      } else {
-                        setState(() {});
-                      }
-                    },
-                  ),
                 ],
               ),
             ),
+            SizedBox(
+              height: 8,
+            ),
 
-            ///list builder
+            ///leave list builder
             FutureBuilder<dynamic>(
-              future: _leaveService.getLoggedUserLeaves(context, _year),
+              future: _leaveService.getLeavesByUserAndYear(
+                  context, widget.userId, _year),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                Widget child;
+
                 if (snapshot.hasData) {
                   if (snapshot.data == 204) {
-                    _child = CustomErrorText(
-                        text: 'No leave data available to show for this year.');
+                    child = CustomErrorText(
+                        text:
+                            "No leave data available for the user in this year");
                   } else if (snapshot.data == 1) {
-                    _child = ServerErrorText();
+                    child = ServerErrorText();
                   } else if (snapshot.data == -1) {
-                    _child = ConnectionErrorText();
+                    child = ConnectionErrorText();
                   } else {
-                    leaves = snapshot.data;
-                    leaves.sort((b, a) => a.startDate.compareTo(b.startDate));
+                    _leaves = snapshot.data;
+                    _leaves.sort((b, a) => a.startDate.compareTo(b.startDate));
 
-                    _child = LeaveListViewBuilder(
-                      list: leaves,
-                      isUserLeave: true,
+                    child = ListView.builder(
+                      itemCount: _leaves.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: UserLeaveCard(item: _leaves[index]),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdminLeaveDetailsPage(
+                                  item: _leaves[index],
+                                  isMoreUserLeave: true,
+                                  isOngoing: false,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     );
                   }
                 } else {
-                  _child = LoadingText();
+                  child = LoadingText();
                 }
 
-                return Expanded(child: _child);
+                return Expanded(child: child);
               },
             )
           ],

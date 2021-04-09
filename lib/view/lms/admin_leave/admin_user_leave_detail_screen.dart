@@ -10,12 +10,13 @@ import 'package:timecapturesystem/components/leave_component/leave_option_builde
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/models/lms/leave_availability_detail.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
-import 'package:timecapturesystem/models/lms/leave_type.dart';
+
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/lms/leave_availability_service.dart';
 import 'package:timecapturesystem/services/lms/leave_day_allocation_service.dart';
-import 'package:timecapturesystem/services/other/storage_service.dart';
+
 import 'package:timecapturesystem/services/user/user_service.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_list_screen.dart';
 
 class MoreLeaveDetails extends StatefulWidget {
   static const String id = "more_leave_detail_screen";
@@ -161,6 +162,16 @@ class _MoreLeaveDetailsState extends State<MoreLeaveDetails> {
                           ),
                         ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdminUserLeaveListScreen(
+                              userId: this.widget.userId,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(
                       height: 10,

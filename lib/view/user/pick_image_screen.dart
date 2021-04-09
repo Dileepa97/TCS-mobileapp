@@ -12,6 +12,7 @@ import 'package:timecapturesystem/managers/orientation.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:timecapturesystem/view/user/profile_screen.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
@@ -41,6 +42,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
         _imageFile = imageFile;
       });
     } catch (e) {
+      print('error');
       displayDialog(context, "Error", e.toString());
     }
   }
@@ -81,6 +83,17 @@ class _PickImageScreenState extends State<PickImageScreen> {
     OrientationManager.portraitMode();
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
+        actions: [
+          HomeButton(color: Colors.black87),
+        ],
+      ),
       body: SafeArea(
         child: ModalProgressHUD(
           inAsyncCall: spin,
@@ -163,7 +176,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
       Navigator.pop(context);
     });
     try {
-      String fileName = id + '@' + DateTime.now().toIso8601String();
+      String fileName = id +
+          '@' +
+          DateTime.now().toIso8601String().replaceAll(RegExp("[-:.]*"), '');
+
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(imageFile.path, filename: fileName)
       });
@@ -179,7 +195,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, Profile.id);
+          // Navigator.pushReplacementNamed(context, Profile.id);
         } else if (res.statusCode == 417) {
           Navigator.pop(context);
           displayDialog(context, "Error", "File too large");
@@ -202,8 +218,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
       setState(() {
         spin = false;
       });
-      displayDialog(
-          context, "Upload Error", "An error occurred while uploading image ");
+      //TODO: Check this
+      displayDialog(context, "Error", "File too large");
+      // displayDialog(
+      //     context, "Upload Error", "An error occurred while uploading image ");
     }
   }
 }

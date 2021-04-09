@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
-import 'package:timecapturesystem/components/leave_component/divider_box.dart';
+
 import 'package:timecapturesystem/models/customer/customer.dart';
-import 'package:timecapturesystem/services/customer/customer_service.dart';
-import 'package:timecapturesystem/view/customer/update_customer_screen.dart';
 
 class CustomerCard extends StatefulWidget {
   final Customer customer;
@@ -34,7 +31,7 @@ class _CustomerCardState extends State<CustomerCard> {
         children: [
           ///icon
           CircleAvatar(
-            child: Icon(Icons.work),
+            child: Icon(Icons.business_outlined),
             radius: 20,
             foregroundColor: Colors.white,
           ),

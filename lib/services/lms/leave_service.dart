@@ -13,6 +13,7 @@ import '../other/utils.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 String endPointName = 'leaves';
+// ignore: non_constant_identifier_names
 var API = apiEndpoint + endPointName;
 var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
 
@@ -151,6 +152,40 @@ class LeaveService {
       };
 
       var uri = Uri.http(apiAuth, 'api/$endPointName/by-month', params);
+
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<Leave> _leaveList =
+            (resBody as List).map((i) => Leave.fromJson(i)).toList();
+
+        return _leaveList;
+      } else if (res.statusCode == 204) {
+        return res.statusCode;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  //Get user leaves by year - admin
+  Future<dynamic> getLeavesByUserAndYear(
+      dynamic context, String userId, int year) async {
+    try {
+      var params = {
+        'year': '$year',
+      };
+
+      var uri = Uri.http(apiAuth, 'api/$endPointName/user/$userId', params);
 
       var authHeader = await generateAuthHeader();
 

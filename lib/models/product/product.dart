@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:timecapturesystem/models/task/task.dart';
 
 part 'product.g.dart';
 
@@ -12,7 +13,7 @@ class Product {
 
   List<String> customerIdList;
 
-  // List<Task> tasks;
+  List<Task> tasks;
 
   Product(
       this.id, this.productName, this.productDescription, this.customerIdList);

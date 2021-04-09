@@ -15,19 +15,17 @@ class TeamMemberTaskService {
 
     var tasks = <TeamMemberTask>[];
 
-    http.Response response = await http.get(
-      apiEndpoint+"/team-member-task",
-      headers: {
-        HttpHeaders.contentTypeHeader: contentTypeHeader
-      }).catchError((error)=>{
-      print(error.toString())
-    });
+    http.Response response = await http.get(apiEndpoint + "/team-member-task",
+        headers: {
+          HttpHeaders.contentTypeHeader: contentTypeHeader
+        }).catchError((error) => {print(error.toString())});
 
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
 
       for (var item in jsonData) {
         tasks.add(TeamMemberTask.formJson(item));
+        // tasks.add(Task.formJson(item));
       }
     }
     return tasks;
@@ -108,16 +106,13 @@ class TeamMemberTaskService {
     print(response.body);
 
 
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       for (var item in jsonData) {
         tasks.add(TeamMemberTask.formJson(item));
+        // tasks.add(Task.formJson(item));
       }
     }
     return tasks;
   }
-
-
-
-
 }

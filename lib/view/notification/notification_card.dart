@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/notification/notification.dart' as N;
+import 'package:timecapturesystem/models/user/user.dart';
+import 'package:timecapturesystem/services/other/storage_service.dart';
+import 'package:timecapturesystem/view/homePage.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leaves_by_status_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/change_allowed_days_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
@@ -20,6 +25,24 @@ class NotificationCard extends StatefulWidget {
 
 class _NotificationCardState extends State<NotificationCard> {
   var vIcon;
+
+  User _loggedUser;
+  bool _userAvailable = false;
+
+  ///get logged in user
+  void getUser() async {
+    _loggedUser = await TokenStorageService.userDataOrEmpty;
+    setState(() {
+      _userAvailable = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     //TODO:make changes to below according to values of notification
@@ -100,7 +123,6 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 
   String notificationClicked(String cat) {
-    //TODO : dileepa add the relevant paths
     switch (cat) {
       case 'reg':
         {
@@ -127,10 +149,18 @@ class _NotificationCardState extends State<NotificationCard> {
         }
       case 'leave-data-created':
         {
+          if (_userAvailable && _loggedUser.highestRoleIndex > 1) {
+            return HomePage.id;
+          }
           return UserLeaveAvailable.id;
         }
       case 'leave-availability-update':
         {
+          if (_userAvailable && _loggedUser.highestRoleIndex == 3) {
+            return HomePage.id;
+          } else if (_userAvailable && _loggedUser.highestRoleIndex == 2) {
+            return ChangeAllowedDays.id;
+          }
           return UserLeaveAvailable.id;
         }
       case 'leave-start':
@@ -143,10 +173,16 @@ class _NotificationCardState extends State<NotificationCard> {
         }
       case 'remain-annual-leave':
         {
+          if (_userAvailable && _loggedUser.highestRoleIndex > 1) {
+            return HomePage.id;
+          }
           return UserLeaveAvailable.id;
         }
       case 'annual-leave-over':
         {
+          if (_userAvailable && _loggedUser.highestRoleIndex > 1) {
+            return HomePage.id;
+          }
           return UserLeaveAvailable.id;
         }
       case 'leave-cancellation-accepted':

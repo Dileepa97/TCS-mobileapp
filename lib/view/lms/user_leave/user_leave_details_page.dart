@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'package:open_file/open_file.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
@@ -21,6 +20,7 @@ import '../check_leaves.dart';
 import 'package:path_provider/path_provider.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
+// ignore: non_constant_identifier_names
 var API = apiEndpoint + 'files/';
 
 class UserLeaveDetailsPage extends StatefulWidget {
@@ -45,6 +45,7 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
 
   @override
   void initState() {
+    super.initState();
     getPermission();
   }
 

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/rounded_button.dart';
+
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/view/customer/customer_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_dashboard_screen.dart';
+import 'package:timecapturesystem/view/product/product_managemnet_dashboard_screen.dart';
 
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
@@ -17,6 +18,8 @@ import 'admin/title_management.dart';
 
 ///time capture system user home page
 class HomePage extends StatefulWidget {
+  static const String id = '/';
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -155,7 +158,6 @@ class _HomePageState extends State<HomePage> {
                 ///Notification center - all users
                 InkWell(
                   onTap: () {
-                    // Navigator.pop(context);
                     Navigator.pushNamed(context, NotificationCenter.id);
                   },
                   child: Container(
@@ -191,7 +193,6 @@ class _HomePageState extends State<HomePage> {
                 if (_userAvailable && user.highestRoleIndex > 1)
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
                       Navigator.pushNamed(context, UserManagementDashboard.id);
                     },
                     child: Container(
@@ -229,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                   InkWell(
                     onTap: () {
                       if (_userAvailable) {
-                        Navigator.pop(context);
                         if (user.highestRoleIndex == 2) {
                           Navigator.pushNamed(context, AdminLeaveDashBoard.id);
                         } else if (user.highestRoleIndex < 2) {
@@ -274,7 +274,6 @@ class _HomePageState extends State<HomePage> {
                 if (_userAvailable && user.highestRoleIndex == 2)
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
                       Navigator.pushNamed(context, CustomerDashboard.id);
                     },
                     child: Container(
@@ -311,8 +310,8 @@ class _HomePageState extends State<HomePage> {
                 if (_userAvailable && user.highestRoleIndex == 2)
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
-                      Navigator.pushNamed(context, CustomerDashboard.id);
+                      Navigator.pushNamed(
+                          context, ProductManagementDashboard.id);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -467,7 +466,6 @@ class _HomePageState extends State<HomePage> {
                     (user.highestRoleIndex == 2 || user.highestRoleIndex == 1))
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -507,7 +505,6 @@ class _HomePageState extends State<HomePage> {
                 if (_userAvailable && user.highestRoleIndex > 1)
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
                       Navigator.pushNamed(context, TitleManagementScreen.id);
                     },
                     child: Container(

@@ -21,7 +21,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
   User _user;
   bool _userAvailable = false;
   bool _teamLeader = false;
-  String _teamId;
+  // String _teamId;
 
   ///get looged-in user data
   void _getUser() async {
@@ -34,7 +34,7 @@ class _UserLeaveDashboardState extends State<UserLeaveDashboard> {
       if (_user.highestRoleIndex == 1) {
         setState(() {
           _teamLeader = true;
-          _teamId = _user.teamId;
+          // _teamId = _user.teamId;
         });
       } else if (_user.highestRoleIndex < 1) {
         setState(() {

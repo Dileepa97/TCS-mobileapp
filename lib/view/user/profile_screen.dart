@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
@@ -19,6 +20,11 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
+        actions: [HomeButton()],
+      ),
       body: SafeArea(
         child: FutureBuilder<User>(
           future: UserService.getLoggedInUser(),

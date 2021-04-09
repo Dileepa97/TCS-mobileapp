@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/models/notification/notification.dart' as N;
 import 'package:timecapturesystem/services/other/notification_service.dart';
 import 'package:timecapturesystem/view/notification/notification_card.dart';
@@ -41,6 +42,7 @@ class _NotificationCenterState extends State<NotificationCenter> {
         title: Text('Notification Center'),
         elevation: 0,
         backgroundColor: Colors.lightBlue.shade800,
+        actions: [HomeButton()],
       ),
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(

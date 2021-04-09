@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/dialog_boxes.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/auth/title.dart' as titleModel;
 import 'package:timecapturesystem/services/auth/title_service.dart';
@@ -48,6 +49,9 @@ class _TitleChangeManagementScreenState
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
+        actions: [
+          HomeButton(color: Colors.black87),
+        ],
       ),
       body: ModalProgressHUD(
         inAsyncCall: spin,

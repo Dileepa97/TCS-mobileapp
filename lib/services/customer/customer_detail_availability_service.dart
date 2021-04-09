@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 String endPointName = 'available-customer';
+// ignore: non_constant_identifier_names
 var API = apiEndpoint + endPointName;
 var apiAuth = apiEndpoint.toString().split('/').elementAt(2);
 

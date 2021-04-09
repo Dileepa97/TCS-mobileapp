@@ -13,22 +13,22 @@ import 'package:timecapturesystem/view/product/product_detail_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerDetailPage extends StatefulWidget {
-  static const String id = 'product_details_page';
+  static const String id = 'customer_details_page';
 
   final Customer customer;
+  final bool disableLoadMore;
 
-  const CustomerDetailPage({Key key, this.customer}) : super(key: key);
+  const CustomerDetailPage({Key key, this.customer, this.disableLoadMore})
+      : super(key: key);
   @override
   _CustomerDetailPageState createState() => _CustomerDetailPageState();
 }
 
 class _CustomerDetailPageState extends State<CustomerDetailPage> {
   bool _spin = false;
-  bool _isProduct = false;
 
   ShowAlertDialog _dialog = ShowAlertDialog();
   CustomerService _customerService = CustomerService();
-  Product _product;
 
   @override
   Widget build(BuildContext context) {
@@ -261,9 +261,7 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                           size: 22,
                         ),
                         onTap: () {
-                          setState(() {
-                            _isProduct = false;
-                          });
+                          setState(() {});
                         },
                       ),
                     ],
@@ -278,78 +276,97 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                         ? ListView.builder(
                             itemCount: widget.customer.productIdList.length,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
-                                child: InputContainer(
-                                  height: 50,
-                                  child: Row(
-                                    children: [
-                                      ///icon
-                                      Icon(Icons.outbox),
+                              return FutureBuilder(
+                                future: ProductService.getProductById(
+                                    widget.customer.productIdList[index]),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  Widget child;
 
-                                      ///Customer name
-                                      FutureBuilder(
-                                        future: ProductService.getProductById(
-                                            widget
-                                                .customer.productIdList[index]),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<dynamic> snapshot) {
-                                          Widget child;
+                                  if (snapshot.hasData) {
+                                    ///if error
+                                    if (snapshot.data == 1 ||
+                                        snapshot.data == -1) {
+                                      child = InputContainer(
+                                        height: 50,
+                                        child: Center(
+                                          child: Text(
+                                            'Cannot fetch data',
+                                            style: TextStyle(
+                                              fontFamily: 'Source Sans Pro',
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }
 
-                                          if (snapshot.hasData) {
-                                            if (snapshot.data == 1 ||
-                                                snapshot.data == -1) {
-                                              child = Text(
-                                                'Cannot fetch data',
-                                                style: TextStyle(
-                                                  fontFamily: 'Source Sans Pro',
-                                                  fontSize: 16,
+                                    ///if data arrive
+                                    else {
+                                      Product _product = snapshot.data;
+
+                                      child = GestureDetector(
+                                        child: InputContainer(
+                                          height: 50,
+                                          child: Row(
+                                            children: [
+                                              ///icon
+                                              Icon(Icons.outbox),
+
+                                              ///product name
+                                              Expanded(
+                                                child: Text(
+                                                  _product.productName,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'Source Sans Pro',
+                                                    fontSize: 16,
+                                                  ),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                textAlign: TextAlign.center,
-                                              );
-                                              _isProduct = false;
-                                            } else {
-                                              this._product = snapshot.data;
-                                              child = Text(
-                                                _product.productName,
-                                                style: TextStyle(
-                                                  fontFamily: 'Source Sans Pro',
-                                                  fontSize: 16,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              );
-                                              _isProduct = true;
-                                            }
-                                          } else {
-                                            child = Text(
-                                              'Wait...',
-                                              style: TextStyle(
-                                                fontFamily: 'Source Sans Pro',
-                                                fontSize: 16,
                                               ),
-                                              textAlign: TextAlign.center,
+                                            ],
+                                          ),
+                                        ),
+
+                                        ///on tap
+                                        onTap: () {
+                                          if (widget.disableLoadMore == false) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductDetailPage(
+                                                  product: _product,
+                                                  disableLoadMore: true,
+                                                ),
+                                              ),
                                             );
-                                            _isProduct = false;
                                           }
-
-                                          return Expanded(child: child);
                                         },
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                      );
+                                    }
+                                  }
 
-                                ///on tap
-                                onTap: () {
-                                  if (_isProduct) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProductDetailPage(
-                                          product: _product,
+                                  /// if data fetching
+                                  else {
+                                    child = InputContainer(
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(
+                                          'Wait...',
+                                          style: TextStyle(
+                                            fontFamily: 'Source Sans Pro',
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     );
                                   }
+
+                                  return child;
                                 },
                               );
                             },
