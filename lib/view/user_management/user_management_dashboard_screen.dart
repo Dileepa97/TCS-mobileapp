@@ -20,13 +20,25 @@ class UserManagementDashboard extends StatefulWidget {
 
 class _UserManagementDashboardState extends State<UserManagementDashboard> {
   List<User> users = [];
+
+  String filterType = 'All';
+
+  List<String> filterTypes = ['All', 'Verified', 'Not Verified', 'Others'];
   User loggedUser;
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
-    users = await UserService.getAllUsers(context);
+    users = await UserService.getAllUsersByFilterType(context, filterType);
     loggedUser = await UserService.getLoggedInUser();
+
+    if (loggedUser.highestRoleIndex == 2) {
+      filterTypes.add("Team Leads");
+    } else if (loggedUser.highestRoleIndex == 3) {
+      filterTypes.add("Admins");
+    }
+
     if (users != [] || users.length > 0) {
       users = users.reversed.toList();
     }
