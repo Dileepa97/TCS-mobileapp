@@ -111,13 +111,14 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
         hint: Icon(
           Icons.filter_list_rounded,
         ),
+        dropdownColor: Colors.blue,
         items: inputTitles.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(
               value,
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           );
         }).toList(),
