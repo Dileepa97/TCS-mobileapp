@@ -30,8 +30,10 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
       RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
-    users = await UserService.getAllUsersByFilterType(context, filterType);
     loggedUser = await UserService.getLoggedInUser();
+
+    users = await UserService.getAllUsersByFilterType(
+        context, filterType, loggedUser.highestRoleIndex);
 
     if (loggedUser.highestRoleIndex == 2) {
       filterTypes.add("Team Leads");
@@ -65,34 +67,37 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
       ),
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
-          child: SmartRefresher(
-        enablePullDown: true,
-        header: ClassicHeader(
-          textStyle: TextStyle(color: Colors.white),
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: ClassicHeader(
+            textStyle: TextStyle(color: Colors.white),
+          ),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: Container(
+            child: users.length > 0
+                ? ListView.builder(
+                    itemBuilder: (c, i) => Center(
+                      child: UserCard(
+                        user: users[i],
+                        loggedUser: loggedUser,
+                      ),
+                    ),
+                    itemExtent: 80.0,
+                    itemCount: users.length,
+                  )
+                : Center(
+                    child: Container(
+                      child: Text(
+                        'No users to manage yet',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ),
+          ),
         ),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: users.length > 0
-            ? ListView.builder(
-                itemBuilder: (c, i) => Center(
-                  child: UserCard(
-                    user: users[i],
-                    loggedUser: loggedUser,
-                  ),
-                ),
-                itemExtent: 80.0,
-                itemCount: users.length,
-              )
-            : Center(
-                child: Container(
-                  child: Text(
-                    'No users to manage yet',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ),
-              ),
-      )),
+      ),
     );
   }
 

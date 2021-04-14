@@ -151,5 +151,10 @@ class UserService {
     return null;
   }
 
-  static getAllUsersByFilterType(BuildContext context, String filterType) {}
+  static getAllUsersByFilterType(
+      BuildContext context, String filterType, int highestRoleIndex) {
+    if (filterType == 'All') {
+      return getAllUsers(context);
+    }
+  }
 }
