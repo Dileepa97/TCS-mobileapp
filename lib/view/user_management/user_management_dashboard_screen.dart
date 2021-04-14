@@ -20,21 +20,21 @@ class UserManagementDashboard extends StatefulWidget {
 
 class _UserManagementDashboardState extends State<UserManagementDashboard> {
   List<User> users = [];
+  User loggedUser;
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     users = await UserService.getAllUsers(context);
+    loggedUser = await UserService.getLoggedInUser();
     if (users != [] || users.length > 0) {
       users = users.reversed.toList();
     }
     if (mounted) setState(() {});
-    // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -64,7 +64,10 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
         child: users.length > 0
             ? ListView.builder(
                 itemBuilder: (c, i) => Center(
-                  child: UserCard(user: users[i]),
+                  child: UserCard(
+                    user: users[i],
+                    loggedUser: loggedUser,
+                  ),
                 ),
                 itemExtent: 80.0,
                 itemCount: users.length,
