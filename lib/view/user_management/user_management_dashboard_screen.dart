@@ -36,13 +36,18 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
         context, filterType, loggedUser.highestRoleIndex);
 
     if (loggedUser.highestRoleIndex == 2) {
-      filterTypes.add("Team Leads");
+      if (!filterTypes.contains("Team Leads")) {
+        filterTypes.add("Team Leads");
+      }
     } else if (loggedUser.highestRoleIndex == 3) {
-      filterTypes.add("Admins");
+      if (!filterTypes.contains("Admins")) {
+        filterTypes.add("Admins");
+      }
     }
-
-    if (users != [] || users.length > 0) {
-      users = users.reversed.toList();
+    if (users != null) {
+      if (users != [] || users.length > 0) {
+        users = users.reversed.toList();
+      }
     }
     if (mounted) setState(() {});
     _refreshController.refreshCompleted();
@@ -75,27 +80,25 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
-          child: Container(
-            child: users.length > 0
-                ? ListView.builder(
-                    itemBuilder: (c, i) => Center(
-                      child: UserCard(
-                        user: users[i],
-                        loggedUser: loggedUser,
-                      ),
-                    ),
-                    itemExtent: 80.0,
-                    itemCount: users.length,
-                  )
-                : Center(
-                    child: Container(
-                      child: Text(
-                        'No users to manage yet',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
+          child: (users != null && users.length > 0)
+              ? ListView.builder(
+                  itemBuilder: (c, i) => Center(
+                    child: UserCard(
+                      user: users[i],
+                      loggedUser: loggedUser,
                     ),
                   ),
-          ),
+                  itemExtent: 80.0,
+                  itemCount: users.length,
+                )
+              : Center(
+                  child: Container(
+                    child: Text(
+                      'No users to manage on selected filter',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ),
+                ),
         ),
       ),
     );
@@ -105,5 +108,59 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
   void dispose() {
     OrientationManager.portraitMode();
     super.dispose();
+  }
+}
+
+class CustomDropDown extends StatelessWidget {
+  final String keyString;
+  final dynamic item;
+  final dynamic items;
+  final dynamic onChanged;
+
+  const CustomDropDown({this.keyString, this.item, this.items, this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        DropdownButton<String>(
+          value: item,
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.blue[700],
+          ),
+          iconSize: 20,
+
+          ///underline
+          underline: Container(
+            color: Colors.white,
+          ),
+
+          ///onchange
+          onChanged: onChanged,
+
+          ///drop down lists
+          items: items.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value.substring(0, 1) +
+                    value
+                        .substring(1)
+                        .toLowerCase()
+                        .replaceFirst('_', '\n')
+                        .replaceFirst('_', ' '),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.blue[700],
+                  fontSize: 17,
+                  fontFamily: 'Source Sans Pro',
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
   }
 }
