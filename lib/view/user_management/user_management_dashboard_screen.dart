@@ -65,18 +65,10 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "User Management",
+          "Users",
         ),
         backgroundColor: Colors.lightBlue.shade800,
-        actions: [
-          GestureDetector(
-            child: Icon(
-              Icons.filter_list_rounded,
-            ),
-            onTap: () {},
-          ),
-          HomeButton()
-        ],
+        actions: [dropDownList(filterTypes), HomeButton()],
       ),
       backgroundColor: Colors.lightBlue.shade800,
       body: SafeArea(
@@ -108,6 +100,34 @@ class _UserManagementDashboardState extends State<UserManagementDashboard> {
                   ),
                 ),
         ),
+      ),
+    );
+  }
+
+  dropDownList(inputTitles) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: filterType,
+        hint: Icon(
+          Icons.filter_list_rounded,
+        ),
+        items: inputTitles.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+          );
+        }).toList(),
+        onTap: () async {},
+        onChanged: (String value) {
+          setState(() {
+            filterType = value;
+            _refreshController.requestRefresh();
+          });
+        },
       ),
     );
   }

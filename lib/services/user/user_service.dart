@@ -155,6 +155,16 @@ class UserService {
       BuildContext context, String filterType, int highestRoleIndex) {
     if (filterType == 'All') {
       return getAllUsers(context);
+    } else if (filterType == 'Verified') {
+      return getAllUsers(context);
+    } else if (filterType == 'Not Verified') {
+      return getAllUsers(context);
+    } else if (filterType == 'Others') {
+      return getAllUsers(context);
+    } else if (filterType == 'Team Leads') {
+      return getAllUsers(context);
+    } else if (filterType == 'Admins') {
+      return getAllUsers(context);
     }
   }
 }
