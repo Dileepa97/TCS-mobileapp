@@ -97,6 +97,7 @@ class _UserDetailsState extends State<UserDetails> {
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         Center(

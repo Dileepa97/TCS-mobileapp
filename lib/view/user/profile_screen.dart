@@ -47,6 +47,7 @@ class _ProfileState extends State<Profile> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(
