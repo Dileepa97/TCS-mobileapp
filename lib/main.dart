@@ -172,6 +172,7 @@ class _MyAppState extends State<MyApp> {
           }
 
           return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'routes',
               theme: ThemeData(
                 scaffoldBackgroundColor: Color(0xFFF1F1F1),

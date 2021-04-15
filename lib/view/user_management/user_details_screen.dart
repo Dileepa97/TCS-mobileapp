@@ -99,6 +99,16 @@ class _UserDetailsState extends State<UserDetails> {
                             ),
                           ),
                         ),
+                        Center(
+                          child: Text(
+                            getRole(user),
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: 27.0,
                         ),
@@ -263,75 +273,78 @@ class _UserDetailsState extends State<UserDetails> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   if (loggedUser.highestRoleIndex > 2)
+                                    if (!isTeamLead)
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.admin_panel_settings,
+                                          color: isAdmin
+                                              ? Colors.white
+                                              : Colors.black87,
+                                          size: 35.0,
+                                        ),
+                                        onPressed: () async {
+                                          if (isAdmin) {
+                                            var confirmed =
+                                                await displayDowngradeAdminSureDialog(
+                                                    context);
+                                            if (confirmed) {
+                                              bool success = await AdminService
+                                                  .handleAdminRoleAssignment(
+                                                      user.username, isAdmin);
+                                              handleSuccess(
+                                                  success, context, user.id);
+                                            }
+                                          } else {
+                                            var confirmed =
+                                                await displayUpliftToAdminSureDialog(
+                                                    context);
+                                            if (confirmed) {
+                                              bool success = await AdminService
+                                                  .handleAdminRoleAssignment(
+                                                      user.username, isAdmin);
+
+                                              await handleSuccess(
+                                                  success, context, user.id);
+                                            }
+                                          }
+                                        },
+                                      ),
+                                  if (!isAdmin &&
+                                      loggedUser.highestRoleIndex == 2)
                                     IconButton(
                                       icon: Icon(
-                                        Icons.admin_panel_settings,
-                                        color: isAdmin
+                                        Icons.accessibility_new,
+                                        color: isTeamLead
                                             ? Colors.white
                                             : Colors.black87,
                                         size: 35.0,
                                       ),
                                       onPressed: () async {
-                                        if (isAdmin) {
+                                        if (isTeamLead) {
                                           var confirmed =
-                                              await displayDowngradeAdminSureDialog(
+                                              await displayDowngradeTeamLeadSureDialog(
                                                   context);
                                           if (confirmed) {
                                             bool success = await AdminService
-                                                .handleAdminRoleAssignment(
-                                                    user.username, isAdmin);
-                                            handleSuccess(
+                                                .handleTeamLeadRoleAssignment(
+                                                    user.username, isTeamLead);
+                                            await handleSuccess(
                                                 success, context, user.id);
                                           }
                                         } else {
                                           var confirmed =
-                                              await displayUpliftToAdminSureDialog(
+                                              await displayUpliftToTeamLeadSureDialog(
                                                   context);
                                           if (confirmed) {
                                             bool success = await AdminService
-                                                .handleAdminRoleAssignment(
-                                                    user.username, isAdmin);
-
+                                                .handleTeamLeadRoleAssignment(
+                                                    user.username, isTeamLead);
                                             await handleSuccess(
                                                 success, context, user.id);
                                           }
                                         }
                                       },
                                     ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.accessibility_new,
-                                      color: isTeamLead
-                                          ? Colors.white
-                                          : Colors.black87,
-                                      size: 35.0,
-                                    ),
-                                    onPressed: () async {
-                                      if (isTeamLead) {
-                                        var confirmed =
-                                            await displayDowngradeTeamLeadSureDialog(
-                                                context);
-                                        if (confirmed) {
-                                          bool success = await AdminService
-                                              .handleTeamLeadRoleAssignment(
-                                                  user.username, isTeamLead);
-                                          await handleSuccess(
-                                              success, context, user.id);
-                                        }
-                                      } else {
-                                        var confirmed =
-                                            await displayUpliftToTeamLeadSureDialog(
-                                                context);
-                                        if (confirmed) {
-                                          bool success = await AdminService
-                                              .handleTeamLeadRoleAssignment(
-                                                  user.username, isTeamLead);
-                                          await handleSuccess(
-                                              success, context, user.id);
-                                        }
-                                      }
-                                    },
-                                  ),
                                   if (user.updated)
                                     IconButton(
                                       icon: Icon(
@@ -421,6 +434,19 @@ class _UserDetailsState extends State<UserDetails> {
                 }
               })),
     );
+  }
+
+  String getRole(User user) {
+    if (user.highestRoleIndex == 0) {
+      return "Team Member";
+    } else if (user.highestRoleIndex == 1) {
+      return "Team Leader";
+    } else if (user.highestRoleIndex == 2) {
+      return "Admin";
+    } else if (user.highestRoleIndex == 3) {
+      return "Super Admin";
+    }
+    return "";
   }
 }
 

@@ -4,10 +4,12 @@ import 'package:timecapturesystem/view/user_management/user_details_screen.dart'
 
 class UserCard extends StatefulWidget {
   final User user;
+  final User loggedUser;
 
   const UserCard({
     Key key,
     this.user,
+    this.loggedUser,
   });
 
   @override
@@ -19,21 +21,28 @@ class _UserCardState extends State<UserCard> {
   Widget build(BuildContext context) {
     var vIcon = widget.user.verified ? Icons.verified : Icons.cancel;
     var vIconColor = widget.user.verified ? Colors.green : Colors.redAccent;
+    var cardColor = (widget.user.id != widget.loggedUser.id &&
+            widget.user.highestRoleIndex < widget.loggedUser.highestRoleIndex)
+        ? Colors.white
+        : Colors.white70;
 
     var imageURL = widget.user.profileImageURL == null
         ? 'default.png'
         : widget.user.profileImageURL;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UserDetails(user: widget.user)),
-        );
+        if (widget.user.id != widget.loggedUser.id &&
+            widget.user.highestRoleIndex < widget.loggedUser.highestRoleIndex)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserDetails(user: widget.user)),
+          );
       },
       child: Container(
         height: 80,
         child: Card(
+          color: cardColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

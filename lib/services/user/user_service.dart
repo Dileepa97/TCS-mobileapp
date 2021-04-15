@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/components/dialog_boxes.dart';
@@ -133,6 +134,164 @@ class UserService {
     return null;
   }
 
+  static Future<List<User>> getAllVerifiedUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.get(API + 'by-verification-true', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<List<User>> getAllUnverifiedUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.get(API + 'by-verification-false', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<List<User>> getAllNonAdminUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http
+          .get(API + 'by-highest-role-index-not-equal-to/' + '2', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<List<User>> getAllNonTeamLeadUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http
+          .get(API + 'by-highest-role-index-not-equal-to/' + '1', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<List<User>> getAllAdminUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.get(API + 'by-highest-role-index/' + '2', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
+  static Future<List<User>> getAllTeamLeadUsers(dynamic context) async {
+    try {
+      var authHeader = await generateAuthHeader();
+      var res = await http.get(API + 'by-highest-role-index/' + '1', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+
+        List<User> _userList =
+            (resBody as List).map((i) => User.fromJson(i)).toList();
+
+        return _userList;
+      } else if (res.statusCode == 400) {
+        displayDialog(context, "Error", "Bad Request");
+      } else {
+        displayDialog(
+            context, "Error", "An error occurred while fetching users");
+      }
+    } catch (e) {
+      displayDialog(context, "Error", e.toString());
+    }
+    return null;
+  }
+
   static Future<UserHistory> fetchUserHistoryById(id) async {
     var authHeader = await generateAuthHeader();
     if (authHeader != null) {
@@ -148,5 +307,26 @@ class UserService {
       }
     }
     return null;
+  }
+
+  static getAllUsersByFilterType(
+      BuildContext context, String filterType, int highestRoleIndex) {
+    if (filterType == 'All') {
+      return getAllUsers(context);
+    } else if (filterType == 'Verified') {
+      return getAllVerifiedUsers(context);
+    } else if (filterType == 'Not Verified') {
+      return getAllUnverifiedUsers(context);
+    } else if (filterType == 'Others') {
+      if (highestRoleIndex == 2) {
+        return getAllNonTeamLeadUsers(context);
+      } else if (highestRoleIndex == 3) {
+        return getAllNonAdminUsers(context);
+      }
+    } else if (filterType == 'Team Leads') {
+      return getAllTeamLeadUsers(context);
+    } else if (filterType == 'Admins') {
+      return getAllAdminUsers(context);
+    }
   }
 }
