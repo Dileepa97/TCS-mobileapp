@@ -51,41 +51,43 @@ class _WeekUnavailableUserScreen extends State<WeekUnavailableUserScreen> {
       ),
 
       ///body
-      body: Column(
-        children: [
-          SizedBox(
-            height: 5,
-          ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 5,
+            ),
 
-          ///absent day list
-          FutureBuilder<dynamic>(
-            future: _leaveService.getUnavailableUsersWeek(context),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              Widget child;
-              if (snapshot.hasData) {
-                if (snapshot.data == 204) {
-                  child =
-                      CustomErrorText(text: "No absent users for this week");
-                } else if (snapshot.data == 1) {
-                  child = ServerErrorText();
-                } else if (snapshot.data == -1) {
-                  child = ConnectionErrorText();
+            ///absent day list
+            FutureBuilder<dynamic>(
+              future: _leaveService.getUnavailableUsersWeek(context),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                Widget child;
+                if (snapshot.hasData) {
+                  if (snapshot.data == 204) {
+                    child =
+                        CustomErrorText(text: "No absent users for this week");
+                  } else if (snapshot.data == 1) {
+                    child = ServerErrorText();
+                  } else if (snapshot.data == -1) {
+                    child = ConnectionErrorText();
+                  } else {
+                    _users = snapshot.data;
+
+                    child = AbsentUserListViewBuilder(
+                      list: _users,
+                      isTeam: false,
+                    );
+                  }
                 } else {
-                  _users = snapshot.data;
-
-                  child = AbsentUserListViewBuilder(
-                    list: _users,
-                    isTeam: false,
-                  );
+                  child = LoadingText();
                 }
-              } else {
-                child = LoadingText();
-              }
 
-              return Expanded(child: child);
-            },
-          )
-        ],
+                return Expanded(child: child);
+              },
+            )
+          ],
+        ),
       ),
     );
   }

@@ -108,116 +108,119 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       : SizedBox(),
 
                   ///button row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ///update button ---------------------------------------------
-                      FlatButton(
-                        child: Text(
-                          'Update',
-                          style: TextStyle(
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 16,
-                            color: Colors.white,
+                  if (widget.disableLoadMore == false)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ///update button ---------------------------------------------
+                        FlatButton(
+                          child: Text(
+                            'Update',
+                            style: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.blueAccent,
+
+                          ///onpressed update
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return UpdateProductScreen(
+                                  product: widget.product,
+                                );
+                              }),
+                            );
+                          },
                         ),
-                        color: Colors.blueAccent,
 
-                        ///onpressed update
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return UpdateProductScreen(
-                                product: widget.product,
-                              );
-                            }),
-                          );
-                        },
-                      ),
-
-                      ///delete button --------------------------------------------------
-                      FlatButton(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 16,
-                            color: Colors.white,
+                        ///delete button --------------------------------------------------
+                        FlatButton(
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        color: Colors.redAccent,
+                          color: Colors.redAccent,
 
-                        ///on pressed delete
-                        onPressed: () {
-                          setState(() {
-                            _spin = true;
-                          });
+                          ///on pressed delete
+                          onPressed: () {
+                            setState(() {
+                              _spin = true;
+                            });
 
-                          _dialog.showConfirmationDialog(
-                            title: 'Delete Product!',
-                            context: context,
-                            children: [
-                              Text(
-                                  'Are you sure you want to permanently delete this Product? '),
-                            ],
+                            _dialog.showConfirmationDialog(
+                              title: 'Delete Product!',
+                              context: context,
+                              children: [
+                                Text(
+                                    'Are you sure you want to permanently delete this Product? '),
+                              ],
 
-                            ///on pressed yes
-                            onPressedYes: () async {
-                              Navigator.of(context).pop();
+                              ///on pressed yes
+                              onPressedYes: () async {
+                                Navigator.of(context).pop();
 
-                              dynamic res = await _productService
-                                  .deleteProduct(widget.product.id);
+                                dynamic res = await _productService
+                                    .deleteProduct(widget.product.id);
 
-                              ///deleted successfully
-                              if (res == 200) {
-                                _dialog.showAlertDialog(
-                                  context: context,
-                                  title: 'Deleted',
-                                  body: 'Product successfully deleted.',
-                                  color: Colors.blueAccent,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _spin = false;
-                                    });
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              }
+                                if (this.mounted) {
+                                  ///deleted successfully
+                                  if (res == 200) {
+                                    _dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Deleted',
+                                      body: 'Product successfully deleted.',
+                                      color: Colors.blueAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          _spin = false;
+                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }
 
-                              ///if error
-                              else {
-                                _dialog.showAlertDialog(
-                                  context: context,
-                                  title: 'Error occurred',
-                                  body:
-                                      'Cannot delete this product. \nTry again later',
-                                  color: Colors.redAccent,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _spin = false;
-                                    });
-                                  },
-                                );
-                              }
-                            },
+                                  ///if error
+                                  else {
+                                    _dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Error occurred',
+                                      body:
+                                          'Cannot delete this product right now. \nTry again later',
+                                      color: Colors.redAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          _spin = false;
+                                        });
+                                      },
+                                    );
+                                  }
+                                }
+                              },
 
-                            ///on pressed no
-                            onPressedNo: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                _spin = false;
-                              });
-                            },
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                  DividerBox(),
+                              ///on pressed no
+                              onPressedNo: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  _spin = false;
+                                });
+                              },
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  if (widget.disableLoadMore == false) DividerBox(),
 
                   ///customer list title
                   Row(

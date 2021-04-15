@@ -37,6 +37,25 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
         ),
         centerTitle: true,
         actions: [
+          ///refresh button
+          GestureDetector(
+            child: Icon(
+              Icons.refresh,
+              size: 25,
+            ),
+            onTap: () {
+              if (leaves != null) {
+                setState(() {
+                  leaves.removeRange(0, leaves.length);
+                  _year = DateTime.now().year;
+                });
+              } else {
+                setState(() {
+                  _year = DateTime.now().year;
+                });
+              }
+            },
+          ),
           HomeButton(),
         ],
       ),
@@ -56,14 +75,6 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ///Icon
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.calendar_today_rounded,
-                      size: 20,
-                    ),
-                  ),
-
                   ///year picker
                   GestureDetector(
                     child: Text(
@@ -78,24 +89,6 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
                     onTap: () {
                       _showIntDialog(
                           DateTime.now().year - 1, DateTime.now().year, _year);
-                    },
-                  ),
-
-                  ///refresh button
-                  GestureDetector(
-                    child: Icon(
-                      Icons.refresh,
-                      size: 25,
-                      color: Colors.lightBlue.shade800,
-                    ),
-                    onTap: () {
-                      if (leaves != null) {
-                        setState(() {
-                          leaves.removeRange(0, leaves.length);
-                        });
-                      } else {
-                        setState(() {});
-                      }
                     },
                   ),
                 ],
@@ -160,7 +153,6 @@ class _OwnUserLeavesState extends State<OwnUserLeaves> {
     ).then((num value) {
       if (value != null) {
         setState(() => _year = value);
-        // integerNumberPicker.animateInt(value);
       }
     });
   }

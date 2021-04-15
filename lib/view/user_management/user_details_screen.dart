@@ -7,7 +7,7 @@ import 'package:timecapturesystem/models/user/user_history.dart';
 import 'package:timecapturesystem/services/admin/admin_service.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_detail_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_related_screens/admin_user_leave_detail_screen.dart';
 import 'package:timecapturesystem/view/user_management/update_table_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 import 'package:url_launcher/url_launcher.dart';

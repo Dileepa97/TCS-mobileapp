@@ -73,7 +73,7 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
           child: Column(
             children: [
               ///title
-              Text("Days allowed for leaves",
+              Text("Days allowed for leave types",
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -202,7 +202,7 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
                       children: [
                         ///card title
                         Text(
-                          'Change allowed days',
+                          'Change allowed days for all',
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'Source Sans Pro',
@@ -334,38 +334,40 @@ class _ChangeAllowedDaysState extends State<ChangeAllowedDays> {
                                           .changeAllowedDays(
                                               this.leaveType, this.days);
 
-                                      ///if success
-                                      if (code == 200) {
-                                        _dialog.showAlertDialog(
-                                          title: 'Allowed Days Changed',
-                                          body:
-                                              'Allowed days for leave type changed successfully',
-                                          color: Colors.blueAccent,
-                                          context: context,
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            setState(() {
-                                              _spin = false;
-                                            });
-                                          },
-                                        );
-                                      }
+                                      if (this.mounted) {
+                                        ///if success
+                                        if (code == 200) {
+                                          _dialog.showAlertDialog(
+                                            title: 'Allowed Days Changed',
+                                            body:
+                                                'Allowed days for leave type changed successfully',
+                                            color: Colors.blueAccent,
+                                            context: context,
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              setState(() {
+                                                _spin = false;
+                                              });
+                                            },
+                                          );
+                                        }
 
-                                      ///if error
-                                      else {
-                                        _dialog.showAlertDialog(
-                                          title: 'Error',
-                                          body:
-                                              'Cannot change allowed days now. \nTry again later',
-                                          color: Colors.redAccent,
-                                          context: context,
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            setState(() {
-                                              _spin = false;
-                                            });
-                                          },
-                                        );
+                                        ///if error
+                                        else {
+                                          _dialog.showAlertDialog(
+                                            title: 'Error',
+                                            body:
+                                                'Cannot change allowed days now. \nTry again later',
+                                            color: Colors.redAccent,
+                                            context: context,
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              setState(() {
+                                                _spin = false;
+                                              });
+                                            },
+                                          );
+                                        }
                                       }
                                     },
 

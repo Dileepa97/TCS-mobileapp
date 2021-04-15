@@ -44,19 +44,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      ///app bar
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Colors.black87,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        ///app bar
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black87,
+          ),
         ),
-      ),
 
-      ///drawer
-      drawer: SideDrawer(),
+        ///drawer
+        drawer: SideDrawer(),
 //      body: SafeArea(
 //        child: Column(
 //          crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -126,74 +128,39 @@ class _HomePageState extends State<HomePage> {
 //      ),
 //
 //
-      ///body
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ///company logo
-            SizedBox(
-              height: 35,
-            ),
-            Center(
-              child: Image(
-                image: AssetImage('images/logo.png'),
+        ///body
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ///company logo
+              SizedBox(
+                height: 35,
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-
-            ///grid view for button
-            GridView.count(
-              // Create a grid with 2 columns. If you change the scrollDirection to
-              // horizontal, this produces 2 rows.
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              // Generate 100 widgets that display their index in the List.
-              children: [
-                ///Notification center - all users
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, NotificationCenter.id);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade700,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.notifications_active_outlined,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text("Notification Center")
-                      ],
-                    ),
-                  ),
+              Center(
+                child: Image(
+                  image: AssetImage('images/logo.png'),
                 ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
 
-                ///User management - super admin, admin
-                if (_userAvailable && user.highestRoleIndex > 1)
+              ///grid view for button
+              GridView.count(
+                // Create a grid with 2 columns. If you change the scrollDirection to
+                // horizontal, this produces 2 rows.
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.all(10),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                // Generate 100 widgets that display their index in the List.
+                children: [
+                  ///Notification center - all users
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, UserManagementDashboard.id);
+                      Navigator.pushNamed(context, NotificationCenter.id);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -212,333 +179,375 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.supervised_user_circle_outlined,
+                            Icons.notifications_active_outlined,
                             color: Colors.white,
                             size: 40,
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text("User Management")
+                          Text("Notification Center")
                         ],
                       ),
                     ),
                   ),
 
-                ///leave management system - admin, teamleader, team member
-                if (_userAvailable && user.highestRoleIndex < 3)
-                  InkWell(
-                    onTap: () {
-                      if (_userAvailable) {
-                        if (user.highestRoleIndex == 2) {
-                          Navigator.pushNamed(context, AdminLeaveDashBoard.id);
-                        } else if (user.highestRoleIndex < 2) {
-                          Navigator.pushNamed(context, UserLeaveDashboard.id);
+                  ///User management - super admin, admin
+                  if (_userAvailable && user.highestRoleIndex > 1)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, UserManagementDashboard.id);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.supervised_user_circle_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("User Management")
+                          ],
+                        ),
+                      ),
+                    ),
+
+                  ///leave management system - admin, teamleader, team member
+                  if (_userAvailable && user.highestRoleIndex < 3)
+                    InkWell(
+                      onTap: () {
+                        if (_userAvailable) {
+                          if (user.highestRoleIndex == 2) {
+                            Navigator.pushNamed(
+                                context, AdminLeaveDashBoard.id);
+                          } else if (user.highestRoleIndex < 2) {
+                            Navigator.pushNamed(context, UserLeaveDashboard.id);
+                          }
                         }
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.directions_walk_outlined,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.directions_walk_outlined,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Leave Management System",
-                            textAlign: TextAlign.center,
-                          )
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Leave Management System",
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///customer management - admin
-                if (_userAvailable && user.highestRoleIndex == 2)
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, CustomerDashboard.id);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///customer management - admin
+                  if (_userAvailable && user.highestRoleIndex == 2)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, CustomerDashboard.id);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.business_outlined,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.business_outlined,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Customer Management")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Customer Management")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///product management - admin
-                if (_userAvailable && user.highestRoleIndex == 2)
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, ProductManagementDashboard.id);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///product management - admin
+                  if (_userAvailable && user.highestRoleIndex == 2)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, ProductManagementDashboard.id);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.outbox,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.outbox,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Product Management")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Product Management")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///Task management - admin
-                if (_userAvailable && user.highestRoleIndex == 2)
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => TaskPanel()));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///Task management - admin
+                  if (_userAvailable && user.highestRoleIndex == 2)
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    TaskPanel()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.business_center,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.business_center,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Task Management")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Task Management")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///Partial Tasks - team leader
-                if (_userAvailable && user.highestRoleIndex == 1)
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => TaskPanel()));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///Partial Tasks - team leader
+                  if (_userAvailable && user.highestRoleIndex == 1)
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    TaskPanel()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.settings_backup_restore,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.settings_backup_restore,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Partial Tasks")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Partial Tasks")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///Task details - team leader, team member
-                if (_userAvailable && user.highestRoleIndex < 2)
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  UserTaskDashboard("184180F")));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///Task details - team leader, team member
+                  if (_userAvailable && user.highestRoleIndex < 2)
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    UserTaskDashboard("184180F")));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.widgets,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.widgets,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Task Details")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Task Details")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///Team management - admin, team leader
-                if (_userAvailable &&
-                    (user.highestRoleIndex == 2 || user.highestRoleIndex == 1))
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => TeamView()));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///Team management - admin, team leader
+                  if (_userAvailable &&
+                      (user.highestRoleIndex == 2 ||
+                          user.highestRoleIndex == 1))
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => TeamView()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.people,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.people,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Team Management")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Team Management")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                ///title management - super admin , admin
-                if (_userAvailable && user.highestRoleIndex > 1)
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, TitleManagementScreen.id);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.blue.shade700,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                  ///title management - super admin , admin
+                  if (_userAvailable && user.highestRoleIndex > 1)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, TitleManagementScreen.id);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade700,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.list_alt_outlined,
+                              color: Colors.white,
+                              size: 40,
                             ),
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.list_alt_outlined,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Title Management")
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("Title Management")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

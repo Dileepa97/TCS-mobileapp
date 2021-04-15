@@ -1,5 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/detail_row.dart';
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
@@ -31,6 +32,11 @@ class _TLLeaveDetailsPageState extends State<TLLeaveDetailsPage> {
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
         elevation: 0,
+        actions: [
+          HomeButton(
+            color: Colors.black,
+          )
+        ],
       ),
 
       ///body
@@ -161,14 +167,8 @@ class _TLLeaveDetailsPageState extends State<TLLeaveDetailsPage> {
                           ///Start day method
                           DetailRow(
                               keyString: 'Start Day Method',
-                              valueString: EnumToString.convertToString(
-                                          widget.item.startDayMethod)
-                                      .substring(0, 1) +
-                                  EnumToString.convertToString(
-                                          this.widget.item.startDayMethod)
-                                      .substring(1)
-                                      .toLowerCase()
-                                      .replaceAll('_', ' ')),
+                              valueString: CheckMethod.methodString(
+                                  widget.item.startDayMethod)),
                           SizedBox(height: 5),
 
                           ///End date
@@ -187,14 +187,8 @@ class _TLLeaveDetailsPageState extends State<TLLeaveDetailsPage> {
                           this.widget.item.endDate != null
                               ? DetailRow(
                                   keyString: 'End Day Method',
-                                  valueString: EnumToString.convertToString(
-                                              widget.item.endDayMethod)
-                                          .substring(0, 1) +
-                                      EnumToString.convertToString(
-                                              this.widget.item.endDayMethod)
-                                          .substring(1)
-                                          .toLowerCase()
-                                          .replaceAll('_', ' '))
+                                  valueString: CheckMethod.methodString(
+                                      this.widget.item.endDayMethod))
                               : SizedBox(),
                           this.widget.item.endDate != null
                               ? SizedBox(height: 5)

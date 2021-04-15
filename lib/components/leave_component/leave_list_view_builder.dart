@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_card.dart';
+import 'package:timecapturesystem/components/leave_component/admin_leave_card.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
-import 'package:timecapturesystem/view/lms/user_leave/user_leave_card.dart';
+import 'package:timecapturesystem/components/leave_component/user_leave_card.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_details_page.dart';
 
 class LeaveListViewBuilder extends StatelessWidget {

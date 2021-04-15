@@ -82,15 +82,21 @@ class CheckType {
 }
 
 class CheckMethod {
-  LeaveMethod method;
-  CheckMethod({this.method});
-
-  String methodString() {
+  static String methodString(LeaveMethod method) {
     if (method == LeaveMethod.FIRST_HALF) {
-      return 'Morning';
+      return ' Morning';
     } else if (method == LeaveMethod.SECOND_HALF) {
-      return 'Afternoon';
+      return ' Afternoon';
     } else
-      return 'Full Day';
+      return ' Full Day';
+  }
+
+  static String convertMethodName(String method) {
+    if (method == 'Morning') {
+      return 'FIRST_HALF';
+    } else if (method == 'Afternoon') {
+      return 'SECOND_HALF';
+    } else
+      return 'FULL';
   }
 }

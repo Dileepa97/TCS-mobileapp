@@ -2,18 +2,18 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
 
-import '../check_leaves.dart';
+import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
+import '../../view/lms/check_leaves.dart';
 
-class UserLeaveCard extends StatefulWidget {
-  UserLeaveCard({this.item});
+class AdminLeaveCard extends StatefulWidget {
   final Leave item;
+  AdminLeaveCard({this.item});
 
   @override
-  _UserLeaveCardState createState() => _UserLeaveCardState();
+  _AdminLeaveCardState createState() => _AdminLeaveCardState();
 }
 
-class _UserLeaveCardState extends State<UserLeaveCard> {
-  @override
+class _AdminLeaveCardState extends State<AdminLeaveCard> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -25,17 +25,8 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
       ),
       child: Row(
         children: <Widget>[
-          ///leave icon
-          CircleAvatar(
-            child: CheckType(type: widget.item.type).typeIcon(),
-            radius: 25,
-            backgroundColor:
-                CheckStatus(status: widget.item.status).statusColor(),
-            foregroundColor: Colors.white,
-          ),
-          SizedBox(
-            width: 5,
-          ),
+          ///profile image
+          UserProfileImage(userId: widget.item.userId, height: 60, width: 60),
 
           ///details
           Expanded(
@@ -44,18 +35,10 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ///leave title
-                  Text(
-                    this.widget.item.title,
-                    style: TextStyle(
-                      color: Colors.cyan[800],
-                      fontFamily: 'Source Sans Pro',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  ///user name
+                  UserNameText(userId: widget.item.userId, fontSize: 15),
 
-                  ///leave start date
+                  ///start date
                   Text(
                     'Start date : ' +
                         widget.item.startDate
@@ -66,6 +49,7 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                       fontFamily: 'Source Sans Pro',
                     ),
                   ),
+
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +61,7 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                               EnumToString.convertToString(widget.item.type)
                                   .substring(1)
                                   .toLowerCase()
-                                  .replaceAll('_', ' '),
+                                  .replaceAll('_', '\n'),
                           style: TextStyle(
                             color: Colors.purple[900],
                             fontFamily: 'Source Sans Pro',
@@ -92,12 +76,23 @@ class _UserLeaveCardState extends State<UserLeaveCard> {
                               EnumToString.convertToString(widget.item.status)
                                   .substring(1)
                                   .toLowerCase()
+                                  .replaceFirst('_', '\n')
                                   .replaceAll('_', ' '),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: CheckStatus(status: widget.item.status)
                                 .statusColor(),
                           ),
+                        ),
+
+                        ///icon
+                        CircleAvatar(
+                          child: CheckType(type: widget.item.type).typeIcon(),
+                          radius: 15,
+                          backgroundColor:
+                              CheckStatus(status: widget.item.status)
+                                  .statusColor(),
+                          foregroundColor: Colors.white,
                         ),
                       ],
                     ),

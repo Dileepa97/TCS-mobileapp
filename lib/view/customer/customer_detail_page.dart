@@ -127,116 +127,119 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                   DividerBox(),
 
                   ///Button Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ///update button -----------------------------------------
-                      FlatButton(
-                        child: Text(
-                          'Update',
-                          style: TextStyle(
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 16,
-                            color: Colors.white,
+                  if (widget.disableLoadMore == false)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ///update button -----------------------------------------
+                        FlatButton(
+                          child: Text(
+                            'Update',
+                            style: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.blueAccent,
+
+                          ///onpressed update
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return UpdateCustomerScreen(
+                                  customer: widget.customer,
+                                );
+                              }),
+                            );
+                          },
                         ),
-                        color: Colors.blueAccent,
 
-                        ///onpressed update
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return UpdateCustomerScreen(
-                                customer: widget.customer,
-                              );
-                            }),
-                          );
-                        },
-                      ),
-
-                      ///delete button -------------------------------------------
-                      FlatButton(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 16,
-                            color: Colors.white,
+                        ///delete button -------------------------------------------
+                        FlatButton(
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.redAccent,
+
+                          ///on pressed delete
+                          onPressed: () {
+                            setState(() {
+                              _spin = true;
+                            });
+
+                            _dialog.showConfirmationDialog(
+                              title: 'Delete Customer!',
+                              context: context,
+                              children: [
+                                Text(
+                                    'Are you sure you want to permanently delete this Customer? '),
+                              ],
+
+                              ///on pressed yes
+                              onPressedYes: () async {
+                                Navigator.of(context).pop();
+
+                                dynamic res = await _customerService
+                                    .deleteCustomer(widget.customer.id);
+
+                                if (this.mounted) {
+                                  ///deleted successfully
+                                  if (res == 200) {
+                                    _dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Deleted',
+                                      body: 'Customer successfully deleted.',
+                                      color: Colors.blueAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          _spin = false;
+                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }
+
+                                  ///if error
+                                  else {
+                                    _dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Error occurred',
+                                      body:
+                                          'Cannot delete this Customer. \nTry again later',
+                                      color: Colors.redAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          _spin = false;
+                                        });
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+
+                              ///on pressed no
+                              onPressedNo: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  _spin = false;
+                                });
+                              },
+                            );
+                          },
                         ),
-                        color: Colors.redAccent,
-
-                        ///on pressed delete
-                        onPressed: () {
-                          setState(() {
-                            _spin = true;
-                          });
-
-                          _dialog.showConfirmationDialog(
-                            title: 'Delete Customer!',
-                            context: context,
-                            children: [
-                              Text(
-                                  'Are you sure you want to permanently delete this Customer? '),
-                            ],
-
-                            ///on pressed yes
-                            onPressedYes: () async {
-                              Navigator.of(context).pop();
-
-                              dynamic res = await _customerService
-                                  .deleteCustomer(widget.customer.id);
-
-                              ///deleted successfully
-                              if (res == 200) {
-                                _dialog.showAlertDialog(
-                                  context: context,
-                                  title: 'Deleted',
-                                  body: 'Customer successfully deleted.',
-                                  color: Colors.blueAccent,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _spin = false;
-                                    });
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              }
-
-                              ///if error
-                              else {
-                                _dialog.showAlertDialog(
-                                  context: context,
-                                  title: 'Error occurred',
-                                  body:
-                                      'Cannot delete this Customer. \nTry again later',
-                                  color: Colors.redAccent,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _spin = false;
-                                    });
-                                  },
-                                );
-                              }
-                            },
-
-                            ///on pressed no
-                            onPressedNo: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                _spin = false;
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  DividerBox(),
+                      ],
+                    ),
+                  if (widget.disableLoadMore == false) DividerBox(),
 
                   ///product list title
                   Row(

@@ -15,6 +15,7 @@ import 'package:timecapturesystem/components/leave_component/input_date.dart';
 import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/services/lms/leave_service.dart';
+import 'package:timecapturesystem/view/lms/check_leaves.dart';
 
 import 'leave_request_confirmation_screen.dart';
 
@@ -47,10 +48,16 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
 
   String _startDayMethod;
   String _endDayMethod;
+  String _finalStartDayMethod;
+  String _finalEndDayMethod;
 
-  List<String> _leaveMethod1 = ['FIRST_HALF', 'SECOND_HALF', 'FULL'];
-  List<String> _leaveMethod2 = ['SECOND_HALF', 'FULL'];
-  List<String> _leaveMethod3 = ['FIRST_HALF', 'FULL'];
+  // List<String> _leaveMethod1 = ['FIRST_HALF', 'SECOND_HALF', 'FULL'];
+  // List<String> _leaveMethod2 = ['SECOND_HALF', 'FULL'];
+  // List<String> _leaveMethod3 = ['FIRST_HALF', 'FULL'];
+
+  List<String> _leaveMethod1 = ['Morning', 'Afternoon', 'Full Day'];
+  List<String> _leaveMethod2 = ['Afternoon', 'Full Day'];
+  List<String> _leaveMethod3 = ['Morning', 'Full Day'];
 
   File file;
 
@@ -79,100 +86,102 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
       ),
 
       ///body
-      body: ModalProgressHUD(
-        inAsyncCall: _spin,
-        child: Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
+      body: SafeArea(
+        child: ModalProgressHUD(
+          inAsyncCall: _spin,
+          child: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
 
-          ///request form
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ///form header
-                Text(
-                  'Create New Leave',
-                  style: TextStyle(
-                    fontFamily: 'Source Sans Pro',
-                    color: Colors.lightBlue.shade800,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            ///request form
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ///form header
+                  Text(
+                    'Create New Leave',
+                    style: TextStyle(
+                      fontFamily: 'Source Sans Pro',
+                      color: Colors.lightBlue.shade800,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                DividerBox(),
+                  DividerBox(),
 
-                ///leave title
-                _buildTitle(),
+                  ///leave title
+                  _buildTitle(),
 
-                ///leave description
-                _buildDescription(),
-                DividerBox(),
+                  ///leave description
+                  _buildDescription(),
+                  DividerBox(),
 
-                ///leave check box
-                _buildCheckBox(),
+                  ///leave check box
+                  _buildCheckBox(),
 
-                ///leave start date
-                _buildStartDate(),
+                  ///leave start date
+                  _buildStartDate(),
 
-                ///leave start day method
-                _buildStartDayMethod(),
-                DividerBox(),
+                  ///leave start day method
+                  _buildStartDayMethod(),
+                  DividerBox(),
 
-                ///leave end date
-                _buildEndDate(),
+                  ///leave end date
+                  _buildEndDate(),
 
-                ///leave end day method
-                _buildEndDayMethod(),
+                  ///leave end day method
+                  _buildEndDayMethod(),
 
-                ///select attachment
-                _buildFilePicker(),
+                  ///select attachment
+                  _buildFilePicker(),
 
-                ///button
-                RoundedButton(
-                  color: Colors.blueAccent[200],
-                  title: 'Request',
-                  minWidth: 200.0,
-                  onPressed: () async {
-                    setState(() {
-                      _spin = true;
-                    });
+                  ///button
+                  RoundedButton(
+                    color: Colors.blueAccent[200],
+                    title: 'Request',
+                    minWidth: 200.0,
+                    onPressed: () async {
+                      setState(() {
+                        _spin = true;
+                      });
 
-                    if (_checkCondition() &&
-                        await _checkDate() &&
-                        await _checkCount()) {
-                      if (this._multiDayLeave == false) {
-                        this._endDayMethod = 'NO';
+                      if (_checkCondition() &&
+                          await _checkDate() &&
+                          await _checkCount()) {
+                        if (this._multiDayLeave == false) {
+                          this._endDayMethod = 'NO';
+                        }
+
+                        setState(() {
+                          _spin = false;
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return RequestConfirmationScreen(
+                              leaveType: widget.leaveType,
+                              leaveTitle: this._leaveTitle,
+                              leaveDescription: this._leaveDescription,
+                              startDate: this._startDate,
+                              startDayMethod: this._startDayMethod,
+                              endDate: this._endDate,
+                              endDayMethod: this._endDayMethod,
+                              file: this.file,
+                              isFile: this._isFile,
+                            );
+                          }));
+                        });
+                      } else {
+                        setState(() {
+                          _spin = false;
+                        });
                       }
-
-                      setState(() {
-                        _spin = false;
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return RequestConfirmationScreen(
-                            leaveType: widget.leaveType,
-                            leaveTitle: this._leaveTitle,
-                            leaveDescription: this._leaveDescription,
-                            startDate: this._startDate,
-                            startDayMethod: this._startDayMethod,
-                            endDate: this._endDate,
-                            endDayMethod: this._endDayMethod,
-                            file: this.file,
-                            isFile: this._isFile,
-                          );
-                        }));
-                      });
-                    } else {
-                      setState(() {
-                        _spin = false;
-                      });
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -226,7 +235,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
         type: FileType.any,
       );
       if (result != null) {
-        print(result.files.single.path);
+        // print(result.files.single.path);
         file = File(result.files.single.path);
         setState(() {
           _isFile = true;
@@ -279,7 +288,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
     else if (this._startDayMethod == null && this.widget.isMatOrPat == false) {
       check.showAlertDialog(
         title: 'Something Missing !',
-        body: 'Select leave start day option',
+        body: 'Select leave start day method',
         color: Colors.redAccent,
         context: context,
         onPressed: () {
@@ -308,7 +317,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
       else if (this._endDayMethod == null) {
         check.showAlertDialog(
           title: 'Something Missing !',
-          body: 'Select leave end day option',
+          body: 'Select leave end day method',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -344,38 +353,41 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
 
     dynamic code = await _leaveService.leaveDateExist(startDate, endDate);
 
-    if (code == 204) {
-      ///if date not exist
+    if (this.mounted) {
+      if (code == 204) {
+        ///if date not exist
 
-      return true;
-    } else if (code == 1 || code == -1) {
-      /// if any error occured
+        return true;
+      } else if (code == 1 || code == -1) {
+        /// if any error occured
 
-      check.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking requested dates are exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else {
-      ///if date exist
+        check.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking requested dates are exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      } else {
+        ///if date exist
 
-      check.showAlertDialog(
-        title: 'Bad Input !',
-        body: '$code' + '. \nTry another date',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        check.showAlertDialog(
+          title: 'Bad Input !',
+          body: '$code' + '. \nTry another date',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      }
     }
+    return false;
   }
 
   /// check if requested date range is accepted or not
@@ -391,7 +403,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
     }
 
     String startDate = this._startDate.toIso8601String();
-    String startDayMethod = this._startDayMethod;
+    String startDayMethod = this._finalStartDayMethod;
     String endDate;
     String endDayMethod;
 
@@ -400,7 +412,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
       endDayMethod = 'NO';
     } else {
       endDate = this._endDate.toIso8601String();
-      endDayMethod = this._endDayMethod;
+      endDayMethod = this._finalEndDayMethod;
     }
 
     dynamic code = await _leaveService.checkLeaveDayCounts(
@@ -408,38 +420,41 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
 
     double count = double.parse(code);
 
-    if (count == -1.0) {
-      ///if error occured
+    if (this.mounted) {
+      if (count == -1.0) {
+        ///if error occured
 
-      check.showAlertDialog(
-        title: 'Error occured !',
-        body: 'Error occured while checking day count. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (count <= this.widget.availableDays) {
-      /// if acceptable
+        check.showAlertDialog(
+          title: 'Error occured !',
+          body: 'Error occured while checking day count. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      } else if (count <= this.widget.availableDays) {
+        /// if acceptable
 
-      return true;
-    } else {
-      /// if not acceptable
+        return true;
+      } else {
+        /// if not acceptable
 
-      check.showAlertDialog(
-        title: 'Bad Input !',
-        body:
-            'You have only ${this.widget.availableDays} days for this leave type. \nYou requested $count days. \nTry another leave type or date range. ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        check.showAlertDialog(
+          title: 'Bad Input !',
+          body:
+              'You have only available ${this.widget.availableDays} days for this leave type. \nYou have requested $count days for this leave. \nTry another leave type or date range. \nIf you need to extend number of available days contact your admin ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      }
     }
+    return false;
   }
 
   ///leave check box
@@ -474,7 +489,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
   Widget _buildTitle() {
     return InputContainer(
       child: InputTextField(
-        labelText: 'Leave Title',
+        labelText: 'Leave Title*',
         onChanged: (text) {
           setState(() {
             this._leaveTitle = text;
@@ -504,13 +519,15 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
     return widget.isMatOrPat == false
         ? InputContainer(
             child: CustomDropDown(
-              keyString: 'Start Day Option',
+              keyString: 'Start Day Method*',
               item: this._startDayMethod,
               items:
                   this._multiDayLeave ? this._leaveMethod2 : this._leaveMethod1,
               onChanged: (String value) {
                 setState(() {
                   this._startDayMethod = value;
+                  this._finalStartDayMethod =
+                      CheckMethod.convertMethodName(value);
                 });
               },
             ),
@@ -531,13 +548,13 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
     return InputContainer(
       height: 45.0,
       child: InputDate(
-        keyString: 'Leave Start Date : ',
+        keyString: 'Leave Start Date* : ',
         date: this._startDate,
         onTap: () {
           showDatePicker(
                   context: context,
                   initialDate: initDate,
-                  firstDate: initDate,
+                  firstDate: initDate.subtract(Duration(days: 14)),
                   lastDate: DateTime.now().add(Duration(days: 365)),
                   selectableDayPredicate: (DateTime val) =>
                       val.weekday == 6 || val.weekday == 7 ? false : true,
@@ -569,7 +586,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
       return InputContainer(
         height: 45.0,
         child: InputDate(
-            keyString: 'Leave End Date : ',
+            keyString: 'Leave End Date* : ',
             date: this._endDate,
             onTap: () {
               this._startDate != null
@@ -612,13 +629,15 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
         children: [
           InputContainer(
             child: CustomDropDown(
-              keyString: 'End Day Option',
+              keyString: 'End Day Method*',
               item: this._endDayMethod,
               items:
                   this._multiDayLeave ? this._leaveMethod3 : this._leaveMethod1,
               onChanged: (String value) {
                 setState(() {
                   this._endDayMethod = value;
+                  this._finalEndDayMethod =
+                      CheckMethod.convertMethodName(value);
                 });
               },
             ),
