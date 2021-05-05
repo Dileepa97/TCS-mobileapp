@@ -234,7 +234,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                           this._alertDialog.showAlertDialog(
                                 context: context,
                                 title: 'Customer Updated',
-                                body: 'Customer updated succesfully!',
+                                body: 'Customer updated successfully!',
                                 color: Colors.blueAccent,
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -376,7 +376,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This new organization id already exist. \nTry another id',
+          body: 'This new organization id already exists. \nTry another id',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -422,7 +422,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This organization name already exist. \nTry another name',
+          body: 'This organization name already exists. \nTry another name',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -467,7 +467,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This organization email already exist. \nTry another email',
+          body: 'This organization email already exists. \nTry another email',
           color: Colors.redAccent,
           context: context,
           onPressed: () {

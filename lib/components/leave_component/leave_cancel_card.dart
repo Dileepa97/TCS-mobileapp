@@ -22,13 +22,6 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
   ShowAlertDialog _dialog = ShowAlertDialog();
   LeaveService _leaveService = LeaveService();
 
-  // @override
-  // void dispose() {
-  //   _leaveService = null;
-  //   _dialog = null;
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(

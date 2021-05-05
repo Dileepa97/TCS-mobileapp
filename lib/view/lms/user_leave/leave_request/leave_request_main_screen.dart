@@ -463,7 +463,7 @@ class _LeaveRequestMainScreenState extends State<LeaveRequestMainScreen> {
         ? Row(
             children: [
               Text(
-                'Multiple Day leaves : ',
+                'Multiple Days leave : ',
                 style: TextStyle(
                   fontFamily: 'Source Sans Pro',
                   fontSize: 16,

@@ -725,7 +725,8 @@ class _AdminLeaveDetailsPageState extends State<AdminLeaveDetailsPage> {
                                                   'Do you want to reject this leave request?'),
                                               TextField(
                                                   decoration: InputDecoration(
-                                                      hintText: 'Reason'),
+                                                      hintText:
+                                                          'Reason (optional)'),
                                                   maxLines: null,
                                                   onChanged: (text) {
                                                     setState(() {

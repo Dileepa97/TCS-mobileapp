@@ -271,7 +271,7 @@ class _FirstRequestScreenState extends State<FirstRequestScreen> {
                       if (this.mounted) {
                         check.showAlertDialog(
                           title: 'Cannot Request !',
-                          body: 'You have no available leaves to request',
+                          body: 'You have no available leaves to request.',
                           color: Colors.redAccent,
                           context: context,
                           onPressed: () {

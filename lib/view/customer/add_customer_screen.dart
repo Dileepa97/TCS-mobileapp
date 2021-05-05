@@ -140,7 +140,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           this._alertDialog.showAlertDialog(
                                 context: context,
                                 title: 'Customer Added',
-                                body: 'New customer added succesfully',
+                                body: 'New customer added successfully',
                                 color: Colors.blueAccent,
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -282,7 +282,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This organization id already exist. \nTry another id',
+          body: 'This organization id already exists. \nTry another id',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -328,7 +328,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This organization name already exist. \nTry another name',
+          body: 'This organization name already exists. \nTry another name',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -347,7 +347,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         _alertDialog.showAlertDialog(
           title: 'Error occured !',
           body:
-              'Error occured while checking organization name is exist. \nTry again ',
+              'Error occured while checking organization name is exists. \nTry again ',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
@@ -374,7 +374,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This organization email already exist. \nTry another email',
+          body: 'This organization email already exists. \nTry another email',
           color: Colors.redAccent,
           context: context,
           onPressed: () {

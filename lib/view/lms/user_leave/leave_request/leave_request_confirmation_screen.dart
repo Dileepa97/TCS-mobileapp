@@ -253,7 +253,7 @@ class _RequestConfirmationScreenState extends State<RequestConfirmationScreen> {
                           this._alertDialog.showAlertDialog(
                                 context: context,
                                 title: 'Request Created',
-                                body: 'Your request submitted succesfully',
+                                body: 'Your request submitted successfully',
                                 color: Colors.blueAccent,
                                 onPressed: () {
                                   Navigator.pop(context);

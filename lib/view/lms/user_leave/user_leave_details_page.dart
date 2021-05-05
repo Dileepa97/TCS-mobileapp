@@ -505,8 +505,14 @@ class _UserLeaveDetailsPageState extends State<UserLeaveDetailsPage> {
                                                     .showAlertDialog(
                                                       context: context,
                                                       title: 'Cancelled',
-                                                      body:
-                                                          'Leave cancelled successfully.',
+                                                      body: this
+                                                                  .widget
+                                                                  .item
+                                                                  .status ==
+                                                              LeaveStatus
+                                                                  .ONGOING
+                                                          ? 'Ongoing leave cancel request created.'
+                                                          : 'Leave cancelled successfully.',
                                                       color: Colors.blueAccent,
                                                       onPressed: () {
                                                         Navigator.pop(context);

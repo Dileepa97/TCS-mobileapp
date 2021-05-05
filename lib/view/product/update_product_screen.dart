@@ -270,7 +270,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                         this._alertDialog.showAlertDialog(
                               context: context,
                               title: 'Product Updated',
-                              body: 'Product updated succesfully!',
+                              body: 'Product updated successfully!',
                               color: Colors.blueAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -350,7 +350,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
 
         _alertDialog.showAlertDialog(
           title: 'Bad Input !',
-          body: 'This product name already exist. \nTry another name',
+          body: 'This product name already exists. \nTry another name',
           color: Colors.redAccent,
           context: context,
           onPressed: () {
