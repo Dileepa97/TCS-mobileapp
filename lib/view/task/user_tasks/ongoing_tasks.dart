@@ -54,7 +54,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -62,7 +62,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -89,7 +89,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
@@ -97,7 +97,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             )
           ],
@@ -143,7 +143,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
         title: Text("Ongoing Tasks",
             style: TextStyle(
                 color: Colors.white,
-              fontFamily: 'Source Sans Pro',
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -158,7 +158,8 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
             child: Text("No Tasks found",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17
+                  fontSize: 17,
+                fontFamily: 'Arial',
               ),),
           )
       ) : ListView.builder(

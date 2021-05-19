@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/services/task/task_service.dart';
-import 'package:timecapturesystem/view/task/task_detail.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 // ignore: must_be_immutable
@@ -59,19 +58,19 @@ class _ViewTasksState extends State<ViewTasks> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Task : "+this.taskList[i].taskName,
+                Text(this.taskList[i].taskName,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                   ),
                 ),
                 SizedBox(height: 8),
                 Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString(),
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 15,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                   ),
                 ),
                 SizedBox(height: 8),
@@ -79,7 +78,7 @@ class _ViewTasksState extends State<ViewTasks> {
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                   ),
                 ),
                 SizedBox(height: 8),
@@ -122,7 +121,8 @@ class _ViewTasksState extends State<ViewTasks> {
                 child: Text("No Tasks found",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17
+                  fontSize: 17,
+                  fontFamily: 'Arial',
                 ),),
               )
           ) : Column(

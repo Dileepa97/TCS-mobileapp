@@ -6,8 +6,6 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/services/task/task_service.dart';
-import 'package:timecapturesystem/view/task/product_dashboard.dart';
-import 'package:timecapturesystem/view/widgets/view_task_drawer.dart';
 
 class AddTask extends StatefulWidget {
 
@@ -91,7 +89,8 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         title: Text("Add task",
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -117,7 +116,7 @@ class _AddTaskState extends State<AddTask> {
                 Text(
                   'Enter Task Details',
                   style: TextStyle(
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                     color: Colors.lightBlue.shade800,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -152,7 +151,6 @@ class _AddTaskState extends State<AddTask> {
                   color: Colors.blueAccent[200],
                   title: 'Submit',
                   minWidth: 200.0,
-
                   onPressed: () async {
                     Task task = new Task(productId: widget.product.id, taskName: this.taskName, estimatedHours: this.estimatedHours);
                     await TaskService.addProductTask(task);

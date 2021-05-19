@@ -11,23 +11,26 @@ var apiEndpoint = DotEnv().env['API_URL'].toString();
 
 class ReportService {
 
-  static Future<TeamMemberReport> getTeamMemberReport(String teamMemberId) async {
+  static Future<dynamic> getTeamMemberReport(String teamMemberId) async {
 
-    var authHeader = await generateAuthHeader();
+    try {
+      var authHeader = await generateAuthHeader();
 
-    http.Response response = await http.get(apiEndpoint + "team-member-report/"+teamMemberId,
-        headers: {
-          HttpHeaders.authorizationHeader: authHeader,
-          HttpHeaders.contentTypeHeader: contentTypeHeader
-        }).catchError((error) => {print(error.toString())});
+      http.Response response = await http.get(
+          apiEndpoint + "team-member-report/" + teamMemberId,
+          headers: {
+            HttpHeaders.authorizationHeader: authHeader,
+            HttpHeaders.contentTypeHeader: contentTypeHeader
+          }).catchError((error) => {print(error.toString())});
 
-    print(response.statusCode);
-
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      return new TeamMemberReport.formJson(jsonData);
-    } else {
-      return null;
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        return new TeamMemberReport.formJson(jsonData);
+      } else {
+        return 1;
+      }
+    }catch(e){
+      return -1;
     }
   }
 

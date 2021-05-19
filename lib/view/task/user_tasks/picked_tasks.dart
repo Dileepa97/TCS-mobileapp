@@ -46,25 +46,29 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Text(this.pickedTaskList[index].teamMemberTask.taskName,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(this.pickedTaskList[index].teamMemberTask.taskName,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black87,
+                    fontFamily: 'Source Sans Pro',
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(this.pickedTaskList[index].customer.organizationName,
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    fontFamily: 'Source Sans Pro',
+                  ),
+                ),
+                SizedBox(height: 8),
+              ],
             ),
-            SizedBox(height: 8),
-            Text(this.pickedTaskList[index].customer.organizationName,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
-              ),
-            ),
-            SizedBox(height: 8),
           ],
         ),
       ),

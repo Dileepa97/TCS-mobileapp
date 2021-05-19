@@ -73,7 +73,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title:
-            Text("Product Dashboard", style: TextStyle(color: Colors.white,fontFamily: 'Source Sans Pro',)),
+            Text("Product Dashboard", style: TextStyle(color: Colors.white,fontFamily: 'Arial',)),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
@@ -111,7 +111,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "View Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Source Sans Pro',),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -146,7 +146,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Add Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Source Sans Pro',),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -180,7 +180,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Update Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Source Sans Pro',),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -216,7 +216,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Delete Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Source Sans Pro',),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),

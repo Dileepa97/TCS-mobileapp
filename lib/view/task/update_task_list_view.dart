@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/product/product.dart';
-import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/services/task/task_service.dart';
 import 'package:timecapturesystem/view/task/update_task.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -69,19 +68,19 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Task : "+this.taskList[i].taskName,
+                    Text(this.taskList[i].taskName,
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         color: Colors.blue.shade800,
-                        fontFamily: 'Source Sans Pro',
+                        fontFamily: 'Arial',
                       ),
                     ),
                     SizedBox(height: 8),
                     Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString() + " Hrs",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
                         color: Colors.blue.shade800,
-                        fontFamily: 'Source Sans Pro',
+                        fontFamily: 'Arial',
                       ),
                     ),
                     SizedBox(height: 8),
@@ -89,7 +88,7 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.blue.shade800,
-                        fontFamily: 'Source Sans Pro',
+                        fontFamily: 'Arial',
                       ),
                     ),
                     SizedBox(height: 8),
@@ -117,7 +116,8 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
         title: Text("Update Tasks",
             style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600
+                fontWeight: FontWeight.w600,
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -134,7 +134,8 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                 child: Text("No Tasks found",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17
+                      fontSize: 17,
+                    fontFamily: 'Arial',
                   ),),
               )
           ) : Column(

@@ -234,7 +234,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                 Text(
                   'Enter Task Details',
                   style: TextStyle(
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                     color: Colors.lightBlue.shade800,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -248,7 +248,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                   child: Text(
                     'Fill feilds that you only want to update. If you don\'t want to upadte any feild keep it blank or empty.',
                     style: TextStyle(
-                      fontFamily: 'Source Sans Pro',
+                      fontFamily: 'Arial',
                       color: Colors.blueGrey,
                       fontSize: 15,
                     ),
@@ -267,7 +267,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                   ),
                 ),
 
-                Text("Previous : "+widget.task.taskName),
+                Text("Previous : "+widget.task.taskName, style: TextStyle(fontFamily: 'Arial',),),
 
                 InputContainer(
                   child: InputTextField(
@@ -281,7 +281,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                   ),
                 ),
 
-                Text("Previous : "+widget.task.estimatedHours.toString()+" Hrs"),
+                Text("Previous : "+widget.task.estimatedHours.toString()+" Hrs", style: TextStyle(fontFamily: 'Arial',),),
 
                 RoundedButton(
                   color: Colors.blueAccent[200],

@@ -54,7 +54,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
       appBar: AppBar(
         title: Text("User Tasks",
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -94,7 +95,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                         Text("Picked Tasks",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: 20
+                              fontSize: 20,
+                            fontFamily: 'Arial',
                           ),
                         )
                       ],
@@ -130,7 +132,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                         Text("Ongoing Tasks",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: 20
+                              fontSize: 20,
+                            fontFamily: 'Arial',
                           ),
                         )
                       ],
@@ -166,7 +169,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                         Text("Partially Completed Tasks",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: 20
+                              fontSize: 20,
+                            fontFamily: 'Arial',
                           ),
                         )
                       ],
@@ -202,7 +206,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                         Text("Completed Tasks",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: 20
+                              fontSize: 20,
+                            fontFamily: 'Arial',
                           ),
                         )
                       ],
@@ -238,7 +243,8 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                         Text("Assigned Tasks",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: 20
+                              fontSize: 20,
+                            fontFamily: 'Arial',
                           ),
                         )
                       ],

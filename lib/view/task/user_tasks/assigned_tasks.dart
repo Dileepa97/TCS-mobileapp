@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -51,7 +50,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -59,7 +58,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -86,7 +85,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
@@ -94,7 +93,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
@@ -102,7 +101,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             )
           ],
@@ -141,7 +140,7 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
         title: Text("Re-Assigned Tasks",
             style: TextStyle(
               color: Colors.white,
-              fontFamily: 'Source Sans Pro',
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -157,7 +156,8 @@ class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
             child: Text("No Tasks found",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17
+                  fontSize: 17,
+                fontFamily: 'Arial',
               ),),
           )
       ) : ListView.builder(

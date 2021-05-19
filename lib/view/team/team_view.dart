@@ -93,9 +93,10 @@ class _TeamViewState extends State<TeamView> {
                           children: [
                             Text(teamMember.fullName,
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 18,
                                 color: Colors.blue.shade800,
-                                fontFamily: 'Source Sans Pro',
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'Arial',
                               ),
                             ),
                             Text((() {
@@ -107,14 +108,16 @@ class _TeamViewState extends State<TeamView> {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black87,
-                                fontFamily: 'Source Sans Pro',
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Arial',
                               ),
                             ),
                             Text(teamMember.gender,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black87,
-                                fontFamily: 'Source Sans Pro',
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Arial',
                               ),
                             ),
                             Text((() {
@@ -125,7 +128,8 @@ class _TeamViewState extends State<TeamView> {
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.blue,
-                                fontFamily: 'Source Sans Pro',
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Arial',
                               ),
                             ),
                           ],
@@ -155,7 +159,8 @@ class _TeamViewState extends State<TeamView> {
       appBar: AppBar(
         title: Text("Team Dashboard",
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+                fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -172,6 +177,7 @@ class _TeamViewState extends State<TeamView> {
                 child: Text("No Tasks found",
                   style: TextStyle(
                       color: Colors.white,
+                      fontFamily: 'Arial',
                       fontSize: 17
                   ),),
               )
@@ -194,8 +200,9 @@ class _TeamViewState extends State<TeamView> {
                             Text(team.teamName,
                               style: TextStyle(
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w800,
                                 color: Colors.blue.shade800,
+                                fontFamily: 'Arial',
                               ),
                             ),
                             SizedBox(height: MediaQuery.of(context).size.height * 0.025,),
@@ -205,9 +212,17 @@ class _TeamViewState extends State<TeamView> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Team Leader "),
+                                    Text("Team Leader ", style: TextStyle(
+                                      fontFamily: 'Arial',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600
+                                    ),),
                                     SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text("Members ")
+                                    Text("Members ",style: TextStyle(
+                                        fontFamily: 'Arial',
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600
+                                    ),)
                                   ],
                                 ),
                                 Column(
@@ -216,12 +231,14 @@ class _TeamViewState extends State<TeamView> {
                                     Text(": "+team.teamLeader.fullName,style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
+                                      fontFamily: 'Arial',
                                       color: Colors.redAccent,
                                     ),),
                                     SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
                                     Text(": "+team.teamMemberList.length.toString(),style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
+                                      fontFamily: 'Arial',
                                       color: Colors.redAccent,
                                     ),)
                                   ],

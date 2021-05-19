@@ -53,7 +53,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -61,7 +61,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -88,7 +88,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                    fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
@@ -96,7 +96,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                    fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             )
           ],
@@ -133,7 +133,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
         title: Text("Partially Completed Tasks",
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Source Sans Pro',
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -149,7 +149,8 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
             child: Text("No Tasks found",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17
+                  fontSize: 17,
+                fontFamily: 'Arial',
               ),),
           )
       ) : ListView.builder(

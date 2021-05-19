@@ -56,7 +56,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -64,7 +64,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
-                fontFamily: 'Source Sans Pro',
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -91,7 +91,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
@@ -99,7 +99,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
-                  fontFamily: 'Source Sans Pro',
+                  fontFamily: 'Arial',
                 )
             )
           ],
@@ -137,7 +137,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         title: Text("Completed Tasks",
             style: TextStyle(
                 color: Colors.white,
-              fontFamily: 'Source Sans Pro',
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -152,7 +152,8 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
             child: Text("No Tasks found",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 17
+                  fontSize: 17,
+                fontFamily: 'Arial',
               ),),
           )
       ) : ListView.builder(

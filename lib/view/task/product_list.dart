@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/product/product_service.dart';
-import 'package:timecapturesystem/services/task/task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/product_dashboard.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -63,7 +62,7 @@ class _TaskPanelState extends State<TaskPanel> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
-                          fontFamily: 'Source Sans Pro',
+                          fontFamily: 'Arial',
                         ),)),
                   decoration: BoxDecoration(
                       color: Colors.blueAccent,
@@ -82,13 +81,13 @@ class _TaskPanelState extends State<TaskPanel> {
                             return "Number of tasks : 0";
                           }
                             return "Number of tasks : "+products[i].taskCount.toString();
-                        })(),style: TextStyle(fontFamily: 'Source Sans Pro',)),
+                        })(),style: TextStyle(fontFamily: 'Arial',)),
                         Text((() {
                           if(products[i].customerIdList == null){
                             return "Number of customers : 0";
                           }
                           return "Number of customers : "+products[i].customerIdList.length.toString();
-                        })(),style: TextStyle(fontFamily: 'Source Sans Pro',)),
+                        })(),style: TextStyle(fontFamily: 'Arial',)),
                       ],
                     ),
                   ),
@@ -126,7 +125,7 @@ class _TaskPanelState extends State<TaskPanel> {
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title:
-            Text("Product Dashboard", style: TextStyle(color: Colors.white)),
+            Text("Product Dashboard", style: TextStyle(color: Colors.white, fontFamily: 'Arial',)),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(

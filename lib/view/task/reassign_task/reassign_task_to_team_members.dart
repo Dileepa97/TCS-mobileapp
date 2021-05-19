@@ -20,7 +20,7 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
   void initState() {
     super.initState();
     if(this.loading) {
-      getPartiallyCompletedTasks();
+      this.getPartiallyCompletedTasks();
     }
   }
 
@@ -123,7 +123,6 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
   }
 
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -136,7 +135,8 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
       appBar: AppBar(
         title: Text("Team Partial Tasks",
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -145,13 +145,14 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
         ),
       ),
       body: SingleChildScrollView(
-          child: (this.partiallyCompletedTasks == 1) ? Container(
+          child: (this.partiallyCompletedTasks == 1 || this.partiallyCompletedTasks.length == 0) ? Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
               child: Center(
                 child: Text("No Tasks found",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17
+                      fontSize: 17,
+                    fontFamily: 'Arial',
                   ),),
               )
           ) : Column(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/product/product.dart';
-import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/services/task/task_service.dart';
 
 class DeleteTask extends StatefulWidget {
@@ -126,37 +125,43 @@ class _DeleteTaskState extends State<DeleteTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Task : "+this.taskList[i].taskName,
+                Text(this.taskList[i].taskName,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
                   ),
                 ),
-                SizedBox(height: 8),
-                Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
-                  ),
-                ),
-                SizedBox(height: 8),
+
+                SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Created At : "+DateFormat('yyyy-MM-dd – kk:mm').format(this.taskList[i].createdAt),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue.shade800,
-                        fontFamily: 'Source Sans Pro',
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString() + " Hrs",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blue.shade800,
+                            fontFamily: 'Arial',
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text("Created At : "+DateFormat('yyyy-MM-dd – kk:mm').format(this.taskList[i].createdAt),
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blue.shade800,
+                            fontFamily: 'Arial',
+                          ),
+                        ),
+                      ],
                     ),
                     RaisedButton(
                       child: Text("Delete",style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
-                        fontFamily: 'Source Sans Pro',
+                        fontFamily: 'Arial',
                       ),),
                         color: Colors.red,
                         onPressed: (){
@@ -184,7 +189,8 @@ class _DeleteTaskState extends State<DeleteTask> {
         title: Text("Delete Tasks",
             style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600
+                fontWeight: FontWeight.w600,
+              fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -200,7 +206,8 @@ class _DeleteTaskState extends State<DeleteTask> {
                 child: Text("No Tasks found",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17
+                      fontSize: 17,
+                    fontFamily: 'Arial',
                   ),),
               )
           ) : Column(

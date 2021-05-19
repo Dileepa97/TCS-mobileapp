@@ -34,24 +34,17 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
   @override
   void initState() {
     super.initState();
-    // this.initializeDownloader();
     if(this.loading) {
-      getReport().then((value) => {
-        setState(() {
-          this.teamMemberReport = value;
-          Future.delayed(Duration(milliseconds: 1200),(){
-            setState(() {
-              this.loading = false;
-            });
-          });
-        })
-      });
+      this.getReport();
     }
   }
 
   getReport() async{
-    TeamMemberReport teamMemberReport = await ReportService.getTeamMemberReport(widget.teamMember.id);
-    return teamMemberReport;
+    dynamic teamMemberReport = await ReportService.getTeamMemberReport(widget.teamMember.id);
+    setState(() {
+      this.teamMemberReport = teamMemberReport;
+      this.loading = false;
+    });
   }
 
 
@@ -96,7 +89,8 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black87,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.w800
                   ),
                 ),
                 SizedBox(height: 8),
@@ -104,7 +98,8 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
+                      fontWeight: FontWeight.w800
                   ),
                 ),
                 SizedBox(height: 8),
@@ -112,7 +107,8 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.blue.shade800,
-                    fontFamily: 'Source Sans Pro',
+                    fontFamily: 'Arial',
+                      fontWeight: FontWeight.w800
                   ),
                 ),
                 SizedBox(height: 8),
@@ -137,7 +133,9 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
       appBar: AppBar(
         title: Text("Team Member Report",
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
@@ -167,7 +165,8 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                             Text(widget.teamMember.fullName,
                               style: TextStyle(
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Arial',
+                                fontWeight: FontWeight.w800,
                                 color: Colors.blue,
                               ),
                             ),
