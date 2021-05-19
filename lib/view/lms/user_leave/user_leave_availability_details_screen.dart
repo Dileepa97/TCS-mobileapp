@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:timecapturesystem/components/home_button.dart';
+import 'package:timecapturesystem/components/leave_component/error_texts.dart';
 import 'package:timecapturesystem/components/leave_component/leave_option_builder.dart';
 import 'package:timecapturesystem/models/lms/leave_option.dart';
 import 'package:timecapturesystem/services/LMS/leave_availability_service.dart';
@@ -34,6 +34,25 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
         ),
         centerTitle: true,
         actions: [
+          ///refresh button
+          GestureDetector(
+            child: Icon(
+              Icons.refresh,
+              size: 25,
+            ),
+            onTap: () {
+              if (_list != null) {
+                setState(() {
+                  _list.removeRange(0, _list.length);
+                  _year = DateTime.now().year;
+                });
+              } else {
+                setState(() {
+                  _year = DateTime.now().year;
+                });
+              }
+            },
+          ),
           HomeButton(),
         ],
       ),
@@ -51,14 +70,6 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ///Icon
-                CircleAvatar(
-                  child: Icon(
-                    Icons.calendar_today_rounded,
-                    size: 20,
-                  ),
-                ),
-
                 ///year picker
                 GestureDetector(
                   child: Text(
@@ -75,24 +86,6 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
                         DateTime.now().year - 1, DateTime.now().year, _year);
                   },
                 ),
-
-                ///refresh button
-                GestureDetector(
-                  child: Icon(
-                    Icons.refresh,
-                    size: 25,
-                    color: Colors.lightBlue.shade800,
-                  ),
-                  onTap: () {
-                    if (_list != null) {
-                      setState(() {
-                        _list.removeRange(0, _list.length);
-                      });
-                    } else {
-                      setState(() {});
-                    }
-                  },
-                ),
               ],
             ),
           ),
@@ -105,35 +98,13 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
               Widget child;
               if (snapshot.hasData) {
                 if (snapshot.data == 204) {
-                  child = Center(
-                    child: Text(
-                      "No leave availability data to show for this year.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
+                  child = CustomErrorText(
+                      text:
+                          'No leave availability data to show for this year.');
                 } else if (snapshot.data == 1) {
-                  child = Center(
-                    child: Text(
-                      "An unknown error occured. \nPlease try again later",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
+                  child = ServerErrorText();
                 } else if (snapshot.data == -1) {
-                  child = Center(
-                    child: Text(
-                      "Connection Error. \nPlease check your connection and try again later",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
+                  child = ConnectionErrorText();
                 } else {
                   _list = snapshot.data;
                   child = LeaveOptionBuilder(
@@ -142,22 +113,7 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
                   );
                 }
               } else {
-                child = Center(
-                  child: Column(
-                    children: [
-                      SpinKitCircle(
-                        color: Colors.white,
-                        size: 50.0,
-                      ),
-                      Text(
-                        "Please wait...",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                child = LoadingText();
               }
 
               return Expanded(child: child);
@@ -192,7 +148,6 @@ class _UserLeaveAvailableState extends State<UserLeaveAvailable> {
     ).then((num value) {
       if (value != null) {
         setState(() => _year = value);
-        // integerNumberPicker.animateInt(value);
       }
     });
   }

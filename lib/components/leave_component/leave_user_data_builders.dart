@@ -34,7 +34,14 @@ class UserNameText extends StatelessWidget {
             ),
           );
         } else {
-          _name = Text('');
+          _name = Text(
+            'User Name',
+            style: TextStyle(
+              color: Colors.grey,
+              fontFamily: 'Source Sans Pro',
+              fontSize: fontSize,
+            ),
+          );
         }
         return _name;
       },

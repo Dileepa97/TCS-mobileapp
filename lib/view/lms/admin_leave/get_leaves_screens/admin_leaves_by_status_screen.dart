@@ -1,25 +1,42 @@
 import 'package:flutter/material.dart';
 
+import 'package:numberpicker/numberpicker.dart';
 import 'package:timecapturesystem/components/home_button.dart';
+import 'package:timecapturesystem/components/leave_component/custom_drop_down.dart';
 import 'package:timecapturesystem/components/leave_component/error_texts.dart';
-
 import 'package:timecapturesystem/components/leave_component/leave_list_view_builder.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-import 'package:timecapturesystem/services/lms/leave_service.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:timecapturesystem/models/lms/leave_response.dart';
 
-class AdminAllLeaves extends StatefulWidget {
-  static const String id = "admin_all_leaves";
+import 'package:timecapturesystem/services/LMS/leave_service.dart';
+
+class AdminLeaveByStatus extends StatefulWidget {
+  static const String id = "admin_leave_by_status";
 
   @override
-  _AdminAllLeavesState createState() => _AdminAllLeavesState();
+  _AdminLeaveByStatusState createState() => _AdminLeaveByStatusState();
 }
 
-class _AdminAllLeavesState extends State<AdminAllLeaves> {
+class _AdminLeaveByStatusState extends State<AdminLeaveByStatus> {
   LeaveService _leaveService = LeaveService();
+  List<LeaveResponse> list = List<LeaveResponse>();
+
   int _year = DateTime.now().year;
-  int _month = DateTime.now().month;
+
   List<Leave> _leaves;
+
+  String _leaveStatus = 'REQUESTED';
+
+  List<String> _leaveStatuses = [
+    'REQUESTED',
+    'ACCEPTED',
+    'REJECTED',
+    'CANCELLED',
+    'ONGOING',
+    'ONGOING_CANCEL_REQUESTED',
+    'ONGOING_CANCELLED',
+    'EXPIRED'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +45,15 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
 
       ///app bar
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.lightBlue.shade800,
         title: Text(
-          'All Leaves',
+          'Leaves by status',
           style: TextStyle(
             fontFamily: 'Source Sans Pro',
           ),
         ),
         centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.lightBlue.shade800,
         actions: [
           GestureDetector(
             child: Icon(
@@ -46,9 +63,14 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
               if (_leaves != null) {
                 setState(() {
                   _leaves.removeRange(0, _leaves.length);
+                  _year = DateTime.now().year;
+                  _leaveStatus = 'REQUESTED';
                 });
               } else {
-                setState(() {});
+                setState(() {
+                  _year = DateTime.now().year;
+                  _leaveStatus = 'REQUESTED';
+                });
               }
             },
           ),
@@ -71,60 +93,53 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ///icon
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.calendar_today_rounded,
-                      size: 20,
-                    ),
-                  ),
-
-                  ///Year picker
+                  ///year picker
                   GestureDetector(
                     child: Text(
                       'Year : $_year',
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
                         color: Colors.blue[700],
-                        fontSize: 17,
+                        fontSize: 18,
                         fontFamily: 'Source Sans Pro',
                       ),
                     ),
                     onTap: () {
-                      _showIntDialog(DateTime.now().year - 1,
-                          DateTime.now().year, this._year, true);
+                      _showIntDialog(
+                          DateTime.now().year - 1, DateTime.now().year, _year);
                     },
                   ),
 
-                  ///month picker
-                  GestureDetector(
-                    child: Text(
-                      'Month : $_month',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.blue[700],
-                        fontSize: 17,
-                        fontFamily: 'Source Sans Pro',
-                      ),
-                    ),
-                    onTap: () {
-                      _showIntDialog(1, 12, this._month, false);
+                  ///leave status picker
+                  CustomDropDown(
+                    keyString: 'Leave Status',
+                    item: _leaveStatus,
+                    items: _leaveStatuses,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        if (_leaves != null)
+                          _leaves.removeRange(0, _leaves.length);
+                        this._leaveStatus = newValue;
+                      });
                     },
                   ),
                 ],
               ),
             ),
+            SizedBox(
+              height: 8,
+            ),
 
             ///leave list builder
             FutureBuilder<dynamic>(
-              future: _leaveService.getLeavesByMonth(context, _year, _month),
+              future: _leaveService.getLeavesByStatusAndYear(
+                  context, _leaveStatus, _year),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 Widget child;
-
                 if (snapshot.hasData) {
                   if (snapshot.data == 204) {
                     child = CustomErrorText(
-                        text: "No leave data available for this month");
+                        text:
+                            "No leave data available for this year and leave status");
                   } else if (snapshot.data == 1) {
                     child = ServerErrorText();
                   } else if (snapshot.data == -1) {
@@ -151,37 +166,33 @@ class _AdminAllLeavesState extends State<AdminAllLeaves> {
     );
   }
 
-  ///year and month picker
-  Future _showIntDialog(int min, int max, int init, bool isYear) async {
+  ///year picker
+  Future _showIntDialog(int min, int max, int init) async {
     await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 500,
-          child: new NumberPickerDialog.integer(
-            minValue: min,
-            maxValue: DateTime.now().month == 12 && isYear ? max + 1 : max,
-            step: 1,
-            initialIntegerValue: init,
-            textStyle: TextStyle(
-              fontFamily: 'Source Sans Pro',
-              fontSize: 20,
-            ),
-            selectedTextStyle: TextStyle(
-              fontFamily: 'Source Sans Pro',
-              fontSize: 25,
-              color: Colors.lightBlue.shade800,
-            ),
+        return new NumberPickerDialog.integer(
+          minValue: min,
+          maxValue: DateTime.now().month == 12 ? max + 1 : max,
+          step: 1,
+          initialIntegerValue: init,
+          textStyle: TextStyle(
+            fontFamily: 'Source Sans Pro',
+            fontSize: 20,
+          ),
+          selectedTextStyle: TextStyle(
+            fontFamily: 'Source Sans Pro',
+            fontSize: 25,
+            color: Colors.lightBlue.shade800,
           ),
         );
       },
     ).then((num value) {
       if (value != null) {
-        if (isYear) {
-          setState(() => _year = value);
-        } else {
-          setState(() => _month = value);
-        }
+        setState(() {
+          if (_leaves != null) _leaves.removeRange(0, _leaves.length);
+          _year = value;
+        });
       }
     });
   }

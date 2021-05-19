@@ -6,7 +6,7 @@ import 'package:timecapturesystem/components/leave_component/leave_user_data_bui
 import 'package:timecapturesystem/models/lms/leave.dart';
 import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
-import 'package:timecapturesystem/view/lms/user_leave/user_leave_card.dart';
+import 'package:timecapturesystem/components/leave_component/user_leave_card.dart';
 
 class AdminUserLeaveListScreen extends StatefulWidget {
   static const String id = "admin_user_leave_list";
@@ -47,9 +47,12 @@ class _AdminUserLeaveListScreenState extends State<AdminUserLeaveListScreen> {
               if (_leaves != null) {
                 setState(() {
                   _leaves.removeRange(0, _leaves.length);
+                  _year = DateTime.now().year;
                 });
               } else {
-                setState(() {});
+                setState(() {
+                  _year = DateTime.now().year;
+                });
               }
             },
           ),
@@ -171,8 +174,10 @@ class _AdminUserLeaveListScreenState extends State<AdminUserLeaveListScreen> {
       },
     ).then((num value) {
       if (value != null) {
-        setState(() => _year = value);
-        // integerNumberPicker.animateInt(value);
+        setState(() {
+          if (_leaves != null) _leaves.removeRange(0, _leaves.length);
+          _year = value;
+        });
       }
     });
   }

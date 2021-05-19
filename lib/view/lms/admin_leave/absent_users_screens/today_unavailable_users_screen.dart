@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/home_button.dart';
-
 import 'package:timecapturesystem/components/leave_component/absent_user_card.dart';
 import 'package:timecapturesystem/components/leave_component/error_texts.dart';
 import 'package:timecapturesystem/models/lms/not_available_users.dart';
@@ -45,13 +44,7 @@ class _TodayUnavailableUserScreenState
               Icons.refresh,
             ),
             onTap: () {
-              if (_users != null) {
-                setState(() {
-                  _users = null;
-                });
-              } else {
-                setState(() {});
-              }
+              setState(() {});
             },
           ),
           HomeButton(),

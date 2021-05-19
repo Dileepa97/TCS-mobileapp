@@ -192,59 +192,61 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           this._description,
                           this._customerIdList);
 
-                      ///successful
-                      if (response == 201) {
-                        setState(() {
-                          _spin = false;
-                        });
+                      if (this.mounted) {
+                        ///successful
+                        if (response == 201) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Product Added',
-                              body: 'New product added succesfully',
-                              color: Colors.blueAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Product Added',
+                                body: 'New product added successfully',
+                                color: Colors.blueAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///server side error
-                      else if (response == 1) {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///server side error
+                        else if (response == 1) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'Cannot add this product. Check inserted data and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'Cannot add this product. Check inserted data and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///error sending request
-                      else {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///error sending request
+                        else {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'There is an error. Please check your connection and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'There is an error. Please check your connection and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
                       }
                     }
                   },
@@ -282,35 +284,38 @@ class _AddProductScreenState extends State<AddProductScreen> {
     dynamic res = await ProductDetailAvailabilityService.checkProductName(
         this._productName);
 
-    if (res == true) {
-      ///if product name exist
+    if (this.mounted) {
+      if (res == true) {
+        ///if product name exist
 
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'This product name already exist. \nTry another name',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (res == false) {
-      return true;
-    } else {
-      /// if any error occured
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This product name already exists. \nTry another name',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
 
-      _alertDialog.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking product name is exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking product name is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return false;
+      }
     }
+    return false;
   }
 }

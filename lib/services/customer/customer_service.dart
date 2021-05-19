@@ -5,7 +5,7 @@ import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
-var apiEndpoint = DotEnv().env['API'].toString();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
 String endPointName = 'customers';
 // ignore: non_constant_identifier_names
 var API = apiEndpoint + endPointName;

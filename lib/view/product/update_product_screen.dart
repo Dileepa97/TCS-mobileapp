@@ -10,6 +10,7 @@ import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/customer/customer_service.dart';
+import 'package:timecapturesystem/services/product/product_detail_availability_service.dart';
 import 'package:timecapturesystem/services/product/product_service.dart';
 
 class UpdateProductScreen extends StatefulWidget {
@@ -127,7 +128,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                   child: Text(
-                    'Fill feilds that you only want to update. If you don\'t want to upadte any feild keep it blank or empty.',
+                    'Fill feilds that you only want to update. If you don\'t want to update any feild keep it blank or empty.',
                     style: TextStyle(
                       fontFamily: 'Source Sans Pro',
                       color: Colors.blueGrey,
@@ -250,11 +251,11 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
 
                   ///on pressed
                   onPressed: () async {
-                    if (setValues()) {
-                      setState(() {
-                        _spin = true;
-                      });
+                    setState(() {
+                      _spin = true;
+                    });
 
+                    if (await _checkProductName() && setValues()) {
                       dynamic response = await _productService.updateProduct(
                           widget.product.id,
                           this._productNameNew,
@@ -270,7 +271,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                         this._alertDialog.showAlertDialog(
                               context: context,
                               title: 'Product Updated',
-                              body: 'Product updated succesfully!',
+                              body: 'Product updated successfully!',
                               color: Colors.blueAccent,
                               onPressed: () {
                                 Navigator.pop(context);
@@ -337,5 +338,51 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     }
 
     return true;
+  }
+
+  ///Check product name exist
+  Future<bool> _checkProductName() async {
+    dynamic res = await ProductDetailAvailabilityService.checkProductName(
+        this._productNameNew);
+
+    if (this.mounted) {
+      if (res == true) {
+        ///if product name exist
+
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This product name already exists. \nTry another name',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
+
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking product name is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
+    }
+    return false;
   }
 }

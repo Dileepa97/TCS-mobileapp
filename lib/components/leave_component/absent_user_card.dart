@@ -7,7 +7,9 @@ import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
 import 'package:timecapturesystem/view/lms/check_leaves.dart';
-import 'package:timecapturesystem/view/lms/team_leader/TL_leave_detail_screen.dart';
+
+import 'package:timecapturesystem/view/lms/team_leader_leave/TL_leave_detail_screen.dart';
+import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class AbsentUserCard extends StatefulWidget {
   final AbsentUser userData;
@@ -78,7 +80,8 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                       EnumToString.convertToString(widget.userData.status)
                           .substring(1)
                           .toLowerCase()
-                          .replaceAll('_', '\n'),
+                          .replaceFirst('_', '\n')
+                          .replaceAll('_', ' '),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: CheckStatus(status: widget.userData.status)
@@ -106,9 +109,8 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
               children: [
                 ///unavailable time
                 DetailRow(
-                  keyString: 'Unavailable in',
-                  valueString: CheckMethod(method: widget.userData.method)
-                      .methodString(),
+                  keyString: 'Unavailable in ',
+                  valueString: CheckMethod.methodString(widget.userData.method),
                 ),
 
                 ///buuton to leave detail page
@@ -131,37 +133,44 @@ class _AbsentUserCardState extends State<AbsentUserCard> {
                     ),
                   ),
                   onTap: () async {
+                    Navigator.pushNamed(context, LoadingScreen.id);
+
                     dynamic data = await _leaveService
                         .getLeaveById(widget.userData.leaveId);
-                    if (data == 204 || data == 1 || data == -1) {
-                      this._dialog.showAlertDialog(
-                            context: context,
-                            title: 'Error occured',
-                            body: 'Cannot fetch this leave data',
-                            color: Colors.redAccent,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          );
-                    } else {
-                      widget.isTeam
-                          ? Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    TLLeaveDetailsPage(item: data),
-                              ),
-                            )
-                          : Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AdminLeaveDetailsPage(
-                                  item: data,
-                                  isMoreUserLeave: false,
-                                  isOngoing: false,
-                                ),
-                              ),
+
+                    if (this.mounted) {
+                      Navigator.pop(context);
+
+                      if (data == 204 || data == 1 || data == -1) {
+                        this._dialog.showAlertDialog(
+                              context: context,
+                              title: 'Error occured',
+                              body: 'Cannot fetch this leave data',
+                              color: Colors.redAccent,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                             );
+                      } else {
+                        widget.isTeam
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      TLLeaveDetailsPage(item: data),
+                                ),
+                              )
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AdminLeaveDetailsPage(
+                                    item: data,
+                                    isMoreUserLeave: false,
+                                    isOngoing: false,
+                                  ),
+                                ),
+                              );
+                      }
                     }
                   },
                 )

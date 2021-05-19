@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
@@ -46,6 +47,7 @@ class _ProfileState extends State<Profile> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(
@@ -183,14 +185,14 @@ class _ProfileState extends State<Profile> {
             } else {
               children = <Widget>[
                 SizedBox(
-                  child: CircularProgressIndicator(),
-                  width: 60,
-                  height: 60,
+                  child: ModalProgressHUD(
+                    inAsyncCall: false,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('loading'),
+                    ),
+                  ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('loading'),
-                )
               ];
             }
             return Center(

@@ -3,8 +3,9 @@ import 'package:timecapturesystem/components/home_button.dart';
 import 'package:timecapturesystem/components/leave_component/dashboard_button.dart';
 import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
-import 'package:timecapturesystem/view/lms/team_leader/TL_today_unavailable_user_screen.dart';
-import 'package:timecapturesystem/view/lms/team_leader/TL_week_unavailable_users_screen.dart';
+import 'package:timecapturesystem/view/lms/team_leader_leave/TL_today_unavailable_user_screen.dart';
+import 'package:timecapturesystem/view/lms/team_leader_leave/TL_week_unavailable_users_screen.dart';
+
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/user_leave_availability_details_screen.dart';
 

@@ -47,9 +47,12 @@ class _OngoingLeaveCancellationManagerState
               if (_leaveList != null) {
                 setState(() {
                   _leaveList.removeRange(0, _leaveList.length);
+                  _year = DateTime.now().year;
                 });
               } else {
-                setState(() {});
+                setState(() {
+                  _year = DateTime.now().year;
+                });
               }
             },
           ),
@@ -109,6 +112,8 @@ class _OngoingLeaveCancellationManagerState
                     child = ConnectionErrorText();
                   } else {
                     _leaveList = snapshot.data;
+                    _leaveList
+                        .sort((b, a) => a.startDate.compareTo(b.startDate));
 
                     child = ListView.builder(
                       itemCount: _leaveList.length,
@@ -138,8 +143,8 @@ class _OngoingLeaveCancellationManagerState
       context: context,
       builder: (BuildContext context) {
         return new NumberPickerDialog.integer(
-          minValue: min,
-          maxValue: DateTime.now().month == 12 ? max + 1 : max,
+          minValue: DateTime.now().month < 7 ? min : min + 1,
+          maxValue: max,
           step: 1,
           initialIntegerValue: init,
           textStyle: TextStyle(
@@ -155,8 +160,8 @@ class _OngoingLeaveCancellationManagerState
       },
     ).then((num value) {
       if (value != null) {
+        if (_leaveList != null) _leaveList.removeRange(0, _leaveList.length);
         setState(() => _year = value);
-        // integerNumberPicker.animateInt(value);
       }
     });
   }

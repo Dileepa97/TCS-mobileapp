@@ -11,15 +11,17 @@ import 'package:timecapturesystem/view/customer/add_customer_screen.dart';
 import 'package:timecapturesystem/view/customer/customer_dashboard_screen.dart';
 import 'package:timecapturesystem/view/customer/customer_detail_page.dart';
 import 'package:timecapturesystem/view/customer/update_customer_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_all_leaves_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/absent_users_screens/today_unavailable_users_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/absent_users_screens/week_unavailable_users_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/get_leaves_screens/admin_all_leaves_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leaves_by_status_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_list_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/get_leaves_screens/admin_leaves_by_status_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_related_screens/admin_user_leave_list_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/today_unavailable_users_screen.dart';
-import 'package:timecapturesystem/view/lms/team_leader/TL_today_unavailable_user_screen.dart';
-import 'package:timecapturesystem/view/lms/team_leader/TL_week_unavailable_users_screen.dart';
+
+import 'package:timecapturesystem/view/lms/team_leader_leave/TL_today_unavailable_user_screen.dart';
+import 'package:timecapturesystem/view/lms/team_leader_leave/TL_week_unavailable_users_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_confirmation_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_first_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/leave_request/leave_request_main_screen.dart';
@@ -36,14 +38,13 @@ import 'package:timecapturesystem/view/task/product_dashboard.dart';
 import 'package:timecapturesystem/view/task/view_tasks.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
-
+import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 import 'managers/orientation.dart';
 import 'view/Auth/login_screen.dart';
 import 'view/Auth/registration_screen.dart';
 import 'view/homePage.dart';
-import 'view/lms/admin_leave/admin_user_leave_detail_screen.dart';
+import 'view/lms/admin_leave/admin_user_leave_related_screens/admin_user_leave_detail_screen.dart';
 import 'view/lms/admin_leave/change_allowed_days_screen.dart';
-import 'view/lms/admin_leave/week_unavailable_users_screen.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
@@ -103,6 +104,7 @@ class _MyAppState extends State<MyApp> {
             routes = {
               //add routes that user can access only after logging
               HomePage.id: (context) => HomePage(),
+              LoadingScreen.id: (context) => LoadingScreen(),
               UserManagementDashboard.id: (context) =>
                   UserManagementDashboard(),
               LoginScreen.id: (context) => LoginScreen(),
@@ -186,6 +188,7 @@ class _MyAppState extends State<MyApp> {
           }
 
           return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'routes',
               theme: ThemeData(
                 scaffoldBackgroundColor: Color(0xFFF1F1F1),

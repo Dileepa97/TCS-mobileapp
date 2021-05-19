@@ -29,9 +29,9 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
   String _orgName;
   String _orgEmail;
 
-  String _orgIdNew;
-  String _orgNameNew;
-  String _orgEmailNew;
+  String _orgIdNew = '';
+  String _orgNameNew = '';
+  String _orgEmailNew = '';
 
   ShowAlertDialog _alertDialog = ShowAlertDialog();
   CustomerService _customerService = CustomerService();
@@ -109,7 +109,7 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                   child: Text(
-                    'Fill feilds that you only want to update. If you don\'t want to upadte any feild keep it blank or empty.',
+                    'Fill feilds that you only want to update. If you don\'t want to update any feild keep it blank or empty.',
                     style: TextStyle(
                       fontFamily: 'Source Sans Pro',
                       color: Colors.blueGrey,
@@ -209,73 +209,85 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                   title: 'Update',
                   minWidth: 200.0,
                   onPressed: () async {
-                    if (await _checkOrgId() && setValues()) {
-                      setState(() {
-                        _spin = true;
-                      });
+                    setState(() {
+                      _spin = true;
+                    });
 
+                    if (checkFields() &&
+                        await _checkOrgId() &&
+                        await _checkOrgName() &&
+                        await _checkOrgEmail() &&
+                        setValues()) {
                       dynamic response = await _customerService.updateCustomer(
                           widget.customer.id,
                           this._orgIdNew,
                           this._orgNameNew,
                           this._orgEmailNew);
 
-                      ///successful
-                      if (response == 200) {
-                        setState(() {
-                          _spin = false;
-                        });
+                      if (this.mounted) {
+                        ///successful
+                        if (response == 200) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Customer Updated',
-                              body: 'Customer updated succesfully!',
-                              color: Colors.blueAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Customer Updated',
+                                body: 'Customer updated successfully!',
+                                color: Colors.blueAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///server side error
-                      else if (response == 1) {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///server side error
+                        else if (response == 1) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'Cannot update this customer. Check inserted data and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'Cannot update this customer. Check inserted data and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///error sending request
-                      else {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///error sending request
+                        else {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'There is an error. Please check your connection and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'There is an error. Please check your connection and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
                       }
                     }
+
+                    setState(() {
+                      _orgIdNew = '';
+                      _orgNameNew = '';
+                      _orgEmailNew = '';
+                    });
                   },
                 )
               ],
@@ -287,7 +299,6 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
   }
 
   bool setValues() {
-    ///set missing values as a previous values
     if (this._orgIdNew == null || this._orgIdNew.trim() == '') {
       this._orgIdNew = this._orgId;
     }
@@ -296,6 +307,42 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
     }
     if (this._orgEmailNew == null || this._orgEmailNew.trim() == '') {
       this._orgEmailNew = this._orgEmail;
+    }
+
+    ///if ok
+    return true;
+  }
+
+  bool checkFields() {
+    int unfilledCount = 0;
+
+    ///set missing values as a previous values
+    if (this._orgIdNew == null || this._orgIdNew.trim() == '') {
+      unfilledCount++;
+    }
+    if (this._orgNameNew == null || this._orgNameNew.trim() == '') {
+      unfilledCount++;
+    }
+    if (this._orgEmailNew == null || this._orgEmailNew.trim() == '') {
+      unfilledCount++;
+    }
+
+    ///all unfilled
+    if (unfilledCount == 3) {
+      _alertDialog.showAlertDialog(
+        title: 'No Input !',
+        body:
+            'You did not change any previous value. Please change fields you want and press again update button',
+        color: Colors.redAccent,
+        context: context,
+        onPressed: () {
+          Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
+        },
+      );
+      return false;
     }
 
     ///validate email
@@ -307,6 +354,9 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
         context: context,
         onPressed: () {
           Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
         },
       );
       return false;
@@ -320,35 +370,135 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
     dynamic res =
         await CustomerDetailAvailabilityService.checkOrgId(this._orgIdNew);
 
-    if (res == true) {
-      ///if org Id exist
+    if (this.mounted) {
+      if (res == true) {
+        ///if org Id exist
 
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'This new organization id already exist. \nTry another id',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (res == false) {
-      return true;
-    } else {
-      /// if any error occured
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This new organization id already exists. \nTry another id',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
 
-      _alertDialog.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking organization id is exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization id is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
     }
+    return false;
+  }
+
+  ///Check org name exist
+  Future<bool> _checkOrgName() async {
+    dynamic res =
+        await CustomerDetailAvailabilityService.checkOrgName(this._orgNameNew);
+
+    if (this.mounted) {
+      if (res == true) {
+        ///if org name exist
+
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This organization name already exists. \nTry another name',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
+
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization name is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
+    }
+    return false;
+  }
+
+  ///Check org email exist
+  Future<bool> _checkOrgEmail() async {
+    dynamic res = await CustomerDetailAvailabilityService.checkOrgEmail(
+        this._orgEmailNew);
+    if (this.mounted) {
+      if (res == true) {
+        ///if org mail exist
+
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This organization email already exists. \nTry another email',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
+
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization email is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
+    }
+    return false;
   }
 }

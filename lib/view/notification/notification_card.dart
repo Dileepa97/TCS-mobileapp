@@ -4,7 +4,7 @@ import 'package:timecapturesystem/models/user/user.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/view/homePage.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_dashboard_screen.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_leaves_by_status_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/get_leaves_screens/admin_leaves_by_status_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/change_allowed_days_screen.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/ongoing_leave_cancellation_manager_screen.dart';
 import 'package:timecapturesystem/view/lms/user_leave/own_user_leave_screen.dart';

@@ -26,7 +26,10 @@ class CustomerDetailAvailabilityService {
 
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
+
         return resBody;
+      } else if (res.statusCode == 404) {
+        return false;
       } else {
         return 1;
       }
@@ -48,6 +51,31 @@ class CustomerDetailAvailabilityService {
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
         return resBody;
+      } else if (res.statusCode == 404) {
+        return false;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+
+  ///check org email exist or not
+  static Future<dynamic> checkOrgEmail(String orgEmail) async {
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var res = await http.get(API + '/orgEmail/$orgEmail', headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      });
+
+      if (res.statusCode == 200) {
+        var resBody = json.decode(res.body);
+        return resBody;
+      } else if (res.statusCode == 404) {
+        return false;
       } else {
         return 1;
       }

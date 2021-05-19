@@ -48,11 +48,9 @@ class _AbsentUserDetailScreenState extends State<AbsentUserDetailScreen> {
               child: ListView.builder(
                 itemCount: widget.item.users.length,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                    child: AbsentUserCard(
-                      userData: widget.item.users[index],
-                      isTeam: widget.isTeam,
-                    ),
+                  return AbsentUserCard(
+                    userData: widget.item.users[index],
+                    isTeam: widget.isTeam,
                   );
                 },
               ),

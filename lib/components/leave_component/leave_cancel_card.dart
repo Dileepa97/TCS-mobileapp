@@ -1,13 +1,13 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timecapturesystem/components/leave_component/alert_dialogs.dart';
 import 'package:timecapturesystem/components/leave_component/divider_box.dart';
 import 'package:timecapturesystem/components/leave_component/leave_user_data_builders.dart';
 import 'package:timecapturesystem/models/lms/leave.dart';
-
 import 'package:timecapturesystem/services/lms/leave_service.dart';
 import 'package:timecapturesystem/view/lms/admin_leave/admin_leave_detail_page.dart';
-import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_detail_screen.dart';
+import 'package:timecapturesystem/view/lms/admin_leave/admin_user_leave_related_screens/admin_user_leave_detail_screen.dart';
+import 'package:timecapturesystem/view/lms/check_leaves.dart';
+import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class LeaveCancelCard extends StatefulWidget {
   final Leave data;
@@ -121,13 +121,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
             children: [
               //start day method
               Text(
-                EnumToString.convertToString(widget.data.startDayMethod)
-                        .substring(0, 1) +
-                    EnumToString.convertToString(
-                            this.widget.data.startDayMethod)
-                        .substring(1)
-                        .toLowerCase()
-                        .replaceAll('_', ' '),
+                CheckMethod.methodString(widget.data.startDayMethod),
                 style: TextStyle(
                   color: Colors.blueGrey,
                   fontFamily: 'Source Sans Pro',
@@ -138,13 +132,7 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
               ///end day method
               widget.data.endDate != null
                   ? Text(
-                      EnumToString.convertToString(widget.data.endDayMethod)
-                              .substring(0, 1) +
-                          EnumToString.convertToString(
-                                  this.widget.data.endDayMethod)
-                              .substring(1)
-                              .toLowerCase()
-                              .replaceAll('_', ' '),
+                      CheckMethod.methodString(widget.data.endDayMethod),
                       style: TextStyle(
                         color: Colors.blueGrey,
                         fontFamily: 'Source Sans Pro',
@@ -191,8 +179,6 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
 
             ///on tap function
             onTap: () {
-              // Navigator.pushNamed(
-              //     context, MoreLeaveDetails.id);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -312,39 +298,46 @@ class _LeaveCancelCardState extends State<LeaveCancelCard> {
                           color: Colors.blueAccent,
                           context: context,
                           onPressed: () async {
+                            Navigator.pushNamed(context, LoadingScreen.id);
+
                             int code = await _leaveService.setTakenDays(
                                 widget.data.id, days);
 
-                            ///if changed successfully
-                            if (code == 200) {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              this._dialog.showAlertDialog(
-                                    context: context,
-                                    title: 'Done',
-                                    body:
-                                        'Leave taken days changed successfully.',
-                                    color: Colors.blueAccent,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                            }
+                            if (this.mounted) {
+                              ///if changed successfully
+                              if (code == 200) {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                this._dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Done',
+                                      body:
+                                          'Leave taken days changed successfully.',
+                                      color: Colors.blueAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                              }
 
-                            ///if some error occur
-                            else {
-                              Navigator.pop(context);
-                              this._dialog.showAlertDialog(
-                                    context: context,
-                                    title: 'Error occurred',
-                                    body:
-                                        'Cannot complete this task. \nTry again later',
-                                    color: Colors.redAccent,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  );
+                              ///if some error occur
+                              else {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                this._dialog.showAlertDialog(
+                                      context: context,
+                                      title: 'Error occurred',
+                                      body:
+                                          'Cannot assign taken days for this ongoing cancellation request. \nTry again later',
+                                      color: Colors.redAccent,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                              }
                             }
                           },
                         );

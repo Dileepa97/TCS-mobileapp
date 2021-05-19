@@ -119,69 +119,72 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   title: 'Submit',
                   minWidth: 200.0,
                   onPressed: () async {
+                    setState(() {
+                      _spin = true;
+                    });
+
                     if (_checkConditions() &&
                         await _checkOrgId() &&
-                        await _checkOrgName()) {
-                      setState(() {
-                        _spin = true;
-                      });
-
+                        await _checkOrgName() &&
+                        await _checkOrgEmail()) {
                       dynamic response = await _customerService.newCustomer(
                           this._orgId, this._orgName, this._orgEmail);
 
-                      ///successful
-                      if (response == 201) {
-                        setState(() {
-                          _spin = false;
-                        });
+                      if (this.mounted) {
+                        ///successful
+                        if (response == 201) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Customer Added',
-                              body: 'New customer added succesfully',
-                              color: Colors.blueAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Customer Added',
+                                body: 'New customer added successfully',
+                                color: Colors.blueAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///server side error
-                      else if (response == 1) {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///server side error
+                        else if (response == 1) {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'Cannot add this customer. Check inserted data and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                      }
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'Cannot add this customer. Check inserted data and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
 
-                      ///error sending request
-                      else {
-                        setState(() {
-                          _spin = false;
-                        });
+                        ///error sending request
+                        else {
+                          setState(() {
+                            _spin = false;
+                          });
 
-                        this._alertDialog.showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              body:
-                                  'There is an error. Please check your connection and try again later. ',
-                              color: Colors.redAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            );
+                          this._alertDialog.showAlertDialog(
+                                context: context,
+                                title: 'Error',
+                                body:
+                                    'There is an error. Please check your connection and try again later. ',
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                        }
                       }
                     }
                   },
@@ -205,6 +208,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         context: context,
         onPressed: () {
           Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
         },
       );
       return false;
@@ -219,6 +225,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         context: context,
         onPressed: () {
           Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
         },
       );
       return false;
@@ -233,6 +242,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         context: context,
         onPressed: () {
           Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
         },
       );
       return false;
@@ -247,6 +259,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         context: context,
         onPressed: () {
           Navigator.of(context).pop();
+          setState(() {
+            _spin = false;
+          });
         },
       );
       return false;
@@ -261,36 +276,45 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     dynamic res =
         await CustomerDetailAvailabilityService.checkOrgId(this._orgId);
 
-    if (res == true) {
-      ///if org Id exist
+    if (this.mounted) {
+      if (res == true) {
+        ///if org Id exist
 
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'This organization id already exist. \nTry another id',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (res == false) {
-      return true;
-    } else {
-      /// if any error occured
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This organization id already exists. \nTry another id',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
 
-      _alertDialog.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking organization id is exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization id is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
     }
+    return false;
   }
 
   ///Check org name exist
@@ -298,35 +322,90 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     dynamic res =
         await CustomerDetailAvailabilityService.checkOrgName(this._orgName);
 
-    if (res == true) {
-      ///if org name exist
+    if (this.mounted) {
+      if (res == true) {
+        ///if org name exist
 
-      _alertDialog.showAlertDialog(
-        title: 'Bad Input !',
-        body: 'This organization name already exist. \nTry another name',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
-    } else if (res == false) {
-      return true;
-    } else {
-      /// if any error occured
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This organization name already exists. \nTry another name',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
 
-      _alertDialog.showAlertDialog(
-        title: 'Error occured !',
-        body:
-            'Error occured while checking organization name is exist. \nTry again ',
-        color: Colors.redAccent,
-        context: context,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      return false;
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization name is exists. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
     }
+    return false;
+  }
+
+  ///Check org email exist
+  Future<bool> _checkOrgEmail() async {
+    dynamic res =
+        await CustomerDetailAvailabilityService.checkOrgEmail(this._orgEmail);
+
+    if (this.mounted) {
+      if (res == true) {
+        ///if org mail exist
+
+        _alertDialog.showAlertDialog(
+          title: 'Bad Input !',
+          body: 'This organization email already exists. \nTry another email',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      } else if (res == false) {
+        return true;
+      } else {
+        /// if any error occured
+
+        _alertDialog.showAlertDialog(
+          title: 'Error occured !',
+          body:
+              'Error occured while checking organization email is exist. \nTry again ',
+          color: Colors.redAccent,
+          context: context,
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _spin = false;
+            });
+          },
+        );
+        return false;
+      }
+    }
+    return false;
   }
 }
