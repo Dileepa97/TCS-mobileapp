@@ -5,7 +5,7 @@ import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 import 'package:http/http.dart' as http;
 
-var apiEndpoint = DotEnv().env['API'].toString();
+var apiEndpoint = DotEnv().env['API_URL'].toString();
 String endPointName = 'products';
 // ignore: non_constant_identifier_names
 var API = apiEndpoint + endPointName;
@@ -42,6 +42,7 @@ class ProductService {
 
   ///Get all products
   Future<dynamic> getAllProducts(dynamic context) async {
+
     try {
       var authHeader = await generateAuthHeader();
 
@@ -49,7 +50,6 @@ class ProductService {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
-
 
       if (res.statusCode == 200) {
         var resBody = json.decode(res.body);
@@ -140,4 +140,6 @@ class ProductService {
       return -1;
     }
   }
+
+
 }

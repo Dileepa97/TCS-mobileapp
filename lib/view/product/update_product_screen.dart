@@ -122,6 +122,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),

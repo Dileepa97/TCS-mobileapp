@@ -11,10 +11,10 @@ class _LoadingScreenState extends State<LoadingScreen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.lightBlue.shade800,
       body: Center(
-        child: SpinKitFadingCube(
-          color: Colors.blue.shade900,
+        child: SpinKitCircle(
+          color: Colors.white,
           size: 50.0,
         ),
       ),

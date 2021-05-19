@@ -4,6 +4,7 @@ import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
+import 'package:intl/intl.dart';
 
 class UserPickedTasks extends StatefulWidget {
 
@@ -16,7 +17,7 @@ class UserPickedTasks extends StatefulWidget {
 
 class _UserPickedTasksState extends State<UserPickedTasks> {
 
-  List<Task> ongoingTaskList;
+  dynamic pickedTaskList;
 
   bool loading = true;
 
@@ -24,29 +25,23 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
   void initState() {
     super.initState();
     if(this.loading) {
-      getOngoingTasks().then((value) => {
-        setState(() {
-          this.ongoingTaskList = value;
-          Future.delayed(Duration(milliseconds: 1200),(){
-            setState(() {
-              this.loading = false;
-            });
-          });
-        })
-      });
+      this.getOngoingTasks();
     }
   }
 
   Future getOngoingTasks() async{
-    List<TeamMemberTask> tasks = await  TeamMemberTaskService.getOngoingTasks(widget.userId);
-    return tasks;
+    dynamic tasks = await  TeamMemberTaskService.getOngoingTasks(widget.userId);
+    setState(() {
+      this.pickedTaskList = tasks;
+      this.loading = false;
+    });
   }
 
   Widget cardTop(dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(3, 155, 245, 1),
+        color: Colors.blueAccent,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -54,17 +49,19 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].taskName,
+            Text(this.pickedTaskList[index].teamMemberTask.taskName,
               style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Source Sans Pro',
               ),
             ),
             SizedBox(height: 8),
-            Text("Company name",
+            Text(this.pickedTaskList[index].customer.organizationName,
               style: TextStyle(
                   fontSize: 15,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Source Sans Pro',
               ),
             ),
             SizedBox(height: 8),
@@ -78,7 +75,7 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(3, 155, 245, 0.77),
+        color: Colors.blueAccent.shade100,
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -87,17 +84,19 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Picked by",
+            Text("Picked at "+ DateFormat('yyyy-MM-dd – kk:mm').format(this.pickedTaskList[index].pickedAt),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Source Sans Pro',
                 )
             ),
             SizedBox(height: 8),
-            Text("Stated at",
+            Text("Estimated hours "+this.pickedTaskList[index].teamMemberTask.estimatedHours.toString(),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Source Sans Pro',
                 )
             )
           ],
@@ -129,23 +128,34 @@ class _UserPickedTasksState extends State<UserPickedTasks> {
       return LoadingScreen();
     }
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("Picked Tasks",
             style: TextStyle(
-                color: Colors.black87
+                color: Colors.white,
+              fontFamily: 'Source Sans Pro',
             )),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ),
       drawer: SideDrawer(),
-      body: ListView.builder(
+      body: (this.pickedTaskList.length == 0 || this.pickedTaskList == 1) ? Container(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
+          child: Center(
+            child: Text("No Tasks found",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17
+              ),),
+          )
+      ) : ListView.builder(
         itemBuilder: (context,index) {
           return taskCard(index);
         },
-        itemCount: this.ongoingTaskList.length,
+        itemCount: this.pickedTaskList.length,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/view/admin/title_change_management.dart';
 import 'package:timecapturesystem/view/admin/title_management.dart';
@@ -32,6 +33,7 @@ import 'package:timecapturesystem/view/product/product_detail_page.dart';
 import 'package:timecapturesystem/view/product/product_managemnet_dashboard_screen.dart';
 import 'package:timecapturesystem/view/product/update_product_screen.dart';
 import 'package:timecapturesystem/view/task/product_dashboard.dart';
+import 'package:timecapturesystem/view/task/view_tasks.dart';
 import 'package:timecapturesystem/view/user/edit_profile_screen.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
 
@@ -45,12 +47,20 @@ import 'view/lms/admin_leave/week_unavailable_users_screen.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
+void initializeDownloader() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+  );
+}
+
 void main() async {
+
   await DotEnv().load('.env');
   OrientationManager.portraitMode();
   var userData = await TokenStorageService.authDataOrEmpty;
-
   var username = await storage.read(key: "username");
+
   if (userData != null) {
     DateTime dateTime = userData.tokenExpirationDate;
     if (dateTime.isBefore(DateTime.now())) {
@@ -58,10 +68,14 @@ void main() async {
       userData = null;
     }
   }
+
+  initializeDownloader();
+
   runApp(MyApp(userData, username));
 }
 
 class MyApp extends StatefulWidget {
+
   final userData;
   final username;
 
@@ -72,8 +86,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  get userData => widget.userData;
 
+  get userData => widget.userData;
   get username => widget.username;
 
   @override
@@ -153,6 +167,8 @@ class _MyAppState extends State<MyApp> {
               AddCustomerScreen.id: (context) => AddCustomerScreen(),
               UpdateCustomerScreen.id: (context) => UpdateCustomerScreen(),
               CustomerDetailPage.id: (context) => CustomerDetailPage(),
+
+              ViewTasks.id: (context) => ViewTasks()
             };
           } else {
             initialRoute = LoginScreen.id;

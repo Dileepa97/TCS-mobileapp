@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/models/user/user.dart';
@@ -19,7 +20,7 @@ class UserCompletedTasks extends StatefulWidget {
 class _UserCompletedTasksState extends State<UserCompletedTasks> {
 
 
-  List<TeamMemberTask> ongoingTaskList;
+  dynamic completedTaskList;
   bool loading = true;
 
 
@@ -27,30 +28,23 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
   void initState() {
     super.initState();
     if(this.loading) {
-      getCompletedTasks().then((value) => {
-        setState(() {
-          this.ongoingTaskList = value;
-          Future.delayed(Duration(milliseconds: 1200),(){
-            setState(() {
-              this.loading = false;
-            });
-          });
-        })
-      });
+      this.getCompletedTasks();
     }
   }
 
   Future getCompletedTasks() async{
-    List<TeamMemberTask> tasks = await  TeamMemberTaskService.getCompletedTasks(widget.userId);
-    print(tasks);
-    return tasks;
+    dynamic tasks = await  TeamMemberTaskService.getCompletedTasks(widget.userId);
+    setState(() {
+      this.completedTaskList = tasks;
+      this.loading = false;
+    });
   }
 
-  Widget cardTop(dynamic index){
+  Widget cardTop(BuildContext context, dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 160, 0, 1),
+        color: Colors.yellowAccent,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -58,17 +52,19 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Task Name",
+            Text(this.completedTaskList[index].teamMemberTask.taskName,
               style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Source Sans Pro',
               ),
             ),
             SizedBox(height: 8),
-            Text("Company name",
+            Text(this.completedTaskList[index].customer.organizationName,
               style: TextStyle(
                   fontSize: 15,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Source Sans Pro',
               ),
             ),
             SizedBox(height: 8),
@@ -78,11 +74,11 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
     );
   }
 
-  Widget cardBottom(dynamic index){
+  Widget cardBottom(BuildContext context, dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 160, 0, 0.6),
+        color: Colors.yellowAccent.shade100,
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -91,17 +87,19 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Started at ",
+            Text("Started at " + DateFormat('yyyy-MM-dd – kk:mm').format(this.completedTaskList[index].startAt),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Source Sans Pro',
                 )
             ),
             SizedBox(height: 8),
-            Text("Completed at",
+            Text("Completed at "+DateFormat('yyyy-MM-dd – kk:mm').format(this.completedTaskList[index].endTime),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Source Sans Pro',
                 )
             )
           ],
@@ -110,7 +108,8 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
     );
   }
 
-  Widget taskCard(dynamic index){
+  Widget taskCard(BuildContext context,dynamic index){
+    print(context);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: InkWell(
@@ -119,8 +118,8 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         },
         child: Column(
           children: [
-            cardTop(index),
-            cardBottom(index)
+            cardTop(context,index),
+            cardBottom(context,index)
           ],
         ),
       ),
@@ -133,23 +132,34 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
       return LoadingScreen();
     }
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("Completed Tasks",
             style: TextStyle(
-                color: Colors.black87
+                color: Colors.white,
+              fontFamily: 'Source Sans Pro',
             )),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ),
       drawer: SideDrawer(),
-      body: ListView.builder(
+      body: (this.completedTaskList.length == 0 || this.completedTaskList == 1) ? Container(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
+          child: Center(
+            child: Text("No Tasks found",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17
+              ),),
+          )
+      ) : ListView.builder(
         itemBuilder: (context,index) {
-          return taskCard(index);
+          return taskCard(context,index);
         },
-        itemCount: this.ongoingTaskList.length,
+        itemCount: this.completedTaskList.length,
       ),
     );
   }

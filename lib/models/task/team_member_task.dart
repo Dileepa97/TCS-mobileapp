@@ -1,10 +1,17 @@
+import 'dart:convert';
+
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:timecapturesystem/models/customer/customer.dart';
 import 'package:timecapturesystem/models/product/product.dart';
+import 'package:timecapturesystem/models/task/task.dart';
 import 'package:timecapturesystem/models/task/task_status.dart';
+import 'package:timecapturesystem/models/user/user.dart';
 
 class TeamMemberTask {
   String teamMemberTaskId;
   String teamMemberId;
+  Task teamMemberTask;
+  User teamMember;
   Customer customer;
   Product product;
   DateTime pickedAt;
@@ -13,11 +20,13 @@ class TeamMemberTask {
   DateTime endTime;
   int timeSpent;
   int additionalTimeSpent;
-  TaskStatus taskStatus;
+  String taskStatus;
 
   TeamMemberTask({
         this.teamMemberTaskId,
         this.teamMemberId,
+        this.teamMemberTask,
+        this.teamMember,
         this.customer,
         this.product,
         this.pickedAt,
@@ -33,12 +42,14 @@ class TeamMemberTask {
     return TeamMemberTask(
       teamMemberTaskId: data['id'],
       teamMemberId: data['teamMemberId'],
-      customer: data['customer'],
-      product: data['product'],
-      pickedAt: data['pickedAt'],
-      startAt: data['startTime'],
-      updateAt: data['updatedTime'],
-      endTime: data['endTime'],
+      teamMember: User.fromJson(data['teamMember']),
+      teamMemberTask : Task.fromJson(data['task']),
+      customer: Customer.fromJson(data['customer']),
+      product: Product.fromJson(data['product']),
+      pickedAt: data['pickedAt'] == null ? null : DateTime.parse(data['pickedAt'] as String),
+      startAt: data['startTime'] == null ? null : DateTime.parse(data['startTime'] as String),
+      updateAt: data['updatedTime'] == null ? null : DateTime.parse(data['updatedTime'] as String),
+      endTime: data['endTime'] == null ? null : DateTime.parse(data['endTime'] as String),
       timeSpent: data['timeSpent'],
       additionalTimeSpent: data['additionalTimeSpent'],
       taskStatus: data['taskStatus']
@@ -49,6 +60,8 @@ class TeamMemberTask {
     return {
       "teamMemberTaskId" :this.teamMemberTaskId,
       "teamMemberId":this.teamMemberId,
+      "teamMemberTask":this.teamMemberTask,
+      "teamMember":this.teamMember,
       "customer":this.customer,
       "product":this.product,
       "pickedAt":this.pickedAt,
