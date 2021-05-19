@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
-import 'package:timecapturesystem/view/task/user_tasks/assigned_tasks.dart';
 import 'package:timecapturesystem/view/task/user_tasks/completed_tasks.dart';
 import 'package:timecapturesystem/view/task/user_tasks/ongoing_tasks.dart';
 import 'package:timecapturesystem/view/task/user_tasks/partially_completd_tasks.dart';
@@ -21,24 +18,7 @@ class UserTaskDashboard extends StatefulWidget {
 
 class _UserTaskDashboardState extends State<UserTaskDashboard> {
 
-  User user;
-  bool _userAvailable = false;
-
   TeamMemberTaskService teamMemberTaskService = new TeamMemberTaskService();
-
-  void getUser() async {
-    user = await TokenStorageService.userDataOrEmpty;
-    setState(() {
-      _userAvailable = true;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    this.getUser();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +30,15 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
     final double itemWidth = size.width / 2;
 
     return Scaffold(
-      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("User Tasks",
             style: TextStyle(
-                color: Colors.white,
-              fontFamily: 'Arial',
+                color: Colors.black87
             )),
-        backgroundColor: Colors.lightBlue.shade800,
+        backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: Colors.black87,
         ),
       ),
       drawer: SideDrawer(),
@@ -71,15 +49,15 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
           mainAxisSpacing: 10,
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           shrinkWrap: true,
-          childAspectRatio: (itemWidth / (itemHeight / 5.4)),
+          childAspectRatio: (itemWidth / (itemHeight /4.2)),
           physics: ScrollPhysics(),
           children: [
 
             Material(
-              elevation: 5,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.lightBlueAccent,
+                    color: Colors.blue.shade700
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -88,15 +66,14 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.add,
-                          color: Colors.black87,
+                          color: Colors.white,
                           size: 40,
                         ),
                         SizedBox(height: 20,),
                         Text("Picked Tasks",
                           style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                            fontFamily: 'Arial',
+                              color: Colors.white,
+                              fontSize: 20
                           ),
                         )
                       ],
@@ -104,19 +81,23 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=> UserPickedTasks(user.id)
+                        builder: (BuildContext context)=> UserPickedTasks("userId")
                      )
                     );
+//                    Navigator.push(context, MaterialPageRoute(
+//                        builder: (BuildContext context)=>ViewTasks("110")
+//                    )
+//                    );
                   },
                 ),
               ),
             ),
 
             Material(
-              elevation: 5,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.greenAccent
+                    color: Colors.green.shade600
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -125,15 +106,14 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.edit,
-                          color: Colors.black87,
+                          color: Colors.white,
                           size: 40,
                         ),
                         SizedBox(height: 20,),
                         Text("Ongoing Tasks",
                           style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                            fontFamily: 'Arial',
+                              color: Colors.white,
+                              fontSize: 20
                           ),
                         )
                       ],
@@ -141,7 +121,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=> UserOngoingTasks(user.id)
+                        builder: (BuildContext context)=> UserOngoingTasks("userId")
                     )
                     );
                   },
@@ -150,47 +130,10 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
             ),
 
             Material(
-              elevation: 5,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.redAccent
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.warning,
-                          color: Colors.black87,
-                          size: 40,
-                        ),
-                        SizedBox(height: 20,),
-                        Text("Partially Completed Tasks",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                            fontFamily: 'Arial',
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UserPartiallyCompletedTasks(user.id)
-                    )
-                    );
-                  },
-                ),
-              ),
-            ),
-
-            Material(
-              elevation: 5,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.yellowAccent
+                    color: Colors.yellow.shade700
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -199,15 +142,14 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.done_all,
-                          color: Colors.black87,
+                          color: Colors.white,
                           size: 40,
                         ),
                         SizedBox(height: 20,),
                         Text("Completed Tasks",
                           style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                            fontFamily: 'Arial',
+                              color: Colors.white,
+                              fontSize: 20
                           ),
                         )
                       ],
@@ -215,7 +157,7 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=>UserCompletedTasks(user.id)
+                        builder: (BuildContext context)=>UserCompletedTasks("1234")
                     )
                     );
                   },
@@ -224,10 +166,10 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
             ),
 
             Material(
-              elevation: 5,
+              elevation: 0,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.purpleAccent
+                    color: Colors.red.shade700
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -235,16 +177,15 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.refresh,
-                          color: Colors.black87,
+                        Icon(Icons.warning,
+                          color: Colors.white,
                           size: 40,
                         ),
                         SizedBox(height: 20,),
-                        Text("Assigned Tasks",
+                        Text("Partially Completed Tasks",
                           style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                            fontFamily: 'Arial',
+                              color: Colors.white,
+                              fontSize: 20
                           ),
                         )
                       ],
@@ -252,14 +193,13 @@ class _UserTaskDashboardState extends State<UserTaskDashboard> {
                   ),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context)=> UserReAssignedTasks(user.id)
+                        builder: (BuildContext context)=>UserPartiallyCompletedTasks("abcd")
                     )
                     );
                   },
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -3,27 +3,18 @@ import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/add_tasks.dart';
 import 'package:timecapturesystem/view/task/delete_task.dart';
-import 'package:timecapturesystem/view/task/update_task_list_view.dart';
+import 'package:timecapturesystem/view/task/update_task.dart';
 import 'package:timecapturesystem/view/task/view_tasks.dart';
 import 'package:timecapturesystem/view/widgets/team_leader_drawer.dart';
 
 // ignore: must_be_immutable
-class ProductDashboard extends StatefulWidget {
+class ProductDashboard extends StatelessWidget {
   static const String id = "product_dashboard";
 
   final Product product;
 
   const ProductDashboard({Key key, this.product}) : super(key: key);
 
-  @override
-  _ProductDashboardState createState() => _ProductDashboardState();
-}
-
-class _ProductDashboardState extends State<ProductDashboard> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Widget taskDashboardCard(
     String optionTitle,
@@ -57,7 +48,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => ViewTasks(product: widget.product,)));
+                  builder: (BuildContext context) => ViewTasks("110")));
         },
       ),
     );
@@ -66,18 +57,19 @@ class _ProductDashboardState extends State<ProductDashboard> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
 
     return Scaffold(
-      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title:
-            Text("Product Dashboard", style: TextStyle(color: Colors.white,fontFamily: 'Arial',)),
-        backgroundColor: Colors.lightBlue.shade800,
+            Text("Product Dashboard", style: TextStyle(color: Colors.black87)),
+        backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: Colors.black87,
         ),
       ),
       drawer: SideDrawer(),
@@ -94,7 +86,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white,),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -103,7 +95,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                       children: [
                         Icon(
                           Icons.search,
-                          color: Colors.blue.shade800,
+                          color: Colors.black87,
                           size: 40,
                         ),
                         SizedBox(
@@ -111,7 +103,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "View Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
@@ -121,7 +113,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                ViewTasks(product: widget.product,)));
+                                ViewTasks("110")));
                   },
                 ),
               ),
@@ -129,7 +121,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white,),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -138,7 +130,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                       children: [
                         Icon(
                           Icons.add,
-                          color: Colors.blue.shade800,
+                          color: Colors.black87,
                           size: 40,
                         ),
                         SizedBox(
@@ -146,7 +138,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Add Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
@@ -155,7 +147,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => AddTask(product: widget.product,)));
+                            builder: (BuildContext context) => AddTask()));
                   },
                 ),
               ),
@@ -163,7 +155,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white,),
+                decoration: BoxDecoration(color: Colors.white),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -172,7 +164,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                       children: [
                         Icon(
                           Icons.settings,
-                          color: Colors.blue.shade800,
+                          color: Colors.black87,
                           size: 40,
                         ),
                         SizedBox(
@@ -180,7 +172,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Update Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
@@ -189,7 +181,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => UpdateTaskListView(product: widget.product,)));
+                            builder: (BuildContext context) => UpdateTask()));
                   },
                 ),
               ),
@@ -208,7 +200,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                       children: [
                         Icon(
                           Icons.delete,
-                          color: Colors.blue.shade800,
+                          color: Colors.black87,
                           size: 40,
                         ),
                         SizedBox(
@@ -216,7 +208,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                         ),
                         Text(
                           "Delete Task",
-                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
+                          style: TextStyle(color: Colors.black87, fontSize: 20),
                         )
                       ],
                     ),
@@ -225,7 +217,7 @@ class _ProductDashboardState extends State<ProductDashboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => DeleteTask(product: widget.product,)));
+                            builder: (BuildContext context) => DeleteTask()));
                   },
                 ),
               ),

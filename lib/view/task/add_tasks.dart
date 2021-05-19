@@ -1,27 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:timecapturesystem/components/leave_component/divider_box.dart';
-import 'package:timecapturesystem/components/leave_component/input_container.dart';
-import 'package:timecapturesystem/components/leave_component/input_text_field.dart';
-import 'package:timecapturesystem/components/rounded_button.dart';
-import 'package:timecapturesystem/models/product/product.dart';
-import 'package:timecapturesystem/models/task/task.dart';
-import 'package:timecapturesystem/services/task/task_service.dart';
+import 'package:timecapturesystem/view/widgets/view_task_drawer.dart';
 
 class AddTask extends StatefulWidget {
-
-  static const String id = "view_tasks";
-
-  final Product product;
-  const AddTask({this.product});
-
   @override
   _AddTaskState createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
-
-  String taskName;
-  double estimatedHours;
 
 
   void successMessage(BuildContext context) {
@@ -47,36 +32,40 @@ class _AddTaskState extends State<AddTask> {
                       color: Colors.grey.shade600
                   ),
                 ),
-                RawMaterialButton(
-                  onPressed: () {},
-                  elevation: 0,
-                  fillColor: Colors.green,
-                  child: Icon(
-                    Icons.done,
-                    color: Colors.white,
-                    size: 25.0,
-                  ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                SizedBox(height: 20,),
-                FlatButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    color: Colors.redAccent,
-                    child: Text("Okay",
-                      style: TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: Colors.white
-                      ),
-                    )
-                ),
               ],
             ),
           ),
+          actions: [
+//            new FlatButton(
+//              child: new Text('Ok'),
+//              onPressed: () {
+//                Navigator.of(context).pop();
+//              },
+//            ),
+
+            FlatButton(onPressed: (){
+              Navigator.pop(context);
+            }, child: Text("Add another task",
+              style: TextStyle(
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Colors.lightBlueAccent
+              ),
+            )
+            ),
+            FlatButton(onPressed: (){
+              Navigator.pop(context);
+            }, child: Text("Ok",
+              style: TextStyle(
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Colors.lightBlueAccent
+              ),
+            )
+            )
+          ],
         );
       },
     );
@@ -85,80 +74,81 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("Add task",
             style: TextStyle(
-                color: Colors.white,
-              fontFamily: 'Arial',
+                color: Colors.black87
             )),
-        backgroundColor: Colors.lightBlue.shade800,
+        backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: Colors.black87,
         ),
       ),
-      body: Center(
+      drawer: viewTaskDrawer(context),
+      body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height / 2,
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: SingleChildScrollView(
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
+          child: Center(
             child: Column(
               children: [
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Enter Task Details',
-                  style: TextStyle(
-                    fontFamily: 'Arial',
-                    color: Colors.lightBlue.shade800,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                DividerBox(),
-
-                InputContainer(
-                  child: InputTextField(
-                    labelText: 'Task name',
-                    onChanged: (text) {
-                      setState(() {
-                        this.taskName = text;
-                      });
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Task name',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter task name';
+                      }
+                      return null;
                     },
                   ),
                 ),
-
-                InputContainer(
-                  child: InputTextField(
-                    maxLines: null,
-                    labelText: 'Estimated hours',
-                    onChanged: (text) {
-                      setState(() {
-                        this.estimatedHours = double.parse(text);
-                      });
+                SizedBox(height: 20,),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Estimated hours',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter task name';
+                      }
+                      return null;
                     },
                   ),
                 ),
-
-                RoundedButton(
-                  color: Colors.blueAccent[200],
-                  title: 'Submit',
-                  minWidth: 200.0,
-                  onPressed: () async {
-                    Task task = new Task(productId: widget.product.id, taskName: this.taskName, estimatedHours: this.estimatedHours);
-                    await TaskService.addProductTask(task);
-                    this.estimatedHours = 0.0;
-                    this.taskName = '';
-                    this.successMessage(context);
-                  },
-                ),
+                SizedBox(height: 100,),
+                RaisedButton(
+                  color: Colors.blue,
+                  child: Text("Add task",
+                    style: TextStyle(
+                        fontFamily: 'Arial',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        fontSize: 17
+                    ),
+                  ),
+                    onPressed: (){
+                      this.successMessage(context);
+                    }
+                    ),
+                SizedBox(height: 20,),
+                RaisedButton(
+                    child: Text("Go back",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17
+                      ),
+                    ),
+                    onPressed: (){
+                      this.successMessage(context);
+                    }
+                )
               ],
             ),
           ),

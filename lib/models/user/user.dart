@@ -59,8 +59,7 @@ class User {
       this.highestRoleIndex,
       this.title,
       this.probationary,
-      this.gender,
-      this.teamId);
+      this.gender);
 
   factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
 
@@ -68,6 +67,6 @@ class User {
 
   @override
   String toString() {
-    return 'User{id: $id, username: $username, fullName: $fullName, profileImageURL: $profileImageURL, telephoneNumber: $telephoneNumber, email: $email, password: $password, verified: $verified, emailVerified: $emailVerified, resetCode: $resetCode, emailVerificationCode: $emailVerificationCode, updated: $updated, roles: $roles, highestRoleIndex: $highestRoleIndex, title: $title, probationary: $probationary, gender: $gender, teamId: $teamId}';
+    return 'User{id: $id, username: $username, fullName: $fullName, profileImageURL: $profileImageURL, telephoneNumber: $telephoneNumber, email: $email, password: $password, verified: $verified, emailVerified: $emailVerified, resetCode: $resetCode, emailVerificationCode: $emailVerificationCode, updated: $updated, roles: $roles, highestRoleIndex: $highestRoleIndex, title: $title, probationary: $probationary, gender: $gender}';
   }
 }

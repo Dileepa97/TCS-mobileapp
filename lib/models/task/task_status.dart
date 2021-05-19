@@ -1,6 +1,6 @@
 enum TaskStatus{
-  NEW,
-  ONGOING,
-  COMPLETED,
-  PARTIALLY_COMPLETED
+  New,
+  Ongoing,
+  Completed,
+  PartiallyCompleted
 }

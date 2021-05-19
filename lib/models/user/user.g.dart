@@ -30,7 +30,6 @@ User _$UserFromJson(Map<String, dynamic> json) {
         : Title.fromJson(json['title'] as Map<String, dynamic>),
     json['probationary'] as bool,
     json['gender'] as String,
-    json['teamId'] as String,
   )..teamId = json['teamId'] as String;
 }
 

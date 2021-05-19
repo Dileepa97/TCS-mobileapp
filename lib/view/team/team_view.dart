@@ -1,19 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:timecapturesystem/models/team/team.dart';
-import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/team/team_service.dart';
-import 'package:timecapturesystem/services/user/user_service.dart';
-import 'package:timecapturesystem/view/report/team_member_report_view.dart';
+import 'package:timecapturesystem/view/report/team_member_report.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
-import 'package:timecapturesystem/view/widgets/loading_screen.dart';
-
-var apiEndpoint = DotEnv().env['API_URL'].toString();
-var fileAPI = apiEndpoint + 'files/';
 
 class TeamView extends StatefulWidget {
   @override
@@ -21,125 +10,55 @@ class TeamView extends StatefulWidget {
 }
 
 class _TeamViewState extends State<TeamView> {
-  
-  User selectedMember;
-  bool loading = true;
-  Team team;
 
-  @override
-  void initState() {
-    super.initState();
-    if(this.loading) {
-      this.getTeamDetails();
-    }
-  }
+  List<String> teamMembers = ["Member AL", "Member B", "Member C", "Member K", "Member L", "Member M", "Member S", "Member I", "Member J", "Member M", "Member S", "Member I", "Member J"];
 
-  getTeamDetails() async{
-    User user =await UserService.getLoggedInUser();
-    Team team = await TeamService.getTeamById(user.teamId);
-    setState(() {
-      this.team = team;
-      this.loading = false;
-    });
-  }
+  String selectedMember;
 
   // ignore: non_constant_identifier_names
-  Widget GetTeamMemberList(List<dynamic> teamMemberList)
+  Widget GetTeamMemberList(List<String> strings)
   {
     List<Widget> list = new List<Widget>();
-    for(var i = 0; i < teamMemberList.length+1; i++){
-      User teamMember;
-      if(i==0){
-        teamMember = this.team.teamLeader;
-      }else {
-        teamMember = User.fromJson(teamMemberList[i-1]);
-      }
+    for(var i = 0; i < strings.length; i++){
       list.add(
           Container(
-            width: MediaQuery.of(context).size.width * 0.96,
-            child: InkWell(
-
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context)=>TeamMemberReportView(teamMember: teamMember,))
-                );
-              },
-
-              child: Container(
-                // width: MediaQuery.of(context).size.width * 0.95,\
-                padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
-                child: new Container(
-                  height: MediaQuery.of(context).size.height / 7,
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 10, 10, 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: MediaQuery.of(context).size.width / 10,
-                          backgroundImage: teamMember.profileImageURL == 'default.png'
-                              ? AssetImage('images/default.png')
-                              : NetworkImage(fileAPI + teamMember.profileImageURL),
-                        ),
-                        SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(teamMember.fullName,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.blue.shade800,
-                                fontWeight: FontWeight.w800,
-                                fontFamily: 'Arial',
-                              ),
-                            ),
-                            Text((() {
-                              if(teamMember.highestRoleIndex == 1){
-                                return "Team Leader";
-                              }else if(teamMember.highestRoleIndex == 0)
-                              return "Team Member";
-                            })(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Arial',
-                              ),
-                            ),
-                            Text(teamMember.gender,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Arial',
-                              ),
-                            ),
-                            Text((() {
-                              if(teamMember.probationary){
-                                return "Probationary*";}
-                              return "";
-                            })(),
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Arial',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Card(
+              margin: EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                leading: FlutterLogo(size: 56.0),
+                title: Text(strings[i],
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade600,
+                    fontSize: 17
                   ),
                 ),
+                subtitle: Text('availabile'),
+                trailing: RaisedButton(
+                    padding: EdgeInsets.only(left: 10,right: 10),
+                    child: Text("View Report",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Arial'
+                      ),
+                    ),
+                    onPressed: (){
+                      this.selectedMember = strings[i];
+                      this.getDateRange(context);
+//                      Navigator.push(context, MaterialPageRoute(
+//                          builder: (BuildContext context)=>TeamMemberReport(strings[i])
+//                        )
+//                      );
+                    },
+                    color: Colors.blue,
+                  ),
               ),
-            ))
+            ),
+          )
       );
     }
     return SingleChildScrollView(child: new Column(children: list));
@@ -147,41 +66,158 @@ class _TeamViewState extends State<TeamView> {
 
 
 
+  void getDateRange(BuildContext context) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Select date range',
+            style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text('Select date range to generate team member report.',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                    color: Colors.grey.shade600
+                  ),
+                ),
+                SizedBox(height: 20,),
+                FlatButton(
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2018, 3, 5),
+                          maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                            print('change $date');
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                          }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Text(
+                      'Set start date',
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                        color: Colors.blue
+                      ),
+                    )
+                ),
+
+                FlatButton(
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2018, 3, 5),
+                          maxTime: DateTime(2022, 6, 7), onChanged: (date) {
+                            print('change $date');
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                          }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Text(
+                      'Set end date',
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                          color: Colors.blue
+                      ),
+                    )
+                ),
+              ],
+            ),
+          ),
+          actions: [
+//            new FlatButton(
+//              child: new Text('Ok'),
+//              onPressed: () {
+//                Navigator.of(context).pop();
+//              },
+//            ),
+
+            FlatButton(onPressed: (){
+              Navigator.pop(context);
+              }, child: Text("Cancel",
+              style: TextStyle(
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Colors.lightBlueAccent
+              ),
+            )
+            ),
+
+            FlatButton(onPressed: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context)=>TeamMemberReport(this.selectedMember)
+                ));
+              }, child: Text("Confirm",
+              style: TextStyle(
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Colors.lightBlueAccent
+              ),
+            )
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
+//  Widget getDateRange(BuildContext context){
+//    return AlertDialog(
+//      title: Text('AlertDialog Title'),
+//      content: SingleChildScrollView(
+//        child: ListBody(
+//          children: <Widget>[
+//            Text('This is a demo alert dialog.'),
+//            Text('Would you like to approve of this message?'),
+//          ],
+//        ),
+//      ),
+//      actions: <Widget>[
+//        TextButton(
+//          child: Text('Approve'),
+//          onPressed: () {
+//            Navigator.of(context).pop();
+//          },
+//        ),
+//      ],
+//    );
+//  }
+
+
   @override
   Widget build(BuildContext context) {
-
-    if(this.loading){
-      return LoadingScreen();
-    }
-
     return Scaffold(
-      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("Team Dashboard",
             style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Arial',
+                color: Colors.black87
             )),
-        backgroundColor: Colors.lightBlue.shade800,
+        backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.white ,
+          color: Colors.black87,
         ),
       ),
       drawer: SideDrawer(),
       body: SingleChildScrollView(
         child: Center(
-          child: (this.team == 1) ? Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
-              child: Center(
-                child: Text("No Tasks found",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Arial',
-                      fontSize: 17
-                  ),),
-              )
-          ) : Column(
+          child: Column(
             children: [
               Container(
                 margin: new EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
@@ -191,18 +227,18 @@ class _TeamViewState extends State<TeamView> {
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         margin: new EdgeInsets.only(top: 20,left: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(team.teamName,
+                            Text("Team Alpha",
                               style: TextStyle(
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.blue.shade800,
-                                fontFamily: 'Arial',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue,
                               ),
                             ),
                             SizedBox(height: MediaQuery.of(context).size.height * 0.025,),
@@ -212,35 +248,17 @@ class _TeamViewState extends State<TeamView> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Team Leader ", style: TextStyle(
-                                      fontFamily: 'Arial',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600
-                                    ),),
+                                    Text("Team Leader : "),
                                     SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text("Members ",style: TextStyle(
-                                        fontFamily: 'Arial',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600
-                                    ),)
+                                    Text("Number of Members :")
                                   ],
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(": "+team.teamLeader.fullName,style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Arial',
-                                      color: Colors.redAccent,
-                                    ),),
+                                    Text("Chethiya"),
                                     SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text(": "+team.teamMemberList.length.toString(),style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Arial',
-                                      color: Colors.redAccent,
-                                    ),)
+                                    Text("12")
                                   ],
                                 )
                               ],
@@ -255,7 +273,7 @@ class _TeamViewState extends State<TeamView> {
                 ),
               ),
               SizedBox(height: 40,),
-              GetTeamMemberList(this.team.teamMemberList)
+              GetTeamMemberList(this.teamMembers)
             ],
           ),
         ),

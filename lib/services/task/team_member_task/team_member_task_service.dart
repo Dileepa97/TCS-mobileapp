@@ -4,172 +4,97 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:timecapturesystem/models/task/team_member_task.dart';
-import 'package:timecapturesystem/services/other/utils.dart';
+import 'package:timecapturesystem/models/task/task.dart';
 
 String contentTypeHeader = 'application/json';
-var apiEndpoint = DotEnv().env['API_URL'].toString();
+var apiEndpoint = DotEnv().env['C_API_URL'].toString();
 
 class TeamMemberTaskService {
+  static Future<List<Task>> getTeamMemberTasks(String teamMemberID) async {
+    var tasks = <Task>[];
 
-  static Future<dynamic> getTeamMemberTasks(String teamMemberID) async {
-
-    try {
-      var tasks = <TeamMemberTask>[];
-
-      http.Response response = await http.get(apiEndpoint + "/team-member-task",
-          headers: {
-            HttpHeaders.contentTypeHeader: contentTypeHeader
-          }).catchError((error) => {print(error.toString())});
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-
-        for (var item in jsonData) {
-          tasks.add(TeamMemberTask.formJson(item));
-          // tasks.add(Task.formJson(item));
-        }
-        return tasks;
-      }else{
-        return 1;
-      }
-
-    }catch(e){
-      return -1;
-    }
-  }
-
-
-  static Future<dynamic> getOngoingTasks(String teamMemberID) async {
-
-    try {
-      var tasks = <TeamMemberTask>[];
-
-      var authHeader = await generateAuthHeader();
-
-      http.Response response = await http.get(
-        apiEndpoint + "team-member-task/ongoing/" + teamMemberID,
+    http.Response response = await http.get(apiEndpoint + "/team-member-task",
         headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          HttpHeaders.authorizationHeader: authHeader,
-        },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+          HttpHeaders.contentTypeHeader: contentTypeHeader
+        }).catchError((error) => {print(error.toString())});
 
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        for (var item in jsonData) {
-          tasks.add(TeamMemberTask.formJson(item));
-        }
-        return tasks;
-      }else{
-        return 1;
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+
+      for (var item in jsonData) {
+        // tasks.add(Task.formJson(item));
       }
-    }catch(e){
-      return -1;
     }
+    return tasks;
   }
 
-  static Future<dynamic> getPartiallyCompletedTasks(String teamMemberID) async {
+  static Future<List<Task>> getOngoingTasks(String teamMemberID) async {
+    var tasks = <Task>[];
 
-    try {
-      var tasks = <TeamMemberTask>[];
+    var body = jsonEncode({"teamMemberId": teamMemberID});
 
-      var authHeader = await generateAuthHeader();
+    http.Response response = await http
+        .post(apiEndpoint + "team-member-task/ongoing",
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json"
+            },
+            body: body)
+        .catchError((error) => {print(error.toString())});
 
-      http.Response response = await http.get(
-        apiEndpoint + "team-member-task/partially-completed/" + teamMemberID,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          HttpHeaders.authorizationHeader: authHeader,
-        },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        for (var item in jsonData) {
-          tasks.add(TeamMemberTask.formJson(item));
-        }
-        return tasks;
-      }else{
-        return 1;
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      for (var item in jsonData) {
+        // tasks.add(Task.formJson(item));
       }
-    }catch(e){
-      return -1;
     }
+    return tasks;
   }
 
-  static Future<dynamic> getCompletedTasks(String teamMemberID) async {
+  static Future<List<Task>> getPartiallyCompletedTasks(
+      String teamMemberID) async {
+    var tasks = <Task>[];
 
-    try {
-      var tasks = <TeamMemberTask>[];
+    var body = jsonEncode({"teamMemberId": teamMemberID});
 
-      var authHeader = await generateAuthHeader();
+    http.Response response = await http
+        .post(apiEndpoint + "team-member-task/partially-completed",
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json"
+            },
+            body: body)
+        .catchError((error) => {print(error.toString())});
 
-      http.Response response = await http.get(
-        apiEndpoint + "team-member-task/completed/" + teamMemberID,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          HttpHeaders.authorizationHeader: authHeader,
-        },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        for (var item in jsonData) {
-          tasks.add(TeamMemberTask.formJson(item));
-        }
-        return tasks;
-      }else{
-        return 1;
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      for (var item in jsonData) {
+        // tasks.add(Task.formJson(item));
       }
-    }catch(e){
-      return -1;
     }
+    return tasks;
   }
 
-  static Future<dynamic> getReAssignedTasks(String teamMemberID) async {
-    try {
-      var tasks = <TeamMemberTask>[];
+  static Future<List<Task>> getCompletedTasks(String teamMemberID) async {
+    var tasks = <Task>[];
 
-      var authHeader = await generateAuthHeader();
+    var body = jsonEncode({"teamMemberId": teamMemberID});
 
-      http.Response response = await http.get(
-        apiEndpoint + "team-member-task/re-assigned/" + teamMemberID,
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          HttpHeaders.authorizationHeader: authHeader,
-        },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+    http.Response response = await http
+        .post(apiEndpoint + "team-member-task/completed",
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json"
+            },
+            body: body)
+        .catchError((error) => {print(error.toString())});
 
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        for (var item in jsonData) {
-          tasks.add(TeamMemberTask.formJson(item));
-        }
-        return tasks;
-      }else{
-        return 1;
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      for (var item in jsonData) {
+        // tasks.add(Task.formJson(item));
       }
-
-    }catch(e){
-      return -1;
     }
+    return tasks;
   }
-
 }

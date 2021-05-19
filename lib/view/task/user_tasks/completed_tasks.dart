@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/task/task.dart';
-import 'package:timecapturesystem/models/task/team_member_task.dart';
-import 'package:timecapturesystem/models/user/user.dart';
-import 'package:timecapturesystem/services/other/storage_service.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -19,32 +15,36 @@ class UserCompletedTasks extends StatefulWidget {
 
 class _UserCompletedTasksState extends State<UserCompletedTasks> {
 
-
-  dynamic completedTaskList;
+  List<Task> ongoingTaskList;
   bool loading = true;
-
 
   @override
   void initState() {
     super.initState();
     if(this.loading) {
-      this.getCompletedTasks();
+      getCompletedTasks().then((value) => {
+        setState(() {
+          this.ongoingTaskList = value;
+          Future.delayed(Duration(milliseconds: 1200),(){
+            setState(() {
+              this.loading = false;
+            });
+          });
+        })
+      });
     }
   }
 
   Future getCompletedTasks() async{
-    dynamic tasks = await  TeamMemberTaskService.getCompletedTasks(widget.userId);
-    setState(() {
-      this.completedTaskList = tasks;
-      this.loading = false;
-    });
+    List<Task> tasks = await  TeamMemberTaskService.getCompletedTasks("5fa9997450cfb564dc765c5b");
+    return tasks;
   }
 
-  Widget cardTop(BuildContext context, dynamic index){
+  Widget cardTop(dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Colors.yellowAccent,
+        color: Color.fromRGBO(255, 160, 0, 1),
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -52,19 +52,17 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.completedTaskList[index].teamMemberTask.taskName,
+            Text(this.ongoingTaskList[index].taskName,
               style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black87,
-                  fontFamily: 'Arial',
+                  color: Colors.white
               ),
             ),
             SizedBox(height: 8),
-            Text(this.completedTaskList[index].customer.organizationName,
+            Text("Company name",
               style: TextStyle(
                   fontSize: 15,
-                  color: Colors.black87,
-                fontFamily: 'Arial',
+                  color: Colors.white
               ),
             ),
             SizedBox(height: 8),
@@ -74,11 +72,11 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
     );
   }
 
-  Widget cardBottom(BuildContext context, dynamic index){
+  Widget cardBottom(dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Colors.yellowAccent.shade100,
+        color: Color.fromRGBO(255, 160, 0, 0.6),
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -87,19 +85,17 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Started at " + DateFormat('yyyy-MM-dd – kk:mm').format(this.completedTaskList[index].startAt),
+            Text("Started at ",
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.black87,
-                  fontFamily: 'Arial',
+                    color: Colors.white
                 )
             ),
             SizedBox(height: 8),
-            Text("Completed at "+DateFormat('yyyy-MM-dd – kk:mm').format(this.completedTaskList[index].endTime),
+            Text("Completed at",
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.black87,
-                  fontFamily: 'Arial',
+                    color: Colors.white
                 )
             )
           ],
@@ -108,8 +104,7 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
     );
   }
 
-  Widget taskCard(BuildContext context,dynamic index){
-    print(context);
+  Widget taskCard(dynamic index){
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: InkWell(
@@ -118,8 +113,8 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
         },
         child: Column(
           children: [
-            cardTop(context,index),
-            cardBottom(context,index)
+            cardTop(index),
+            cardBottom(index)
           ],
         ),
       ),
@@ -132,35 +127,23 @@ class _UserCompletedTasksState extends State<UserCompletedTasks> {
       return LoadingScreen();
     }
     return Scaffold(
-      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title: Text("Completed Tasks",
             style: TextStyle(
-                color: Colors.white,
-              fontFamily: 'Arial',
+                color: Colors.black87
             )),
-        backgroundColor: Colors.lightBlue.shade800,
+        backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: Colors.black87,
         ),
       ),
       drawer: SideDrawer(),
-      body: (this.completedTaskList.length == 0 || this.completedTaskList == 1) ? Container(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
-          child: Center(
-            child: Text("No Tasks found",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                fontFamily: 'Arial',
-              ),),
-          )
-      ) : ListView.builder(
+      body: ListView.builder(
         itemBuilder: (context,index) {
-          return taskCard(context,index);
+          return taskCard(index);
         },
-        itemCount: this.completedTaskList.length,
+        itemCount: this.ongoingTaskList.length,
       ),
     );
   }

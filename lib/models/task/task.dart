@@ -9,7 +9,7 @@ class Task {
 
   String taskName;
 
-  double estimatedHours;
+  int estimatedHours;
 
   DateTime createdAt;
 

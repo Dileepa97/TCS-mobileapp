@@ -12,7 +12,6 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
     json['productName'] as String,
     json['productDescription'] as String,
     (json['customerIdList'] as List)?.map((e) => e as String)?.toList(),
-    json['taskCount'] as int
   )..tasks = (json['tasks'] as List)
       ?.map((e) => e == null ? null : Task.fromJson(e as Map<String, dynamic>))
       ?.toList();
