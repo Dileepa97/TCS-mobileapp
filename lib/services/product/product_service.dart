@@ -42,6 +42,7 @@ class ProductService {
 
   ///Get all products
   Future<dynamic> getAllProducts(dynamic context) async {
+
     try {
       var authHeader = await generateAuthHeader();
 
@@ -139,4 +140,6 @@ class ProductService {
       return -1;
     }
   }
+
+
 }

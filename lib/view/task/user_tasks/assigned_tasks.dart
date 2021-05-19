@@ -1,39 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timecapturesystem/models/task/task.dart';
-import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
-class UserOngoingTasks extends StatefulWidget {
+class UserReAssignedTasks extends StatefulWidget {
 
   final String userId;
-  UserOngoingTasks(this.userId);
+  UserReAssignedTasks(this.userId);
 
   @override
-  _UserOngoingTasksState createState() => _UserOngoingTasksState();
+  _UserReAssignedTasksState createState() => _UserReAssignedTasksState();
 }
 
+class _UserReAssignedTasksState extends State<UserReAssignedTasks> {
 
-class _UserOngoingTasksState extends State<UserOngoingTasks> {
-
-  dynamic ongoingTaskList;
-
+  dynamic reAssignedTaskList;
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
     if(this.loading) {
-      this.getOngoingTasks();
+      getReAssignedTasks();
     }
   }
 
-  Future getOngoingTasks() async{
-    dynamic tasks = await  TeamMemberTaskService.getOngoingTasks(widget.userId);
+  Future getReAssignedTasks() async{
+    dynamic tasks = await  TeamMemberTaskService.getReAssignedTasks(widget.userId);
     setState(() {
-      this.ongoingTaskList = tasks;
+      this.reAssignedTaskList = tasks;
       this.loading = false;
     });
   }
@@ -42,7 +38,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Colors.greenAccent,
+        color: Colors.purpleAccent,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -50,18 +46,18 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].teamMemberTask.taskName,
+            Text(this.reAssignedTaskList[index].teamMemberTask.taskName,
               style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black87,
+                fontSize: 20,
+                color: Colors.black87,
                 fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
-            Text(this.ongoingTaskList[index].customer.organizationName,
+            Text(this.reAssignedTaskList[index].customer.organizationName,
               style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black87,
+                fontSize: 15,
+                color: Colors.black87,
                 fontFamily: 'Arial',
               ),
             ),
@@ -76,7 +72,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Colors.greenAccent.shade100,
+        color: Colors.purpleAccent.shade100,
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -85,18 +81,26 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Picked at "+DateFormat('yyyy-MM-dd – kk:mm').format(this.ongoingTaskList[index].pickedAt),
+            Text("Last Picked By : "+ this.reAssignedTaskList[index].teamMember.fullName,
                 style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black87,
+                  fontSize: 15,
+                  color: Colors.black87,
                   fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
-            Text("Estimated time "+ this.ongoingTaskList[index].teamMemberTask.estimatedHours.toString() + " Hrs",
+            Text("Picked at : "+ DateFormat('yyyy-MM-dd – kk:mm').format(this.reAssignedTaskList[index].pickedAt),
                 style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black87,
+                  fontSize: 15,
+                  color: Colors.black87,
+                  fontFamily: 'Arial',
+                )
+            ),
+            SizedBox(height: 8),
+            Text("Estimated hours : "+this.reAssignedTaskList[index].teamMemberTask.estimatedHours.toString(),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black87,
                   fontFamily: 'Arial',
                 )
             )
@@ -123,26 +127,19 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
     );
   }
 
-
-  Widget taskListView(index){
-    return Container(
-          // width: MediaQuery.of(context).size.width * 0.95,
-          margin: EdgeInsets.fromLTRB(10, 4, 10, 1),
-          child: taskCard(index),
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
+
     if(this.loading){
       return LoadingScreen();
     }
+
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text("Ongoing Tasks",
+        title: Text("Re-Assigned Tasks",
             style: TextStyle(
-                color: Colors.white,
+              color: Colors.white,
               fontFamily: 'Arial',
             )),
         backgroundColor: Colors.lightBlue.shade800,
@@ -152,7 +149,8 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
         ),
       ),
       drawer: SideDrawer(),
-      body: (this.ongoingTaskList.length == 0 || this.ongoingTaskList == 1) ? Container(
+      // ignore: unrelated_type_equality_checks
+      body: (this.reAssignedTaskList.length == 0 || this.reAssignedTaskList == 1) ? Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
           child: Center(
             child: Text("No Tasks found",
@@ -163,10 +161,10 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
               ),),
           )
       ) : ListView.builder(
-          itemBuilder: (context,index) {
-            return taskCard(index);
-          },
-          itemCount: this.ongoingTaskList.length,
+        itemBuilder: (context,index) {
+          return taskCard(index);
+        },
+        itemCount: this.reAssignedTaskList.length,
       ),
     );
   }

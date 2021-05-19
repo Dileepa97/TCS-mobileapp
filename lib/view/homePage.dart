@@ -10,6 +10,7 @@ import 'package:timecapturesystem/view/product/product_managemnet_dashboard_scre
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/notification/notification_screen.dart';
 import 'package:timecapturesystem/view/task/product_list.dart';
+import 'package:timecapturesystem/view/task/reassign_task/reassign_task_to_team_members.dart';
 import 'package:timecapturesystem/view/task/user_tasks/user_task_dashboard.dart';
 import 'package:timecapturesystem/view/team/team_view.dart';
 import 'package:timecapturesystem/view/user_management/user_management_dashboard_screen.dart';
@@ -186,7 +187,15 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text("Notification Center")
+                          Text("Notification Center",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -223,7 +232,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("User Management")
+                            Text("User Management",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -269,6 +285,12 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               "Leave Management System",
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontFamily: 'Arial',
+                              ),
                             )
                           ],
                         ),
@@ -305,7 +327,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Customer Management")
+                            Text("Customer Management",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -342,7 +371,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Product Management")
+                            Text("Product Management",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -382,7 +418,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Task Management")
+                            Text("Task Management",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -396,7 +439,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    TaskPanel()));
+                                    ReassignTasksToTeamMembers()));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -422,7 +465,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Partial Tasks")
+                            Text("Partial Tasks",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -462,7 +512,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Task Details")
+                            Text("Task Details",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -470,8 +527,7 @@ class _HomePageState extends State<HomePage> {
 
                   ///Team management - admin, team leader
                   if (_userAvailable &&
-                      (user.highestRoleIndex == 2 ||
-                          user.highestRoleIndex == 1))
+                      (user.highestRoleIndex == 1))
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -503,7 +559,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Team Management")
+                            Text("My Team",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),
@@ -539,7 +602,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("Title Management")
+                            Text("Title Management",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),)
                           ],
                         ),
                       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/task/task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
@@ -15,7 +17,7 @@ class UserPartiallyCompletedTasks extends StatefulWidget {
 
 class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTasks> {
 
-  List<Task> ongoingTaskList;
+  List<TeamMemberTask> partiallyCompletedTaskList;
 
   bool loading = true;
 
@@ -23,47 +25,43 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
   void initState() {
     super.initState();
     if(this.loading) {
-      getOngoingTasks().then((value) => {
-        setState(() {
-          this.ongoingTaskList = value;
-          Future.delayed(Duration(milliseconds: 1200),(){
-            setState(() {
-              this.loading = false;
-            });
-          });
-        })
-      });
+      this.getPartiallyCompletedTasks();
     }
   }
 
-  Future getOngoingTasks() async{
-    List<Task> tasks = await  TeamMemberTaskService.getCompletedTasks("5fa9997450cfb564dc765c5b");
-    return tasks;
+  Future getPartiallyCompletedTasks() async{
+    dynamic tasks = await  TeamMemberTaskService.getPartiallyCompletedTasks(widget.userId);
+    setState(() {
+      this.partiallyCompletedTaskList = tasks;
+      this.loading = false;
+    });
   }
 
   Widget cardTop(dynamic index){
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(198, 40, 40, 1),
+        color: Colors.redAccent,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].taskName,
+            Text(this.partiallyCompletedTaskList[index].teamMemberTask.taskName,
               style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
-            Text("Company name",
+            Text(this.partiallyCompletedTaskList[index].customer.organizationName,
               style: TextStyle(
                   fontSize: 15,
-                  color: Colors.white
+                  color: Colors.black87,
+                fontFamily: 'Arial',
               ),
             ),
             SizedBox(height: 8),
@@ -77,7 +75,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(198, 40, 40, 0.77),
+        color: Colors.redAccent.shade100,
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
       ),
       child: Padding(
@@ -86,17 +84,19 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Picked by",
+            Text("Started at  "+DateFormat('yyyy-MM-dd – kk:mm').format(this.partiallyCompletedTaskList[index].startAt),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Arial',
                 )
             ),
             SizedBox(height: 8),
-            Text("Stated at",
+            Text("Ended at   "+DateFormat('yyyy-MM-dd – kk:mm').format(this.partiallyCompletedTaskList[index].endTime),
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white
+                    color: Colors.black87,
+                  fontFamily: 'Arial',
                 )
             )
           ],
@@ -107,7 +107,7 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
 
   Widget taskCard(dynamic index){
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
+      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: InkWell(
         onTap: (){
           print("Pressed");
@@ -128,23 +128,36 @@ class _UserPartiallyCompletedTasksState extends State<UserPartiallyCompletedTask
       return LoadingScreen();
     }
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text("COmpleted Tasks",
+        title: Text("Partially Completed Tasks",
             style: TextStyle(
-                color: Colors.black87
+                color: Colors.white,
+              fontFamily: 'Arial',
             )),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ),
       drawer: SideDrawer(),
-      body: ListView.builder(
+      // ignore: unrelated_type_equality_checks
+      body: (this.partiallyCompletedTaskList.length == 0 || this.partiallyCompletedTaskList == 1) ? Container(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
+          child: Center(
+            child: Text("No Tasks found",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                fontFamily: 'Arial',
+              ),),
+          )
+      ) : ListView.builder(
         itemBuilder: (context,index) {
           return taskCard(index);
         },
-        itemCount: this.ongoingTaskList.length,
+        itemCount: this.partiallyCompletedTaskList.length,
       ),
     );
   }

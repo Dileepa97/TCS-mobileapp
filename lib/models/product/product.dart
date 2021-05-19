@@ -15,8 +15,10 @@ class Product {
 
   List<Task> tasks;
 
+  int taskCount;
+
   Product(
-      this.id, this.productName, this.productDescription, this.customerIdList);
+      this.id, this.productName, this.productDescription, this.customerIdList, this.taskCount);
 
   factory Product.fromJson(Map<String, dynamic> data) =>
       _$ProductFromJson(data);
