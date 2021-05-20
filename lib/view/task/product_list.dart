@@ -3,21 +3,20 @@ import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/services/product/product_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/product_dashboard.dart';
+import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class TaskPanel extends StatefulWidget {
-
   @override
   _TaskPanelState createState() => _TaskPanelState();
 }
 
 class _TaskPanelState extends State<TaskPanel> {
-
   List<Product> products;
   bool loading = true;
   ProductService _productService = ProductService();
   int length = 0;
 
-  getProducts(context) async{
+  getProducts(context) async {
     await _productService.getAllProducts(context).then((value) => {
       setState(() {
         this.products = value;
@@ -29,8 +28,9 @@ class _TaskPanelState extends State<TaskPanel> {
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getProducts(context);
+      print(products);
     }
   }
 
@@ -42,9 +42,9 @@ class _TaskPanelState extends State<TaskPanel> {
         return new AlertDialog(
           title: new Text('No customers found!',
             style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w600,
-              color: Colors.red
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.red
             ),
           ),
           content: new SingleChildScrollView(
@@ -95,11 +95,10 @@ class _TaskPanelState extends State<TaskPanel> {
   }
 
 
-  Widget productCard(List<Product> products, BuildContext context){
-
+  Widget productCard(List<Product> products, BuildContext context) {
     List<Widget> productCardList = new List<Widget>();
 
-    for(var i=0; i < products.length ; i++){
+    for (var i = 0; i < products.length; i++) {
       productCardList.add(new InkWell(
           onTap: () {
             if(products[i].customerIdList != null) {
@@ -107,10 +106,13 @@ class _TaskPanelState extends State<TaskPanel> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          ProductDashboard(product: products[i],)));
+                          ProductDashboard(product: products[i],)
+                  )
+              );
             }else{
               this.warningMessage(context);
             }
+
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -124,10 +126,11 @@ class _TaskPanelState extends State<TaskPanel> {
                       child: Text(
                         products[i].productName,
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
+                          color: Colors.white,
+                          fontSize: 20,
                           fontFamily: 'Arial',
-                        ),)),
+                        ),
+                      )),
                   decoration: BoxDecoration(
                       color: Colors.blueAccent,
                       borderRadius: BorderRadius.only(
@@ -141,17 +144,25 @@ class _TaskPanelState extends State<TaskPanel> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text((() {
-                          if(products[i].tasks == null){
+                          if (products[i].tasks == null) {
                             return "Number of tasks : 0";
                           }
-                            return "Number of tasks : "+products[i].tasks.length.toString();
-                        })(),style: TextStyle(fontFamily: 'Arial',)),
+                          return "Number of tasks : " +
+                              products[i].tasks.length.toString();
+                        })(),
+                            style: TextStyle(
+                              fontFamily: 'Arial',
+                            )),
                         Text((() {
-                          if(products[i].customerIdList == null){
+                          if (products[i].customerIdList == null) {
                             return "Number of customers : 0";
                           }
-                          return "Number of customers : "+products[i].customerIdList.length.toString();
-                        })(),style: TextStyle(fontFamily: 'Arial',)),
+                          return "Number of customers : " +
+                              products[i].customerIdList.length.toString();
+                        })(),
+                            style: TextStyle(
+                              fontFamily: 'Arial',
+                            )),
                       ],
                     ),
                   ),
@@ -171,21 +182,25 @@ class _TaskPanelState extends State<TaskPanel> {
                 ),
               ],
             ),
-          )
-      ));
+          )));
     }
 
     return new Column(children: productCardList);
-
   }
 
   @override
   Widget build(BuildContext context) {
+    if (this.loading) {
+      return LoadingScreen();
+    }
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title:
-        Text("Product Dashboard", style: TextStyle(color: Colors.white, fontFamily: 'Arial',)),
+        title: Text("Product Dashboard",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Arial',
+            )),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
