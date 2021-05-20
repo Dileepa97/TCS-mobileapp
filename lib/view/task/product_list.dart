@@ -35,18 +35,83 @@ class _TaskPanelState extends State<TaskPanel> {
     }
   }
 
+  void warningMessage(BuildContext context) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('No customers found!',
+            style: TextStyle(
+              fontFamily: 'Arial',
+              fontWeight: FontWeight.w600,
+              color: Colors.red
+            ),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text('Contact admin',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Colors.grey.shade600
+                  ),
+                ),
+                SizedBox(height: 20,),
+                RawMaterialButton(
+                  onPressed: () {},
+                  elevation: 0,
+                  fillColor: Colors.redAccent,
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                SizedBox(height: 20,),
+                FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    color: Colors.redAccent,
+                    child: Text("Okay",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.white
+                      ),
+                    )
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget productCard(List<Product> products, BuildContext context){
 
     List<Widget> productCardList = new List<Widget>();
 
-    for(var i=0; i < 6 ; i++){
+    for(var i=0; i < products.length ; i++){
       productCardList.add(new InkWell(
           onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProductDashboard(product: products[i],)));
+            if(products[i].customerIdList != null) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ProductDashboard(product: products[i],)));
+            }else{
+              this.warningMessage(context);
+            }
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -125,7 +190,7 @@ class _TaskPanelState extends State<TaskPanel> {
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title:
-            Text("Product Dashboard", style: TextStyle(color: Colors.white, fontFamily: 'Arial',)),
+            Text("Product List", style: TextStyle(color: Colors.white, fontFamily: 'Arial',)),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(

@@ -34,12 +34,13 @@ class _AddTaskState extends State<AddTask> {
             style: TextStyle(
               fontFamily: 'Arial',
               fontWeight: FontWeight.w600,
+              color: Colors.green
             ),
           ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
-                Text('Added task can be seen at all tasks.',
+                Text('Added task can be seen at view tasks.',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
@@ -47,6 +48,7 @@ class _AddTaskState extends State<AddTask> {
                       color: Colors.grey.shade600
                   ),
                 ),
+                SizedBox(height: 20,),
                 RawMaterialButton(
                   onPressed: () {},
                   elevation: 0,
@@ -64,7 +66,7 @@ class _AddTaskState extends State<AddTask> {
                     onPressed: (){
                       Navigator.pop(context);
                     },
-                    color: Colors.redAccent,
+                    color: Colors.green,
                     child: Text("Okay",
                       style: TextStyle(
                           fontFamily: 'Arial',
