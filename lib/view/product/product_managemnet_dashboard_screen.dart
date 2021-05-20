@@ -113,7 +113,6 @@ class _ProductManagementDashboardState
                     child = ConnectionErrorText();
                   } else {
                     _productList = snapshot.data;
-
                     child = ListView.builder(
                       itemCount: _productList.length,
                       itemBuilder: (context, index) {

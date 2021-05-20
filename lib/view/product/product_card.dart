@@ -52,10 +52,30 @@ class _ProductCardState extends State<ProductCard> {
                   ),
 
                   ///number of customers
-                  Text(
+//                  Text(
+//                    widget.product.customerIdList.length == 1
+//                        ? '${widget.product.customerIdList.length} customer'
+//                        : '${widget.product.customerIdList.length} customers',
+//                    style: TextStyle(
+//                      color: Colors.blueGrey,
+//                      fontFamily: 'Source Sans Pro',
+//                      fontSize: 15,
+//                    ),
+//                  ),
+                  widget.product.customerIdList != null &&
+                      widget.product.customerIdList.length > 0
+                      ? Text(
                     widget.product.customerIdList.length == 1
                         ? '${widget.product.customerIdList.length} customer'
                         : '${widget.product.customerIdList.length} customers',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontFamily: 'Source Sans Pro',
+                      fontSize: 15,
+                    ),
+                  )
+                      : Text(
+                    'Customers unavailable',
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontFamily: 'Source Sans Pro',

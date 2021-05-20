@@ -48,13 +48,6 @@ import 'view/lms/admin_leave/change_allowed_days_screen.dart';
 import 'view/user/pick_image_screen.dart';
 import 'view/user/profile_screen.dart';
 
-void initializeDownloader() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      debug: true // optional: set false to disable printing logs to console
-  );
-}
-
 void main() async {
 
   await DotEnv().load('.env');
@@ -70,7 +63,10 @@ void main() async {
     }
   }
 
-  initializeDownloader();
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+  );
 
   runApp(MyApp(userData, username));
 }
