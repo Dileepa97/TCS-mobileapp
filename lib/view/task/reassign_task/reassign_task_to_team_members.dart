@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/team_member_task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/team_tasks/team_tasks_service.dart';
+import 'package:timecapturesystem/services/task/team_tasks/team_tasks_service.dart';
 import 'package:timecapturesystem/services/user/user_service.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class ReassignTasksToTeamMembers extends StatefulWidget {
   @override
-  _ReassignTasksToTeamMembersState createState() => _ReassignTasksToTeamMembersState();
+  _ReassignTasksToTeamMembersState createState() =>
+      _ReassignTasksToTeamMembersState();
 }
 
-class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers> {
-
+class _ReassignTasksToTeamMembersState
+    extends State<ReassignTasksToTeamMembers> {
   dynamic partiallyCompletedTasks;
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getPartiallyCompletedTasks();
     }
   }
 
-
-  getPartiallyCompletedTasks() async{
+  getPartiallyCompletedTasks() async {
     User user = await UserService.getLoggedInUser();
-    dynamic partiallyCompletedTasksOfTeam = await TeamTasksService.getReAssignedTasks(user.teamId);
+    dynamic partiallyCompletedTasksOfTeam =
+        await TeamTasksService.getReAssignedTasks(user.teamId);
     setState(() {
       this.partiallyCompletedTasks = partiallyCompletedTasksOfTeam;
       this.loading = false;
@@ -38,17 +39,11 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
     List<Widget> tasksList = new List<Widget>();
     for (int i = 0; i < tasks.length; i++) {
       tasksList.add(Container(
-        // width: MediaQuery.of(context).size.width * 0.95,\
+          // width: MediaQuery.of(context).size.width * 0.95,\
           padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
           child: new Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 1,
+            height: MediaQuery.of(context).size.height / 4,
+            width: MediaQuery.of(context).size.width * 1,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -59,7 +54,7 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment : MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       RawMaterialButton(
                         onPressed: () {},
@@ -75,8 +70,8 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                       )
                     ],
                   ),
-
-                  Text(tasks[i].teamMemberTask.taskName,
+                  Text(
+                    tasks[i].teamMemberTask.taskName,
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.blue.shade800,
@@ -84,8 +79,8 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text("Customer : " +
-                      tasks[i].customer.organizationName,
+                  Text(
+                    "Customer : " + tasks[i].customer.organizationName,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.blue.shade800,
@@ -93,9 +88,10 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text("Ended At : " +
-                      DateFormat('yyyy-MM-dd – kk:mm').format(
-                          tasks[i].endTime),
+                  Text(
+                    "Ended At : " +
+                        DateFormat('yyyy-MM-dd – kk:mm')
+                            .format(tasks[i].endTime),
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
@@ -103,7 +99,8 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text("Picked By : " + tasks[i].teamMember.fullName,
+                  Text(
+                    "Picked By : " + tasks[i].teamMember.fullName,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
@@ -114,19 +111,15 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
                 ],
               ),
             ),
-          )
-      ));
+          )));
     }
 
     return new Column(children: tasksList);
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
-    if(this.loading){
+    if (this.loading) {
       return LoadingScreen();
     }
 
@@ -145,24 +138,29 @@ class _ReassignTasksToTeamMembersState extends State<ReassignTasksToTeamMembers>
         ),
       ),
       body: SingleChildScrollView(
-          child: (this.partiallyCompletedTasks == 1 || this.partiallyCompletedTasks.length == 0) ? Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
-              child: Center(
-                child: Text("No Tasks found",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontFamily: 'Arial',
-                  ),),
-              )
-          ) : Column(
-            children: [
-              SizedBox(
-                height: 15,
-              ),
-              taskListView(this.partiallyCompletedTasks)
-            ],
-          )),
+          child: (this.partiallyCompletedTasks == 1 ||
+                  this.partiallyCompletedTasks.length == 0)
+              ? Container(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 2.5),
+                  child: Center(
+                    child: Text(
+                      "No Tasks found",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontFamily: 'Arial',
+                      ),
+                    ),
+                  ))
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    taskListView(this.partiallyCompletedTasks)
+                  ],
+                )),
     );
   }
 }

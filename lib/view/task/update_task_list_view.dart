@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/product/product.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/task_service.dart';
+import 'package:timecapturesystem/services/task/task_service.dart';
 import 'package:timecapturesystem/view/task/update_task.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class UpdateTaskListView extends StatefulWidget {
-
   static const String id = "view_tasks";
 
   final Product product;
@@ -17,44 +16,42 @@ class UpdateTaskListView extends StatefulWidget {
 }
 
 class _UpdateTaskListViewState extends State<UpdateTaskListView> {
-
   bool loading = true;
   dynamic taskList;
 
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getTasks();
     }
   }
 
-  getTasks() async{
-
+  getTasks() async {
     dynamic taskList = await TaskService.getProductTasks(widget.product.id);
 
     setState(() {
       this.taskList = taskList;
       this.loading = false;
     });
-
   }
 
-  Widget taskListView(dynamic tasks){
+  Widget taskListView(dynamic tasks) {
     List<Widget> tasksList = new List<Widget>();
 
-    for(int i = 0; i<tasks.length; i++){
+    for (int i = 0; i < tasks.length; i++) {
       tasksList.add(InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => UpdateTask(task: this.taskList[i], product: widget.product,)
-              )
-          );
+                  builder: (BuildContext context) => UpdateTask(
+                        task: this.taskList[i],
+                        product: widget.product,
+                      )));
         },
         child: Container(
-          // width: MediaQuery.of(context).size.width * 0.95,\
+            // width: MediaQuery.of(context).size.width * 0.95,\
             padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
             child: new Container(
               height: MediaQuery.of(context).size.height / 6.5,
@@ -68,7 +65,8 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(this.taskList[i].taskName,
+                    Text(
+                      this.taskList[i].taskName,
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.blue.shade800,
@@ -76,7 +74,10 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString() + " Hrs",
+                    Text(
+                      "Estimated Hours : " +
+                          this.taskList[i].estimatedHours.toString() +
+                          " Hrs",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.blue.shade800,
@@ -84,7 +85,10 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text("Created At : "+DateFormat('yyyy-MM-dd – kk:mm').format(this.taskList[i].createdAt),
+                    Text(
+                      "Created At : " +
+                          DateFormat('yyyy-MM-dd – kk:mm')
+                              .format(this.taskList[i].createdAt),
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.blue.shade800,
@@ -95,8 +99,7 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
                   ],
                 ),
               ),
-            )
-        ),
+            )),
       ));
     }
 
@@ -105,8 +108,7 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(this.loading){
+    if (this.loading) {
       return LoadingScreen();
     }
 
@@ -127,24 +129,29 @@ class _UpdateTaskListViewState extends State<UpdateTaskListView> {
       ),
       // drawer: viewTaskDrawer(context),
       body: SingleChildScrollView(
-        // ignore: unrelated_type_equality_checks
-          child: (this.taskList == 1) ? Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
-              child: Center(
-                child: Text("No Tasks found",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontFamily: 'Arial',
-                  ),),
-              )
-          ) : Column(
-            children: [
-              SizedBox(height: 15,),
-              taskListView(this.taskList)
-            ],
-          )
-      ),
+          // ignore: unrelated_type_equality_checks
+          child: (this.taskList == 1)
+              ? Container(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 2.5),
+                  child: Center(
+                    child: Text(
+                      "No Tasks found",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontFamily: 'Arial',
+                      ),
+                    ),
+                  ))
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    taskListView(this.taskList)
+                  ],
+                )),
     );
   }
 }

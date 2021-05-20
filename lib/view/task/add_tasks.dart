@@ -5,10 +5,9 @@ import 'package:timecapturesystem/components/leave_component/input_text_field.da
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/models/task/task.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/task_service.dart';
+import 'package:timecapturesystem/services/task/task_service.dart';
 
 class AddTask extends StatefulWidget {
-
   static const String id = "view_tasks";
 
   final Product product;
@@ -19,10 +18,8 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-
   String taskName;
   double estimatedHours;
-
 
   void successMessage(BuildContext context) {
     showDialog(
@@ -30,23 +27,23 @@ class _AddTaskState extends State<AddTask> {
 
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Task Created Succsfully !',
+          title: new Text(
+            'Task Created Succsfully !',
             style: TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w600,
-                color: Colors.green
-            ),
+                color: Colors.green),
           ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
-                Text('Added task can be seen at all tasks.',
+                Text(
+                  'Added task can be seen at all tasks.',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      color: Colors.grey.shade600
-                  ),
+                      color: Colors.grey.shade600),
                 ),
                 RawMaterialButton(
                   onPressed: () {},
@@ -60,21 +57,22 @@ class _AddTaskState extends State<AddTask> {
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 FlatButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                     },
                     color: Colors.green,
-                    child: Text("Okay",
+                    child: Text(
+                      "Okay",
                       style: TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
-                          color: Colors.white
-                      ),
-                    )
-                ),
+                          color: Colors.white),
+                    )),
               ],
             ),
           ),
@@ -124,7 +122,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
                 DividerBox(),
-
                 InputContainer(
                   child: InputTextField(
                     labelText: 'Task name',
@@ -135,7 +132,6 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                 ),
-
                 InputContainer(
                   child: InputTextField(
                     maxLines: null,
@@ -147,13 +143,15 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                 ),
-
                 RoundedButton(
                   color: Colors.blueAccent[200],
                   title: 'Submit',
                   minWidth: 200.0,
                   onPressed: () async {
-                    Task task = new Task(productId: widget.product.id, taskName: this.taskName, estimatedHours: this.estimatedHours);
+                    Task task = new Task(
+                        productId: widget.product.id,
+                        taskName: this.taskName,
+                        estimatedHours: this.estimatedHours);
                     await TaskService.addProductTask(task);
                     this.estimatedHours = 0.0;
                     this.taskName = '';

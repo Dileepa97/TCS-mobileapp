@@ -5,12 +5,11 @@ import 'package:timecapturesystem/components/leave_component/input_text_field.da
 import 'package:timecapturesystem/components/rounded_button.dart';
 import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/models/task/task.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/task_service.dart';
+import 'package:timecapturesystem/services/task/task_service.dart';
 import 'package:timecapturesystem/view/task/update_task_list_view.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class UpdateTask extends StatefulWidget {
-
   static const String id = "update_task";
 
   final Task task;
@@ -22,7 +21,6 @@ class UpdateTask extends StatefulWidget {
 }
 
 class _UpdateTaskState extends State<UpdateTask> {
-
   String taskName;
   double estimatedHours;
   bool loading = true;
@@ -33,8 +31,8 @@ class _UpdateTaskState extends State<UpdateTask> {
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
-      Future.delayed(Duration(milliseconds: 1200),(){
+    if (this.loading) {
+      Future.delayed(Duration(milliseconds: 1200), () {
         setState(() {
           this.displayTaskName = widget.task.taskName;
           this.displayEstimatedHours = widget.task.estimatedHours;
@@ -50,7 +48,8 @@ class _UpdateTaskState extends State<UpdateTask> {
 
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Task Updated succesfully !',
+          title: new Text(
+            'Task Updated succesfully !',
             style: TextStyle(
               fontFamily: 'Arial',
               fontWeight: FontWeight.w600,
@@ -71,27 +70,29 @@ class _UpdateTaskState extends State<UpdateTask> {
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 FlatButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => UpdateTaskListView(product: widget.product,)
-                          )
-                      );
+                              builder: (BuildContext context) =>
+                                  UpdateTaskListView(
+                                    product: widget.product,
+                                  )));
                     },
                     color: Colors.redAccent,
-                    child: Text("Okay",
+                    child: Text(
+                      "Okay",
                       style: TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
-                          color: Colors.white
-                      ),
-                    )
-                ),
+                          color: Colors.white),
+                    )),
               ],
             ),
           ),
@@ -106,90 +107,88 @@ class _UpdateTaskState extends State<UpdateTask> {
 
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Warning !',
+          title: new Text(
+            'Warning !',
             style: TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w600,
-                color: Colors.red
-            ),
+                color: Colors.red),
           ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
-                Text('Do you really want to update the task?',
+                Text(
+                  'Do you really want to update the task?',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      color: Colors.grey.shade600
-                  ),
+                      color: Colors.grey.shade600),
                 ),
               ],
             ),
           ),
           actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "No",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.lightBlueAccent),
+                )),
+            FlatButton(
+                onPressed: () async {
+                  if (this.taskName != null && this.estimatedHours != null) {
+                    Task task = new Task(
+                        productId: widget.task.productId,
+                        createdAt: widget.task.createdAt,
+                        taskStatus: widget.task.taskStatus,
+                        taskId: widget.task.taskId,
+                        taskName: this.taskName,
+                        estimatedHours: this.estimatedHours);
+                    this.loading = true;
+                    await TaskService.updateTask(task).then((value) => {});
+                  }
+                  if (this.taskName != null && this.estimatedHours == null) {
+                    Task task = new Task(
+                        productId: widget.task.productId,
+                        createdAt: widget.task.createdAt,
+                        taskStatus: widget.task.taskStatus,
+                        taskId: widget.task.taskId,
+                        taskName: this.taskName,
+                        estimatedHours: widget.task.estimatedHours);
+                    this.loading = true;
+                    await TaskService.updateTask(task).then((value) => {});
+                  }
+                  if (this.taskName == null && this.estimatedHours != null) {
+                    Task task = new Task(
+                        productId: widget.task.productId,
+                        createdAt: widget.task.createdAt,
+                        taskStatus: widget.task.taskStatus,
+                        taskId: widget.task.taskId,
+                        taskName: widget.task.taskName,
+                        estimatedHours: this.estimatedHours);
+                    this.loading = true;
+                    await TaskService.updateTask(task).then((value) => {});
+                  }
 
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-            }, child: Text("No",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.lightBlueAccent
-              ),
-            )
-            ),
-            FlatButton(onPressed: ()async{
-              if(this.taskName != null && this.estimatedHours != null) {
-                Task task = new Task(productId: widget.task.productId,
-                    createdAt: widget.task.createdAt,
-                    taskStatus: widget.task.taskStatus,
-                    taskId: widget.task.taskId,
-                    taskName: this.taskName,
-                    estimatedHours: this.estimatedHours);
-                this.loading = true;
-                await TaskService.updateTask(task).then((value) => {
-                });
-              }
-              if(this.taskName != null && this.estimatedHours == null){
-                Task task = new Task(productId: widget.task.productId,
-                    createdAt: widget.task.createdAt,
-                    taskStatus: widget.task.taskStatus,
-                    taskId: widget.task.taskId,
-                    taskName: this.taskName,
-                    estimatedHours: widget.task.estimatedHours);
-                this.loading = true;
-                await TaskService.updateTask(task).then((value) => {
+                  Navigator.pop(context);
 
-                });
-              }
-              if(this.taskName == null && this.estimatedHours != null){
-                Task task = new Task(productId: widget.task.productId,
-                    createdAt: widget.task.createdAt,
-                    taskStatus: widget.task.taskStatus,
-                    taskId: widget.task.taskId,
-                    taskName: widget.task.taskName,
-                    estimatedHours: this.estimatedHours);
-                this.loading = true;
-                await TaskService.updateTask(task).then((value) => {
-
-                });
-              }
-
-              Navigator.pop(context);
-
-              this.successMessage(context);
-
-            }, child: Text("Yes",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.lightBlueAccent
-              ),
-            )
-            )
+                  this.successMessage(context);
+                },
+                child: Text(
+                  "Yes",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.lightBlueAccent),
+                ))
           ],
         );
       },
@@ -198,18 +197,14 @@ class _UpdateTaskState extends State<UpdateTask> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(this.loading){
+    if (this.loading) {
       return LoadingScreen();
     }
 
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text("Add task",
-            style: TextStyle(
-                color: Colors.white
-            )),
+        title: Text("Add task", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
@@ -241,10 +236,9 @@ class _UpdateTaskState extends State<UpdateTask> {
                   ),
                 ),
                 DividerBox(),
-
                 Padding(
                   padding:
-                  const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                   child: Text(
                     'Fill feilds that you only want to update. If you don\'t want to upadte any feild keep it blank or empty.',
                     style: TextStyle(
@@ -255,7 +249,6 @@ class _UpdateTaskState extends State<UpdateTask> {
                   ),
                 ),
                 DividerBox(),
-
                 InputContainer(
                   child: InputTextField(
                     labelText: 'Task name',
@@ -266,9 +259,12 @@ class _UpdateTaskState extends State<UpdateTask> {
                     },
                   ),
                 ),
-
-                Text("Previous : "+widget.task.taskName, style: TextStyle(fontFamily: 'Arial',),),
-
+                Text(
+                  "Previous : " + widget.task.taskName,
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                  ),
+                ),
                 InputContainer(
                   child: InputTextField(
                     maxLines: null,
@@ -280,14 +276,18 @@ class _UpdateTaskState extends State<UpdateTask> {
                     },
                   ),
                 ),
-
-                Text("Previous : "+widget.task.estimatedHours.toString()+" Hrs", style: TextStyle(fontFamily: 'Arial',),),
-
+                Text(
+                  "Previous : " +
+                      widget.task.estimatedHours.toString() +
+                      " Hrs",
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                  ),
+                ),
                 RoundedButton(
                   color: Colors.blueAccent[200],
                   title: 'Submit',
                   minWidth: 200.0,
-
                   onPressed: () async {
                     this.warningMessage(context);
                   },

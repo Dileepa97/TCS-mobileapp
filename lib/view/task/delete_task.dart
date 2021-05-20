@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timecapturesystem/models/product/product.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/task_service.dart';
+import 'package:timecapturesystem/services/task/task_service.dart';
 
 class DeleteTask extends StatefulWidget {
-
   static const String id = "delete_tasks";
 
   final Product product;
@@ -15,19 +14,18 @@ class DeleteTask extends StatefulWidget {
 }
 
 class _DeleteTaskState extends State<DeleteTask> {
-
   bool loading = true;
   dynamic taskList = [];
 
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getTasks();
     }
   }
 
-  getTasks() async{
+  getTasks() async {
     dynamic taskList = await TaskService.getProductTasks(widget.product.id);
     setState(() {
       this.taskList = taskList;
@@ -35,83 +33,83 @@ class _DeleteTaskState extends State<DeleteTask> {
     });
   }
 
-
   void warningMessage(BuildContext context, String taskId) {
     showDialog(
       context: context, barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Warning !',
+          title: new Text(
+            'Warning !',
             style: TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w600,
-                color: Colors.red
-            ),
+                color: Colors.red),
           ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
-                Text("Do you really want to delete?",
+                Text(
+                  "Do you really want to delete?",
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
-                      color: Colors.grey.shade600
-                  ),
+                      color: Colors.grey.shade600),
                 ),
-                SizedBox(height: 10,),
-                Text('This action cannot be undone!',
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'This action cannot be undone!',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
-                      color: Colors.grey.shade600
-                  ),
+                      color: Colors.grey.shade600),
                 ),
               ],
             ),
           ),
           actions: [
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-            }, child: Text("Cancel",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.blue
-              ),
-            )
-            ),
-
-            FlatButton(onPressed: ()async{
-              Navigator.pop(context);
-              this.loading = true;
-              await TaskService.deleteProductTask(taskId);
-              getTasks() ;
-
-            }, child: Text("Delete",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.blue
-              ),
-            )
-            ),
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.blue),
+                )),
+            FlatButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  this.loading = true;
+                  await TaskService.deleteProductTask(taskId);
+                  getTasks();
+                },
+                child: Text(
+                  "Delete",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.blue),
+                )),
           ],
         );
       },
     );
   }
 
-
-  Widget taskListView(dynamic tasks){
+  Widget taskListView(dynamic tasks) {
     List<Widget> tasksList = new List<Widget>();
 
-    for(int i = 0; i<tasks.length; i++){
+    for (int i = 0; i < tasks.length; i++) {
       tasksList.add(Container(
-        // width: MediaQuery.of(context).size.width * 0.95,
+          // width: MediaQuery.of(context).size.width * 0.95,
           padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
           child: new Container(
             height: MediaQuery.of(context).size.height / 5.5,
@@ -125,14 +123,14 @@ class _DeleteTaskState extends State<DeleteTask> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(this.taskList[i].taskName,
+                  Text(
+                    this.taskList[i].taskName,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.blue.shade800,
                       fontFamily: 'Arial',
                     ),
                   ),
-
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +138,10 @@ class _DeleteTaskState extends State<DeleteTask> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Estimated Hours : "+this.taskList[i].estimatedHours.toString() + " Hrs",
+                          Text(
+                            "Estimated Hours : " +
+                                this.taskList[i].estimatedHours.toString() +
+                                " Hrs",
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.blue.shade800,
@@ -148,7 +149,10 @@ class _DeleteTaskState extends State<DeleteTask> {
                             ),
                           ),
                           SizedBox(height: 8),
-                          Text("Created At : "+DateFormat('yyyy-MM-dd – kk:mm').format(this.taskList[i].createdAt),
+                          Text(
+                            "Created At : " +
+                                DateFormat('yyyy-MM-dd – kk:mm')
+                                    .format(this.taskList[i].createdAt),
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.blue.shade800,
@@ -158,24 +162,26 @@ class _DeleteTaskState extends State<DeleteTask> {
                         ],
                       ),
                       RaisedButton(
-                          child: Text("Delete",style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontFamily: 'Arial',
-                          ),),
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontFamily: 'Arial',
+                            ),
+                          ),
                           color: Colors.red,
-                          onPressed: (){
-                            this.warningMessage(context, this.taskList[i].taskId);
-                          }
-                      )
+                          onPressed: () {
+                            this.warningMessage(
+                                context, this.taskList[i].taskId);
+                          })
                     ],
                   ),
                   SizedBox(height: 8),
                 ],
               ),
             ),
-          )
-      ));
+          )));
     }
 
     return new Column(children: tasksList);
@@ -200,23 +206,28 @@ class _DeleteTaskState extends State<DeleteTask> {
       ),
       // drawer: viewTaskDrawer(context),
       body: SingleChildScrollView(
-          child: (this.taskList == 1) ? Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
-              child: Center(
-                child: Text("No Tasks found",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontFamily: 'Arial',
-                  ),),
-              )
-          ) : Column(
-            children: [
-              SizedBox(height: 15,),
-              taskListView(this.taskList)
-            ],
-          )
-      ),
+          child: (this.taskList == 1)
+              ? Container(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 2.5),
+                  child: Center(
+                    child: Text(
+                      "No Tasks found",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontFamily: 'Arial',
+                      ),
+                    ),
+                  ))
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    taskListView(this.taskList)
+                  ],
+                )),
     );
   }
 }

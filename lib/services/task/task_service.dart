@@ -1,31 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:timecapturesystem/models/task/task.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 
 String contentTypeHeader = 'application/json';
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
 class TaskService {
-
   static Future<dynamic> getProductTasks(String productId) async {
-
     try {
       var authHeader = await generateAuthHeader();
 
       var tasks = <Task>[];
-      http.Response response = await http.get(
-          apiEndpoint + "tasks/getAllTasks/" + productId,
-          headers: {
-            HttpHeaders.authorizationHeader: authHeader,
-            HttpHeaders.contentTypeHeader: contentTypeHeader
-          }).catchError((error) => {print(error.toString())});
+      http.Response response = await http
+          .get(apiEndpoint + "tasks/getAllTasks/" + productId, headers: {
+        HttpHeaders.authorizationHeader: authHeader,
+        HttpHeaders.contentTypeHeader: contentTypeHeader
+      }).catchError((error) => {print(error.toString())});
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -37,23 +31,19 @@ class TaskService {
       } else {
         return 1;
       }
-    }catch(e){
+    } catch (e) {
       return -1;
     }
-
   }
 
-
   static Future<bool> addProductTask(Task task) async {
-
     var authHeader = await generateAuthHeader();
 
-    http.Response response = await http.post(apiEndpoint + "tasks/addTask",
-        body: jsonEncode(task),
-        headers: {
-          HttpHeaders.authorizationHeader: authHeader,
-          HttpHeaders.contentTypeHeader: contentTypeHeader
-        }).catchError((error) => {print(error.toString())});
+    http.Response response = await http
+        .post(apiEndpoint + "tasks/addTask", body: jsonEncode(task), headers: {
+      HttpHeaders.authorizationHeader: authHeader,
+      HttpHeaders.contentTypeHeader: contentTypeHeader
+    }).catchError((error) => {print(error.toString())});
 
     print(response.statusCode);
 
@@ -64,24 +54,22 @@ class TaskService {
     }
   }
 
-
   static Future<List<Task>> deleteProductTask(String taskId) async {
-
     var authHeader = await generateAuthHeader();
 
     var tasks = <Task>[];
-    http.Response response = await http.delete(apiEndpoint + "tasks/"+taskId,
-        headers: {
-          HttpHeaders.authorizationHeader: authHeader,
-          HttpHeaders.contentTypeHeader: contentTypeHeader
-        }).catchError((error) => {print(error.toString())});
+    http.Response response =
+        await http.delete(apiEndpoint + "tasks/" + taskId, headers: {
+      HttpHeaders.authorizationHeader: authHeader,
+      HttpHeaders.contentTypeHeader: contentTypeHeader
+    }).catchError((error) => {print(error.toString())});
 
     print(response);
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
 
-      for(var item in jsonData){
+      for (var item in jsonData) {
         tasks.add(new Task.fromJson(item));
       }
       return tasks;
@@ -90,13 +78,12 @@ class TaskService {
     }
   }
 
-
   static Future<dynamic> getTasksByProductId(String productId) async {
-
     try {
       var authHeader = await generateAuthHeader();
 
-      http.Response response = await http.get(apiEndpoint + 'tasks/getAllTasks/'+productId , headers: {
+      http.Response response = await http
+          .get(apiEndpoint + 'tasks/getAllTasks/' + productId, headers: {
         HttpHeaders.authorizationHeader: authHeader,
         HttpHeaders.contentTypeHeader: contentTypeHeader
       });
@@ -116,19 +103,18 @@ class TaskService {
   }
 
   static Future<dynamic> updateTask(Task task) async {
-
     try {
-
       print(task.taskId);
 
       var authHeader = await generateAuthHeader();
 
-      http.Response response = await http.patch(apiEndpoint + 'tasks/'+task.taskId ,
-          body: jsonEncode(task),
-          headers: {
-            HttpHeaders.authorizationHeader: authHeader,
-            HttpHeaders.contentTypeHeader: contentTypeHeader
-          },
+      http.Response response = await http.patch(
+        apiEndpoint + 'tasks/' + task.taskId,
+        body: jsonEncode(task),
+        headers: {
+          HttpHeaders.authorizationHeader: authHeader,
+          HttpHeaders.contentTypeHeader: contentTypeHeader
+        },
       );
 
       print(response.statusCode);
@@ -144,5 +130,4 @@ class TaskService {
       return -1;
     }
   }
-
 }

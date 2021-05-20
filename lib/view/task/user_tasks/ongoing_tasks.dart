@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timecapturesystem/models/task/task.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/team_member_task.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/task/team_member_task/team_member_task_service.dart';
+import 'package:timecapturesystem/services/task/team_member_task/team_member_task_service.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
 
 class UserOngoingTasks extends StatefulWidget {
-
   final String userId;
   UserOngoingTasks(this.userId);
 
@@ -15,9 +12,7 @@ class UserOngoingTasks extends StatefulWidget {
   _UserOngoingTasksState createState() => _UserOngoingTasksState();
 }
 
-
 class _UserOngoingTasksState extends State<UserOngoingTasks> {
-
   dynamic ongoingTaskList;
 
   bool loading = true;
@@ -25,32 +20,34 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getOngoingTasks();
     }
   }
 
-  Future getOngoingTasks() async{
-    dynamic tasks = await  TeamMemberTaskService.getOngoingTasks(widget.userId);
+  Future getOngoingTasks() async {
+    dynamic tasks = await TeamMemberTaskService.getOngoingTasks(widget.userId);
     setState(() {
       this.ongoingTaskList = tasks;
       this.loading = false;
     });
   }
 
-  Widget cardTop(dynamic index){
+  Widget cardTop(dynamic index) {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
         color: Colors.greenAccent,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15), topRight: Radius.circular(15)),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(this.ongoingTaskList[index].teamMemberTask.taskName,
+            Text(
+              this.ongoingTaskList[index].teamMemberTask.taskName,
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black87,
@@ -58,7 +55,8 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
               ),
             ),
             SizedBox(height: 8),
-            Text(this.ongoingTaskList[index].customer.organizationName,
+            Text(
+              this.ongoingTaskList[index].customer.organizationName,
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.black87,
@@ -72,12 +70,13 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
     );
   }
 
-  Widget cardBottom(dynamic index){
+  Widget cardBottom(dynamic index) {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
         color: Colors.greenAccent.shade100,
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight:  Radius.circular(15)),
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -85,46 +84,50 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
-            Text("Picked at "+DateFormat('yyyy-MM-dd – kk:mm').format(this.ongoingTaskList[index].pickedAt),
+            Text(
+                "Picked at " +
+                    DateFormat('yyyy-MM-dd – kk:mm')
+                        .format(this.ongoingTaskList[index].pickedAt),
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
                   fontFamily: 'Arial',
-                )
-            ),
+                )),
             SizedBox(height: 8),
-            Text("Estimated time "+ this.ongoingTaskList[index].teamMemberTask.estimatedHours.toString() + " Hrs",
+            Text(
+                "Estimated time " +
+                    this
+                        .ongoingTaskList[index]
+                        .teamMemberTask
+                        .estimatedHours
+                        .toString() +
+                    " Hrs",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
                   fontFamily: 'Arial',
-                )
-            )
+                ))
           ],
         ),
       ),
     );
   }
 
-  Widget taskCard(dynamic index){
+  Widget taskCard(dynamic index) {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           print("Pressed");
         },
         child: Column(
-          children: [
-            cardTop(index),
-            cardBottom(index)
-          ],
+          children: [cardTop(index), cardBottom(index)],
         ),
       ),
     );
   }
 
-
-  Widget taskListView(index){
+  Widget taskListView(index) {
     return Container(
       // width: MediaQuery.of(context).size.width * 0.95,
       margin: EdgeInsets.fromLTRB(10, 4, 10, 1),
@@ -134,7 +137,7 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
 
   @override
   Widget build(BuildContext context) {
-    if(this.loading){
+    if (this.loading) {
       return LoadingScreen();
     }
     return Scaffold(
@@ -152,22 +155,26 @@ class _UserOngoingTasksState extends State<UserOngoingTasks> {
         ),
       ),
       drawer: SideDrawer(),
-      body: (this.ongoingTaskList.length == 0 || this.ongoingTaskList == 1) ? Container(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
-          child: Center(
-            child: Text("No Tasks found",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontFamily: 'Arial',
-              ),),
-          )
-      ) : ListView.builder(
-        itemBuilder: (context,index) {
-          return taskCard(index);
-        },
-        itemCount: this.ongoingTaskList.length,
-      ),
+      body: (this.ongoingTaskList.length == 0 || this.ongoingTaskList == 1)
+          ? Container(
+              padding:
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 17),
+              child: Center(
+                child: Text(
+                  "No Tasks found",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+              ))
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                return taskCard(index);
+              },
+              itemCount: this.ongoingTaskList.length,
+            ),
     );
   }
 }

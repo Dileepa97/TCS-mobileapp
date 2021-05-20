@@ -1,5 +1,5 @@
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/task_status.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:timecapturesystem/models/task/task_status.dart';
 
 part 'task.g.dart';
 

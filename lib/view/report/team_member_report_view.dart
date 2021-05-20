@@ -1,21 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timecapturesystem/models/report/team_member_report.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/team_member_task.dart';
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/models/user/user.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/services/report/report_service.dart';
+import 'package:timecapturesystem/services/report/report_service.dart';
 import 'package:timecapturesystem/view/widgets/loading_screen.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
 class TeamMemberReportView extends StatefulWidget {
-
   static const String id = "team_member_task_report";
 
   final User teamMember;
@@ -26,52 +23,54 @@ class TeamMemberReportView extends StatefulWidget {
 }
 
 class _TeamMemberReportViewState extends State<TeamMemberReportView> {
-
-
   bool loading = true;
-  TeamMemberReport teamMemberReport ;
+  TeamMemberReport teamMemberReport;
 
   @override
   void initState() {
     super.initState();
-    if(this.loading) {
+    if (this.loading) {
       this.getReport();
     }
   }
 
-  getReport() async{
-    dynamic teamMemberReport = await ReportService.getTeamMemberReport(widget.teamMember.id);
+  getReport() async {
+    dynamic teamMemberReport =
+        await ReportService.getTeamMemberReport(widget.teamMember.id);
     setState(() {
       this.teamMemberReport = teamMemberReport;
       this.loading = false;
     });
   }
 
-
-  downloadCsv(User teamMember)async{
-
-    final status =await Permission.storage.request();
+  downloadCsv(User teamMember) async {
+    final status = await Permission.storage.request();
     final externalDirectory = await getExternalStorageDirectory();
 
-    if(status.isGranted){
+    if (status.isGranted) {
       FlutterDownloader.enqueue(
-          url: apiEndpoint + "team-member-report/"+teamMember.id+"/export/csv",
+          url: apiEndpoint +
+              "team-member-report/" +
+              teamMember.id +
+              "/export/csv",
           savedDir: externalDirectory.path,
-          fileName: teamMember.fullName+"_"+DateTime.now().year.toString()+".csv",
+          fileName: teamMember.fullName +
+              "_" +
+              DateTime.now().year.toString() +
+              ".csv",
           showNotification: true,
-          openFileFromNotification: true
-      );
+          openFileFromNotification: true);
     }
   }
 
   Widget taskListView(List<dynamic> teamMemberTaskList) {
     List<Widget> tasksList = new List<Widget>();
     for (int i = 0; i < teamMemberTaskList.length; i++) {
-
-      TeamMemberTask teamMemberTask = TeamMemberTask.formJson(teamMemberTaskList[i]);
+      TeamMemberTask teamMemberTask =
+          TeamMemberTask.formJson(teamMemberTaskList[i]);
 
       tasksList.add(Container(
-        // width: MediaQuery.of(context).size.width * 0.95,\
+          // width: MediaQuery.of(context).size.width * 0.95,\
           padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: new Container(
@@ -85,37 +84,36 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(teamMemberTask.teamMemberTask.taskName,
+                Text(
+                  teamMemberTask.teamMemberTask.taskName,
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black87,
                       fontFamily: 'Arial',
-                      fontWeight: FontWeight.w800
-                  ),
+                      fontWeight: FontWeight.w800),
                 ),
                 SizedBox(height: 8),
-                Text("Product : "+teamMemberTask.product.productName,
+                Text(
+                  "Product : " + teamMemberTask.product.productName,
                   style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
                       fontFamily: 'Arial',
-                      fontWeight: FontWeight.w800
-                  ),
+                      fontWeight: FontWeight.w800),
                 ),
                 SizedBox(height: 8),
-                Text("Time Spent : "+teamMemberTask.timeSpent.toString(),
+                Text(
+                  "Time Spent : " + teamMemberTask.timeSpent.toString(),
                   style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
                       fontFamily: 'Arial',
-                      fontWeight: FontWeight.w800
-                  ),
+                      fontWeight: FontWeight.w800),
                 ),
                 SizedBox(height: 8),
               ],
             ),
-          )
-      ));
+          )));
     }
 
     return new Column(children: tasksList);
@@ -123,8 +121,7 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(this.loading){
+    if (this.loading) {
       return LoadingScreen();
     }
 
@@ -148,7 +145,8 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
           child: Column(
             children: [
               Container(
-                margin: new EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
+                margin: new EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.03),
                 height: MediaQuery.of(context).size.height * 0.37,
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Card(
@@ -158,11 +156,12 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: new EdgeInsets.only(top: 10,left: 20),
+                        margin: new EdgeInsets.only(top: 10, left: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(widget.teamMember.fullName,
+                            Text(
+                              widget.teamMember.fullName,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontFamily: 'Arial',
@@ -170,104 +169,144 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                                 color: Colors.blue,
                               ),
                             ),
-                            SizedBox(height: MediaQuery.of(context).size.height * 0.025,),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.025,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Task count ",
+                                    Text(
+                                      "Task count ",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text("Total Time Spent ",
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Text(
+                                      "Total Time Spent ",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text("Product count ",
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Text(
+                                      "Product count ",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text("Customer count ",
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Text(
+                                      "Customer count ",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-
                                   ],
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(this.teamMemberReport.taskCount.toString(),
+                                    Text(
+                                      this
+                                          .teamMemberReport
+                                          .taskCount
+                                          .toString(),
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text(this.teamMemberReport.totalHours.toString(),
-                                      style: TextStyle(
-                                          fontFamily: 'Arial',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text(this.teamMemberReport.productCount.toString(),
+                                    Text(
+                                      this
+                                          .teamMemberReport
+                                          .totalHours
+                                          .toString(),
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
                                     ),
-                                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-                                    Text(this.teamMemberReport.customerCount.toString(),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Text(
+                                      this
+                                          .teamMemberReport
+                                          .productCount
+                                          .toString(),
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 17
-                                      ),
+                                          fontSize: 17),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
+                                    ),
+                                    Text(
+                                      this
+                                          .teamMemberReport
+                                          .customerCount
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontFamily: 'Arial',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 17),
                                     )
                                   ],
                                 )
                               ],
                             ),
-
-                            SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
                             Container(
                               height: 50,
                               child: RaisedButton(
                                 color: Colors.blue,
-                                child: Text("Download CSV",
+                                child: Text(
+                                  "Download CSV",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Arial',
-                                      fontSize: 18
-                                  ),
+                                      fontSize: 18),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25.0),
                                 ),
-                                onPressed: (){
-                                  this.downloadCsv(this.teamMemberReport.teamMember);
+                                onPressed: () {
+                                  this.downloadCsv(
+                                      this.teamMemberReport.teamMember);
                                 },
                               ),
                             )
@@ -278,7 +317,9 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               this.taskListView(this.teamMemberReport.teamMemberTasks)
             ],
           ),
@@ -289,4 +330,3 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
     //return this.getDateRange();
   }
 }
-

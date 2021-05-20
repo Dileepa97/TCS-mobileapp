@@ -1,19 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'file:///G:/level_2_project/Git_Lab/TCS-MobileApp/lib/models/task/team_member_task.dart';
+import 'package:http/http.dart' as http;
+import 'package:timecapturesystem/models/task/team_member_task.dart';
 import 'package:timecapturesystem/services/other/utils.dart';
 
 String contentTypeHeader = 'application/json';
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
 class TeamMemberTaskService {
-
   static Future<dynamic> getTeamMemberTasks(String teamMemberID) async {
-
     try {
       var tasks = <TeamMemberTask>[];
 
@@ -30,18 +27,15 @@ class TeamMemberTaskService {
           // tasks.add(Task.formJson(item));
         }
         return tasks;
-      }else{
+      } else {
         return 1;
       }
-
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
 
-
   static Future<dynamic> getOngoingTasks(String teamMemberID) async {
-
     try {
       var tasks = <TeamMemberTask>[];
 
@@ -54,10 +48,7 @@ class TeamMemberTaskService {
           "content-type": "application/json",
           HttpHeaders.authorizationHeader: authHeader,
         },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+      ).catchError((error) => {print(error.toString())});
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -65,16 +56,15 @@ class TeamMemberTaskService {
           tasks.add(TeamMemberTask.formJson(item));
         }
         return tasks;
-      }else{
+      } else {
         return 1;
       }
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
 
   static Future<dynamic> getPartiallyCompletedTasks(String teamMemberID) async {
-
     try {
       var tasks = <TeamMemberTask>[];
 
@@ -87,10 +77,7 @@ class TeamMemberTaskService {
           "content-type": "application/json",
           HttpHeaders.authorizationHeader: authHeader,
         },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+      ).catchError((error) => {print(error.toString())});
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -98,16 +85,15 @@ class TeamMemberTaskService {
           tasks.add(TeamMemberTask.formJson(item));
         }
         return tasks;
-      }else{
+      } else {
         return 1;
       }
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
 
   static Future<dynamic> getCompletedTasks(String teamMemberID) async {
-
     try {
       var tasks = <TeamMemberTask>[];
 
@@ -120,10 +106,7 @@ class TeamMemberTaskService {
           "content-type": "application/json",
           HttpHeaders.authorizationHeader: authHeader,
         },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+      ).catchError((error) => {print(error.toString())});
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -131,10 +114,10 @@ class TeamMemberTaskService {
           tasks.add(TeamMemberTask.formJson(item));
         }
         return tasks;
-      }else{
+      } else {
         return 1;
       }
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
@@ -152,10 +135,7 @@ class TeamMemberTaskService {
           "content-type": "application/json",
           HttpHeaders.authorizationHeader: authHeader,
         },
-      ).catchError((error) =>
-      {
-        print(error.toString())
-      });
+      ).catchError((error) => {print(error.toString())});
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -163,13 +143,11 @@ class TeamMemberTaskService {
           tasks.add(TeamMemberTask.formJson(item));
         }
         return tasks;
-      }else{
+      } else {
         return 1;
       }
-
-    }catch(e){
+    } catch (e) {
       return -1;
     }
   }
-
 }
