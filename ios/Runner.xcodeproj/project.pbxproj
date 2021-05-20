@@ -14,6 +14,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		FA7E69CE26568F87008EAAB6 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7E69CD26568F23008EAAB6 /* libsqlite3.tbd */; };
 		FFFCF4C9001733E6603F5B26 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058E23C85A97109DD92A875E /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA7E69CD26568F23008EAAB6 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA7E69CE26568F87008EAAB6 /* libsqlite3.tbd in Frameworks */,
 				FFFCF4C9001733E6603F5B26 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,6 +133,7 @@
 		C4E5D7B8E8BA0D419C260B32 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA7E69CD26568F23008EAAB6 /* libsqlite3.tbd */,
 				058E23C85A97109DD92A875E /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
