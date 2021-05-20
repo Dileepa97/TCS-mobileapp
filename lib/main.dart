@@ -158,7 +158,7 @@ class _MyAppState extends State<MyApp> {
           };
           var initialRoute;
           if (userData != null) {
-            initialRoute = '/';
+            initialRoute = HomePage.id;
           } else {
             initialRoute = LoginScreen.id;
           }
