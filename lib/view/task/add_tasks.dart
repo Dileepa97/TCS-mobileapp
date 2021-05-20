@@ -7,31 +7,61 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-
-
   void successMessage(BuildContext context) {
     showDialog(
       context: context, barrierDismissible: false, // user must tap button!
 
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Task Created Succsfully !',
+          title: new Text(
+            'Task Created Succsfully !',
             style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w600,
-            ),
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.green),
           ),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: [
-                Text('Added task can be seen at all tasks.',
+                Text(
+                  'Added task can be seen at view tasks.',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
                       fontSize: 17,
-                      color: Colors.grey.shade600
-                  ),
+                      color: Colors.grey.shade600),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                RawMaterialButton(
+                  onPressed: () {},
+                  elevation: 0,
+                  fillColor: Colors.green,
+                  child: Icon(
+                    Icons.done,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.green,
+                    child: Text(
+                      "Okay",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.white),
+                    )),
               ],
             ),
           ),
@@ -43,28 +73,30 @@ class _AddTaskState extends State<AddTask> {
 //              },
 //            ),
 
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-            }, child: Text("Add another task",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.lightBlueAccent
-              ),
-            )
-            ),
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-            }, child: Text("Ok",
-              style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Colors.lightBlueAccent
-              ),
-            )
-            )
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Add another task",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.lightBlueAccent),
+                )),
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Ok",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.lightBlueAccent),
+                ))
           ],
         );
       },
@@ -75,10 +107,7 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add task",
-            style: TextStyle(
-                color: Colors.black87
-            )),
+        title: Text("Add task", style: TextStyle(color: Colors.black87)),
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
@@ -88,7 +117,8 @@ class _AddTaskState extends State<AddTask> {
       drawer: viewTaskDrawer(context),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
           child: Center(
             child: Column(
               children: [
@@ -106,7 +136,9 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: TextFormField(
@@ -121,34 +153,36 @@ class _AddTaskState extends State<AddTask> {
                     },
                   ),
                 ),
-                SizedBox(height: 100,),
+                SizedBox(
+                  height: 100,
+                ),
                 RaisedButton(
-                  color: Colors.blue,
-                  child: Text("Add task",
-                    style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        fontSize: 17
-                    ),
-                  ),
-                    onPressed: (){
-                      this.successMessage(context);
-                    }
-                    ),
-                SizedBox(height: 20,),
-                RaisedButton(
-                    child: Text("Go back",
+                    color: Colors.blue,
+                    child: Text(
+                      "Add task",
                       style: TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w600,
-                          fontSize: 17
-                      ),
+                          color: Colors.white,
+                          fontSize: 17),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       this.successMessage(context);
-                    }
-                )
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
+                RaisedButton(
+                    child: Text(
+                      "Go back",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17),
+                    ),
+                    onPressed: () {
+                      this.successMessage(context);
+                    })
               ],
             ),
           ),
