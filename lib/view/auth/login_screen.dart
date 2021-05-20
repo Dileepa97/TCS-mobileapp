@@ -157,7 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           _passwordController.text.trim());
                       if (code == 1) {
                         //login success
-                        app.main();
                         Navigator.popAndPushNamed(context, '/');
                       } else {
                         if (code == 404) {
