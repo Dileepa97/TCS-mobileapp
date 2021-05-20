@@ -3,24 +3,33 @@ import 'package:timecapturesystem/models/product/product.dart';
 import 'package:timecapturesystem/view/side_nav/side_drawer.dart';
 import 'package:timecapturesystem/view/task/add_tasks.dart';
 import 'package:timecapturesystem/view/task/delete_task.dart';
-import 'package:timecapturesystem/view/task/update_task.dart';
+import 'package:timecapturesystem/view/task/update_task_list_view.dart';
 import 'package:timecapturesystem/view/task/view_tasks.dart';
 import 'package:timecapturesystem/view/widgets/team_leader_drawer.dart';
 
 // ignore: must_be_immutable
-class ProductDashboard extends StatelessWidget {
+class ProductDashboard extends StatefulWidget {
   static const String id = "product_dashboard";
 
   final Product product;
 
   const ProductDashboard({Key key, this.product}) : super(key: key);
 
+  @override
+  _ProductDashboardState createState() => _ProductDashboardState();
+}
+
+class _ProductDashboardState extends State<ProductDashboard> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Widget taskDashboardCard(
-    String optionTitle,
-    BuildContext context,
-    IconData optionIcon,
-  ) {
+      String optionTitle,
+      BuildContext context,
+      IconData optionIcon,
+      ) {
     return Container(
       decoration: BoxDecoration(color: Colors.lightBlueAccent),
       child: InkWell(
@@ -48,7 +57,7 @@ class ProductDashboard extends StatelessWidget {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => ViewTasks("110")));
+                  builder: (BuildContext context) => ViewTasks(product: widget.product,)));
         },
       ),
     );
@@ -57,19 +66,18 @@ class ProductDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
-    /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
     final double itemWidth = size.width / 2;
 
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
         title:
-            Text("Product Dashboard", style: TextStyle(color: Colors.black87)),
-        backgroundColor: Colors.white,
+        Text("Product Dashboard", style: TextStyle(color: Colors.white,fontFamily: 'Arial',)),
+        backgroundColor: Colors.lightBlue.shade800,
         shadowColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ),
       drawer: SideDrawer(),
@@ -86,7 +94,7 @@ class ProductDashboard extends StatelessWidget {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Colors.white,),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -95,7 +103,7 @@ class ProductDashboard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.search,
-                          color: Colors.black87,
+                          color: Colors.blue.shade800,
                           size: 40,
                         ),
                         SizedBox(
@@ -103,7 +111,7 @@ class ProductDashboard extends StatelessWidget {
                         ),
                         Text(
                           "View Task",
-                          style: TextStyle(color: Colors.black87, fontSize: 20),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -113,7 +121,7 @@ class ProductDashboard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                ViewTasks("110")));
+                                ViewTasks(product: widget.product,)));
                   },
                 ),
               ),
@@ -121,7 +129,7 @@ class ProductDashboard extends StatelessWidget {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Colors.white,),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -130,7 +138,7 @@ class ProductDashboard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.add,
-                          color: Colors.black87,
+                          color: Colors.blue.shade800,
                           size: 40,
                         ),
                         SizedBox(
@@ -138,7 +146,7 @@ class ProductDashboard extends StatelessWidget {
                         ),
                         Text(
                           "Add Task",
-                          style: TextStyle(color: Colors.black87, fontSize: 20),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -147,7 +155,7 @@ class ProductDashboard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => AddTask()));
+                            builder: (BuildContext context) => AddTask(product: widget.product,)));
                   },
                 ),
               ),
@@ -155,7 +163,7 @@ class ProductDashboard extends StatelessWidget {
             Material(
               elevation: 0,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Colors.white,),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
                   child: Center(
@@ -164,7 +172,7 @@ class ProductDashboard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.settings,
-                          color: Colors.black87,
+                          color: Colors.blue.shade800,
                           size: 40,
                         ),
                         SizedBox(
@@ -172,7 +180,7 @@ class ProductDashboard extends StatelessWidget {
                         ),
                         Text(
                           "Update Task",
-                          style: TextStyle(color: Colors.black87, fontSize: 20),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -181,7 +189,7 @@ class ProductDashboard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => UpdateTask()));
+                            builder: (BuildContext context) => UpdateTaskListView(product: widget.product,)));
                   },
                 ),
               ),
@@ -200,7 +208,7 @@ class ProductDashboard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.delete,
-                          color: Colors.black87,
+                          color: Colors.blue.shade800,
                           size: 40,
                         ),
                         SizedBox(
@@ -208,7 +216,7 @@ class ProductDashboard extends StatelessWidget {
                         ),
                         Text(
                           "Delete Task",
-                          style: TextStyle(color: Colors.black87, fontSize: 20),
+                          style: TextStyle(color: Colors.blue.shade800, fontSize: 20,fontFamily: 'Arial',),
                         )
                       ],
                     ),
@@ -217,7 +225,7 @@ class ProductDashboard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => DeleteTask()));
+                            builder: (BuildContext context) => DeleteTask(product: widget.product,)));
                   },
                 ),
               ),

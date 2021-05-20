@@ -10,7 +10,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
   return Task(
     taskId: json['taskId'] as String,
     taskName: json['taskName'] as String,
-    estimatedHours: json['estimatedHours'] as int,
+    estimatedHours: json['estimatedHours'] as double,
     createdAt: json['createdAt'] == null
         ? null
         : DateTime.parse(json['createdAt'] as String),
@@ -61,8 +61,8 @@ T _$enumDecodeNullable<T>(
 }
 
 const _$TaskStatusEnumMap = {
-  TaskStatus.New: 'New',
-  TaskStatus.Ongoing: 'Ongoing',
-  TaskStatus.Completed: 'Completed',
-  TaskStatus.PartiallyCompleted: 'PartiallyCompleted',
+  TaskStatus.NEW: 'NEW',
+  TaskStatus.ONGOING: 'ONGOING',
+  TaskStatus.COMPLETED: 'COMPLETED',
+  TaskStatus.PARTIALLY_COMPLETED: 'PARTIALLY_COMPLETED',
 };

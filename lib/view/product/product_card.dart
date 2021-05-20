@@ -52,18 +52,8 @@ class _ProductCardState extends State<ProductCard> {
                   ),
 
                   ///number of customers
-//                  Text(
-//                    widget.product.customerIdList.length == 1
-//                        ? '${widget.product.customerIdList.length} customer'
-//                        : '${widget.product.customerIdList.length} customers',
-//                    style: TextStyle(
-//                      color: Colors.blueGrey,
-//                      fontFamily: 'Source Sans Pro',
-//                      fontSize: 15,
-//                    ),
-//                  ),
-                  widget.product.customerIdList != null &&
-                      widget.product.customerIdList.length > 0
+                  widget.product.tasks != null &&
+                      widget.product.tasks.length > 0
                       ? Text(
                     widget.product.customerIdList.length == 1
                         ? '${widget.product.customerIdList.length} customer'
@@ -75,7 +65,7 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   )
                       : Text(
-                    'Customers unavailable',
+                    'Tasks unavailable',
                     style: TextStyle(
                       color: Colors.blueGrey,
                       fontFamily: 'Source Sans Pro',
@@ -85,25 +75,25 @@ class _ProductCardState extends State<ProductCard> {
 
                   ///number of tasks
                   widget.product.tasks != null &&
-                          widget.product.tasks.length > 0
+                      widget.product.tasks.length > 0
                       ? Text(
-                          widget.product.tasks.length == 1
-                              ? '${widget.product.tasks.length} task available'
-                              : '${widget.product.tasks.length} tasks available',
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 15,
-                          ),
-                        )
+                    widget.product.tasks.length == 1
+                        ? '${widget.product.tasks.length} task available'
+                        : '${widget.product.tasks.length} tasks available',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontFamily: 'Source Sans Pro',
+                      fontSize: 15,
+                    ),
+                  )
                       : Text(
-                          'Tasks unavailable',
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontFamily: 'Source Sans Pro',
-                            fontSize: 15,
-                          ),
-                        ),
+                    'Tasks unavailable',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontFamily: 'Source Sans Pro',
+                      fontSize: 15,
+                    ),
+                  ),
                 ],
               ),
             ),
