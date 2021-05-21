@@ -60,7 +60,7 @@ class _DeleteTaskState extends State<DeleteTask> {
                   height: 10,
                 ),
                 Text(
-                  'This action cannot be undone!',
+                  'This action cannot be undo!',
                   style: TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w600,
