@@ -35,6 +35,206 @@ class _ReassignTasksToTeamMembersState
     });
   }
 
+  void successMessage(BuildContext context) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text(
+            'Successfull !',
+            style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.green),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text(
+                  'Task accepted as completed',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Colors.grey.shade600),
+                ),
+                RawMaterialButton(
+                  onPressed: () {},
+                  elevation: 0,
+                  fillColor: Colors.green,
+                  child: Icon(
+                    Icons.done,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.green,
+                    child: Text(
+                      "Okay",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.white),
+                    )),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void warningMessage(BuildContext context, String teamMemberTaskId) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text(
+            'Warning !',
+            style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.red),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text(
+                  "You are going to accept this task as completed",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.grey.shade600),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'This action cannot be undo!',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.blue),
+                )),
+            FlatButton(
+                onPressed: () async{
+                  Navigator.pop(context);
+                  this.acceptAsCompleted(teamMemberTaskId);
+                },
+                child: Text(
+                  "Accept",
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.blue),
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  void errorMessage(BuildContext context) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Failed!',
+            style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.red
+            ),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text('Cannot complete the task',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Colors.grey.shade600
+                  ),
+                ),
+                SizedBox(height: 20,),
+                RawMaterialButton(
+                  onPressed: () {},
+                  elevation: 0,
+                  fillColor: Colors.redAccent,
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                SizedBox(height: 20,),
+                FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    color: Colors.redAccent,
+                    child: Text("Okay",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.white
+                      ),
+                    )
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  acceptAsCompleted(String teamMemberTaskId) async{
+
+    dynamic response = await TeamTasksService.acceptReAssignedTaskAsCompleted(teamMemberTaskId);
+    if(response){
+      this.successMessage(context);
+    }else{
+      this.errorMessage(context);
+    }
+    this.getPartiallyCompletedTasks();
+  }
+
   Widget taskListView(List<TeamMemberTask> tasks) {
     List<Widget> tasksList = new List<Widget>();
     for (int i = 0; i < tasks.length; i++) {
@@ -57,7 +257,9 @@ class _ReassignTasksToTeamMembersState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          this.warningMessage(context, tasks[i].teamMemberTaskId);
+                        },
                         elevation: 2.0,
                         fillColor: Colors.pinkAccent,
                         child: Icon(

@@ -16,7 +16,8 @@ class TeamMemberReportView extends StatefulWidget {
   static const String id = "team_member_task_report";
 
   final User teamMember;
-  const TeamMemberReportView({this.teamMember});
+  final User loggedUser;
+  const TeamMemberReportView({this.teamMember, this.loggedUser});
 
   @override
   _TeamMemberReportViewState createState() => _TeamMemberReportViewState();
@@ -103,7 +104,7 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Time Spent : " + teamMemberTask.timeSpent.toString(),
+                  "Time Spent : " + (teamMemberTask.timeSpent/60).round().toString()+" h "+(teamMemberTask.timeSpent%60).toString()+" min",
                   style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
@@ -243,10 +244,10 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                                               0.01,
                                     ),
                                     Text(
-                                      this
+                                        (this
                                           .teamMemberReport
-                                          .totalHours
-                                          .toString(),
+                                          .totalHours/60).round()
+                                          .toString()+" h "+ (this.teamMemberReport.totalHours%60).toString()+" min",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
@@ -289,9 +290,10 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.03,
                             ),
+                            
                             Container(
                               height: 50,
-                              child: RaisedButton(
+                              child: (widget.loggedUser.highestRoleIndex == 1) ? RaisedButton(
                                 color: Colors.blue,
                                 child: Text(
                                   "Download CSV",
@@ -308,7 +310,7 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                                   this.downloadCsv(
                                       this.teamMemberReport.teamMember);
                                 },
-                              ),
+                              ) : Text(""),
                             )
                           ],
                         ),

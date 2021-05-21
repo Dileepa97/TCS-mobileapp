@@ -21,6 +21,7 @@ class _TeamViewState extends State<TeamView> {
   User selectedMember;
   bool loading = true;
   Team team;
+  User user;
 
   @override
   void initState() {
@@ -31,10 +32,11 @@ class _TeamViewState extends State<TeamView> {
   }
 
   getTeamDetails() async {
-    User user = await UserService.getLoggedInUser();
-    Team team = await TeamService.getTeamById(user.teamId);
+    User us = await UserService.getLoggedInUser();
+    Team team = await TeamService.getTeamById(us.teamId);
     setState(() {
       this.team = team;
+      this.user = us;
       this.loading = false;
     });
   }
@@ -58,6 +60,7 @@ class _TeamViewState extends State<TeamView> {
                   MaterialPageRoute(
                       builder: (BuildContext context) => TeamMemberReportView(
                             teamMember: teamMember,
+                            loggedUser: this.user,
                           )));
             },
             child: Container(
@@ -155,7 +158,7 @@ class _TeamViewState extends State<TeamView> {
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text("Team Dashboard",
+        title: Text("My Team",
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'Arial',

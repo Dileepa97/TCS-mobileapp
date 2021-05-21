@@ -18,8 +18,69 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+
   String taskName;
   double estimatedHours;
+
+  void warningMessage(BuildContext context) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Error !',
+            style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.w600,
+                color: Colors.red
+            ),
+          ),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                Text('Task name cannot be empty',
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Colors.grey.shade600
+                  ),
+                ),
+                SizedBox(height: 20,),
+                RawMaterialButton(
+                  onPressed: () {},
+                  elevation: 0,
+                  fillColor: Colors.redAccent,
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+                ),
+                SizedBox(height: 20,),
+                FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    color: Colors.redAccent,
+                    child: Text("Okay",
+                      style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Colors.white
+                      ),
+                    )
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void successMessage(BuildContext context) {
     showDialog(
@@ -28,7 +89,7 @@ class _AddTaskState extends State<AddTask> {
       builder: (BuildContext context) {
         return new AlertDialog(
           title: new Text(
-            'Task Created Succsfully !',
+            'Task Created Successfully !',
             style: TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w600,
@@ -148,14 +209,32 @@ class _AddTaskState extends State<AddTask> {
                   title: 'Submit',
                   minWidth: 200.0,
                   onPressed: () async {
-                    Task task = new Task(
-                        productId: widget.product.id,
-                        taskName: this.taskName,
-                        estimatedHours: this.estimatedHours);
-                    await TaskService.addProductTask(task);
-                    this.estimatedHours = 0.0;
-                    this.taskName = '';
-                    this.successMessage(context);
+                    if(this.taskName != null && this.estimatedHours != null) {
+                      Task task = new Task(
+                          productId: widget.product.id,
+                          taskName: this.taskName,
+                          estimatedHours: this.estimatedHours);
+                      await TaskService.addProductTask(task);
+
+                      this.estimatedHours = 0.0;
+                      this.taskName = '';
+                      this.successMessage(context);
+
+                    }else if(this.taskName != null && this.estimatedHours == null){
+                      Task task = new Task(
+                          productId: widget.product.id,
+                          taskName: this.taskName,
+                          estimatedHours: 0.0);
+                      await TaskService.addProductTask(task);
+
+                      this.estimatedHours = 0.0;
+                      this.taskName = '';
+                      this.successMessage(context);
+
+                    }if(this.taskName ==  null){
+                      this.warningMessage(context);
+                    }
+
                   },
                 ),
               ],

@@ -11,6 +11,7 @@ String contentTypeHeader = 'application/json';
 var apiEndpoint = DotEnv().env['API_URL'].toString();
 
 class TeamTasksService {
+
   static Future<dynamic> getReAssignedTasks(String teamID) async {
     try {
       var authHeader = await generateAuthHeader();
@@ -39,4 +40,35 @@ class TeamTasksService {
       return -1;
     }
   }
+
+  static Future<dynamic> acceptReAssignedTaskAsCompleted(String teamMemberTaskId) async {
+
+    try {
+      var authHeader = await generateAuthHeader();
+
+      var requestBody = {
+        'teamMemberTaskId': teamMemberTaskId
+      };
+
+      print(requestBody);
+
+      http.Response response = await http
+          .patch(apiEndpoint + "team-task/accept-as-completed",
+          body: jsonEncode(requestBody), headers: {
+            HttpHeaders.authorizationHeader: authHeader,
+            HttpHeaders.contentTypeHeader: contentTypeHeader
+          }).catchError((error) => {print(error.toString())});
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }catch(e){
+      return -1;
+    }
+  }
+
 }
