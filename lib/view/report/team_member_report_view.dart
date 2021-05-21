@@ -16,7 +16,8 @@ class TeamMemberReportView extends StatefulWidget {
   static const String id = "team_member_task_report";
 
   final User teamMember;
-  const TeamMemberReportView({this.teamMember});
+  final User loggedUser;
+  const TeamMemberReportView({this.teamMember, this.loggedUser});
 
   @override
   _TeamMemberReportViewState createState() => _TeamMemberReportViewState();
@@ -289,9 +290,10 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.03,
                             ),
+                            
                             Container(
                               height: 50,
-                              child: RaisedButton(
+                              child: (widget.loggedUser.highestRoleIndex == 1) ? RaisedButton(
                                 color: Colors.blue,
                                 child: Text(
                                   "Download CSV",
@@ -308,7 +310,7 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                                   this.downloadCsv(
                                       this.teamMemberReport.teamMember);
                                 },
-                              ),
+                              ) : Text(""),
                             )
                           ],
                         ),
