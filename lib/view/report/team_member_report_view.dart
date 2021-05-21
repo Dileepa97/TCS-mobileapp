@@ -103,7 +103,7 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Time Spent : " + teamMemberTask.timeSpent.toString(),
+                  "Time Spent : " + (teamMemberTask.timeSpent/60).round().toString()+" h "+(teamMemberTask.timeSpent%60).toString()+" min",
                   style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue.shade800,
@@ -243,10 +243,10 @@ class _TeamMemberReportViewState extends State<TeamMemberReportView> {
                                               0.01,
                                     ),
                                     Text(
-                                      this
+                                        (this
                                           .teamMemberReport
-                                          .totalHours
-                                          .toString(),
+                                          .totalHours/60).round()
+                                          .toString()+" h "+ (this.teamMemberReport.totalHours%60).toString()+" min",
                                       style: TextStyle(
                                           fontFamily: 'Arial',
                                           fontWeight: FontWeight.w600,
