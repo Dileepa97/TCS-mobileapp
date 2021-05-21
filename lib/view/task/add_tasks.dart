@@ -28,7 +28,7 @@ class _AddTaskState extends State<AddTask> {
       builder: (BuildContext context) {
         return new AlertDialog(
           title: new Text(
-            'Task Created Succsfully !',
+            'Task Created Successfully !',
             style: TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w600,
