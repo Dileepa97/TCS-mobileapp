@@ -537,7 +537,7 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                   ///Team management - admin, team leader
-                  if (_userAvailable && (user.highestRoleIndex == 1))
+                  if (_userAvailable && (user.highestRoleIndex < 2))
                     InkWell(
                       onTap: () {
                         Navigator.push(
