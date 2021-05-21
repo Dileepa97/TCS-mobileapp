@@ -155,7 +155,7 @@ class _TeamViewState extends State<TeamView> {
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade800,
       appBar: AppBar(
-        title: Text("Team Dashboard",
+        title: Text("My Team",
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'Arial',
